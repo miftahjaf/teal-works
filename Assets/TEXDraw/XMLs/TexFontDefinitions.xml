@@ -1,0 +1,68 @@
+<?xml version='1.0'?>
+<!-- 
+  Editor Font Definitions (Non Auto-Generated, Read-Only data), discarded on Build but containing fundamental content about each fonts 
+  Do not modify this file, any misconfigurations will lead the TEXDraw component not able to display any Formulas
+-->
+<TexFont> 
+	<Fonts>
+		<cmex id="0" name="CM Math Extensions" description="Primary Mathematical Syntaxes" modifiable="0"/>
+		<cmmi id="1" name="CM Italic Math" description="Standard Mathematical Latin" modifiable="0"/>
+		<cmsy id="2" name="CM Symbols Set" description="Primary Symbols Set" modifiable="0"/>
+		<cmr id="3" name="CM Regular" description="Standard Regular Plain Text" modifiable="0"/>
+		
+		<wasy id="4" name="Waldi's Symbols Set" description="Waldi's Geometry and Astronomical Symbols Set" modifiable="0"/>
+		<stmary id="5" name="St. MR Symbol Set" description="St. Mary's Road Symbols Set" modifiable="0"/>
+		<msam id="6" name="Symbols Set 1"  description="MS Additional Symbol Set 1" modifiable="0"/>
+		<msbm id="7" name="Symbols Set 2" description="MS Additional Symbol Set 2" modifiable="0"/>		
+		
+		<cmbx id="8" name="CM Bold" description="Bold version of the Plain Text" modifiable="1"/>
+		<cmss id="9" name="CM Sans Serif" description="Sans Serif version of the Plain Text" modifiable="1"/>
+		<eufm id="10" name="Euler Fraktur" description="Fraktur Latin Characters" modifiable="1"/>
+		<eurm id="11" name="Euler Roman" description="Roman Latin Characters" modifiable="1"/>
+		<eusm id="12" name="Euler Script" description="Calligraphy Latin (caps only) Characters" modifiable="1"/>
+		<rsfs id="13" name="RS Formal Script" description="Ralph Smith Formal (caps only) Characters" modifiable="1"/>
+		<bbold id="14" name="Black Board"  description="Black Board (Double Lined) Latin Characters" modifiable="1"/>
+	</Fonts>
+	<FamilyPath>
+		<Family caption="Primary Math Fonts" idLength="4"/>
+		<Family caption="Additional Symbols" idLength="4"/>		
+		<Family caption="Modifiable Set Fonts" idLength="7"/>
+	</FamilyPath>
+	<Params>
+		<Param name="SpaceWidth" min="0" max="2" value="0.35" desc="Standard Empty Space Width"/>
+		<Param name="LineHeight" min="0" max="2" value="0.7" desc="Minimum Single Line Height"/>
+		<Param name="GlueRatio" min="0" max="0.2" value="0.03" desc="Glue Width Multiplier"/>
+		<Param name="ExtentPadding" min="0" max="0.1" value="0.025" desc="Extension Padding Sizes"/>
+
+		<Param name="ScriptFactor" min="0.1" max="1" value="0.6" desc="The Size ratio of First Script"/>
+		<Param name="NestedScriptFactor" min="0.1" max="1" value="0.4" desc="The Size ratio of Nested Scripts"/>
+		<Param name="AxisHeight" min="-1" max="1" value="0.32" desc="Global Top-to-Bottom Orientation"/>
+		
+		<Param name="LineThickness" min="0" max="0.5" value="0.045" desc="Standard Line Thickness"/>
+		<Param name="NegateMargin" min="0" max="2" value="0.3" desc="Negation Line Additional Width"/>
+		<Param name="DoubleNegateOffset" min="0" max="1" value="0.08" desc="Double Negation Line Gap Width"/>
+		<Param name="MatrixMargin" min="0" max="2" value="0.4" desc="Matrix Childs-to-Childs Gap Width"/>
+		<Param name="OverUnderMargin" min="0" max="2" value="0.09" desc="Additional Gap for Accents"/>
+		<Param name="FractionMargin" min="0" max="2" value="0.2" desc="Fraction Line Additional Width"/>
+		
+		<Param name="NumeratorShift" min="0" max="1.5" value="0.33" desc="Numerator Gap Size to the Fraction Line"/>
+		<Param name="NumeratorShiftNoLine" min="0" max="1.5" value="0.28" desc="Numerator Gap (No Line) to the Fraction Line"/>
+		<Param name="NumeratorNarrow" min="0" max="1.5" value="0.11" desc="Numerator Gap (Narrowed Size) to the Fraction Line"/>
+		<Param name="DenominatorShift" min="0" max="1.5" value="0.7" desc="Denominator Gap Size to the Fraction Line"/>
+		<Param name="DenominatorNarrow" min="0" max="1.5" value="0.5" desc="Denominator Gap (Narrowed Size) to the Fraction Line"/>
+		
+		<Param name="SupDrop" min="0" max="1.5" value="0.32" desc="Superscript Pivot Offset"/>
+		<Param name="SubDrop" min="0" max="1.5" value="0.25" desc="Subscript Pivot Offset"/>
+		<Param name="SupMin" min="0" max="1.5" value="0.28" desc="Superscript Minimum Offset"/>
+		<Param name="SupMinCramped" min="0" max="1.5" value="0.2" desc="Superscript Minimum Offset (Cramped)"/>
+		<Param name="SupMinNarrowed" min="0" max="1.5" value="0.24" desc="Superscript Minimum Offset (Narrowed)"/>
+		<Param name="SubMinNoSup" min="0" max="1.5" value="0.1" desc="Subscript Minimum (No Superscript above)"/>
+		<Param name="SubMinOnSup" min="0" max="1.5" value="0.18" desc="Subscript Minimum (With Superscript)"/>
+		
+		<Param name="BigOpMargin" min="0" max="1.5" value="0.11" desc="Big Operator's Additional Height Size"/>
+		<Param name="BigOpUpShift" min="0" max="1.5" value="0.2" desc="Offset from Pivot of Upper limit to Big Operator's Top Bound"/>
+		<Param name="BigOpUpperGap" min="0" max="1.5" value="0.2" desc="Minimum Gap of Upper limit to Big Operator's Top Bound"/>
+		<Param name="BigOpLowShift" min="0" max="1.5" value="0.1" desc="Offset from Pivot of Lower limit to Big Operator's Low Bound"/>
+		<Param name="BigOpLowerGap" min="0" max="1.5" value="0.16" desc="Minimum Gap of Lower limit to Big Operator's Low Bound"/>
+	</Params>
+</TexFont>

@@ -1,0 +1,93 @@
+<?xml version='1.0'?>
+<!-- AUTO-GENERATED: this file contains global TEXDraw preferences, do not modify directly unless you know what are you doing -->
+<TexConfigurations>
+	<Parameters>
+	</Parameters>
+	<DefaultTypefaces>
+		<MapStyle code="0" fontId="3"/>
+		<MapStyle code="1" fontId="1"/>
+		<MapStyle code="2" fontId="1"/>
+		<MapStyle code="3" fontId="3"/>
+		<MapStyle code="4" fontId="3"/>
+		<MapStyle code="5" fontId="0"/>
+	</DefaultTypefaces>
+	<GlueTable>
+		<Glue leftType="0" rightType="1" glueSize="3"/>
+		<Glue leftType="0" rightType="2" glueSize="3"/>
+		<Glue leftType="0" rightType="3" glueSize="4"/>
+		<Glue leftType="0" rightType="4" glueSize="4"/>
+		<Glue leftType="0" rightType="5" glueSize="1"/>
+		<Glue leftType="0" rightType="6" glueSize="1"/>
+		<Glue leftType="0" rightType="7" glueSize="3"/>
+		<Glue leftType="0" rightType="8" glueSize="2"/>
+		<Glue leftType="1" rightType="0" glueSize="3"/>
+		<Glue leftType="1" rightType="2" glueSize="3"/>
+		<Glue leftType="1" rightType="3" glueSize="2"/>
+		<Glue leftType="1" rightType="4" glueSize="2"/>
+		<Glue leftType="1" rightType="5" glueSize="1"/>
+		<Glue leftType="1" rightType="6" glueSize="1"/>
+		<Glue leftType="1" rightType="7" glueSize="2"/>
+		<Glue leftType="1" rightType="8" glueSize="2"/>
+		<Glue leftType="2" rightType="0" glueSize="3"/>
+		<Glue leftType="2" rightType="1" glueSize="3"/>
+		<Glue leftType="2" rightType="2" glueSize="1"/>
+		<Glue leftType="2" rightType="3" glueSize="1"/>
+		<Glue leftType="2" rightType="4" glueSize="1"/>
+		<Glue leftType="2" rightType="5" glueSize="1"/>
+		<Glue leftType="2" rightType="6" glueSize="1"/>
+		<Glue leftType="2" rightType="7" glueSize="2"/>
+		<Glue leftType="2" rightType="8" glueSize="2"/>
+		<Glue leftType="3" rightType="0" glueSize="4"/>
+		<Glue leftType="3" rightType="1" glueSize="2"/>
+		<Glue leftType="3" rightType="2" glueSize="1"/>
+		<Glue leftType="3" rightType="3" glueSize="1"/>
+		<Glue leftType="3" rightType="4" glueSize="1"/>
+		<Glue leftType="3" rightType="5" glueSize="1"/>
+		<Glue leftType="3" rightType="6" glueSize="1"/>
+		<Glue leftType="3" rightType="7" glueSize="3"/>
+		<Glue leftType="3" rightType="8" glueSize="3"/>
+		<Glue leftType="4" rightType="0" glueSize="4"/>
+		<Glue leftType="4" rightType="1" glueSize="2"/>
+		<Glue leftType="4" rightType="2" glueSize="1"/>
+		<Glue leftType="4" rightType="3" glueSize="1"/>
+		<Glue leftType="4" rightType="4" glueSize="1"/>
+		<Glue leftType="4" rightType="5" glueSize="1"/>
+		<Glue leftType="4" rightType="6" glueSize="1"/>
+		<Glue leftType="4" rightType="7" glueSize="2"/>
+		<Glue leftType="4" rightType="8" glueSize="1"/>
+		<Glue leftType="5" rightType="0" glueSize="1"/>
+		<Glue leftType="5" rightType="1" glueSize="1"/>
+		<Glue leftType="5" rightType="2" glueSize="1"/>
+		<Glue leftType="5" rightType="3" glueSize="1"/>
+		<Glue leftType="5" rightType="4" glueSize="1"/>
+		<Glue leftType="5" rightType="5" glueSize="1"/>
+		<Glue leftType="5" rightType="7" glueSize="2"/>
+		<Glue leftType="5" rightType="8" glueSize="2"/>
+		<Glue leftType="6" rightType="0" glueSize="1"/>
+		<Glue leftType="6" rightType="1" glueSize="1"/>
+		<Glue leftType="6" rightType="2" glueSize="1"/>
+		<Glue leftType="6" rightType="3" glueSize="1"/>
+		<Glue leftType="6" rightType="4" glueSize="1"/>
+		<Glue leftType="6" rightType="6" glueSize="1"/>
+		<Glue leftType="6" rightType="7" glueSize="2"/>
+		<Glue leftType="6" rightType="8" glueSize="2"/>
+		<Glue leftType="7" rightType="0" glueSize="3"/>
+		<Glue leftType="7" rightType="1" glueSize="2"/>
+		<Glue leftType="7" rightType="2" glueSize="2"/>
+		<Glue leftType="7" rightType="3" glueSize="3"/>
+		<Glue leftType="7" rightType="4" glueSize="2"/>
+		<Glue leftType="7" rightType="5" glueSize="2"/>
+		<Glue leftType="7" rightType="6" glueSize="2"/>
+		<Glue leftType="7" rightType="7" glueSize="3"/>
+		<Glue leftType="7" rightType="8" glueSize="4"/>
+		<Glue leftType="8" rightType="0" glueSize="2"/>
+		<Glue leftType="8" rightType="1" glueSize="2"/>
+		<Glue leftType="8" rightType="2" glueSize="2"/>
+		<Glue leftType="8" rightType="3" glueSize="3"/>
+		<Glue leftType="8" rightType="4" glueSize="1"/>
+		<Glue leftType="8" rightType="5" glueSize="2"/>
+		<Glue leftType="8" rightType="6" glueSize="2"/>
+		<Glue leftType="8" rightType="7" glueSize="4"/>
+		<Glue leftType="8" rightType="8" glueSize="2"/>
+	</GlueTable>
+</TexConfigurations>

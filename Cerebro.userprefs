@@ -1,0 +1,24 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Cerebro/Scripts/General/WelcomeScript.cs">
+    <Files>
+      <File FileName="Assets/Cerebro/Scripts/General/CerebroScript.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/StudentScripts/StudentPlaylistContainerScript.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/Game/GOTGame.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/Game/Cell.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/Game/CellGrid.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/General/LaunchList.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/Game/CustomUnitGenerator.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/General/HTTPRequestHelper.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/Game/GOTSplashScreen.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/General/profileScript.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/General/WelcomeScript.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/Assessments/BaseAssessment.cs" Line="1" Column="1" />
+      <File FileName="Assets/Cerebro/Scripts/StudentScripts/AssessmentScript.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

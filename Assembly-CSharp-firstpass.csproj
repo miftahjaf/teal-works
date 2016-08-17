@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace></RootNamespace>
+    <ProjectGuid>{5D456D68-0921-B82A-AE9C-14835BCC1030}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseDirectory>Assets</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_3_5;UNITY_5_3;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_SPRITE_POLYGON;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;ENABLE_EDITOR_TESTS_RUNNER;ENABLE_RUNTIME_GI;ENABLE_SUBSTANCE;ENABLE_GAMECENTER;ENABLE_NETWORK;ENABLE_LOG_MIXED_STACKTRACE;ENABLE_UNITYWEBREQUEST;ENABLE_TEXTUREID_MAP;PLAYERCONNECTION_LISTENS_FIXED_PORT;DEBUGGER_LISTENS_FIXED_PORT;PLATFORM_SUPPORTS_ADS_ID;SUPPORT_ENVIRONMENT_VARIABLES;PLATFORM_SUPPORTS_PROFILER;PLATFORM_HAS_NO_SUPPORT_FOR_BUCKET_ALLOCATOR;STRICTCPP_NEW_DELETE_SIGNATURES;WWW_USE_CURL;HAS_NEON_SKINNIG;UNITY_INPUT_SIMULATE_EVENTS;PLATFORM_ALWAYS_USES_STDOUT_FOR_LOG;ENABLE_UNITYADS_RUNTIME;UNITY_UNITYADS_API;UNITY_IOS;UNITY_IPHONE;UNITY_IPHONE_API;SUPPORT_MULTIPLE_DISPLAYS;ENABLE_IL2CPP;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_OSX;ENABLE_IOS_ON_DEMAND_RESOURCES;ENABLE_IOS_APP_SLICING</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Temp\bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine">
+      <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\Plugins\GoKit\Go.cs" />
+     <Compile Include="Assets\Plugins\GoKit\GoDummyPath.cs" />
+     <Compile Include="Assets\Plugins\GoKit\GoTween.cs" />
+     <Compile Include="Assets\Plugins\GoKit\GoTweenChain.cs" />
+     <Compile Include="Assets\Plugins\GoKit\GoTweenCollectionConfig.cs" />
+     <Compile Include="Assets\Plugins\GoKit\GoTweenConfig.cs" />
+     <Compile Include="Assets\Plugins\GoKit\GoTweenFlow.cs" />
+     <Compile Include="Assets\Plugins\GoKit\base\AbstractGoTween.cs" />
+     <Compile Include="Assets\Plugins\GoKit\base\AbstractGoTweenCollection.cs" />
+     <Compile Include="Assets\Plugins\GoKit\easing\GoEaseBack.cs" />
+     <Compile Include="Assets\Plugins\GoKit\easing\GoEaseBounce.cs" />
+     <Compile Include="Assets\Plugins\GoKit\easing\GoEaseCircular.cs" />
+     <Compile Include="Assets\Plugins\GoKit\easing\GoEaseCubic.cs" />
+     <Compile Include="Assets\Plugins\GoKit\easing\GoEaseElastic.cs" />
+     <Compile Include="Assets\Plugins\GoKit\easing\GoEaseExponential.cs" />
+     <Compile Include="Assets\Plugins\GoKit\easing\GoEaseLinear.cs" />
+     <Compile Include="Assets\Plugins\GoKit\easing\GoEaseQuadratic.cs" />
+     <Compile Include="Assets\Plugins\GoKit\easing\GoEaseQuartic.cs" />
+     <Compile Include="Assets\Plugins\GoKit\easing\GoEaseQuintic.cs" />
+     <Compile Include="Assets\Plugins\GoKit\easing\GoEaseSinusoidal.cs" />
+     <Compile Include="Assets\Plugins\GoKit\enums\GoDuplicatePropertyRuleType.cs" />
+     <Compile Include="Assets\Plugins\GoKit\enums\GoEaseType.cs" />
+     <Compile Include="Assets\Plugins\GoKit\enums\GoLogLevel.cs" />
+     <Compile Include="Assets\Plugins\GoKit\enums\GoLookAtType.cs" />
+     <Compile Include="Assets\Plugins\GoKit\enums\GoLoopType.cs" />
+     <Compile Include="Assets\Plugins\GoKit\enums\GoShakeType.cs" />
+     <Compile Include="Assets\Plugins\GoKit\enums\GoSplineType.cs" />
+     <Compile Include="Assets\Plugins\GoKit\enums\GoTweenState.cs" />
+     <Compile Include="Assets\Plugins\GoKit\enums\GoUpdateType.cs" />
+     <Compile Include="Assets\Plugins\GoKit\extensions\GoKitTweenExtensions.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\GoTweenUtils.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\abstracts\AbstractColorTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\abstracts\AbstractQuaternionTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\abstracts\AbstractTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\abstracts\AbstractVector3TweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\ColorTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\FloatTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\IGenericProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\IntTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector2TweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector3PathTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector3TweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector3XTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector3YTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector3ZTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector4TweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\smoothing\GoSmoothedQuaternion.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\smoothing\GoSmoothedVector3.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\smoothing\GoSmoothingType.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\EulerAnglesTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\MaterialColorTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\PositionPathTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\PositionTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\RotationQuaternionTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\RotationTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\ScalePathTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\ScaleTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\ShakeTweenProperty.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\splines\AbstractGoSplineSolver.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSpline.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSplineCatmullRomSolver.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSplineCubicBezierSolver.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSplineQuadraticBezierSolver.cs" />
+     <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSplineStraightLineSolver.cs" />
+     <Compile Include="Assets\Plugins\SimpleJSON\SimpleJSON.cs" />
+     <Compile Include="Assets\Plugins\UniWebViewEventProcessor.cs" />
+     <Compile Include="Assets\Plugins\UniWebViewPluginAndroid.cs" />
+     <Compile Include="Assets\Plugins\UniWebViewPluginMacEditor.cs" />
+     <Compile Include="Assets\Plugins\UniWebViewPluginWP.cs" />
+     <Compile Include="Assets\Plugins\UniWebViewPluginiOS.cs" />
+     <None Include="Assets\Plugins\Android\NativeToolkit\bin\AndroidManifest.xml" />
+     <None Include="Assets\UniWebView\ChangeLog.txt" />
+     <None Include="Assets\TEXDraw\XMLs\TexSymbolDefinitions.xml" />
+     <None Include="Assets\TEXDraw\Script\TEXShaderLitShadow.shader" />
+     <None Include="Assets\JSON\readme.txt" />
+     <None Include="Assets\Resources\words.txt" />
+     <None Include="Assets\TEXDraw\XMLs\TexFontDefinitions.xml" />
+     <None Include="Assets\MaterialUI\README.txt" />
+     <None Include="Assets\TEXDraw\Script\TEXShader.shader" />
+     <None Include="Assets\ProceduralUIImage\Shaders\ProceduralImageRuntime.shader" />
+     <None Include="Assets\Plugins\Android\AndroidManifestAmazon.xml" />
+     <None Include="Assets\Plugins\GoKit\easing\easeEquationsLicense.txt" />
+     <None Include="Assets\InternetReachabilityVerifier\Examples\internetreachabilityverifier.txt" />
+     <None Include="Assets\TEXDraw\XMLs\TexConfigurations.xml" />
+     <None Include="Assets\MaterialUI\Fonts\Roboto\NOTICE.txt" />
+     <None Include="Assets\Ultimate Isometric Toolkit\ReadMe.txt" />
+     <None Include="Assets\TEXDraw\Script\TEXShaderLit.shader" />
+     <None Include="Assets\UniWebView\Readme.txt" />
+     <None Include="Assets\MaterialUI\Fonts\Resources\Material Design Icons\LICENSE.txt" />
+     <None Include="Assets\Plugins\Android\answers\AndroidManifest.xml" />
+     <None Include="Assets\MaterialUI\CHANGELOG.txt" />
+     <None Include="Assets\TEXDraw\Script\TEXShaderMobile.shader" />
+     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
+     <None Include="Assets\Fingers\Readme.txt" />
+     <None Include="Assets\TBS Framework\ReleaseNotes.txt" />
+     <None Include="Assets\Plugins\Android\beta\AndroidManifest.xml" />
+     <None Include="Assets\Plugins\Android\NativeToolkit\AndroidManifest.xml" />
+     <None Include="Assets\Plugins\Android\NativeToolkit\bin\R.txt" />
+     <None Include="Assets\Ultimate Isometric Toolkit\Art\License.txt" />
+ <Reference Include="UnityEngine.Networking">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.UI">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="Ionic.Zlib.CF">
+ <HintPath>/Users/shalin/cerebro/Assets/HTTP/lib/Ionic.Zlib.CF.dll</HintPath>
+ </Reference>
+ <Reference Include="NativeToolkitWP8">
+ <HintPath>/Users/shalin/cerebro/Assets/Plugins/NativeToolkitWP8.dll</HintPath>
+ </Reference>
+ <Reference Include="ICSharpCode.SharpZipLib">
+ <HintPath>/Users/shalin/cerebro/Assets/Plugins/SimpleJSON/ICSharpCode.SharpZipLib.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>

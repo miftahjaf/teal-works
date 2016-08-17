@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace></RootNamespace>
+    <ProjectGuid>{90AE767E-B41A-0F4D-F90F-9099C8236C83}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseDirectory>Assets</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_3_5;UNITY_5_3;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_SPRITE_POLYGON;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;ENABLE_EDITOR_TESTS_RUNNER;ENABLE_RUNTIME_GI;ENABLE_SUBSTANCE;ENABLE_GAMECENTER;ENABLE_NETWORK;ENABLE_LOG_MIXED_STACKTRACE;ENABLE_UNITYWEBREQUEST;ENABLE_TEXTUREID_MAP;PLAYERCONNECTION_LISTENS_FIXED_PORT;DEBUGGER_LISTENS_FIXED_PORT;PLATFORM_SUPPORTS_ADS_ID;SUPPORT_ENVIRONMENT_VARIABLES;PLATFORM_SUPPORTS_PROFILER;PLATFORM_HAS_NO_SUPPORT_FOR_BUCKET_ALLOCATOR;STRICTCPP_NEW_DELETE_SIGNATURES;WWW_USE_CURL;HAS_NEON_SKINNIG;UNITY_INPUT_SIMULATE_EVENTS;PLATFORM_ALWAYS_USES_STDOUT_FOR_LOG;ENABLE_UNITYADS_RUNTIME;UNITY_UNITYADS_API;UNITY_IOS;UNITY_IPHONE;UNITY_IPHONE_API;SUPPORT_MULTIPLE_DISPLAYS;ENABLE_IL2CPP;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_OSX;ENABLE_IOS_ON_DEMAND_RESOURCES;ENABLE_IOS_APP_SLICING</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Temp\bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine">
+      <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\AlgebraicExpression.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\Averages7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\BaseAssessment.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\DecimalsScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\DecimalsScript5.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\DecimalsScript7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\FactorsAndMultiplesScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\FactorsAndMultiplesScript5.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\FactorsAndMultiplesScript7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\FractionsScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\FractionsScript5.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\FractionsScript7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\FundamentalConceptsOfAlgebra.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\FundamentalConceptsOfAlgebra7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\LargeNos.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\Mensuration.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\Mensuration7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\NumberSystemScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\NumbersScript7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\OperationsAndApplications5.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\PercentageScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\PowerAndRootsScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\PowerAndRootsScript7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\ProfitAndLoss6.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\ProfitAndLoss7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\RatioAndProportionScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\RatioAndProportionScript7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\Revisit.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\Sets.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\SimpleEquations.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\SimpleInterest.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\SimpleInterest7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\SimplifyQuestionGenerator.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\SpecialProducts7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\SubstitutionAndFormulae.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\UnitaryMethod7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\CalloutBGScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\Cell.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\CellGrid.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\CellGridStateUnitsSelected.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\CustomUnitGenerator.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\GOTGame.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\GOTSplashScreen.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\GenericUnit.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\HumanPlayer.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\MySquare.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\NextGuiController.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Game\Unit.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\AlertScreenScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\AnalyticsViewScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\CerebroAnalytics.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\CerebroScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\CerebroTestScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\CerebroTouchScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\Coding.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\ConsoleScreenScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\FeedbackScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\HTTPRequestHelper.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\LaunchList.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\MathFunctions.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\MissionComplete.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\MissionScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\MissionScriptOld.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\PasswordDialogScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\Properties.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\PushNotificator.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\RatingPopup.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\SettingsDialogScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\VerbalizeLandingPage.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\VerbalizeScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\WelcomeScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Helpers\CerebroHelper.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Helpers\ExpressionParser.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Helpers\ProgressHelper.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Helpers\StringHelper.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Helpers\SwipeHelper.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Helpers\TextureScale.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Helpers\VersionHelper.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Helpers\VideoHelper.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\AssessmentScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\AssessmentSelector.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\ChooseAssessmentScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\ClickableOption.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\DescribeImageScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\GooglyScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\PracticeData.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\ProfileScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\QOTD.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\QOTDLandingPage.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\QOTDLeaderboard.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\StudentClickableOption.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\StudentList.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\StudentListOption.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\StudentOptionData.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\StudentPlaylist.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\StudentPlaylistContainerScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\StudentPlaylistOption.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\StudentPlaylstOptionData.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\StudentScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\StudentScripts\WCLandingPage.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\WordTower\BlockScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\WordTower\BuyBlockScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\WordTower\BuyScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\WordTower\Cell.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\WordTower\Constants.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\WordTower\MovableScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\WordTower\WarningScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\WordTower\WildcardSelectScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\WordTower\WordChecker.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\WordTower\WordTowerScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\WordTower\World.cs" />
+     <Compile Include="Assets\Cerebro\iOSBridge\FrameworkBridge.cs" />
+     <Compile Include="Assets\Cerebro\iOSBridge\TestiOS.cs" />
+     <Compile Include="Assets\Demo\scripts\BaseDemoGUI.cs" />
+     <Compile Include="Assets\Demo\scripts\FPSHUD.cs" />
+     <Compile Include="Assets\Demo\scripts\PathTweenGUI.cs" />
+     <Compile Include="Assets\Demo\scripts\ShakeVariantsGUI.cs" />
+     <Compile Include="Assets\Demo\scripts\SimpleTween.cs" />
+     <Compile Include="Assets\Demo\scripts\StressTestGUI.cs" />
+     <Compile Include="Assets\Demo\scripts\TweenChainGUI.cs" />
+     <Compile Include="Assets\Demo\scripts\TweenFlowGUI.cs" />
+     <Compile Include="Assets\Fingers\Demo\AsteroidScript.cs" />
+     <Compile Include="Assets\Fingers\Demo\DemoScript.cs" />
+     <Compile Include="Assets\Fingers\Script\DeviceInfo.cs" />
+     <Compile Include="Assets\Fingers\Script\FingersScript.cs" />
+     <Compile Include="Assets\Fingers\Script\GestureRecognizer.cs" />
+     <Compile Include="Assets\Fingers\Script\LongPressGestureRecognizer.cs" />
+     <Compile Include="Assets\Fingers\Script\OneTouchRotateGestureRecognizer.cs" />
+     <Compile Include="Assets\Fingers\Script\OneTouchScaleGestureRecognizer.cs" />
+     <Compile Include="Assets\Fingers\Script\PanGestureRecognizer.cs" />
+     <Compile Include="Assets\Fingers\Script\RotateGestureRecognizer.cs" />
+     <Compile Include="Assets\Fingers\Script\ScaleGestureRecognizer.cs" />
+     <Compile Include="Assets\Fingers\Script\SwipeGestureRecognizer.cs" />
+     <Compile Include="Assets\Fingers\Script\TapGestureRecognizer.cs" />
+     <Compile Include="Assets\HTTP\lib\JSON.cs" />
+     <Compile Include="Assets\HTTP\src\CookieJar.cs" />
+     <Compile Include="Assets\HTTP\src\DiskCache.cs" />
+     <Compile Include="Assets\HTTP\src\FormDataStream.cs" />
+     <Compile Include="Assets\HTTP\src\Request.cs" />
+     <Compile Include="Assets\HTTP\src\Response.cs" />
+     <Compile Include="Assets\HTTP\src\ResponseCallbackDispatcher.cs" />
+     <Compile Include="Assets\HTTP\src\StreamedWWWForm.cs" />
+     <Compile Include="Assets\InternetReachabilityVerifier\Examples\CustomIRVExample.cs" />
+     <Compile Include="Assets\InternetReachabilityVerifier\Examples\IRVExample.cs" />
+     <Compile Include="Assets\InternetReachabilityVerifier\Examples\SkeletonIRVExample.cs" />
+     <Compile Include="Assets\InternetReachabilityVerifier\InternetReachabilityVerifier.cs" />
+     <Compile Include="Assets\JSON\JSONObject.cs" />
+     <Compile Include="Assets\JSON\JSONTemplates.cs" />
+     <Compile Include="Assets\JSON\VectorTemplates.cs" />
+     <Compile Include="Assets\MaterialUI\Examples\Scripts\07 - Inputs\Example07LengthValidation.cs" />
+     <Compile Include="Assets\MaterialUI\Examples\Scripts\07 - Inputs\Example07LetterValidation.cs" />
+     <Compile Include="Assets\MaterialUI\Examples\Scripts\08 - Sliders\Example08.cs" />
+     <Compile Include="Assets\MaterialUI\Examples\Scripts\09 - Progress Indicators\Example09.cs" />
+     <Compile Include="Assets\MaterialUI\Examples\Scripts\13 - Toasts &amp; Snackbars\Example13.cs" />
+     <Compile Include="Assets\MaterialUI\Examples\Scripts\14 - Dialogs\Example14.cs" />
+     <Compile Include="Assets\MaterialUI\Examples\Scripts\15 - Pickers\Example15.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Animation\AutoTweener.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Animation\EasyTween.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Animation\Tween.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\ColorCopier.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\Interfaces.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\MaterialUIScaler.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\RectTransformSnap.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\Ripples\MaterialRipple.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\Ripples\Ripple.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\Ripples\RippleManager.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\Shadows\MaterialShadow.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\Shadows\ShadowAnim.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\Shadows\ShadowGenerator.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\SpriteSwapper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\ToggleBase.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Common\VerticalScrollLayoutElement.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Buttons\MaterialButton.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Buttons\MaterialMovableFab.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogAlert.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogAnimator.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogBackground.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogCheckboxList.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogCheckboxOption.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogClickableItem.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogProgress.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogRadioList.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogRadioOption.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogSections.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogSimpleList.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\DialogSimpleOption.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\MaterialDialog.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\Pickers\DatePicker\DialogDatePicker.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\Pickers\DatePicker\DialogDatePickerDayItem.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\Pickers\DatePicker\DialogDatePickerYearItem.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\Pickers\DatePicker\DialogDatePickerYearList.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\Pickers\TimePicker\DialogTimePicker.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Dialogs\Pickers\TimePicker\DialogTimePickerClock.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\MaterialCheckbox.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\MaterialDropdown.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\MaterialInputField.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\MaterialNavDrawer.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\MaterialSlider.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\MaterialSwitch.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Menus\DropdownTrigger.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\OptionData.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\OverscrollConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Progress\CircularProgressIndicator.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Progress\LinearProgressIndicator.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Progress\ProgressIndicator.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\RadioGroups\MaterialRadio.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\RadioGroups\MaterialRadioGroup.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Screens\MaterialScreen.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Screens\ScreenView.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Snackbars\Snackbar.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Snackbars\SnackbarAnimator.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Tabs\TabItem.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Tabs\TabPage.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Tabs\TabPagesScrollDetector.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Tabs\TabView.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Toasts\Toast.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\Toasts\ToastAnimator.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\VectorImages\ImageData.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\VectorImages\MaterialIconEnum.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\VectorImages\MaterialIconHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\VectorImages\MaterialUIIconHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\VectorImages\Model\Glyph.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\VectorImages\Model\VectorImageData.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\VectorImages\Model\VectorImageSet.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\VectorImages\VectorImage.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Components\VectorImages\VectorImageManager.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Managers\DialogManager.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Managers\PrefabManager.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Managers\SnackbarManager.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Managers\ToastManager.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Managers\TweenManager.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\AdaptiveUIGrid.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\ContinuationManager.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\EditorCoroutine.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\EditorUpdate.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\Extensions.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\FPSCounter.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\HSBColor.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\ImageHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\InputFieldValidators\TextValidatorUtils.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\InstantiationHelpers\ButtonRectInstantiationHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\InstantiationHelpers\ButtonRoundInstantiationHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\InstantiationHelpers\CircleProgressIndicatorInstantiationHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\InstantiationHelpers\DropdownInstantiationHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\InstantiationHelpers\InputFieldInstantiationHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\InstantiationHelpers\InstantiationHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\InstantiationHelpers\MaterialSliderInstantiationHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\InstantiationHelpers\RadioInstantiationHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\InstantiationHelpers\TabViewInstantiationHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\InstantiationHelpers\ToggleInstantiationHelper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\MaterialColor.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\MaterialUIVersion.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\TextUnicode.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUtils\TextureUtils.cs" />
+     <Compile Include="Assets\MaterialUI\Utils\LitJson\IJsonWrapper.cs" />
+     <Compile Include="Assets\MaterialUI\Utils\LitJson\JsonData.cs" />
+     <Compile Include="Assets\MaterialUI\Utils\LitJson\JsonException.cs" />
+     <Compile Include="Assets\MaterialUI\Utils\LitJson\JsonMapper.cs" />
+     <Compile Include="Assets\MaterialUI\Utils\LitJson\JsonMockWrapper.cs" />
+     <Compile Include="Assets\MaterialUI\Utils\LitJson\JsonReader.cs" />
+     <Compile Include="Assets\MaterialUI\Utils\LitJson\JsonWriter.cs" />
+     <Compile Include="Assets\MaterialUI\Utils\LitJson\Lexer.cs" />
+     <Compile Include="Assets\MaterialUI\Utils\LitJson\ParserToken.cs" />
+     <Compile Include="Assets\MaterialUI\Utils\PropertyDrawers\ObserveAttribute\ObserveAttribute.cs" />
+     <Compile Include="Assets\MaterialUI\Utils\PropertyDrawers\PopupAttribute\PopupAttribute.cs" />
+     <Compile Include="Assets\NativeToolkit\Example\NativeToolkitExample.cs" />
+     <Compile Include="Assets\NativeToolkit\Example\NativeToolkitFacebookExample.cs" />
+     <Compile Include="Assets\NativeToolkit\Facebook\FBUploadImage.cs" />
+     <Compile Include="Assets\NativeToolkit\Scripts\FBWrapper.cs" />
+     <Compile Include="Assets\NativeToolkit\Scripts\MiniJSON.cs" />
+     <Compile Include="Assets\NativeToolkit\Scripts\NativeToolkit.cs" />
+     <Compile Include="Assets\ProceduralUIImage\Scripts\Attributes\ModifierID.cs" />
+     <Compile Include="Assets\ProceduralUIImage\Scripts\EmptySprite.cs" />
+     <Compile Include="Assets\ProceduralUIImage\Scripts\MaterialHelper.cs" />
+     <Compile Include="Assets\ProceduralUIImage\Scripts\Modifiers\CustomPremadeModifier.cs" />
+     <Compile Include="Assets\ProceduralUIImage\Scripts\Modifiers\FreeModifier.cs" />
+     <Compile Include="Assets\ProceduralUIImage\Scripts\Modifiers\OnlyOneEdgeModifier.cs" />
+     <Compile Include="Assets\ProceduralUIImage\Scripts\Modifiers\RoundModifier.cs" />
+     <Compile Include="Assets\ProceduralUIImage\Scripts\Modifiers\UniformModifier.cs" />
+     <Compile Include="Assets\ProceduralUIImage\Scripts\ProceduralImage.cs" />
+     <Compile Include="Assets\ProceduralUIImage\Scripts\ProceduralImageModifier.cs" />
+     <Compile Include="Assets\Pushwoosh\PushNotificationsAndroid.cs" />
+     <Compile Include="Assets\Pushwoosh\PushNotificationsIOS.cs" />
+     <Compile Include="Assets\Pushwoosh\PushNotificationsWindows.cs" />
+     <Compile Include="Assets\Pushwoosh\Pushwoosh.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\AStarPathfinding.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\BreadthFirstSearch.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\Buff.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\CellGridState.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\CellGridStateAiTurn.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\CellGridStateGameOver.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\CellGridStateTurnChanging.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\CellGridStateUnitSelected.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\CellGridStateWaitingForInput.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\CustomObstacleGenerator.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\DijkstraPathfinding.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\EquilateralHexGridGenerator.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\GreedyBestFirstSearch.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\HeapPriorityQueue.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\Hexagon.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\HexagonalHexGridGenerator.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\ICellGridGenerator.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\IGraphNode.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\IPathfinding.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\IPriorityQueue.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\IUnitGenerator.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\ListPriorityQueue.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\NaiveAiPlayer.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\Player.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\RandomUnitGenerator.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\RectangularHexGridGenerator.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\RectangularSquareGridGenerator.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\Square.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\TriangularHexGridGenerator.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitState.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateMarkedAsFinished.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateMarkedAsFriendly.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateMarkedAsReachableEnemy.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateMarkedAsSelected.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateNormal.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\AccentedAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\Atom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\AttrColorAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\BigOperatorAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\CharAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\CharSymbol.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\FractionAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\MatrixAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\NegateAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\OverUnderDelimiter.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\OverlinedAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\Radical.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\RowAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\ScriptsAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\SpaceAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\SymbolAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\UnderOverAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\UnderlinedAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\UnicodeAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Atom\VerticalCenteredAtom.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Box\AttrColorBox.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Box\Box.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Box\CharBox.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Box\HorizontalBox.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Box\HorizontalRule.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Box\OverBar.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Box\OverUnderBox.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Box\StrikeBox.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Box\StrutBox.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Box\UnicodeBox.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Box\VerticalBox.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Exception\SymbolNotFoundException.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Exception\TexParseException.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Internal\DelimiterFactory.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Internal\DrawingContext.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Internal\DrawingParams.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Internal\ListPool.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Internal\ObjectPool.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Internal\TexCharMetric.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Internal\TexEnums.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Internal\TexFormula.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Internal\TexFormulaParser.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Internal\TexRenderer.cs" />
+     <Compile Include="Assets\TEXDraw\Core\Internal\TexUtility.cs" />
+     <Compile Include="Assets\TEXDraw\Core\TEXPreference.cs" />
+     <Compile Include="Assets\TEXDraw\Core\TexChar.cs" />
+     <Compile Include="Assets\TEXDraw\Core\TexCustomDictionary.cs" />
+     <Compile Include="Assets\TEXDraw\Core\TexFont.cs" />
+     <Compile Include="Assets\TEXDraw\Core\TexFontHeader.cs" />
+     <Compile Include="Assets\TEXDraw\Core\TexXmlParser.cs" />
+     <Compile Include="Assets\TEXDraw\Sample\Scripts\TexConstantUpdater.cs" />
+     <Compile Include="Assets\TEXDraw\Sample\Scripts\TexSampleTryPractice.cs" />
+     <Compile Include="Assets\TEXDraw\Script\TEXDraw.cs" />
+     <Compile Include="Assets\TEXDraw\Script\TEXDraw3D.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Iso\GenericGridMap.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Iso\GridMap.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Iso\IsoDirection.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Iso\IsoObject.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Iso\Isometric.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Iso\Tile.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\IsoCollision\IsoCollider.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\IsoController\AbstractIsoObjectController.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\IsoController\AdvancedIsoObjectController.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\IsoController\Node.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\IsoController\NodeIsoObjectController.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\IsoController\SimpleIsoObjectController.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\IsoController\TurnbasedIsoObjectController.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Other\Draggable.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Other\EasingFunctions.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Other\LevelGenerator.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Other\LevelLoader.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Other\MethodExtensionForMonoBehaviourTransform.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Other\Singleton.cs" />
+     <Compile Include="Assets\Ultimate Isometric Toolkit\Code\IsometricTools\Other\TurnbasedSetup.cs" />
+     <Compile Include="Assets\UniWebView\Demo\1.Basic\TopSceneManager.cs" />
+     <Compile Include="Assets\UniWebView\Demo\2.UseWithCode\UseWithCodeSceneManager.cs" />
+     <Compile Include="Assets\UniWebView\Demo\3.LocalHTML\LocalHTMLSceneManager.cs" />
+     <Compile Include="Assets\UniWebView\Demo\4.SizeAndTransition\SizeAndTransitionSceneManager.cs" />
+     <Compile Include="Assets\UniWebView\Demo\5.CallbackFromWeb\CallbackFromWebSceneManager.cs" />
+     <Compile Include="Assets\UniWebView\Demo\6.RunJavaScriptInWeb\RunJavaScriptInWebSceneManager.cs" />
+     <Compile Include="Assets\UniWebView\Demo\Common\Navigator.cs" />
+     <Compile Include="Assets\UniWebView\Script\Helper\UniWebViewHelper.cs" />
+     <Compile Include="Assets\UniWebView\Script\UniWebView.cs" />
+     <Compile Include="Assets\UniWebView\Script\UniWebViewEdgeInsets.cs" />
+     <Compile Include="Assets\UniWebView\Script\UniWebViewMessage.cs" />
+     <Compile Include="Assets\UniWebView\Script\UniWebViewOrientation.cs" />
+     <Compile Include="Assets\UniWebView\Script\UniWebViewTransitionEdge.cs" />
+     <None Include="Assets\Plugins\Android\NativeToolkit\bin\AndroidManifest.xml" />
+     <None Include="Assets\UniWebView\ChangeLog.txt" />
+     <None Include="Assets\TEXDraw\XMLs\TexSymbolDefinitions.xml" />
+     <None Include="Assets\TEXDraw\Script\TEXShaderLitShadow.shader" />
+     <None Include="Assets\JSON\readme.txt" />
+     <None Include="Assets\Resources\words.txt" />
+     <None Include="Assets\TEXDraw\XMLs\TexFontDefinitions.xml" />
+     <None Include="Assets\MaterialUI\README.txt" />
+     <None Include="Assets\TEXDraw\Script\TEXShader.shader" />
+     <None Include="Assets\ProceduralUIImage\Shaders\ProceduralImageRuntime.shader" />
+     <None Include="Assets\Plugins\Android\AndroidManifestAmazon.xml" />
+     <None Include="Assets\Plugins\GoKit\easing\easeEquationsLicense.txt" />
+     <None Include="Assets\InternetReachabilityVerifier\Examples\internetreachabilityverifier.txt" />
+     <None Include="Assets\TEXDraw\XMLs\TexConfigurations.xml" />
+     <None Include="Assets\MaterialUI\Fonts\Roboto\NOTICE.txt" />
+     <None Include="Assets\Ultimate Isometric Toolkit\ReadMe.txt" />
+     <None Include="Assets\TEXDraw\Script\TEXShaderLit.shader" />
+     <None Include="Assets\UniWebView\Readme.txt" />
+     <None Include="Assets\MaterialUI\Fonts\Resources\Material Design Icons\LICENSE.txt" />
+     <None Include="Assets\Plugins\Android\answers\AndroidManifest.xml" />
+     <None Include="Assets\MaterialUI\CHANGELOG.txt" />
+     <None Include="Assets\TEXDraw\Script\TEXShaderMobile.shader" />
+     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
+     <None Include="Assets\Fingers\Readme.txt" />
+     <None Include="Assets\TBS Framework\ReleaseNotes.txt" />
+     <None Include="Assets\Plugins\Android\beta\AndroidManifest.xml" />
+     <None Include="Assets\Plugins\Android\NativeToolkit\AndroidManifest.xml" />
+     <None Include="Assets\Plugins\Android\NativeToolkit\bin\R.txt" />
+     <None Include="Assets\Ultimate Isometric Toolkit\Art\License.txt" />
+ <Reference Include="UnityEngine.Networking">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.UI">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="Ionic.Zlib.CF">
+ <HintPath>/Users/shalin/cerebro/Assets/HTTP/lib/Ionic.Zlib.CF.dll</HintPath>
+ </Reference>
+ <Reference Include="NativeToolkitWP8">
+ <HintPath>/Users/shalin/cerebro/Assets/Plugins/NativeToolkitWP8.dll</HintPath>
+ </Reference>
+ <Reference Include="ICSharpCode.SharpZipLib">
+ <HintPath>/Users/shalin/cerebro/Assets/Plugins/SimpleJSON/ICSharpCode.SharpZipLib.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{5D456D68-0921-B82A-AE9C-14835BCC1030}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>

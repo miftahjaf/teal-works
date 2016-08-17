@@ -1,0 +1,238 @@
+//Fonts
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
+html {
+    font-size: 10px;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+
+body {
+    background-color: #e5e5e5;
+    font-family: 'Source Sans Pro', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+a {
+    color: #4682ea;
+}
+
+a:hover {
+    color: #1a64e3;
+    text-decoration: none;
+}
+
+.cerebro-text {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.flex-hvc {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex: 0 1 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -webkit-flex-basis: 25%;
+    -ms-flex-preferred-size: 25%;
+    flex-basis: 25%;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.loader {
+    background-image: -webkit-linear-gradient(top, #31bcaf, #52df8e);
+    background-image: linear-gradient(to bottom, #31bcaf, #52df8e);
+    background-color: #52df8e;
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+.loader-inner,
+.loader-inner:before,
+.loader-inner:after {
+  background: #666;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+.loader-inner:before,
+.loader-inner:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.loader-inner:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader-inner {
+  text-indent: -9999em;
+  margin: 200px auto;
+  position: relative;
+  font-size: 10px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.loader-inner:after {
+  left: 1.5em;
+}
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0 #fff;
+    background: #fff;
+    /*height: 4em;*/
+  }
+  40% {
+    box-shadow: 0 -4em #fff;
+    background: #fff;
+    /*height: 5em;*/
+  }
+}
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0 #fff;
+    background: #fff;
+    /*height: 4em;*/
+  }
+  40% {
+    box-shadow: 0 -4em #fff;
+    background: #fff;
+    /*height: 5em;*/
+  }
+}
+
+.container-fluid {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.content-container {
+    cursor: default;
+}
+
+.hdr__label {
+    background-color: #404040;
+    color: #f8f8f8;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 15px 40px;
+}
+
+.content {
+    padding: 40px;
+}
+
+.stats-container__stats {
+    padding: 40px 40px 20px 40px;
+}
+
+.stats-container {
+    width: 100%;
+}
+
+.stats-container__stat {
+    padding: 20px;
+}
+
+.stats-container__stat {
+    background: #FFF;
+    -webkit-box-shadow: 0 10px 6px -6px #999;
+    -moz-box-shadow: 0 10px 6px -6px #999;
+    box-shadow: 0 10px 6px -6px #999;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.stats-container__stat:not(:last-child) {
+    margin-right: 12.5%;
+}
+
+.stats-container__stat__value {
+    color: #4d4d4d;
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 80px;
+    text-align: center;
+}
+
+.stats-container__stat__label {
+    color: #999;
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+}
+
+#reportrange {
+    background: #fff;
+    cursor: pointer;
+    padding: 8px 15px;
+    display: inline-block;
+    width: auto;
+    color: #606060;
+    line-height: 24px;
+}
+
+#reportrange .glyphicon {
+    opacity: 0.7;
+}
+
+#filters_div {
+    visibility: hidden;
+}
+
+#filterTag {
+    display: inline-block;
+    margin-left: 3rem;
+}
+
+.filter__remove {
+    font-size: 14px;
+}
+
+.export__csv {
+    font-size: 14px;
+}
+
+.cerebro-chart {
+    text-align: center;
+}
+
+.cerebro-chart2 {
+    text-align: center;
+    overflow-x: scroll;
+ overflow-y: hidden;     
+ width: 100%;
+}
+
+#classAccuracy_div > div > div,
+#subtopicAttempts_div > div > div,
+#subtopicAccuracy_div > div,
+#activity_div > div {
+    margin: 0 auto;
+}

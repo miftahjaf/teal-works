@@ -1,0 +1,99 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cerebro</title>
+
+    <!-- Libs CSS -->
+    <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css"/>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="./styles.css"/>
+</head>
+
+<body>
+<div class="loader flex-hvc">
+    <div class="loader-inner">Loading...</div>
+</div>
+
+<div class="content-container hidden">
+    
+    <div class="container-fluid">
+        <div class="stats-container">
+        <div class="stats-container__hdr-label hdr__label">
+            Class Statistics
+        </div>
+        <div class="stats-container__stats content clearfix row"></div>
+        </div>
+        <div id="classStats_div"></div>
+        <div id="filters_div">
+            <div class="filters__hdr-label hdr__label">Select Filters</div>
+            <div class="filters__content content">
+                <div id="reportrange">
+                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                    <span></span> <b class="caret"></b>
+                </div>
+
+                <div id="filterTag">
+                    <a class="filter__remove" onclick="removeFilters()" href="javascript:void(0);">Remove Student Filter</a>
+                </div>
+                <div id="filterTag">
+                    <a class="export__csv" onclick="exportCompleteCSV()" href="javascript:void(0);">Export CSV</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="hdr__label">Student List</div>
+        <div class="row content">
+            <div id="studentlist_div" class="cerebro-chart col-md-12 col-xs-12 col-sm-12 col-lg-12"></div>
+        </div>
+
+        <div class="class-accuracy__hdr__label hdr__label"></div>
+        <div class="row content">
+            <div id="classAccuracy_div" class="cerebro-chart col-md-12 col-xs-12 col-sm-12 col-lg-12"></div>
+        </div>
+
+       
+
+
+        <div class="subtopic-attempts__hdr__label hdr__label"></div>
+        <div class="row content">
+            <div id="subtopicAttempts_div" class="cerebro-chart col-md-12 col-xs-12 col-sm-12 col-lg-12"></div>
+        </div>
+
+        <div class="hdr__label">Subtopics Attempts and Accuracy</div>
+        <div class="row content">
+            <div id="subtopicAccuracy_div" class="cerebro-chart col-md-12 col-xs-12 col-sm-12 col-lg-12"></div>
+        </div>
+
+        <div class="activity__hdr__label hdr__label"></div>
+        <div class="row content">
+            <div id="activity_div" class="cerebro-chart col-md-12 col-xs-12 col-sm-12 col-lg-12"></div>
+        </div>
+
+         <div class="accuracy__hdr__label hdr__label"></div>
+        <div class="row content">
+            <div id="accuracy_div" class="cerebro-chart2"></div>
+        </div>
+
+        <div class="hdr__label">Evaluation per Topic</div>
+        <div class="row content">
+            <div id="questiontype_div_per_class" class="container-with-padding cerebro-chart col-md-12 col-xs-12 col-sm-12 col-lg-12"></div>
+            <div id="questiontype_div_per_student" class="container-with-padding cerebro-chart col-md-12 col-xs-12 col-sm-12 col-lg-12"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Libraries JS -->
+<script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
+<script src="//sdk.amazonaws.com/js/aws-sdk-2.2.47.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+
+<script type="text/javascript" src="./main.js"></script>
+</body>
+</html>
