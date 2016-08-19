@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{90AE767E-B41A-0F4D-F90F-9099C8236C83}</ProjectGuid>
+    <ProjectGuid>{5AC707DD-1102-61AD-B8AF-9256F115B70A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -51,6 +51,7 @@
      <Compile Include="Assets\Cerebro\Scripts\Assessments\DecimalsScript.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\DecimalsScript5.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\DecimalsScript7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\EquationsAndInequations7.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\FactorsAndMultiplesScript.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\FactorsAndMultiplesScript5.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\FactorsAndMultiplesScript7.cs" />
@@ -452,16 +453,19 @@
      <Compile Include="Assets\UniWebView\Script\UniWebViewMessage.cs" />
      <Compile Include="Assets\UniWebView\Script\UniWebViewOrientation.cs" />
      <Compile Include="Assets\UniWebView\Script\UniWebViewTransitionEdge.cs" />
+     <None Include="Assets\Vectrosity 5 Documentation\Vectrosity5 Upgrade Guide.txt" />
      <None Include="Assets\Plugins\Android\NativeToolkit\bin\AndroidManifest.xml" />
      <None Include="Assets\UniWebView\ChangeLog.txt" />
      <None Include="Assets\TEXDraw\XMLs\TexSymbolDefinitions.xml" />
      <None Include="Assets\TEXDraw\Script\TEXShaderLitShadow.shader" />
      <None Include="Assets\JSON\readme.txt" />
+     <None Include="Assets\What to import!.txt" />
      <None Include="Assets\Resources\words.txt" />
      <None Include="Assets\TEXDraw\XMLs\TexFontDefinitions.xml" />
      <None Include="Assets\MaterialUI\README.txt" />
      <None Include="Assets\TEXDraw\Script\TEXShader.shader" />
      <None Include="Assets\ProceduralUIImage\Shaders\ProceduralImageRuntime.shader" />
+     <None Include="Assets\Vectrosity 5 Documentation\Vectrosity changelog.txt" />
      <None Include="Assets\Plugins\Android\AndroidManifestAmazon.xml" />
      <None Include="Assets\Plugins\GoKit\easing\easeEquationsLicense.txt" />
      <None Include="Assets\InternetReachabilityVerifier\Examples\internetreachabilityverifier.txt" />
@@ -488,18 +492,21 @@
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Ionic.Zlib.CF">
- <HintPath>/Users/shalin/cerebro/Assets/HTTP/lib/Ionic.Zlib.CF.dll</HintPath>
+ <HintPath>/Users/shalin/tealcerebro/Assets/HTTP/lib/Ionic.Zlib.CF.dll</HintPath>
  </Reference>
  <Reference Include="NativeToolkitWP8">
- <HintPath>/Users/shalin/cerebro/Assets/Plugins/NativeToolkitWP8.dll</HintPath>
+ <HintPath>/Users/shalin/tealcerebro/Assets/Plugins/NativeToolkitWP8.dll</HintPath>
  </Reference>
  <Reference Include="ICSharpCode.SharpZipLib">
- <HintPath>/Users/shalin/cerebro/Assets/Plugins/SimpleJSON/ICSharpCode.SharpZipLib.dll</HintPath>
+ <HintPath>/Users/shalin/tealcerebro/Assets/Plugins/SimpleJSON/ICSharpCode.SharpZipLib.dll</HintPath>
+ </Reference>
+ <Reference Include="Vectrosity">
+ <HintPath>/Users/shalin/tealcerebro/Assets/Plugins/Vectrosity/Vectrosity.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{5D456D68-0921-B82A-AE9C-14835BCC1030}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+      <Project>{14B2C9F7-CEEA-5A59-42B6-873AD17A000F}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
