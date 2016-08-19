@@ -465,6 +465,8 @@ namespace Cerebro {
 				}
 
 				SendUsageAnalytics ();
+
+				LaunchList.instance.CheckForVerbalizeToUpload ();
 			}
 		}
 

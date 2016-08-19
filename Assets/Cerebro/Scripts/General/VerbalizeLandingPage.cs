@@ -235,7 +235,10 @@ namespace Cerebro
 			CerebroHelper.DebugLog ("Viewing "+LaunchList.instance.mVerbalize.UserResponseURL);
 			Debug.Log ("Viewing "+LaunchList.instance.mVerbalize.UserResponseURL);
 			#if UNITY_IOS && !UNITY_EDITOR
-			Handheld.PlayFullScreenMovie (LaunchList.instance.mVerbalize.UserResponseURL);
+			if(LaunchList.instance.mVerbalize.UploadedToServer)
+				Handheld.PlayFullScreenMovie (LaunchList.instance.mVerbalize.UserResponseURL);
+			else
+				Handheld.PlayFullScreenMovie ("file://"+LaunchList.instance.mVerbalize.UserResponseURL);
 			#endif
 			StartCoroutine (DisableProgressCircle ());
 		}
@@ -246,12 +249,6 @@ namespace Cerebro
 			yield return 0;
 			yield return 0;
 			progressCircle.SetActive (false);
-		}
-
-		public void RetakeButtonPressed()
-		{
-			GameObject Verbalize = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Verbalize, VerbalizeContainer.transform);
-			landingPage.SetActive (false);
 		}
 
 		public void DoneButtonPressed()

@@ -16,7 +16,7 @@ namespace Cerebro {
 
 		private string TimeStarted;
 		private float LastClickTimeSpeed;
-		private bool IsSpeedSelectorOpen;
+		private bool IsSpeedSelectorOpen, IsLandscapeLeft;
 
 		void Awake ()
 		{
@@ -33,7 +33,14 @@ namespace Cerebro {
 			GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 			GetComponent<RectTransform> ().sizeDelta = Vector2.zero;
 			GetComponent<RectTransform> ().eulerAngles = new Vector3 (0, 0, 90f);
-			WelcomeScript.instance.dashboardIcon.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-1002f, -32f);
+
+			if (Screen.orientation == ScreenOrientation.LandscapeRight) {
+				Debug.Log ("Calling right from start "+IsLandscapeLeft);
+				ChangeToLandscapeRight ();
+			} else {
+				Debug.Log ("Calling left from start "+IsLandscapeLeft);
+				ChangeToLandscapeLeft ();
+			}
 
 			StartButton = transform.FindChild ("StartButton").gameObject;
 			PauseButton = transform.FindChild ("PauseButton").gameObject;
@@ -59,7 +66,39 @@ namespace Cerebro {
 					StopRecording ();
 				}
 			}
+
+			if (IsLandscapeLeft && Screen.orientation == ScreenOrientation.LandscapeRight) {
+				Debug.Log ("calling right from update "+IsLandscapeLeft);
+				ChangeToLandscapeRight ();
+				#if UNITY_IOS && !UNITY_EDITOR
+				_RotationChanged ("false");
+				#endif
+			} else if(!IsLandscapeLeft && Screen.orientation == ScreenOrientation.LandscapeLeft) {
+				Debug.Log ("calling left from update "+IsLandscapeLeft);
+				ChangeToLandscapeLeft ();
+				#if UNITY_IOS && !UNITY_EDITOR
+				_RotationChanged ("true");
+				#endif
+			}
 		
+		}
+
+		public void ChangeToLandscapeLeft()
+		{
+			Debug.Log ("into left "+IsLandscapeLeft);
+			WelcomeScript.instance.dashboardIcon.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-1002f, -32f);
+			transform.parent.GetComponent<RectTransform> ().eulerAngles = Vector3.zero;
+			Debug.Log ("into left curr "+transform.parent.GetComponent<RectTransform> ().eulerAngles);
+			IsLandscapeLeft = true;
+		}
+
+		public void ChangeToLandscapeRight()
+		{
+			Debug.Log ("into right "+IsLandscapeLeft);
+			WelcomeScript.instance.dashboardIcon.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-22f, -736f);
+			transform.parent.GetComponent<RectTransform> ().eulerAngles = new Vector3 (0, 0, 180f);
+			Debug.Log ("into right curr "+transform.parent.GetComponent<RectTransform> ().eulerAngles);
+			IsLandscapeLeft = false;
 		}
 
 		public void StartButtonPressed()
@@ -82,8 +121,11 @@ namespace Cerebro {
 			IsTextStartedMoving = true;
 			SpeedText.transform.parent.gameObject.SetActive (true);
 			TimeStarted = System.DateTime.Now.ToString ("yyyy-MM-ddTHH:mm:ss");
+			string CurrOrientationLeft = "true";
+			if (Screen.orientation == ScreenOrientation.LandscapeRight)
+				CurrOrientationLeft = "false";
 			#if UNITY_IOS && !UNITY_EDITOR
-			_StartButton ("Start Recording");
+			_StartButton (CurrOrientationLeft);
 			#endif
 		}
 
@@ -173,8 +215,11 @@ namespace Cerebro {
 
 		public void StartPreview()
 		{
+			string CurrOrientationLeft = "true";
+			if (Screen.orientation == ScreenOrientation.LandscapeRight)
+				CurrOrientationLeft = "false";
 			#if UNITY_IOS && !UNITY_EDITOR
-			_StartPreview ("Start Preview");
+			_StartPreview (CurrOrientationLeft);
 			#endif
 		}
 
@@ -213,9 +258,9 @@ namespace Cerebro {
 		[DllImport ("__Internal")]
 		private static extern void _BackButton (
 			string message);
-//
-//		[DllImport ("__Internal")]
-//		private static extern void _AutoStopVideo (
-//			string message);
+
+		[DllImport ("__Internal")]
+		private static extern void _RotationChanged (
+			string message);
 	}
 }

@@ -1114,6 +1114,7 @@ namespace Cerebro
 						}
 					}
 					LaunchList.instance.SetVerbalizeUploaded(verb);
+					LaunchList.instance.CheckForVerbalizeToUpload();
 					if(LaunchList.instance.UploadingVerbalize.Contains(verb))
 					{
 						LaunchList.instance.UploadingVerbalize.Remove(verb);

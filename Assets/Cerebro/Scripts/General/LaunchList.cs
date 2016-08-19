@@ -1769,7 +1769,7 @@ namespace Cerebro
 		public void GotVerbalizeText ()
 		{
 //			CheckForSubmittedVerbalize (mVerbalize.VerbalizeID);
-			if(mVerbalize != null)
+			if(mVerbalize != null && mVerbalize.VerbalizeID != null)
 			WriteVerbalizeResponseToFile(mVerbalize);
 			if (m_Instance.VerbalizeTextLoaded != null) {
 				m_Instance.VerbalizeTextLoaded.Invoke (this, null);
@@ -2024,6 +2024,27 @@ namespace Cerebro
 				}
 			}
 			return null;
+		}
+
+		public void CheckForVerbalizeToUpload ()
+		{
+			string fileName = Application.persistentDataPath + "/VerbalizeSubmitted.txt";
+			if (File.Exists (fileName)) {
+				string data = File.ReadAllText (fileName);
+				JSONNode N = JSONClass.Parse (data);
+				for (int i = 0; i < N ["Data"].Count; i++) {
+					if (N ["Data"][i]["UserSubmitted"].AsBool && !N ["Data"][i]["UploadedToServer"].AsBool) {
+						Verbalize Verb = CheckForSubmittedVerbalizeViaDate (N ["Data"][i]["VerbalizeDate"].Value);
+						#if UNITY_EDITOR
+						HTTPRequestHelper.instance.SubmitVerbalizeResponse(Verb);
+						#endif
+						#if UNITY_IOS && !UNITY_EDITOR
+						HTTPRequestHelper.instance.uploadProfileVid ("vid.mov", Verb.UserResponseURL, Verb);
+						#endif
+						break;
+					}
+				}
+			}
 		}
 
 		public bool SetVerbalizeUploaded (Verbalize Verb)

@@ -56,7 +56,7 @@ static CameraEngine* theEngine;
     return theEngine;
 }
 
-- (void) startup
+- (void) startup : (BOOL*) IsLandscapeLeft
 {
     if (_session == nil)
     {
@@ -90,7 +90,10 @@ static CameraEngine* theEngine;
         videoout.videoSettings = setcapSettings;
         [_session addOutput:videoout];
         _videoConnection = [videoout connectionWithMediaType:AVMediaTypeVideo];
-        [_videoConnection setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
+        if(IsLandscapeLeft)
+            [_videoConnection setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
+        else
+            [_videoConnection setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
         // find the actual dimensions used so we can set up the encoder to the same.
         NSDictionary* actual = videoout.videoSettings;
         _cy = [[actual objectForKey:@"Height"] integerValue];
@@ -359,6 +362,11 @@ static CameraEngine* theEngine;
 - (AVCaptureVideoPreviewLayer*) getPreviewLayer
 {
     return _preview;
+}
+
+- (AVCaptureConnection*) getVideoConnection
+{
+    return _videoConnection;
 }
 
 @end
