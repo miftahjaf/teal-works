@@ -12,6 +12,7 @@
 @interface RecordVideoViewController()
 @property(nonatomic) int counter;
 @property(nonatomic,weak) AVCaptureVideoPreviewLayer* preview;
+@property(nonatomic,weak) AVCaptureConnection* connection;
 @property(nonatomic,strong) UILabel *counterLabel;
 @end
 
@@ -19,37 +20,74 @@
 
 #define DEGREES_TO_RADIANS(x) (M_PI * (x) / 180.0)
 
--(void) recordAndPlay
+-(void) recordAndPlay : (BOOL*) IsLandscapeLeft
 {
-    [[CameraEngine engine] startup];
+    [[CameraEngine engine] startup : IsLandscapeLeft];
     
     _preview = [[CameraEngine engine] getPreviewLayer];
     [_preview removeFromSuperlayer];
     _preview.frame = self.view.bounds;
     [self.view setTransform:CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180))];
-    [[_preview connection] setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
+    if(IsLandscapeLeft)
+        [[_preview connection] setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
+    else
+        [[_preview connection] setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
     
+    _counter = 0;
     [self.view.layer addSublayer:_preview];
 }
 
--(void) startRecording
+-(void) startRecording : (BOOL*) IsLandscapeLeft
 {
     NSLog(@"Stop clicked");
     float width = 186;
     float height = 145;
     
     UIViewController* rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
-    [self.view setFrame:CGRectMake(rootVC.view.frame.size.width - width - 24, 25, width, height)];
-
+    if(IsLandscapeLeft)
+        [self.view setFrame:CGRectMake(rootVC.view.frame.size.width - width - 24, 25, width, height)];
+    else
+        [self.view setFrame:CGRectMake(24, rootVC.view.frame.size.height - height - 25, width, height)];
+    
     
     
     //[self.view setTransform:CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180))];
     
-
+    _counter = 1;
     _preview.frame = self.view.bounds;
     
     [[CameraEngine engine] startCapture];
+    
+}
 
+-(void) rotationChanged : (BOOL*) IsLandscapeLeft
+{
+    if(_counter == 1)
+    {
+        float width = 186;
+        float height = 145;
+        
+        UIViewController* rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+        if(IsLandscapeLeft)
+            [self.view setFrame:CGRectMake(rootVC.view.frame.size.width - width - 24, 25, width, height)];
+        else
+            [self.view setFrame:CGRectMake(24, rootVC.view.frame.size.height - height - 25, width, height)];
+        
+        _connection = [[CameraEngine engine] getVideoConnection];
+        if(IsLandscapeLeft)
+        {
+            [_connection setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
+        }
+        else
+        {
+            [_connection setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
+        }
+    }
+    _preview = [[CameraEngine engine] getPreviewLayer];
+    if(IsLandscapeLeft)
+        [[_preview connection] setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
+    else
+        [[_preview connection] setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
 }
 
 -(void) stopButtonClicked
@@ -119,7 +157,14 @@ void _BackButton(const char* message)
 void _StartButton(const char* message)
 {
     NSLog(@"Native: Back button clicked");
-    [r startRecording];
+    BOOL IsLandscapeLeft = true;
+    
+    if(strcmp(message, "true") != 0)
+    {
+        IsLandscapeLeft = false;
+    }
+    
+    [r startRecording : IsLandscapeLeft];
 }
 
 void _StopButton(const char* message)
@@ -146,10 +191,43 @@ void _DeleteLocalVideo(const char* path)
     [r deleteLocalVideo:path];
 }
 
+void _RotationChanged(const char* message)
+{
+    NSLog(@"Message from framework ");
+    NSLog(@"%s",message);
+    BOOL IsLandscapeLeft = true;
+    
+    if(strcmp(message, "true") != 0)
+    {
+        IsLandscapeLeft = false;
+    }
+    
+    UIViewController* rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+    
+    float width = 800;
+    float height = 600;
+    
+    if(r == NULL) {
+        r = [[RecordVideoViewController alloc]init];
+    }
+    if(IsLandscapeLeft)
+        [r.view setFrame:CGRectMake(78, 84, width, height)];
+    else
+        [r.view setFrame:CGRectMake(rootVC.view.frame.size.width - width - 78, 84, width, height)];
+    
+    [r rotationChanged:IsLandscapeLeft];
+}
+
 void _StartPreview(const char* message)
 {
     NSLog(@"Message from framework ");
     NSLog(@"%s",message);
+    BOOL IsLandscapeLeft = true;
+    
+    if(strcmp(message, "true") != 0)
+    {
+        IsLandscapeLeft = false;
+    }
     
     UIViewController* rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
     
@@ -160,11 +238,14 @@ void _StartPreview(const char* message)
     if(r == NULL) {
         r = [[RecordVideoViewController alloc]init];
     }
-    [r.view setFrame:CGRectMake(78, 84, width, height)];
+    if(IsLandscapeLeft)
+        [r.view setFrame:CGRectMake(78, 84, width, height)];
+    else
+        [r.view setFrame:CGRectMake(rootVC.view.frame.size.width - width - 78, 84, width, height)];
     r.view.backgroundColor  = [UIColor clearColor];
     
     [rootVC addChildViewController:r];
     [rootVC.view addSubview:r.view];
     [r didMoveToParentViewController:rootVC];
-    [r recordAndPlay];
+    [r recordAndPlay : IsLandscapeLeft];
 }

@@ -19,9 +19,10 @@
 @interface CameraEngine : NSObject
 
 + (CameraEngine*) engine;
-- (void) startup;
+- (void) startup : (BOOL*) IsLandscapeLeft;
 - (void) shutdown;
 - (AVCaptureVideoPreviewLayer*) getPreviewLayer;
+- (AVCaptureConnection*) getVideoConnection;
 
 - (void) startCapture;
 - (void) pauseCapture;
