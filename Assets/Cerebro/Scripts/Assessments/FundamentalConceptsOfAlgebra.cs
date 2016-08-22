@@ -585,13 +585,8 @@ namespace Cerebro
 					coeff1 = Random.Range(2, 10);
 					coeff2 = Random.Range(2, 10);
 					coeff3 = Random.Range(2, 10);
-					pow1 = Random.Range(-10, 10);
-					while (pow1 == 1 || pow1 == 0)
-						pow1 = Random.Range(-10, 10);
-					pow2 = Random.Range(-10, 10);
-					while (pow2 == 1 || pow2 == 0)
-						pow2 = Random.Range(-10, 10);
-					randact = Random.Range(1, 2);
+					pow1 = Random.Range(2, 5);
+					pow2 = Random.Range(2,5);
 					expression1 = "";
 					expression2 = "";
 					expression3 = "";
@@ -609,7 +604,7 @@ namespace Cerebro
 						subQuestionTEX.text = expression3;
 	                    string[] answer = new string[2];
 	                    answer[0] = expression1;
-	                    answer[1] = "-"+expression2;
+	                    answer[1] = "-" + expression2;
 	                    Answerarray = answer;    
 	                }
 	                if (selector == 4)
@@ -617,15 +612,15 @@ namespace Cerebro
 						QuestionText.text = "Separate the terms of the expression :";
 	                    expression1 = coeff1 + "x^{" + pow1+"}";
 	                    expression2 = coeff2 + "y^{" + pow2+"}";
-	                    expression4 = coeff3 + "x^{2}y";
-	                    expression5 = coeff3 + "xy^{2}";
-	                    expression3 = expression1 + "-" + expression2 + "+" + coeff3 + "xy(x+y)";
+	                    expression4 = coeff1 * coeff3 + "x";
+	                    expression5 = coeff2 * coeff3 + "y";
+						expression3 = expression1 + "-" + expression2 + "+" + coeff3 + "xy(\\frac{" + coeff1 + "}{y} + \\frac{" + coeff2 + "}{x})";
 						subQuestionTEX.text = expression3;
 	                    string[] answer = new string[4];
-	                    answer[0] = coeff1 + "x^{" + pow1 + "}";
-	                    answer[1] = "-" + coeff2 + "y^{" + pow2 + "}";
-						answer[2] = coeff3 + "x^{2}y";
-						answer[3] = coeff3 + "xy^{2}";
+						answer[0] = expression1;
+						answer[1] = "-"+ expression2;
+						answer[2] = expression4;
+						answer[3] = expression5;
 	                    Answerarray = answer;
 	              	}
 	                if (selector == 5)
@@ -633,13 +628,13 @@ namespace Cerebro
 						QuestionText.text = "Separate the terms of the expression :";
 	                    expression1 = coeff1.ToString();
 	                    expression2 = coeff2 + "x";
-	                    expression4 = coeff3 + "x^{"+pow1+"}";
-	                    expression3 = expression1 + "+" + expression2 + "+" +expression4;
-						subQuestionTEX.text = expression3;
+	                    expression3 = coeff3 + "x^{"+pow1+"}";
+	                    expression4 = expression1 + "+" + expression2 + "+" +expression3;
+						subQuestionTEX.text = expression4;
 	                    string[] answer = new string[3];
-	                    answer[0] = coeff1.ToString();
-	                    answer[1] = coeff2 + "x";
-	                    answer[2] = coeff3 + "x^{"+pow1+"}";
+						answer[0] = expression1;
+						answer[1] = expression2;
+						answer[2] = expression3;
 	                    Answerarray = answer;
 	             	}
 				}
@@ -1026,17 +1021,17 @@ namespace Cerebro
 		            {
 						subQuestionTEX.gameObject.SetActive(true);
 						subQuestionText.gameObject.SetActive(false);
-		                expression3 = coeff1 + " more than thrice of x gives " + coeff2;
+		                expression3 = coeff1 + " less than thrice of x gives " + coeff2;
 		                subQuestionTEX.text = expression3;
-		                Answer = coeff1 + " + 3x = " + coeff2;
+						Answer = "3x-" + coeff1 + "=" + coeff2;
 		            }
 		            if (selector == 3)
 		            {
 						subQuestionTEX.gameObject.SetActive(true);
 						subQuestionText.gameObject.SetActive(false);
-		                expression3 = "Sum of x and " + coeff1 + " subtracted from " + coeff1 + " y is equal to " + coeff2;
+		                expression3 = "Difference of x and " + coeff1 + " subtracted from " + coeff1 + "y is equal to " + coeff2;
 		                subQuestionTEX.text = expression3;
-		                Answer = coeff1 + "y-(x+"+coeff1+")="+coeff2;
+		                Answer = coeff1 + "y-(x-"+coeff1+")="+coeff2;
 		            }
 		            if (selector == 4)
 		            {
@@ -1044,20 +1039,20 @@ namespace Cerebro
 						subQuestionText.gameObject.SetActive(false);
 		                expression3 = coeff1 + "x decreased by " + coeff1 + "y is equal to -" + coeff1 + "z";
 		                subQuestionTEX.text = expression3;
-		                Answer = coeff1 + "y - " + coeff1 + "x = -" + coeff1 + "z";
+		                Answer = coeff1 + "y-" + coeff1 + "x=-" + coeff1 + "z";
 		            }
 		            if (selector == 5)
 		            {
-						while (MathFunctions.GetHCF(coeff1,coeff2) != 1);
+						while (MathFunctions.GetHCF(coeff1,coeff2) != 1)
 							coeff1 = Random.Range(2, 10);
 						subQuestionTEX.gameObject.SetActive(true);
 		                subQuestionText.gameObject.SetActive(false);
-		                expression3 = "\\frac{" + coeff1 + "}{" + coeff2 + "} of the sum of " + rand + "x and 7";
+		                expression3 = "\\frac{" + coeff1 + "}{" + coeff2 + "} of the difference of " + coeff3 + "x and 7";
 						subQuestionTEX.text = expression3;
-		                Answer = coeff1+"("+rand+"x+7)/"+coeff2;
+						Answer = coeff1 + "(" + coeff3 + "x-7)/" + coeff2;
 					}
 				}
-            }
+            } 
             #endregion
             #region level9
             if (level == 9)
