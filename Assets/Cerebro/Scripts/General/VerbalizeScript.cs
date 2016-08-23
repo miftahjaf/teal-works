@@ -34,11 +34,9 @@ namespace Cerebro {
 			GetComponent<RectTransform> ().sizeDelta = Vector2.zero;
 
 			if (Screen.orientation == ScreenOrientation.LandscapeRight) {
-				StartLandscapeLeft = false;
 				Debug.Log ("Calling right from start "+IsLandscapeLeft);
 				ChangeToLandscapeRight ();
 			} else {
-				StartLandscapeLeft = true;
 				Debug.Log ("Calling left from start "+IsLandscapeLeft);
 				ChangeToLandscapeLeft ();
 			}
