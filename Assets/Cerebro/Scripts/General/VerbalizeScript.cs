@@ -32,12 +32,13 @@ namespace Cerebro {
 
 			GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 			GetComponent<RectTransform> ().sizeDelta = Vector2.zero;
-			GetComponent<RectTransform> ().eulerAngles = new Vector3 (0, 0, 90f);
 
 			if (Screen.orientation == ScreenOrientation.LandscapeRight) {
+				StartLandscapeLeft = false;
 				Debug.Log ("Calling right from start "+IsLandscapeLeft);
 				ChangeToLandscapeRight ();
 			} else {
+				StartLandscapeLeft = true;
 				Debug.Log ("Calling left from start "+IsLandscapeLeft);
 				ChangeToLandscapeLeft ();
 			}
@@ -87,7 +88,7 @@ namespace Cerebro {
 		{
 			Debug.Log ("into left "+IsLandscapeLeft);
 			WelcomeScript.instance.dashboardIcon.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-1002f, -32f);
-			transform.parent.GetComponent<RectTransform> ().eulerAngles = Vector3.zero;
+			GetComponent<RectTransform> ().eulerAngles = new Vector3 (0, 0, 90f);
 			Debug.Log ("into left curr "+transform.parent.GetComponent<RectTransform> ().eulerAngles);
 			IsLandscapeLeft = true;
 		}
@@ -96,7 +97,7 @@ namespace Cerebro {
 		{
 			Debug.Log ("into right "+IsLandscapeLeft);
 			WelcomeScript.instance.dashboardIcon.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-22f, -736f);
-			transform.parent.GetComponent<RectTransform> ().eulerAngles = new Vector3 (0, 0, 180f);
+			GetComponent<RectTransform> ().eulerAngles = new Vector3 (0, 0, -90f);
 			Debug.Log ("into right curr "+transform.parent.GetComponent<RectTransform> ().eulerAngles);
 			IsLandscapeLeft = false;
 		}

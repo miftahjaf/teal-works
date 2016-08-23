@@ -1106,18 +1106,20 @@ namespace Cerebro
 					Debug.Log (verb.VerbalizeDate + " " + verb.UserSubmitted + " " + verb.UserResponseURL + " " + verb.UploadedToServer);
 //					LaunchList.instance.WriteVerbalizeResponseToFile (verb);
 					GameObject VerbLandPage = GameObject.FindGameObjectWithTag("VerbalizeLandingPage");
+
+					LaunchList.instance.SetVerbalizeUploaded(verb);
+					LaunchList.instance.CheckForVerbalizeToUpload();
+					if(LaunchList.instance.UploadingVerbalize.Contains(verb))
+					{
+						LaunchList.instance.UploadingVerbalize.Remove(verb);
+					}
+
 					if(VerbLandPage != null)
 					{
 						if (LaunchList.instance.mVerbalize != null) {
 							System.DateTime dt = System.DateTime.ParseExact (LaunchList.instance.mVerbalize.VerbalizeDate, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
 							VerbLandPage.GetComponent<VerbalizeLandingPage>().ManageCardDataForDate (dt);
 						}
-					}
-					LaunchList.instance.SetVerbalizeUploaded(verb);
-					LaunchList.instance.CheckForVerbalizeToUpload();
-					if(LaunchList.instance.UploadingVerbalize.Contains(verb))
-					{
-						LaunchList.instance.UploadingVerbalize.Remove(verb);
 					}
 				} else {
 					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
