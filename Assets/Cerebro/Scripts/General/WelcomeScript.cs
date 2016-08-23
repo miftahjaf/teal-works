@@ -749,24 +749,24 @@ namespace Cerebro
 
 		void Update ()
 		{
-			if (Input.GetMouseButton (0) && CerebroHelper.isTestUser()) {
-				
-				Vector2 pos = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 0));
-				//CerebroHelper.DebugLog (pos.x);
-				if (pos.x < 0 && !mFetchingFeature) {						
-					mFeatureDate = mFeatureDate.AddDays (-1);
-					string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
-					//CerebroHelper.DebugLog ("KJFDJKDFJKFDKJFDJFKD FETCHING NEXT FEATURE " + forDate);
-					//FetchFeatureData (forDate);
-				} else if (pos.x > 0 && !mFetchingFeature) {					
-					mFeatureDate = mFeatureDate.AddDays (1);
-					string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
-					//CerebroHelper.DebugLog ("KJFDJKDFJKFDKJFDJFKD FETCHING PREVIOUS FEATURE " + forDate);
-					//FetchFeatureData (forDate);					
-				} else {
-					//CerebroHelper.DebugLog ("relax, looks like we are fetching a feature");
-				}
-			}
+//			if (Input.GetMouseButton (0) && CerebroHelper.isTestUser()) {
+//				
+//				Vector2 pos = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 0));
+//				//CerebroHelper.DebugLog (pos.x);
+//				if (pos.x < 0 && !mFetchingFeature) {						
+//					mFeatureDate = mFeatureDate.AddDays (-1);
+//					string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
+//					//CerebroHelper.DebugLog ("KJFDJKDFJKFDKJFDJFKD FETCHING NEXT FEATURE " + forDate);
+//					//FetchFeatureData (forDate);
+//				} else if (pos.x > 0 && !mFetchingFeature) {					
+//					mFeatureDate = mFeatureDate.AddDays (1);
+//					string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
+//					//CerebroHelper.DebugLog ("KJFDJKDFJKFDKJFDJFKD FETCHING PREVIOUS FEATURE " + forDate);
+//					//FetchFeatureData (forDate);					
+//				} else {
+//					//CerebroHelper.DebugLog ("relax, looks like we are fetching a feature");
+//				}
+//			}
 			if (Input.GetKeyDown (KeyCode.S)) {
 				takingScreenshots = !takingScreenshots;
 				BottomBarObject.transform.Find ("TestScreens").Find ("Info").GetComponent<Text> ().text = "Screenshots " + takingScreenshots.ToString ();
@@ -779,6 +779,28 @@ namespace Cerebro
 					BottomBarObject.transform.parent.GetComponent<ScrollRect> ().normalizedPosition = new Vector2 (BottomTargetPos, 0);
 					BottomScrollStart = false;
 				}
+			}
+		}
+
+		System.DateTime OldestDate = System.DateTime.ParseExact ("20160412", "yyyyMMdd", null);
+		System.DateTime TodayDate = System.DateTime.Now;
+		public void FeaturePreviousPressed()
+		{
+			if (!mFetchingFeature && (mFeatureDate.ToString ("yyyyMMdd") != OldestDate.ToString ("yyyyMMdd") || CerebroHelper.isTestUser ())) {
+				mFeatureDate = mFeatureDate.AddDays (-1);
+				string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
+				//CerebroHelper.DebugLog ("KJFDJKDFJKFDKJFDJFKD FETCHING NEXT FEATURE " + forDate);
+				FetchFeatureData (forDate);
+			}
+		}
+
+		public void FeatureNextPressed()
+		{
+			if (!mFetchingFeature && (mFeatureDate.ToString ("yyyyMMdd") != TodayDate.ToString ("yyyyMMdd") || CerebroHelper.isTestUser ())) {
+				mFeatureDate = mFeatureDate.AddDays (1);
+				string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
+				//CerebroHelper.DebugLog ("KJFDJKDFJKFDKJFDJFKD FETCHING PREVIOUS FEATURE " + forDate);
+				FetchFeatureData (forDate);
 			}
 		}
 
