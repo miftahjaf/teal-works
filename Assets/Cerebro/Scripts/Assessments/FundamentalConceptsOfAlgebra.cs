@@ -166,6 +166,7 @@ namespace Cerebro
                     else
                     {
                         correct = false;
+						AnimateMCQOptionCorrect(Answer);
                     }
                 }
                 else if (checkingThreeChoice)
@@ -387,6 +388,14 @@ namespace Cerebro
             yield return new WaitForSeconds(0.2f);
             Go.to(GO.transform, 0.2f, new GoTweenConfig().scale(new Vector3(1, 1, 1), false));
         }
+		void AnimateMCQOptionCorrect(string ans)
+		{
+			for (int i = 1; i <= 2; i++) {
+				if (MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().text == ans) {
+					MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.green800;
+				}
+			}
+		}
         IEnumerator AnimateThreeChoiceOption(int value)
         {
             var GO = ThreeChoice.transform.Find("Option" + value.ToString()).gameObject;
@@ -519,6 +528,9 @@ namespace Cerebro
             numPad.SetActive(true);
 			for (int i = 1; i < 4; i++) {
 				ThreeChoice.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.textDark;
+			}
+			for (int i = 1; i < 3; i++) {
+				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.textDark;
 			}
 
             subQuestionText.text = null;
