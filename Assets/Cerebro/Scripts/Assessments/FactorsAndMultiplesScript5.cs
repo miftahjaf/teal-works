@@ -61,7 +61,7 @@ namespace Cerebro {
                     string ans = MathFunctions.GetFactors(num);
                     CerebroHelper.DebugLog(ans);
                     Answer = ans;
-                    QuestionText.text = "Find the factors of " + num;
+                    QuestionText.text = "Find all the factors of " + num + ".";
                     GeneralButton.gameObject.SetActive(true);
 
                 } else if (selector == 2) {
@@ -85,13 +85,13 @@ namespace Cerebro {
                         }
                     }
                     Answer = ans;
-                    QuestionText.text = "Find the common factors of " + num + " & " + num1;
+					QuestionText.text = "Find all the common factors of " + num + " & " + num1 + ".";
                     GeneralButton.gameObject.SetActive(true);
 
 
                 } else if (selector == 3) {
                     int num1 = Random.Range(2, 20);
-                    QuestionText.text = "Find the first 5 multiples of " + num1.ToString();
+					QuestionText.text = "Find the first 5 multiples of " + num1.ToString() + ".";
                     Answer = MathFunctions.GetMultiples(num1, 5);
                     GeneralButton.gameObject.SetActive(true);
                 } else if (selector == 4) {
@@ -107,7 +107,7 @@ namespace Cerebro {
 
 
                     Answer = lcm.ToString() + "," + lcm2.ToString();
-                    QuestionText.text = "Find the first two common multiples of " + num + " & " + num1;
+					QuestionText.text = "Find the first two common multiples of " + num + " & " + num1 + ".";
                     GeneralButton.gameObject.SetActive(true);
                 }
 
@@ -150,7 +150,7 @@ namespace Cerebro {
                         }
                     }
                     temp = string.Join(",", ans.ToArray());
-                    QuestionText.text = "Find all the prime factors of the number " + num;
+					QuestionText.text = "Find all the prime factors of the number " + num + ".";
                     Answer = temp;
                     GeneralButton.gameObject.SetActive(true);
 
@@ -158,14 +158,14 @@ namespace Cerebro {
 
 
                 } else if (selector == 2) {
-                    int num1 = Random.Range(1, 21);
-                    int num2 = Random.Range(1, 21);
-                    int num3 = Random.Range(1, 21);
-                    int num4 = Random.Range(1, 21);
-                    int temp1 = MathFunctions.GetLCM(num1, num2);
-                    int temp2 = MathFunctions.GetLCM(num3, num4);
-                    int lcm = MathFunctions.GetLCM(temp1, temp2);
-                    int m = Random.Range(1, 11);
+                    int num1 = Random.Range(2, 21);
+                    int num2 = Random.Range(2, 21);
+					while (num1 == num2)
+						num2 = Random.Range(2, 21);
+					int num3 = 2 * num1;
+					int num4 = 3 * num2;
+                    int lcm = MathFunctions.GetLCM(num3, num4);
+                    int m = Random.Range(1, 6);
                     var number = Random.Range(0, 2);
                     int ans = lcm * m;
                     int opt1 = Random.Range(1, 10000);
@@ -177,7 +177,7 @@ namespace Cerebro {
 
 
                     Answer = ans.ToString();
-                    QuestionText.text = "Select the number divisible by " + num1 + ", " + num2 + ", " + num3 + ", " + num4;
+					QuestionText.text = "Select the number divisible by " + num1 + ", " + num2 + ", " + num3 + " and " + num4 + ".";
 
                     if (number == 0)
                     {
@@ -205,7 +205,7 @@ namespace Cerebro {
                     int temp = MathFunctions.GetHCF(num1, num2);
                     int hcf = MathFunctions.GetHCF(temp, num3);
                     Answer = hcf.ToString();
-                    QuestionText.text = "Find the HCF of " + num1 + ", " + num2 + ", " + num3;
+                    QuestionText.text = "Find the HCF of " + num1 + ", " + num2 + ", " + num3 + ".";
                     GeneralButton.gameObject.SetActive(true);
                 } else if (selector == 4) {
                     int number = Random.Range(5, 16);
@@ -215,7 +215,7 @@ namespace Cerebro {
                     num1 = num1 * number;
                     int hcf = MathFunctions.GetHCF(num1, num2);
                     Answer = hcf.ToString();
-                    QuestionText.text = "Find the largest number that divides " + num1 + " and " + num2 + " without leaving a remainder";
+                    QuestionText.text = "Find the largest number that divides " + num1 + " and " + num2 + " without leaving a remainder.";
                     GeneralButton.gameObject.SetActive(true);
 
 
@@ -243,7 +243,7 @@ namespace Cerebro {
                     int num4 = num1 + num3;
                     int num5 = num2 + num3;
                     Answer = hcf.ToString();
-                    QuestionText.text = "Find the largest number that divides " + num4 + " and " + num5 + " while leaving a remainder of " + num3;
+					QuestionText.text = "Find the largest number that divides " + num4 + " and " + num5 + " while leaving a remainder of " + num3 + ".";
                     GeneralButton.gameObject.SetActive(true);
 
                 }
@@ -260,7 +260,7 @@ namespace Cerebro {
                     int temp = MathFunctions.GetLCM(num1, num2);
                     int lcm = MathFunctions.GetLCM(temp, num3);
                     Answer = lcm.ToString();
-                    QuestionText.text = "Find the LCM of " + num1 + ", " + num2 + ", " + num3;
+					QuestionText.text = "Find the LCM of " + num1 + ", " + num2 + " and " + num3 + ".";
                     GeneralButton.gameObject.SetActive(true);
 
                 }
@@ -276,7 +276,7 @@ namespace Cerebro {
                     int hcf = MathFunctions.GetHCF(num1, num2);
                     Answer = hcf.ToString();
                     //subQuestionText.text = "HCF X LCM = Product of two numbers";
-                    QuestionText.text = "LCM of " + num1 + " and " + num2 + " is " + lcm + ". Find their HCF";
+                    QuestionText.text = "LCM of " + num1 + " and " + num2 + " is " + lcm + ". Find their HCF.";
                     GeneralButton.gameObject.SetActive(true);
 
 
@@ -293,7 +293,7 @@ namespace Cerebro {
                     int hcf = MathFunctions.GetHCF(num1, num2);
                     int product = num1 * num2;
                     Answer = hcf.ToString();
-                    QuestionText.text = "The LCM of two numbers is " + lcm + ". If their product is " + product + ". What is the HCF ?";
+                    QuestionText.text = "The LCM of two numbers is " + lcm + ". If their product is " + product + ". What is the HCF?";
                     subQuestionText.text = "HCF X LCM = Product of two numbers";
                     GeneralButton.gameObject.SetActive(true);
                     subQuestionText.gameObject.SetActive(true);

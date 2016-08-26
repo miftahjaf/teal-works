@@ -68,7 +68,7 @@ namespace Cerebro {
                     int ans = num1 - num2;
                     subQuestionText.gameObject.SetActive(true);
                     Answer = ans.ToString();
-                    QuestionText.text = "Subtract:";
+                    QuestionText.text = "Subtract :";
                     subQuestionText.text = num1 + " - " + num2;
                     GeneralButton.gameObject.SetActive(true);
                      
@@ -85,7 +85,7 @@ namespace Cerebro {
                     {
                         ans = num1 * num2;
                         Answer = ans.ToString();
-                        QuestionText.text = "Multiply:";
+                        QuestionText.text = "Multiply :";
                         subQuestionText.text = num1 + " \\times " + num2;
                         GeneralButton.gameObject.SetActive(true);
 
@@ -109,7 +109,7 @@ namespace Cerebro {
                     {
                         ans = num1 / num2; 
                         Answer = ans.ToString();
-                        QuestionText.text = "Find the quotient:";
+                        QuestionText.text = "Find the quotient :";
                         subQuestionText.text = num1 + " / " + num2;
                         GeneralButton.gameObject.SetActive(true);
 
@@ -118,7 +118,7 @@ namespace Cerebro {
                     {
                         ans = num1 / num3;
                         Answer = ans.ToString();
-                        QuestionText.text = "Find the quotient:";
+                        QuestionText.text = "Find the quotient :";
                         subQuestionText.text = num1 + " / " + num3;
                         GeneralButton.gameObject.SetActive(true);
                     }
@@ -141,7 +141,7 @@ namespace Cerebro {
                     int num2 = Random.Range(100, 1001);
                     int ans = num1 + num2;
                     Answer = ans.ToString();
-                    QuestionText.text = "A box already has " + num1 + " pencils. They need " + num2 + " more pencils in the box to complete the ordered package. What is the total number of pencils ordered ?";
+                    QuestionText.text = "A box already has " + num1 + " pencils. They need " + num2 + " more pencils in the box to complete the ordered package. What is the total number of pencils ordered?";
                     GeneralButton.gameObject.SetActive(true);
 
                 } else if (selector == 3) {
@@ -188,7 +188,7 @@ namespace Cerebro {
 
                     avg = (num1 + num2 + num3 + num4 + num5) / 5;
                     Answer = avg.ToString();
-                    QuestionText.text = "Find the average of " + num1 + ", " + num2 + ", " + num3 + ", " + num4 + ", " + num5 + ".";
+                    QuestionText.text = "Find the average of " + num1 + ", " + num2 + ", " + num3 + ", " + num4 + " and " + num5 + ".";
                     GeneralButton.gameObject.SetActive(true);
 
                     
@@ -236,7 +236,7 @@ namespace Cerebro {
                         }
                         ans = sum / 5;
                         Answer = ans.ToString();
-                        QuestionText.text = "A vendor sells " + num1 + ", " + num2 + ", " + num3 + ", " + num4 + ", " + num5 + " balloons during five days. What is the average number balloons sold per day?";
+                        QuestionText.text = "A vendor sells " + num1 + ", " + num2 + ", " + num3 + ", " + num4 + " and " + num5 + " balloons during five days. What is the average number balloons sold per day?";
                         GeneralButton.gameObject.SetActive(true); 
 
                     }
@@ -250,7 +250,7 @@ namespace Cerebro {
                         }
                         ans = sum / 6;
                         Answer = ans.ToString();
-						QuestionText.text = "A vendor sells " + num1 + ", " + num2 + ", " + num3 + ", " + num4 + ", " + num5 +", "+ num6+ " balloons during six days. What is the average number balloons sold per day?";
+						QuestionText.text = "A vendor sells " + num1 + ", " + num2 + ", " + num3 + ", " + num4 + ", " + num5 +" and "+ num6+ " balloons during six days. What is the average number balloons sold per day?";
                         GeneralButton.gameObject.SetActive(true);
 
                     }
@@ -286,7 +286,7 @@ namespace Cerebro {
                         }
                         speed = num1 / num2;
                         Answer = speed.ToString();
-						QuestionText.text = "Anup drove " + num1 + " km in " + num2 + " hour. What was his average speed(in kms/hr)?";
+						QuestionText.text = "Anup drove " + num1 + " km in " + num2 + " hour. What was his average speed (in kms/hr)?";
                         GeneralButton.gameObject.SetActive(true); 
 
                     }
@@ -299,7 +299,7 @@ namespace Cerebro {
                         }
                         speed = num3 / num4;
                         Answer = speed.ToString();
-						QuestionText.text = "Anup drove " + num3 + " km in " + num4 + " hour. What was his average speed(in kms/hr)?";
+						QuestionText.text = "Anup drove " + num3 + " km in " + num4 + " hour. What was his average speed (in kms/hr)?";
                         GeneralButton.gameObject.SetActive(true);
                     }
                     

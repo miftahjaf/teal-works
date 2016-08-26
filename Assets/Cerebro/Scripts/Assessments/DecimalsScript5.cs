@@ -222,15 +222,17 @@ namespace Cerebro
 				selector = GetRandomSelector (1, 5);
 
 				if (selector == 1) {
-					float num1 = UnityEngine.Random.Range (10, 50) / 10f;
+					float num1 = UnityEngine.Random.Range (11, 50) / 10f;
 					if (num1 % 10 == 0) {
 						num1 = UnityEngine.Random.Range (10, 50) / 10f;
 					}
 					float num2 = UnityEngine.Random.Range (2, 20);
+					while (num2 == 10)
+						num2 = UnityEngine.Random.Range (2, 20);
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Multiply(Upto 2 decimal places)";
+					QuestionText.text = "Multiply :";
 					subQuestionText.text = num1.ToString () + " \\times " + num2.ToString ();
-					Answer = (((float)System.Math.Round((num1 * num2) * 100f, System.MidpointRounding.AwayFromZero)) / 100f).ToString (); //((float)(num1 * 100 / num2) / (float)100).ToString ();
+					Answer = (((float)System.Math.Round((num1 * num2) * 100f, System.MidpointRounding.AwayFromZero)) / 100f).ToString (); //((float)(num1 * 100 * num2) / (float)100).ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 2) {
 					int[] conversion = new int[] { 10, 100, 1000};
@@ -247,7 +249,7 @@ namespace Cerebro
 
 					float num2 = conversion[rndDivider];
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Multiply(Upto 2 decimal places)";
+					QuestionText.text = "Multiply :";
 					subQuestionText.text = num1.ToString () + " \\times " + num2.ToString ();
 					if (num2 != 0)
 						Answer = (((float)System.Math.Round((num1 * num2) * 100f, System.MidpointRounding.AwayFromZero)) / 100f).ToString (); //((float)(num1 * 100 / num2) / (float)100).ToString ();
@@ -256,9 +258,9 @@ namespace Cerebro
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 3) {
 					float num1 = UnityEngine.Random.Range (10, 50) / 10f;
-					float num2 = UnityEngine.Random.Range (1, 50) / 10f;
+					float num2 = UnityEngine.Random.Range (2, 50) / 10f;
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Multiply(Upto 2 decimal places)";
+					QuestionText.text = "Multiply :";
 					subQuestionText.text = num1.ToString () + " \\times " + num2.ToString ();
 					Answer = (((float)System.Math.Round((num1 * num2) * 100f, System.MidpointRounding.AwayFromZero)) / 100f).ToString (); //((float)(num1 * 100 / num2) / (float)100).ToString ();
 					GeneralButton.gameObject.SetActive (true);
@@ -266,7 +268,7 @@ namespace Cerebro
 					float num1 = UnityEngine.Random.Range (10, 50) / 10f;
 					float num2 = UnityEngine.Random.Range (1, 10) / 100f;
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Multiply(Upto 2 decimal places)";
+					QuestionText.text = "Multiply :";
 					subQuestionText.text = num1.ToString () + " \\times " + num2.ToString ();
 					Answer = (((float)System.Math.Round((num1 * num2) * 1000f, System.MidpointRounding.AwayFromZero)) / 1000f).ToString (); //((float)(num1 * 100 / num2) / (float)100).ToString ();
 					GeneralButton.gameObject.SetActive (true);
@@ -274,7 +276,7 @@ namespace Cerebro
 					float num1 = UnityEngine.Random.Range (1000, 10000) / 1000f;
 					int num2 = UnityEngine.Random.Range (2, 10);
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Multiply(Upto 2 decimal places)";
+					QuestionText.text = "Multiply :";
 					subQuestionText.text = num1.ToString () + " \\times " + num2.ToString ();
 					Answer = (((float)System.Math.Round((num1 * num2) * 100f, System.MidpointRounding.AwayFromZero)) / 100f).ToString (); //((float)(num1 * 100 / num2) / (float)100).ToString ();
 					GeneralButton.gameObject.SetActive (true);
@@ -297,7 +299,7 @@ namespace Cerebro
 				float num2 = conversion[rndDivider];
 				float ans = (((float)System.Math.Round ((num1 * num2) * 100f, System.MidpointRounding.AwayFromZero)) / 100f);
 				subQuestionText.gameObject.SetActive (true);
-				QuestionText.text = "Enter the missing number";
+				QuestionText.text = "Enter the missing number :";
 				subQuestionText.text = num1.ToString () + " \\times ? = " + ans.ToString ();
 				Answer = num2.ToString ();
 				GeneralButton.gameObject.SetActive (true);
@@ -318,7 +320,7 @@ namespace Cerebro
 				float ans = (((float)System.Math.Round ((num1 * num2) * 100f, System.MidpointRounding.AwayFromZero)) / 100f);
 
 				subQuestionText.gameObject.SetActive (true);
-				QuestionText.text = "Divide(upto 1 decimal place)";
+				QuestionText.text = "Divide :";
 				subQuestionText.text = ans.ToString () + " \\div " + num2.ToString ();
 				Answer = num1.ToString ();
 				GeneralButton.gameObject.SetActive (true);
@@ -339,7 +341,7 @@ namespace Cerebro
 				float ans = (((float)System.Math.Round ((num1 * num2) * 100f, System.MidpointRounding.AwayFromZero)) / 100f);
 
 				subQuestionText.gameObject.SetActive (true);
-				QuestionText.text = "Find the unit price (upto 2 decimal places)";
+				QuestionText.text = "Find the unit price (in Rs.) :";
 				subQuestionText.text = "Rs. " + ans.ToString () + " for " + num2.ToString () + " packets of bread.";
 				Answer = num1.ToString ();
 				GeneralButton.gameObject.SetActive (true);

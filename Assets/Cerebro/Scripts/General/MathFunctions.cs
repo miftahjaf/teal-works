@@ -46,12 +46,12 @@ public class MathFunctions : MonoBehaviour {
 	public static string GetFactors(int num) {
 		List<string> factors = new List<string> ();
 		factors.Add ("1");
-		factors.Add (num.ToString());
 		for (int i = 2; i <= num/2; i++) {
 			if((num % i) == 0) {
 				factors.Add (i.ToString());
 			}
 		}
+		factors.Add (num.ToString());
 		return string.Join(",", factors.ToArray());
 	}
 
