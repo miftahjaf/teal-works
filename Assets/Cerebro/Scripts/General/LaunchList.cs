@@ -1665,12 +1665,10 @@ namespace Cerebro
 			System.TimeSpan differenceTime = timeNow.Subtract (timestarted);
 			float diff = (float)differenceTime.TotalSeconds;
 			float secondsForRegeneration = float.Parse (pItem.RegenRate) * 60 * 60 * 24;
-//			float secondsForRegeneration = float.Parse (pItem.RegenRate);
 			if (diff >= secondsForRegeneration) {
 				return true;
 			}
 			return false;
-//			return true;
 		}
 
 		public void ResetRegenerationinPracticeItems (List<string> practiceIDs)
@@ -1686,8 +1684,8 @@ namespace Cerebro
 
 					if (line != null) {
 						splitArr = line.Split ("," [0]);
-						if (practiceIDs.Contains (splitArr [0])) {
-							string newLine = splitArr [0] + "," + splitArr [1] + "," + splitArr [2] + "," + splitArr [3] + "," + splitArr [4] + splitArr [5] + ",0,," + splitArr [8];
+						if (practiceIDs.Contains (splitArr [1])) {
+							string newLine = splitArr [0] + "," + splitArr [1] + "," + splitArr [2] + "," + splitArr [3] + "," + splitArr [4] + "," + splitArr [5] + ",0,," + splitArr [8];
 							lines.Add (newLine);
 						} else {
 							lines.Add (line);
@@ -1836,6 +1834,7 @@ namespace Cerebro
 			N ["Data"] [cnt] ["VerbDifficulty"] = verb.VerbDifficulty;
 			N ["Data"] [cnt] ["VerbGenre"] = verb.VerbGenre;
 			N ["Data"] [cnt] ["VerbTitle"] = verb.VerbTitle;
+			N ["Data"] [cnt] ["VerbAuthor"] = verb.VerbAuthor;
 			N ["Data"] [cnt] ["PromptText"] = verb.PromptText;
 			N ["Data"] [cnt] ["VerbSpeed"] = verb.VerbSpeed;
 			N ["Data"] [cnt] ["VerbStartTime"] = verb.VerbStartTime;
@@ -2015,6 +2014,7 @@ namespace Cerebro
 						Verb.VerbDifficulty = N ["Data"][i]["VerbDifficulty"].Value;
 						Verb.VerbGenre = N ["Data"][i]["VerbGenre"].Value;
 						Verb.VerbTitle = N ["Data"][i]["VerbTitle"].Value;
+						Verb.VerbAuthor = N ["Data"][i]["VerbAuthor"].Value;
 						Verb.PromptText = N ["Data"][i]["PromptText"].Value;
 						Verb.VerbSpeed = N ["Data"][i]["VerbSpeed"].Value;
 						Verb.VerbStartTime = N ["Data"][i]["VerbStartTime"].Value;
@@ -2353,6 +2353,8 @@ namespace Cerebro
 
 		public string VerbTitle { get; set; }
 
+		public string VerbAuthor { get; set; }
+
 		public string PromptText { get; set; }
 
 		public string VerbSpeed { get; set; }
@@ -2375,6 +2377,7 @@ namespace Cerebro
 			VerbDifficulty = "";
 			VerbGenre = "";
 			VerbTitle = "";
+			VerbAuthor = "";
 			PromptText = "";
 			VerbSpeed = "";
 			VerbStartTime = "";

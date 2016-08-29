@@ -174,6 +174,7 @@ namespace Cerebro
                     else
                     {
                         correct = false;
+						AnimateMCQOptionCorrect (Answer);
                     }
                 }
                 else if (checkingThreeChoice)
@@ -185,6 +186,7 @@ namespace Cerebro
                     else
                     {
                         correct = false;
+						AnimateThreeChoiceOptionCorrect (Answer);
                     }
                 }
                 else
@@ -373,6 +375,14 @@ namespace Cerebro
             yield return new WaitForSeconds(0.2f);
             Go.to(GO.transform, 0.2f, new GoTweenConfig().scale(new Vector3(1, 1, 1), false));
         }
+		void AnimateMCQOptionCorrect(string ans)
+		{
+			for (int i = 1; i <= 2; i++) {
+				if (MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().text == ans) {
+					MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.green800;
+				}
+			}
+		}
         IEnumerator AnimateThreeChoiceOption(int value)
         {
             var GO = ThreeChoice.transform.Find("Option" + value.ToString()).gameObject;
@@ -380,13 +390,21 @@ namespace Cerebro
             yield return new WaitForSeconds(0.2f);
             Go.to(GO.transform, 0.2f, new GoTweenConfig().scale(new Vector3(1, 1, 1), false));
         }
+		void AnimateThreeChoiceOptionCorrect(string ans)
+		{
+			for (int i = 1; i <= 3; i++) {
+				if (ThreeChoice.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().text == ans) {
+					ThreeChoice.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().color = MaterialColor.green800;
+				}
+			}
+		}
         protected override IEnumerator ShowWrongAnimation()
         {
 
             userAnswerText.color = MaterialColor.red800;
 			Go.to(userAnswerText.gameObject.transform, 0.5f, new GoTweenConfig().shake(new Vector3(0, 0, 20), GoShakeType.Eulers));
             yield return new WaitForSeconds(0.5f);
-            if (level == 3 || level == 7)
+            if (level == 3)
             {
                 if (isRevisitedQuestion)
                 {
@@ -404,6 +422,7 @@ namespace Cerebro
                         else
                             str += Answerarray[i] + ", ";
                     }
+					CerebroHelper.DebugLog("going here");
                     userAnswerText.text = " " + str + " ";
                     userAnswerText.color = MaterialColor.green800;
                 }
@@ -480,6 +499,12 @@ namespace Cerebro
             MCQ.gameObject.SetActive(false);
             ThreeChoice.gameObject.SetActive(false);
             numPad.SetActive(true);
+			for (int i = 1; i < 4; i++) {
+				ThreeChoice.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().color = MaterialColor.textDark;
+			}
+			for (int i = 1; i < 3; i++) {
+				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().color = MaterialColor.textDark;
+			}
             if (Queslevel > scorestreaklvls.Length)
             {
                 level = UnityEngine.Random.Range(1, scorestreaklvls.Length + 1);

@@ -48,7 +48,9 @@ namespace Cerebro {
 
 			IsTextStartedMoving = false;
 			StartButton.SetActive (true);
-			videoText.GetComponent<Text> ().text = LaunchList.instance.mVerbalize.PromptText;
+			videoText.transform.FindChild("Title").GetComponent<Text> ().text = LaunchList.instance.mVerbalize.VerbTitle + "\n";
+			videoText.transform.FindChild("Title").GetComponent<Text> ().text += "by " + LaunchList.instance.mVerbalize.VerbAuthor;
+			videoText.GetComponent<Text> ().text += LaunchList.instance.mVerbalize.PromptText;
 			StartPreview ();
 		}
 		
@@ -131,20 +133,34 @@ namespace Cerebro {
 		public void PauseButtonPressed()
 		{
 			if (IsTextStartedMoving) {
+				PauseText ();
+			} else {
+				ResumeText ();
+			}
+			if (IsSpeedSelectorOpen) {
+				SetSpeed (0f);
+			}
+		}
+
+		void PauseText()
+		{
+			if (IsTextStartedMoving) {
 				IsTextStartedMoving = false;
 				PauseButton.transform.FindChild ("Text").GetComponent<Text> ().text = "Resume";
 				#if UNITY_IOS && !UNITY_EDITOR
 				_PauseButton ("Pause");
 				#endif
-			} else {
+			}
+		}
+
+		void ResumeText()
+		{
+			if (!IsTextStartedMoving) {
 				IsTextStartedMoving = true;
 				PauseButton.transform.FindChild ("Text").GetComponent<Text> ().text = "Pause";
 				#if UNITY_IOS && !UNITY_EDITOR
 				_ResumeButton ("Resume");
 				#endif
-			}
-			if (IsSpeedSelectorOpen) {
-				SetSpeed (0f);
 			}
 		}
 
@@ -179,6 +195,7 @@ namespace Cerebro {
 		public void EnableSpeedSelector()
 		{
 			if (Time.time - LastClickTimeSpeed > 0.5f && !IsSpeedSelectorOpen) {
+				PauseText ();
 				SpeedText.gameObject.SetActive (false);
 				LastClickTimeSpeed = Time.time;
 				IsSpeedSelectorOpen = true;
@@ -190,6 +207,7 @@ namespace Cerebro {
 		public void SetSpeed(float value)
 		{
 			if (IsSpeedSelectorOpen) {
+				ResumeText ();
 				IsSpeedSelectorOpen = false;
 				SpeedText.gameObject.SetActive (true);
 				if (value != 0) {

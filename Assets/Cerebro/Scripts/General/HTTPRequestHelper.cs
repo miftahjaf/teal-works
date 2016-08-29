@@ -620,6 +620,8 @@ namespace Cerebro
 						d.VerbalizeDate = System.DateTime.Now.ToString("yyyy") + date;
 						d.VerbDifficulty = jsonResponse["difficulty"].Value;
 						d.VerbTitle = jsonResponse["title"].Value;
+						if(jsonResponse["author"].Value != null)
+							d.VerbAuthor = jsonResponse["author"].Value;	
 						d.VerbGenre = jsonResponse["genre"].Value;
 						d.PromptText = jsonResponse ["passage"].Value;
 					}
