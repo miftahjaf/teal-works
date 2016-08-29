@@ -219,13 +219,14 @@ namespace Cerebro
 			}
 
 			if (level == 1) {
-				selector = GetRandomSelector (1, 5);
+				selector = GetRandomSelector (1, 6);
 
 				if (selector == 1) {
-					float num1 = UnityEngine.Random.Range (11, 50) / 10f;
-					if (num1 % 10 == 0) {
-						num1 = UnityEngine.Random.Range (10, 50) / 10f;
+					int num = UnityEngine.Random.Range (11, 50);
+					while (num % 10 == 0) {
+						num = UnityEngine.Random.Range (11, 50);
 					}
+					float num1 = num / 10f;
 					float num2 = UnityEngine.Random.Range (2, 20);
 					while (num2 == 10)
 						num2 = UnityEngine.Random.Range (2, 20);
@@ -241,6 +242,8 @@ namespace Cerebro
 					int rndDivider = UnityEngine.Random.Range (1, conversion.Length);
 
 					int number = UnityEngine.Random.Range (1000, 10000);
+					while (number % 10 == 0)
+						number = UnityEngine.Random.Range (1000, 10000);
 					int preDec = number / conversion [rndSelector];
 					int postDec = number % conversion [rndSelector];
 
@@ -257,15 +260,23 @@ namespace Cerebro
 						Answer = conversion [0].ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 3) {
-					float num1 = UnityEngine.Random.Range (10, 50) / 10f;
-					float num2 = UnityEngine.Random.Range (2, 50) / 10f;
+					int num = UnityEngine.Random.Range (11, 50);
+					while (num % 10 == 0) {
+						num = UnityEngine.Random.Range (11, 50);
+					}
+					float num1 = num / 10f;
+					num = UnityEngine.Random.Range (11, 50);
+					while (num % 10 == 0) {
+						num = UnityEngine.Random.Range (11, 50);
+					}
+					float num2 = num / 10f;
 					subQuestionText.gameObject.SetActive (true);
 					QuestionText.text = "Multiply :";
 					subQuestionText.text = num1.ToString () + " \\times " + num2.ToString ();
 					Answer = (((float)System.Math.Round((num1 * num2) * 100f, System.MidpointRounding.AwayFromZero)) / 100f).ToString (); //((float)(num1 * 100 / num2) / (float)100).ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 4) {
-					float num1 = UnityEngine.Random.Range (10, 50) / 10f;
+					float num1 = UnityEngine.Random.Range (11, 50) / 10f;
 					float num2 = UnityEngine.Random.Range (1, 10) / 100f;
 					subQuestionText.gameObject.SetActive (true);
 					QuestionText.text = "Multiply :";
@@ -273,7 +284,11 @@ namespace Cerebro
 					Answer = (((float)System.Math.Round((num1 * num2) * 1000f, System.MidpointRounding.AwayFromZero)) / 1000f).ToString (); //((float)(num1 * 100 / num2) / (float)100).ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 5) {
-					float num1 = UnityEngine.Random.Range (1000, 10000) / 1000f;
+					int num = UnityEngine.Random.Range (1001, 10000);
+					while (num % 10 == 0) {
+						num = UnityEngine.Random.Range (1001, 10000);
+					}
+					float num1 = num / 1000f;
 					int num2 = UnityEngine.Random.Range (2, 10);
 					subQuestionText.gameObject.SetActive (true);
 					QuestionText.text = "Multiply :";

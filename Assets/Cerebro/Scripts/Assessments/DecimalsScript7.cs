@@ -75,6 +75,7 @@ namespace Cerebro
 					correct = true;
 				} else {
 					correct = false;
+					AnimateMCQOptionCorrect (Answer);
 				}
 			} else {				
 				float answer;
@@ -163,7 +164,14 @@ namespace Cerebro
 			yield return new WaitForSeconds (0.2f);
 			Go.to (GO.transform, 0.2f, new GoTweenConfig ().scale (new Vector3 (1, 1, 1), false));
 		}
-
+		void AnimateMCQOptionCorrect(string ans)
+		{
+			for (int i = 1; i <= 4; i++) {
+				if (MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().text == ans) {
+					MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.green800;
+				}
+			}
+		}
 		protected override IEnumerator ShowCorrectAnimation ()
 		{
 			if (userAnswerText != null) {
@@ -249,6 +257,10 @@ namespace Cerebro
 		{
 			ignoreTouches = false;
 			base.QuestionStarted ();
+
+			for (int i = 1; i < 5; i++) {
+				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.textDark;
+			}
 			// Generating the parameters
             
 			level = Queslevel;
@@ -265,19 +277,22 @@ namespace Cerebro
 			if (Queslevel > scorestreaklvls.Length) {
 				level = UnityEngine.Random.Range (1, scorestreaklvls.Length + 1);
 			}
-            
+
 			#region L1
 			if (level == 1) {
 				selector = GetRandomSelector (1, 6);
 				QuestionText.text = "";
 				subQuestionText.text = "";
 				if (selector == 1) {
-					float num1 = (float)UnityEngine.Random.Range (1, 50) / (float)10;
-					float den1 = (float)UnityEngine.Random.Range (1, 50) / (float)10;
+					int num = UnityEngine.Random.Range (1, 50);
+					while (num % 10 == 0)
+						num = UnityEngine.Random.Range (1, 50);
+					float num1 = num/10f;
+					float den1 = UnityEngine.Random.Range(2,7) * num1;
 					float ans = num1 / den1;
 					ans = (float)System.Math.Round ((ans * 100), System.MidpointRounding.AwayFromZero) / (float)100;
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Convert the below fraction to decimal (Round to 2 decimals)";
+					QuestionText.text = "Convert the below fraction to decimal (round to 2 decimal places) :";
 					subQuestionText.text = num1.ToString () + " / " + den1.ToString ();
 					Answer = ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);
@@ -288,9 +303,9 @@ namespace Cerebro
 
 					int rndselector = UnityEngine.Random.Range (0, main.Length);
 
-					int number = UnityEngine.Random.Range (0, conversion [rndselector] * 10);
-					if (conversion [rndselector] >= 1000) {
-						number = UnityEngine.Random.Range (0, conversion [rndselector]) * 10;
+					int number = UnityEngine.Random.Range (conversion[rndselector], conversion [rndselector] * 10);
+					while (number % conversion [rndselector] == 0) {
+						number = UnityEngine.Random.Range (1, conversion [rndselector]) * 10;
 					}
 					int preDec = number / conversion [rndselector];
 					int postDec = number % conversion [rndselector];
@@ -299,7 +314,7 @@ namespace Cerebro
 					float ans = (float)preDec + (float)dec;
 
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Express " + preDec.ToString () + " " + main [rndselector] + " " + postDec + " " + sub [rndselector] + " as " + main [rndselector] + " (round to 2 decimal places)";
+					QuestionText.text = "Express " + preDec.ToString () + " " + main [rndselector] + " " + postDec + " " + sub [rndselector] + " as " + main [rndselector] + " (round to 2 decimal places) :";
 					subQuestionText.text = "";
 					Answer = ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);
@@ -307,9 +322,8 @@ namespace Cerebro
 					float num1 = (float)UnityEngine.Random.Range (1, 10) / (float)10;
 					float num2 = (float)UnityEngine.Random.Range (1, 10) / (float)10;
 					float ans = num1 * num2;
-					ans = (float)System.Math.Round ((ans * 100), System.MidpointRounding.AwayFromZero) / (float)100;
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Multiply the following decimals (Round to 2 decimal places)";
+					QuestionText.text = "Multiply the following decimals (round to 2 decimal places) :";
 					subQuestionText.text = num1.ToString () + " X " + num2.ToString ();
 					Answer = ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);
@@ -408,7 +422,7 @@ namespace Cerebro
 					float n44 = Random.Range (11, 99);
 					n44 /= 10;
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Simplify (Correct to 2 decimal places):";
+					QuestionText.text = "Simplify (correct to 2 decimal places) :";
 					subQuestionLaText.text = n11 + " \\times " + n22 + " + \\frac{" + n33 + "}{" + n44 + "}";
 					float ans = (n11 * n22) + (n33 / n44);
 					Answer = ans.ToString ("F2");
@@ -432,7 +446,7 @@ namespace Cerebro
                     
 
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Simplify (Correct to 2 decimal places):";
+					QuestionText.text = "Simplify (correct to 2 decimal places) :";
 					subQuestionLaText.text = n1 + " + " + n2 + " - ( " + n3 + " + ( " + "\\frac{" + n4 + "}{" + n5 + "}" + " + " + n6 + " ) " + " ) ";
 					float ans = n1 + n2 - (n3 + (n4 / n5 + n6));
                     
@@ -440,27 +454,29 @@ namespace Cerebro
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 4) {
                     
-					int e = Random.Range (2, 10);
-                  
-					int c = Random.Range (1, 10);
-					int d = Random.Range (1, 10);
+					int c = Random.Range (2, 11);
+					int d = Random.Range (1, 8);
+					int e = Random.Range (d + 1, 10);
+					while (MathFunctions.GetHCF(d, e) > 1)
+						d = Random.Range (1, 8);
 
 					string n2 = c + "\\frac{" + d + "}{" + e + "}";
 					int n3 = Random.Range (2, 10);
 					int g = Random.Range (1, 10);
 					int h = Random.Range (2, 10);
+					while (MathFunctions.GetHCF(g, h) > 1)
+						g = Random.Range (1, 10);
 					int i = Random.Range (1, 10);
 					int j = Random.Range (2, 10);
-					while (g % h != 0)
-						g = Random.Range (2, 30);
-                   
-
+	
 					string n4 = "\\frac{" + g + "}{" + h + "}";
 					int num2 = Random.Range (1, 10);
 					float n5 = (float)num2 / 10;
-					int l = Random.Range (2, 10);
-					int m = Random.Range (2, 10);
-					int n = Random.Range (2, 10);
+					int l = Random.Range (2, 11);
+					int m = Random.Range (1, 8);
+					int n = Random.Range (m + 1, 10);
+					while (MathFunctions.GetHCF(m, n) > 1)
+						m = Random.Range (1, 8);
 					string n6 = l + "\\frac{" + m + "}{" + n + "}";
                    
 					float val2 = (float)((c * e) + d) / (float)e;
@@ -468,7 +484,7 @@ namespace Cerebro
 					float val6 = (float)((l * n) + m) / (float)n;
 
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Simplify (Correct to 2 decimal places):";
+					QuestionText.text = "Simplify (correct to 2 decimal places) :";
 					subQuestionLaText.text = n2 + " + " + n3 + " + ( " + n4 + " + " + n5 + "( " + n6 + " ) " + ") ";
 					float ans = val2 + n3 + (val4 + n5 * (val6));
 					Answer = ans.ToString ("F2");
@@ -482,7 +498,7 @@ namespace Cerebro
 					QuestionText.text = "";
 					subQuestionText.gameObject.SetActive (true);
                    
-					QuestionText.text = "Convert in decimal (Correct to 4 significant figures):";
+					QuestionText.text = "Convert in decimal (correct to 4 significant figures) :";
 					subQuestionLaText.text = "\\frac{1}{" + (a * b) + "}";
 					Answer = ans.ToString ("F4");
 					GeneralButton.gameObject.SetActive (true);
@@ -498,7 +514,7 @@ namespace Cerebro
 				if (selector == 1) {
 					int num = Random.Range (11111, 1000000);
 					float num1 = ((float)num) / 1000000;
-					QuestionText.text = "Round off " + num1.ToString ("F6") + " correct to nearest thousandths";
+					QuestionText.text = "Round off " + num1.ToString ("F6") + " correct to nearest thousandths :";
 					int remainder = num % 100;
 					int Ans = 0;
 					if (remainder >= 50) {
@@ -511,7 +527,7 @@ namespace Cerebro
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 2) {
 					int a = Random.Range (10000000, 100000000);
-					QuestionText.text = "Round off " + a + " to nearest ten thousand";
+					QuestionText.text = "Round off " + a + " to nearest ten thousand :";
 					int remainder = a % 10000;
 
 					int Ans = 0;
@@ -540,14 +556,17 @@ namespace Cerebro
 					foreach (char c in temppp) {
 
 						if ((int)c == 46) {
+							if (Ans == "")
+								Ans += "0";
 							Ans += ".";
 						} else if ((int)c == 48 + a) {
-							Ans += "1";
-						} else
+							Ans += a.ToString();
+						} else if(Ans != "")
 							Ans += "0";
 
 					}
-					QuestionText.text = "Calculate the sum of place value " + a + " in " + num1;
+
+					QuestionText.text = "Calculate the sum of place values " + a + " in " + num1 + ".";
 					Answer = Ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 4) {
@@ -561,7 +580,7 @@ namespace Cerebro
 					} else
 						ans = remainder2;
 					ans /= 10000;
-					QuestionText.text = "Calculate the error in rounding off to the nearest tenths " + x;
+					QuestionText.text = "Calculate the error in rounding off to the nearest tenths " + x + ".";
 					Answer = (ans).ToString ();
 
 					Answer = Mathf.Abs (ans).ToString ("F4");

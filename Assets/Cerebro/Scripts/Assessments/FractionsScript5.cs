@@ -25,7 +25,7 @@ namespace Cerebro
 			StartCoroutine (StartAnimation ());
 			base.Initialise ("M", "FRA05", "S01", "A01");
 
-			scorestreaklvls = new int[3];
+			scorestreaklvls = new int[6];
 			for (var i = 0; i < scorestreaklvls.Length; i++) {
 				scorestreaklvls [i] = 0;
 			}
@@ -229,16 +229,16 @@ namespace Cerebro
 
 			if (level == 1) {
 			
-				selector = GetRandomSelector (1, 10);
+				selector = GetRandomSelector (1, 6);
 				if (selector == 1) {
 				
 					MCQ.SetActive (true);
 					numPad.SetActive (false);
-					GeneralButton.gameObject.SetActive(false);
+					GeneralButton.gameObject.SetActive (false);
 					num = Random.Range (1, 10);
 					num1 = Random.Range (1, 6);
 					num2 = Random.Range (num1 + 1, 10);
-					while (MathFunctions.GetHCF(num1, num2) > 1)
+					while (MathFunctions.GetHCF (num1, num2) > 1)
 						num1 = Random.Range (1, 6);
 					int ansNum = ((num * num2) + num1);
 					string option1 = num.ToString () + " \\frac{" + num1.ToString () + "}{" + num2.ToString () + "}";
@@ -272,7 +272,7 @@ namespace Cerebro
 					num = Random.Range (1, 10);
 					num1 = Random.Range (1, 6);
 					num2 = Random.Range (num1 + 1, 10);
-					while (MathFunctions.GetHCF(num1, num2) > 1)
+					while (MathFunctions.GetHCF (num1, num2) > 1)
 						num1 = Random.Range (1, 6);
 					subQuestionText.gameObject.SetActive (true);
 					QuestionText.text = "Convert the following complex fraction into a simple fraction :";
@@ -312,7 +312,12 @@ namespace Cerebro
 					num = num / hcf;
 					num1 = num1 / hcf;
 					Answer = num.ToString () + "/" + num1.ToString ();
-				} else if (selector == 6) {
+				}
+			}
+			else if (level == 2)
+			{
+				selector = GetRandomSelector (1, 5);
+				if (selector == 1) {
 				
 					num = Random.Range (2, 11);
 					num1 = Random.Range (2, 11);
@@ -343,7 +348,7 @@ namespace Cerebro
 					n = (num * num1) + (num2 * num3) + (num4 * num5);
 					Answer = (n/MathFunctions.GetHCF(n,num6)).ToString () + "/" + (num6/MathFunctions.GetHCF(n,num6)).ToString ();
 
-				} else if (selector == 7) {
+				} else if (selector == 2) {
 				
 					num = Random.Range (5, 10);
 					num1 = Random.Range (1, 8);
@@ -359,11 +364,11 @@ namespace Cerebro
 					int hcf = Mathf.Abs (MathFunctions.GetHCF (num5,num2));
 					Answer = (num5/hcf).ToString () + "/" + (num2/hcf).ToString ();
 
-				} else if (selector == 8) {
+				} else if (selector == 3) {
 			
 					num = Random.Range (1, 10);
 					num1 = Random.Range (1, 8);
-					num2 = Random.Range (num2 + 1, 10);
+					num2 = Random.Range (num1 + 1, 10);
 					while (MathFunctions.GetHCF(num1,num2) > 1)
 						num1 = Random.Range (1, 8);
 					num3 = Random.Range (1, 10);
@@ -382,7 +387,7 @@ namespace Cerebro
 					n = (num1 * num2) - (num4 * num5);
 					int hcf = Mathf.Abs (MathFunctions.GetHCF (n,num6));
 					Answer = (n/hcf).ToString () + "/" + (num6/hcf).ToString ();
-				} else if (selector == 9) {
+				} else if (selector == 4) {
 				
 					num = Random.Range (1, 8);
 					num1 = Random.Range (num + 1, 10);
@@ -404,9 +409,9 @@ namespace Cerebro
 					int hcf = Mathf.Abs (MathFunctions.GetHCF (num5, num4));
 					Answer = Answer = (num5/hcf).ToString () + "/" + (num4/hcf).ToString ();
 				}
-			} else if (level == 2) {
+			} else if (level == 3) {
 			
-				selector = GetRandomSelector (1, 14);
+				selector = GetRandomSelector (1, 5);
 
 				if (selector == 1) {
 					num = Random.Range (1, 11);
@@ -476,33 +481,43 @@ namespace Cerebro
 					num6 = num6 / hcf;
 					n = n / hcf;
 					Answer = num6.ToString () + "/" + n.ToString ();
-				} else if (selector == 5) {
+				}
+			}
+			else if (level == 4)
+			{
+				selector = GetRandomSelector (1, 5);
+				if (selector == 1) {
 				
 					num = Random.Range (1, 12);
 					QuestionText.text = num.ToString () + "/12 of one year is how many months?";
 					num1 = (num * 12) / 12;
 					Answer = num1.ToString ();
-				} else if (selector == 6) {
+				} else if (selector == 2) {
 				
 					num = Random.Range (1, 12);
 					num = num * 5;
 					QuestionText.text = num.ToString () + "/60 of 1 minute is how many seconds?";
 					num1 = (num * 60) / 60;
 					Answer = num1.ToString ();
-				} else if (selector == 7) {
+				} else if (selector == 3) {
 				
 					num = Random.Range (1, 6);
 					QuestionText.text = num.ToString () + "/7 of 1 week is how many days?";
 					num1 = (num * 7) / 7;
 					Answer = num1.ToString ();
-				} else if (selector == 8) {
+				} else if (selector == 4) {
 				
 					num = Random.Range (1, 17);
 					num = num * 5;
 					QuestionText.text = num.ToString () + "/90 of a right angle is how many degrees?";
 					num1 = (num * 90) / 90;
 					Answer = num1.ToString ();
-				} else if (selector == 9) {
+				}
+			}
+			else if (level == 5)
+			{
+				selector = GetRandomSelector (1, 6);
+				if (selector == 1) {
 				
 					num = Random.Range (2, 15);
 					num1 = Random.Range (2, 15);
@@ -512,11 +527,11 @@ namespace Cerebro
 					QuestionText.text = "Find the reciprocal of the given fraction.";
 					subQuestionText.text = "\\frac{" + num.ToString () + "}{" + num1.ToString () + "}";
 					Answer = num1.ToString () + "/" + num.ToString ();
-				} else if (selector == 10) {
+				} else if (selector == 2) {
 				
 					num = Random.Range (1, 10);
 					num1 = Random.Range (1, 8);
-					num2 = Random.Range (num2 + 1, 10);
+					num2 = Random.Range (num1 + 1, 10);
 					while (MathFunctions.GetHCF(num1,num2) > 1)
 						num1 = Random.Range (1, 8);
 					subQuestionText.gameObject.SetActive (true);
@@ -524,9 +539,9 @@ namespace Cerebro
 					subQuestionText.text = num.ToString () + " \\frac{" + num1.ToString () + "}{" + num2.ToString () + "}";
 					num3 = (num * num2) + num1;
 					Answer = num2.ToString () + "/" + num3.ToString ();
-				} else if (selector == 11) {
+				} else if (selector == 3) {
 					num1 = Random.Range (1, 8);
-					num2 = Random.Range (num2 + 1, 10);
+					num2 = Random.Range (num1 + 1, 10);
 					while (MathFunctions.GetHCF(num1,num2) > 1)
 						num1 = Random.Range (1, 8);
 					num3 = Random.Range (2, 11);
@@ -538,11 +553,11 @@ namespace Cerebro
 					num1 = num1 / hcf;
 					n = n / hcf;
 					Answer = num1.ToString () + "/" + n.ToString ();
-				} else if (selector == 12) {
+				} else if (selector == 4) {
 			
 					num = Random.Range (2, 11);
 					num1 = Random.Range (1, 8);
-					num2 = Random.Range (num2 + 1, 10);
+					num2 = Random.Range (num1 + 1, 10);
 					while (MathFunctions.GetHCF(num1,num2) > 1)
 						num1 = Random.Range (1, 8);
 					subQuestionText.gameObject.SetActive (true);
@@ -556,16 +571,18 @@ namespace Cerebro
 						Answer = n.ToString ();
 					else
 						Answer = n.ToString () + "/" + num1.ToString ();
-				} else if (selector == 13) {
+				} else if (selector == 5) {
 				
 					num1 = Random.Range (1, 8);
-					num2 = Random.Range (num2 + 1, 10);
+					num2 = Random.Range (num1 + 1, 10);
 					while (MathFunctions.GetHCF(num1,num2) > 1)
 						num1 = Random.Range (1, 8);
 					num3 = Random.Range (1, 8);
-					num4 = Random.Range (num2 + 1, 10);
-					while (MathFunctions.GetHCF(num3,num4) > 1)
+					while (num1 == num3)
 						num3 = Random.Range (1, 8);
+					num4 = Random.Range (num3 + 1, 10);
+					while (MathFunctions.GetHCF(num3,num4) > 1)
+						num4 = Random.Range (num3 + 1, 10);
 					subQuestionText.gameObject.SetActive (true);
 					QuestionText.text = "Give the quotient in the lowest term :";
 					subQuestionText.text = " \\frac{" + num1.ToString () + "}{" + num2.ToString () + "} \\div " + " \\frac{" + num3.ToString () + "}{" + num4.ToString () + "}";
@@ -579,9 +596,9 @@ namespace Cerebro
 					else
 						Answer = n.ToString () + "/" + m.ToString ();
 				}
-			} else if (level == 3) {
+			} else if (level == 6) {
 			
-				selector = GetRandomSelector (1, 7);
+				selector = GetRandomSelector (1, 6);
 
 				if (selector == 1) {
 
@@ -620,14 +637,9 @@ namespace Cerebro
 					Answer = num3.ToString ();
 				} else if (selector == 4) {
 				
-					num = Random.Range (1, 11);
-					QuestionText.text = "How many halves in " + num.ToString ()+"?";
-					Answer = (2 * num).ToString ();
-				} else if (selector == 5) {
-				
 					num = Random.Range (2, 11);
 					num1 = Random.Range (1, 8);
-					num2 = Random.Range (num2 + 1, 10);
+					num2 = Random.Range (num1 + 1, 10);
 					while (MathFunctions.GetHCF(num1,num2) > 1)
 						num1 = Random.Range (1, 8);
 					num3 = Random.Range (2, 11);
@@ -643,16 +655,16 @@ namespace Cerebro
 						Answer = num4.ToString ();
 					else
 						Answer = num4.ToString () + "/" + num5.ToString();
-				} else if (selector == 6) {
+				} else if (selector == 5) {
 				
 					num = Random.Range (2, 11);
 					num1 = Random.Range (1, 8);
-					num2 = Random.Range (num2 + 1, 10);
+					num2 = Random.Range (num1 + 1, 10);
 					while (MathFunctions.GetHCF(num1,num2) > 1)
 						num1 = Random.Range (1, 8);
 					num3 = Random.Range (2, 11);
 					num4 = Random.Range (1, 8);
-					num5 = Random.Range (num2 + 1, 10);
+					num5 = Random.Range (num4 + 1, 10);
 					while (MathFunctions.GetHCF(num4,num5) > 1)
 						num4 = Random.Range (1, 8);
 					subQuestionText.gameObject.SetActive (true);

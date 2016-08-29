@@ -484,9 +484,7 @@ namespace Cerebro
             {
                 level = UnityEngine.Random.Range(1, scorestreaklvls.Length + 1);
             }
-           
-            level = 6;
-            
+                       
             #region level1
             if (level == 1)
             {
@@ -498,19 +496,19 @@ namespace Cerebro
                 if (selector == 1)
                 {
                     coeff1 = Random.Range(8000, 10000);
-                    expression3 = coeff1 + " is _____ than 10,000";
+                    expression3 = coeff1 + " is _____ than 10000.";
                     Answer = "<";
                 }
                 else if (selector == 2)
                 {
                     coeff1 = Random.Range(80000, 100000);
-                    expression3 = coeff1 + " is _____ than 1,00,000";
+                    expression3 = coeff1 + " is _____ than 100000.";
                     Answer = "<";
                 }
                 else if (selector == 3)
                 {
                     coeff1 = Random.Range(80000, 1000000);
-                    expression3 = coeff1 + " is _____ than 10,00,000";
+                    expression3 = coeff1 + " is _____ than 1000000.";
                     Answer = "<";
                 }
                 QuestionText.text = expression3;
@@ -530,19 +528,19 @@ namespace Cerebro
                 if (selector == 1)
                 {
                     coeff1 = Random.Range(10000, 100000);
-                    expression3 = coeff1 + " is _____ than 10,000";
+                    expression3 = coeff1 + " is _____ than 10000.";
                     Answer = ">";
                 }
                 else if (selector == 2)
                 {
                     coeff1 = Random.Range(100000, 1000000);
-                    expression3 = coeff1 + " is _____ than 1,00,000";
+                    expression3 = coeff1 + " is _____ than 100000.";
                     Answer = ">";
                 }
                 else if (selector == 3)
                 {
                     coeff1 = Random.Range(1000000, 10000000);
-                    expression3 = coeff1 + " is _____ than 10,00,000";
+                    expression3 = coeff1 + " is _____ than 1000000.";
                     Answer = ">";
                 }
                 QuestionText.text = expression3;
@@ -560,15 +558,18 @@ namespace Cerebro
                 coeff1 = Random.Range(1000, 10000);
                 string[] str1 = new string[4];
                 str1[0] = str1[1] = str1[2] = str1[3] = coeff1.ToString();
-                string[] randarr = new string[4];
+                string[] randarr = new string[5];
+				randarr[0] = Random.Range(1, 10).ToString();
                 randarr[1] = Random.Range(1, 10).ToString();
                 randarr[2] = Random.Range(1, 10).ToString();
                 randarr[3] = Random.Range(1, 10).ToString();
+				randarr[4] = Random.Range(1, 10).ToString();
+
                 for (int j = 0; j < 4; j++)
                 {
                     for (int i = 0; i < 3; i++)
                     {
-                        int x = Random.Range(1, 4);
+                        int x = Random.Range(0, 5);
                         str1[j] += randarr[x];
                     }
 
@@ -898,7 +899,7 @@ namespace Cerebro
                     ThreeChoice.SetActive(true);
                     numPad.SetActive(false);
                     QuestionText.text = ">, < or = ?";
-                    coeff1 = Random.Range(100, 1000);
+                    coeff1 = Random.Range(10, 100);
                     coeff2 = Random.Range(10, 100);
                     coeff3 = Random.Range(100, 1000);
                     int units, tens;

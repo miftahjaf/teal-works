@@ -57,7 +57,7 @@ namespace Cerebro {
 
                 CerebroHelper.DebugLog("SELECTOR = " + selector);
                 if (selector == 1) {
-                    int num = Random.Range(1, 100);
+					int num = Random.Range(2,4) * Random.Range(5, 20);
                     string ans = MathFunctions.GetFactors(num);
                     CerebroHelper.DebugLog(ans);
                     Answer = ans;
@@ -90,17 +90,18 @@ namespace Cerebro {
 
 
                 } else if (selector == 3) {
-                    int num1 = Random.Range(2, 20);
+                    int num1 = Random.Range(6, 20);
 					QuestionText.text = "Find the first 5 multiples of " + num1.ToString() + ".";
                     Answer = MathFunctions.GetMultiples(num1, 5);
                     GeneralButton.gameObject.SetActive(true);
                 } else if (selector == 4) {
-                    int num = Random.Range(2, 21);
-                    int num1 = Random.Range(2, 21);
+					int multiplier = Random.Range (2, 6);
+                    int num = multiplier * Random.Range(2, 6);
+                    int num1 = multiplier * Random.Range(2, 10);
                     while(num==num1)
                     {
                         
-                        num1 = Random.Range(2, 21);
+                        num1 = multiplier * Random.Range(2, 21);
                     }
                     int lcm = MathFunctions.GetLCM(num, num1);
                     int lcm2 = lcm * 2;
@@ -115,7 +116,7 @@ namespace Cerebro {
             } else if (level == 2) {
                 selector = GetRandomSelector(1, 5);
                 if (selector == 1) {
-                    int num = Random.Range(1, 200);
+					int num = Random.Range(2,6) * Random.Range(5, 20);
                     string[] a = new string[100];
                     int j = 0;
                     List<string> ans = new List<string>();
@@ -160,7 +161,7 @@ namespace Cerebro {
                 } else if (selector == 2) {
                     int num1 = Random.Range(2, 21);
                     int num2 = Random.Range(2, 21);
-					while (num1 == num2)
+					while (num1 == num2 || 2*num1 == num2 || 3*num2 == num1)
 						num2 = Random.Range(2, 21);
 					int num3 = 2 * num1;
 					int num4 = 3 * num2;
@@ -168,7 +169,7 @@ namespace Cerebro {
                     int m = Random.Range(1, 6);
                     var number = Random.Range(0, 2);
                     int ans = lcm * m;
-                    int opt1 = Random.Range(1, 10000);
+					int opt1 = 2* Random.Range(ans - 10, ans + 100)/2;
 
                     while (opt1 % num1 == 0 && opt1 % num2 == 0 && opt1 % num3 == 0 && opt1 % num4 == 0)
                     {
@@ -195,25 +196,22 @@ namespace Cerebro {
                     }
 
                 } else if (selector == 3) {
-                    int num1 = Random.Range(1,12);
-                    var number = Random.Range(2, 11);
-                    var number1 = Random.Range(11,21);
-                    var number2 = Random.Range(21, 31);
-                    int num2 = num1*number;
-                    int num3 = num1*number1;
-                    num1 = num1 * number2;
-                    int temp = MathFunctions.GetHCF(num1, num2);
-                    int hcf = MathFunctions.GetHCF(temp, num3);
+					int hcf = Random.Range (2, 10);
+					int num1 = Random.Range (2, 6)*hcf;
+					int num2 = Random.Range (6, 10)*hcf;
+					int num3 = Random.Range (10, 16)*hcf;
+					hcf = MathFunctions.GetHCF (num1, num2);
+					hcf = MathFunctions.GetHCF (hcf, num3);
                     Answer = hcf.ToString();
                     QuestionText.text = "Find the HCF of " + num1 + ", " + num2 + ", " + num3 + ".";
                     GeneralButton.gameObject.SetActive(true);
                 } else if (selector == 4) {
-                    int number = Random.Range(5, 16);
-                    int number1 = Random.Range(2, 11);
-                    int num1 = Random.Range(1, 12);
-                    int num2 = num1 * number1;
-                    num1 = num1 * number;
-                    int hcf = MathFunctions.GetHCF(num1, num2);
+					int hcf = Random.Range (2, 10);
+					int num1 = Random.Range (2, 10)*hcf;
+					int num2 = Random.Range (2, 10)*hcf;
+					while (num1 == num2)
+						num2 = Random.Range (2, 10)*hcf;
+                    hcf = MathFunctions.GetHCF(num1, num2);
                     Answer = hcf.ToString();
                     QuestionText.text = "Find the largest number that divides " + num1 + " and " + num2 + " without leaving a remainder.";
                     GeneralButton.gameObject.SetActive(true);
@@ -275,7 +273,7 @@ namespace Cerebro {
                     int lcm = MathFunctions.GetLCM(num1, num2);
                     int hcf = MathFunctions.GetHCF(num1, num2);
                     Answer = hcf.ToString();
-                    //subQuestionText.text = "HCF X LCM = Product of two numbers";
+                    subQuestionText.text = "HCF X LCM = Product of two numbers";
                     QuestionText.text = "LCM of " + num1 + " and " + num2 + " is " + lcm + ". Find their HCF.";
                     GeneralButton.gameObject.SetActive(true);
 
