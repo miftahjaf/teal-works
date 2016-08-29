@@ -953,14 +953,14 @@ namespace Cerebro
                     coeff1 = Random.Range(1000000, 10000000);
                     if (randact == 1)
                     {
-                        QuestionText.text = "How much is 1 lakh less than " + coeff1 + "?";
+                        QuestionText.text = "How much is : 1 lakh less than " + coeff1 + "?";
                         int tempans;
                         tempans = coeff1 - 100000;
                         Answer = tempans.ToString();
                     }
                     else if (randact == 2)
                     {
-                        QuestionText.text = "How much is 1 lakh more than " + coeff1 + "?";
+                        QuestionText.text = "How much is : 1 lakh more than " + coeff1 + "?";
                         int tempans;
                         tempans = coeff1 + 100000;
                         Answer = tempans.ToString();
@@ -971,7 +971,7 @@ namespace Cerebro
                     coeff1 = Random.Range(1000000, 10000000);
                     if (randact == 1)
                     {
-                        QuestionText.text = "How much is 10 lakhs less than " + coeff1 + "?";
+                        QuestionText.text = "How much is : 10 lakhs less than " + coeff1 + "?";
                         int tempans;
                         tempans = coeff1 - 1000000;
                         Answer = tempans.ToString();
@@ -989,14 +989,14 @@ namespace Cerebro
                     coeff1 = Random.Range(10000000, 100000000);
                     if (randact == 1)
                     {
-                        QuestionText.text = "How much is 1 crore less than " + coeff1 + "?";
+                        QuestionText.text = "How much is : 1 crore less than " + coeff1 + "?";
                         int tempans;
                         tempans = coeff1 - 10000000;
                         Answer = tempans.ToString();
                     }
                     else if (randact == 2)
                     {
-                        QuestionText.text = "How much is 1 crore more than " + coeff1 + "?";
+                        QuestionText.text = "How much is : 1 crore more than " + coeff1 + "?";
                         int tempans;
                         tempans = coeff1 + 10000000;
                         Answer = tempans.ToString();
@@ -1007,14 +1007,14 @@ namespace Cerebro
                     coeff1 = Random.Range(100000000, 1000000000);
                     if (randact == 1)
                     {
-                        QuestionText.text = "How much is 10 crores less than " + coeff1 + "?";
+                        QuestionText.text = "How much is : 10 crores less than " + coeff1 + "?";
                         int tempans;
                         tempans = coeff1 - 100000000;
                         Answer = tempans.ToString();
                     }
                     else if (randact == 2)
                     {
-                        QuestionText.text = "How much is 10 crores more than " + coeff1 + "?";
+                        QuestionText.text = "How much is : 10 crores more than " + coeff1 + "?";
                         int tempans;
                         tempans = coeff1 + 100000000;
                         Answer = tempans.ToString();
