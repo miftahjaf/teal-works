@@ -35,6 +35,12 @@ public class MathFunctions : MonoBehaviour {
 		return num2;
 	}
 
+	public static float GetRounded(float number, int places)
+	{
+		places = Mathf.Clamp (places, 1, 10);
+		return (float)System.Math.Round (number, places, System.MidpointRounding.AwayFromZero);
+	}
+
 	public static string GetMultiples(int num, int count) {
 		List<string> factors = new List<string> ();
 		for (int i = 1; i <= count; i++) {

@@ -16,7 +16,7 @@ namespace Cerebro {
 
 		private string TimeStarted;
 		private float LastClickTimeSpeed;
-		private bool IsSpeedSelectorOpen, IsLandscapeLeft;
+		private bool IsSpeedSelectorOpen, IsLandscapeLeft, IsStopEnabled;
 
 		void Awake ()
 		{
@@ -43,6 +43,7 @@ namespace Cerebro {
 
 			StartButton = transform.FindChild ("StartButton").gameObject;
 			PauseButton = transform.FindChild ("PauseButton").gameObject;
+			StopButton = transform.FindChild ("StopButton").gameObject;
 			NumberText = transform.FindChild ("NumberText").gameObject;
 			VideoBG = transform.FindChild ("VideoBG").gameObject;
 
@@ -50,7 +51,7 @@ namespace Cerebro {
 			StartButton.SetActive (true);
 			videoText.transform.FindChild("Title").GetComponent<Text> ().text = LaunchList.instance.mVerbalize.VerbTitle + "\n";
 			videoText.transform.FindChild("Title").GetComponent<Text> ().text += "by " + LaunchList.instance.mVerbalize.VerbAuthor;
-			videoText.GetComponent<Text> ().text += LaunchList.instance.mVerbalize.PromptText;
+			videoText.GetComponent<Text> ().text = LaunchList.instance.mVerbalize.PromptText;
 			StartPreview ();
 		}
 		
@@ -62,9 +63,14 @@ namespace Cerebro {
 			{
 				//print (videoText.GetComponent<RectTransform> ().offsetMin.y);
 				videoText.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (videoText.GetComponent<RectTransform> ().anchoredPosition.x, videoText.GetComponent<RectTransform> ().anchoredPosition.y + Time.deltaTime * 50f * speed);
-				if (videoText.GetComponent<RectTransform> ().anchoredPosition.y > videoText.GetComponent<RectTransform>().rect.height) {
-					IsTextStartedMoving = false;
+				if (videoText.GetComponent<RectTransform> ().anchoredPosition.y > videoText.GetComponent<RectTransform>().rect.height) {					
 					StopRecording ();
+				}
+			}
+
+			if (!IsStopEnabled) {
+				if (videoText.GetComponent<RectTransform> ().anchoredPosition.y > videoText.GetComponent<RectTransform>().rect.height - videoText.transform.parent.GetComponent<RectTransform>().rect.height) {					
+					EnableStopButton ();
 				}
 			}
 
@@ -82,6 +88,14 @@ namespace Cerebro {
 				#endif
 			}
 		
+		}
+
+		void EnableStopButton()
+		{			
+			StopButton.SetActive (true);
+			PauseButton.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-100f, PauseButton.GetComponent<RectTransform> ().anchoredPosition.y);
+			StopButton.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (100f, PauseButton.GetComponent<RectTransform> ().anchoredPosition.y);
+			IsStopEnabled = true;
 		}
 
 		public void ChangeToLandscapeLeft()
@@ -166,6 +180,7 @@ namespace Cerebro {
 
 		public void StopRecording()
 		{
+			IsTextStartedMoving = false;
 			#if UNITY_IOS && !UNITY_EDITOR
 			_StopButton ("Stop");
 			#endif

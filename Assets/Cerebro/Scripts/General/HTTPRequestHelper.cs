@@ -31,6 +31,7 @@ namespace Cerebro
 
 		//		private string SERVER_URL = "http://192.168.1.28:3000/";
 		private string SERVER_URL = "https://teal-server.herokuapp.com/";
+//		private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
 
 		public event EventHandler MoveValidated;
 		public event EventHandler DescribeImageResponseSubmitted;
@@ -112,14 +113,21 @@ namespace Cerebro
 			bool isLevelUp = false;
 			string alteredAssessmentID = assessmentID;
 
+			if (alteredAssessmentID.Contains ("CONTENT_")) {
+				itemID = alteredAssessmentID.Substring (alteredAssessmentID.IndexOf ("CONTENT_"));
+				alteredAssessmentID = alteredAssessmentID.Substring (0, alteredAssessmentID.IndexOf ("CONTENT_"));;
+			}
+
 			if (alteredAssessmentID.Contains ("VIDEO_")) {
 				itemType = "VIDEO";
 				foundSublevel = true;
+				alteredAssessmentID = alteredAssessmentID.Remove (alteredAssessmentID.IndexOf ("VIDEO_"), 6);
 			} else if (alteredAssessmentID.Contains ("GOOGLY_")) {
 				itemType = "GOOGLY";
 				foundSublevel = true;
 			} else if (alteredAssessmentID.Contains ("SOLUTION_")) {
 				itemType = "SOLUTION";
+				alteredAssessmentID = alteredAssessmentID.Remove (alteredAssessmentID.IndexOf ("SOLUTION_"), 9);
 			} else {
 				itemType = "PRACTICE";
 				if (alteredAssessmentID.Contains ("LEVEL_UP")) {
@@ -127,6 +135,7 @@ namespace Cerebro
 					alteredAssessmentID = alteredAssessmentID.Split (new string[] { "LEVEL_UP" }, System.StringSplitOptions.None) [0];
 				}
 			}
+			Debug.Log (alteredAssessmentID);
 
 			for (var i = alteredAssessmentID.Length - 1; i >= 0; i--) {
 				if (!foundSublevel && alteredAssessmentID [i] == "t" [0]) {
@@ -145,12 +154,20 @@ namespace Cerebro
 					endTime += alteredAssessmentID [i];
 					continue;
 				}
-				itemID += alteredAssessmentID [i];
+				if (!itemID.Contains ("CONTENT_")) {
+					itemID += alteredAssessmentID [i];
+				}
 			}
-			itemID = StringHelper.Reverse (itemID);
+			if (itemID.Contains ("CONTENT_")) {				
+				itemID = itemID.Remove (0, 8);
+			} else {
+				itemID = StringHelper.Reverse (itemID);
+			}
+			Debug.Log (itemID);
 			endTime = StringHelper.Reverse (endTime);
 			subLevel = StringHelper.Reverse (subLevel);
 
+			Debug.Log (alteredAssessmentID+" "+itemID);
 			CerebroHelper.DebugLog (timeStarted + " Timings " + endTime);
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["component_data"] ["assessment_id"] = alteredAssessmentID.Substring (0, alteredAssessmentID.IndexOf ('Z'));
@@ -939,6 +956,7 @@ namespace Cerebro
 							explanation.Level = jsonResponse [i] ["difficulty"].Value;
 							explanation.SubLevel = jsonResponse [i] ["sub_level"].Value;
 							explanation.URL = jsonResponse [i] ["explanation_url"].Value;
+							explanation.ContentId = jsonResponse [i] ["content_id"].Value;
 							string key = explanation.PracticeItemID + "L" + explanation.Level + explanation.SubLevel;
 							sr.WriteLine (explanation.PracticeItemID + "," + explanation.Level + "," + explanation.SubLevel + "," + explanation.URL);
 							if (LaunchList.instance.mExplanation.ContainsKey (key)) {

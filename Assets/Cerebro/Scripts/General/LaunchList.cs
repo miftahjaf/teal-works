@@ -2111,6 +2111,7 @@ namespace Cerebro
 		public string Level { get; set; }
 		public string SubLevel { get; set; }
 		public string URL { get; set; }
+		public string ContentId { get; set; }
 	}
 
 

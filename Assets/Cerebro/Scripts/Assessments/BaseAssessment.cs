@@ -430,9 +430,9 @@ namespace Cerebro {
 			string uniqueTime = eventArgs.timeEnded;
 			string key = mSubjectID + mTopicID + mSubTopicID + mAssessmentID;
 			string uniquekey = key + "Z" + uniqueTime + "t" + selector;
-			string contentKey = "SOLUTION_" + uniquekey;
+			string contentKey = "SOLUTION_" + uniquekey + "CONTENT_" + currentExplanation.ContentId;
 
-			WelcomeScript.instance.ShowRatingPopup ("SOLUTION", eventArgs.timeSpent, key, "How many stars would you give to this video?");
+			WelcomeScript.instance.ShowRatingPopup ("SOLUTION", eventArgs.timeSpent, currentExplanation.ContentId, "How many stars would you give to this video?");
 
 			Cerebro.LaunchList.instance.WriteAnalyticsToFile (contentKey, currentQuestionDifficulty, videoWatched, day, eventArgs.timeStarted, Mathf.FloorToInt (totalimeTaken), Mathf.FloorToInt (eventArgs.timeSpent).ToString(), 0, " " );  
 
