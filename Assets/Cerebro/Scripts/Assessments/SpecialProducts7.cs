@@ -11,6 +11,7 @@ namespace Cerebro
 
         public Text subQuestionText;
         public TEXDraw subQuestionTEX;
+		public GameObject MCQ;
         private string Answer;
         private int AnswerInt;
         private string[] Answerarray;
@@ -110,7 +111,20 @@ namespace Cerebro
             CerebroHelper.DebugLog("*" + Answer + "*");
             questionsAttempted++;
             updateQuestionsAttempted();
-			if (!SingleExpression)
+			if (MCQ.activeSelf) 
+			{
+				if (Answer == userAnswerLaText.text) 
+				{
+					correct = true;
+				}
+				else
+				{
+					correct = false;
+					AnimateMCQOptionCorrect(Answer);
+
+				}
+			}
+			else if (!SingleExpression)
             {
 				userAnswerLaText.text.Replace ("-", "+-");
                 string[] userAnswerSplits = userAnswerLaText.text.Split(new string[] { "+" }, System.StringSplitOptions.None);
@@ -281,6 +295,34 @@ namespace Cerebro
 
         }
 
+		void AnimateMCQOptionCorrect(string ans)
+		{
+			for (int i = 1; i <= 4; i++) {
+				if (MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().text == ans) {
+					MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.green800;
+				}
+			}
+		}
+
+		public void MCQOptionClicked (int value)
+		{
+			if (ignoreTouches) {
+				return;
+			}
+			AnimateMCQOption (value);
+			userAnswerLaText = MCQ.transform.Find ("Option" + value.ToString ()).Find ("Text").GetComponent<TEXDraw> ();
+			answerButton = MCQ.transform.Find ("Option" + value.ToString ()).GetComponent<Button> ();
+			SubmitClick ();
+		}
+
+		IEnumerator AnimateMCQOption (int value)
+		{
+			var GO = MCQ.transform.Find ("Option" + value.ToString ()).gameObject;
+			Go.to (GO.transform, 0.2f, new GoTweenConfig ().scale (new Vector3 (1.2f, 1.2f, 1), false));
+			yield return new WaitForSeconds (0.2f);
+			Go.to (GO.transform, 0.2f, new GoTweenConfig ().scale (new Vector3 (1, 1, 1), false));
+		}
+
 		int[] SolveEquation(int No1, int No2, int No3, int No4)
 		{
 			int[] ans = new int[3];
@@ -312,6 +354,17 @@ namespace Cerebro
 			return ans;
 		}
 
+		void RandomizeMCQOptionsAndFill(List<string> options)
+		{
+			int index = 0;
+			int cnt = options.Count;
+			for (int i = 1; i <= cnt; i++) {
+				index = Random.Range (0, options.Count);
+				MCQ.transform.Find ("Option"+i).Find ("Text").GetComponent<TEXDraw> ().text = options [index];
+				options.RemoveAt (index);
+			}
+		}
+
         protected override void GenerateQuestion()
         {
             ignoreTouches = false;
@@ -326,6 +379,10 @@ namespace Cerebro
             subQuestionTEX.gameObject.SetActive(false);
             QuestionText.gameObject.SetActive(true);
             numPad.SetActive(true);
+			MCQ.SetActive (false);
+			for (int i = 1; i < 5; i++) {
+				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.textDark;
+			}
 
             subQuestionText.text = null;
             QuestionText.text = null;
@@ -347,7 +404,7 @@ namespace Cerebro
                 selector = GetRandomSelector(1,6);
 
                 if (selector == 1)
-                {
+                {					
 					coeff1 = Random.Range(2,10);
 					coeff2 = Random.Range(2,10);
 					while(coeff1 == coeff2)
@@ -355,7 +412,16 @@ namespace Cerebro
 					QuestionText.text = "Solve:";
 					subQuestionTEX.text = "(x+" + coeff1 + ")(x+" + coeff2 + ")";
 					int[] Ans = SolveEquation(1, coeff1, 1, coeff2);
-					Answer = "x^{2}+"+(Ans[1] == 1 ? "" : Ans[1].ToString())+"x+"+Ans[2];                   
+					MCQ.SetActive (true);
+					GeneralButton.gameObject.SetActive(false);
+					numPad.SetActive(false);
+					List<string> options = new List<string>();
+					options.Add("x^{2}+"+(Ans[1] == 1 ? "" : Ans[1].ToString())+"x+"+Ans[2]);
+					options.Add("x^{2}+"+(coeff1*coeff2)+"x+"+(coeff1+coeff2));
+					options.Add("x^{2}+"+(coeff1*coeff2));
+					options.Add("x^{2}+"+(coeff1+coeff2)+"x+"+(2*coeff1*coeff2));
+					Answer = options[0];
+					RandomizeMCQOptionsAndFill(options);
 				} 
 				else if (selector == 2)
 				{
@@ -367,7 +433,17 @@ namespace Cerebro
 					QuestionText.text = "Solve:";
 					subQuestionTEX.text = "(x+" + coeff1 + ")(x" + coeff2 + ")";
 					int[] Ans = SolveEquation(1, coeff1, 1, coeff2);
-					Answer = "x^{2}"+(Ans[1].ToString().Contains("-")?"":"+")+(Ans[1] == 1 ? "" : Ans[1].ToString())+"x"+Ans[2];  
+					Answer = "x^{2}"+(Ans[1].ToString().Contains("-")?"":"+")+(Ans[1] == 1 ? "" : Ans[1].ToString())+"x"+Ans[2];
+					MCQ.SetActive (true);
+					GeneralButton.gameObject.SetActive(false);
+					numPad.SetActive(false);
+					List<string> options = new List<string>();
+					options.Add("x^{2}"+(Ans[1].ToString().Contains("-")?"":"+")+(Ans[1] == 1 ? "" : Ans[1].ToString())+"x"+Ans[2]);
+					options.Add("x^{2}"+(coeff1*coeff2)+"x+"+(coeff1-coeff2));
+					options.Add("x^{2}"+(coeff1*coeff2));
+					options.Add("x^{2}+"+(coeff1-coeff2)+"x"+(2*coeff1*coeff2));
+					Answer = options[0];
+					RandomizeMCQOptionsAndFill(options);
 				}
 				else if (selector == 3)
 				{
