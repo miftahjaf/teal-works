@@ -30,7 +30,7 @@ namespace Cerebro
         private int[] coeff = new int[9];
         private float x, y, z, a, b, c;
         string[] exp = new string[9];
-        int[] end = new int[5];
+        int[] end = new int[15];
         private int upflag = 0;
         int noOfTerms = 0;
 
@@ -50,7 +50,7 @@ namespace Cerebro
             StartCoroutine(StartAnimation());
             base.Initialise("M", "FCA07", "S01", "A01");
 
-            scorestreaklvls = new int[5];
+            scorestreaklvls = new int[6];
             for (var i = 0; i < scorestreaklvls.Length; i++)
             {
                 scorestreaklvls[i] = 0;
@@ -358,6 +358,7 @@ namespace Cerebro
                     else
                     {
                         correct = false;
+						AnimateMCQOptionCorrect(Answer);
                     }
                 }
                 else if (checkingThreeChoice)
@@ -369,6 +370,7 @@ namespace Cerebro
                     else
                     {
                         correct = false;
+						AnimateThreeChoiceOptionCorrect(Answer);
                     }
                 }
             }
@@ -541,31 +543,35 @@ namespace Cerebro
             Go.to(GO.transform, 0.2f, new GoTweenConfig().scale(new Vector3(1, 1, 1), false));
         }
 
+		void AnimateMCQOptionCorrect(string ans)
+		{
+			for (int i = 1; i <= 2; i++) {
+				if (MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().text == ans) {
+					MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.green800;
+				}
+			}
+		}
+
+		void AnimateThreeChoiceOptionCorrect(string ans)
+		{
+			int index = -1;
+			for (int i = 1; i <= 3; i++) {
+				if (ThreeChoice.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().text == ans) {
+					//index = i;
+					ThreeChoice.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.green800;
+				}
+			}
+			if (index != -1) {
+				var GO = ThreeChoice.transform.Find ("Option" + index.ToString ()).gameObject;
+				Go.to (ThreeChoice.gameObject.transform, 0.5f, new GoTweenConfig ().shake (new Vector3 (0, 0, 20), GoShakeType.Eulers));
+			}
+		}
+
         protected override IEnumerator ShowWrongAnimation()
         {
             userAnswerLaText.color = MaterialColor.red800;
             Go.to(answerButton.gameObject.transform, 0.5f, new GoTweenConfig().shake(new Vector3(0, 0, 20), GoShakeType.Eulers));
             yield return new WaitForSeconds(0.5f);
-            if(level == 3 && selector == 3)
-            {
-                if (isRevisitedQuestion)
-                {
-                    userAnswerLaText.text = "";
-                    userAnswerLaText.color = MaterialColor.textDark;
-                    ignoreTouches = false;
-                }
-                else 
-                {
-                    string str = "";
-                      
-                    str += Answerarray[0];
-                       
-                    userAnswerLaText.text = " " + str + " ";
-                    userAnswerLaText.color = MaterialColor.green800;
-                }
-            }
-            else
-            {
                 if (isRevisitedQuestion)
                 {
                     if (numPad.activeSelf)
@@ -596,7 +602,6 @@ namespace Cerebro
                         userAnswerLaText.color = MaterialColor.textDark;
                     }
                 }
-            }
             ShowContinueButton();
         }
 
@@ -635,6 +640,12 @@ namespace Cerebro
             subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -50);
 
             level = Queslevel;
+			for (int i = 1; i < 3; i++) {
+				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.textDark;
+			}
+			for (int i = 1; i < 4; i++) {
+				ThreeChoice.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.textDark;
+			}
             
             answerButton = GeneralButton;
             GeneralButton.gameObject.SetActive(true);
@@ -655,12 +666,12 @@ namespace Cerebro
             if (level == 1)
             {
                
-                selector = GetRandomSelector(1, 6);
+                selector = GetRandomSelector(1, 5);
                 subQuestionText.text = "";
               
                 if (selector == 1)
                 {
-                    coeff1 = Random.Range(1, 100);
+                    coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(10, 50);
                    // subQuestionText.gameObject.SetActive(true);
                     QuestionTEX.gameObject.SetActive(true);
@@ -669,23 +680,23 @@ namespace Cerebro
                     if (temp == 1)
                     {
                         QuestionTEX.text = coeff1 + " + " + coeff2 + "x";
-                        Answer = coeff2 + "x";
+                        Answer = "x";
                     }
                     else if(temp == 2)
                     {
                         QuestionTEX.text = coeff1 + " + " + coeff2 + "y";
-                        Answer = coeff2 + coeff2 + "y";
+                        Answer = "y";
                     }
                     else
                     {
                         QuestionTEX.text = coeff1 + " + " + coeff2 + "z";
-                        Answer = coeff2 + "z";
+                        Answer = "z";
                     }
                    
                 }
                 else if (selector == 2)
                 {
-                    coeff1 = Random.Range(1, 100);
+                    coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(10, 50);
                     coeff3 = Random.Range(10, 50);
                     coeff4 = Random.Range(10, 50);
@@ -695,68 +706,53 @@ namespace Cerebro
                     int temp = Random.Range(1, 3);
                     if (temp == 1)
                     {
-                        QuestionTEX.text = coeff3 + "x +" + coeff4 + "y +" + coeff1 + " + " + coeff2 + "z";
+                        QuestionTEX.text = coeff3 + "x + " + coeff4 + "y + " + coeff1 + " + " + coeff2 + "z";
                     }
                     else if(temp == 2)
                     {
-                        QuestionTEX.text = coeff3 + "x^2 +" + coeff4 + "y +"  + coeff2 + "z + " + coeff1 ;
+                        QuestionTEX.text = coeff3 + "x^2 + " + coeff4 + "y + "  + coeff2 + "z + " + coeff1 ;
                     }
                     Answer = coeff1.ToString();
                   
                 }
                 else if (selector == 3)
                 {
-                    coeff1 = Random.Range(1, 100);
+                    coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(10, 50);
                     coeff3 = Random.Range(10, 50);
-                    pow1 = Random.Range(1, 10);
-                    pow2 = Random.Range(1, 10);
+                    pow1 = Random.Range(2, 10);
+                    pow2 = Random.Range(2, 10);
 
-                    QuestionText.text = "The number of separate terms in the following expression:";
+                    QuestionText.text = "The number of terms in the following expression :";
                     QuestionTEX.gameObject.SetActive(true);
-                    expression1 = "(" + coeff1 + "x^{" + pow1 + "})";
+                    expression1 = coeff1 + "x^{" + pow1 + "}";
                     int temp = Random.Range(1, 4);
                     if (temp == 1)
                     {
-                        expression1 += " + (" + coeff2 + "y^{" + pow2 + "})+ (" + coeff3 + "xy(x+y))";
-                        Answer = "3";
+                        expression1 += " + " + coeff2 + "y^{" + pow2 + "} + " + coeff3 + "xy(x+y)";
+                        Answer = "4";
                     }
                     else if (temp == 2)
                     {
-                        expression1 += " + (" + coeff3 + "xy(x+y))";
-                        Answer = "2";
-                    }
-                    else if(temp == 3)
-                    {
-                        expression1 += " + (" + coeff2 + "(x+y))+ (" + coeff3 + "xy(x+y))";
+                        expression1 += " + " + coeff3 + "xy(x+y)";
                         Answer = "3";
                     }
-                    else
+                    else 
                     {
-                        expression1 += coeff3 + "xy(x+y)";
-                        Answer = "1";
+                        expression1 += " + " + coeff2 + "(x+y) + " + coeff3 + "xy(x+y)";
+                        Answer = "5";
                     }
-                    
                     QuestionTEX.text = expression1;
                    
                 }
+                
                 else if (selector == 4)
                 {
                     QuestionTEX.gameObject.SetActive(true);
-                    QuestionText.text = "Write the number of terms:";
-                    int temp = Random.Range(1, 3);
-                    coeff1 = Random.Range(1, 9);
-                    if (temp == 1)
-                        QuestionTEX.text = "\\frac{0}{xy}";
-                    else QuestionTEX.text = "\\frac{0}{x^" + coeff1 + "y}";
-                    Answer = "0";
-                }
-                else if (selector == 5)
-                {
-                    QuestionTEX.gameObject.SetActive(true);
+					GeneralButton.gameObject.SetActive(false);
                     MCQ.gameObject.SetActive(true);
                     numPad.SetActive(false);
-                    QuestionText.text = "State True or False:";
+                    QuestionText.text = "State True or False :";
                     int temp = Random.Range(1, 3);
                     if (temp == 1)
                     {
@@ -783,7 +779,7 @@ namespace Cerebro
                
                 if (selector == 1)
                 {
-                    coeff1 = Random.Range(1, 100);
+                    coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(10, 50);
                     coeff3 = Random.Range(10, 50);
                    // subQuestionText.gameObject.SetActive(true);
@@ -803,10 +799,12 @@ namespace Cerebro
                 else if (selector == 2)
                 {
                     QuestionTEX.gameObject.SetActive(true);
-                    coeff1 = Random.Range(-10, 10);
-                    pow1 = Random.Range(-10, 10);
-                    pow2 = Random.Range(-10, 10);
-                    pow3 = Random.Range(-10, 10);
+                    coeff1 = Random.Range(2, 50);
+					if(Random.Range(1,3) == 1)
+						coeff1 *= -1;
+                    pow1 = Random.Range(2, 6);
+					pow2 = Random.Range(2, 6);
+					pow3 = Random.Range(2, 6);
                     QuestionText.text = "Write the numerical co-efficient of :";
                     expression3 = coeff1 + "x\\^{" + pow1 + "}y\\^{" + pow2 + "}z\\^{" + pow3 + "}";
                     QuestionTEX.text = expression3;
@@ -814,35 +812,30 @@ namespace Cerebro
                 }
                 else if (selector == 3)
                 {
-                    subQuestionText.gameObject.SetActive(true);
-                    subQuestionTEX.gameObject.SetActive(true);
-                    QuestionTEX.gameObject.SetActive(true);
-                    tempQuestionTEX.gameObject.SetActive(true);
-                    QuestionText.gameObject.SetActive(false);
-                    coeff1 = Random.Range(-10, 10);
+					QuestionTEX.gameObject.SetActive(true);
+                    coeff1 = Random.Range(2,10);
+					if(Random.Range(1,3) == 1)
+						coeff1 *= -1;
                     pow1 = Random.Range(2, 10);
                     pow2 = Random.Range(2, 10);
                     pow3 = Random.Range(2, 10);
-                    subQuestionText.text = "For the above expression, write the co-efficient of the following:";
+					QuestionText.text = "Write the coefficient of :";
                     expression1 = coeff1 + "x\\^{" + pow1 + "}y\\^{" + pow2 + "}z\\^{" + pow3 + "}";
-                    subQuestionTEX.text = expression1;
                     expression3 = "x\\^{" + pow1 + "}";
-                    QuestionTEX.text = expression3;
+					QuestionTEX.text = expression3 + " in " + expression1;
                     Answer = coeff1 + "y^{" + pow2 + "}z^{" + pow3 + "}";
 
                 }
                 else if (selector == 4)
                 {
                     coeff1 = Random.Range(2, 100);
+					if(Random.Range(1,3) == 1)
+						coeff1 *= -1;
                     a = Random.Range(2, 10);
                     b = Random.Range(2, 10);
                     c = Random.Range(2, 10);
-                    subQuestionText.gameObject.SetActive(true);
-                   // subQuestionTEX.gameObject.SetActive(true);
                     QuestionTEX.gameObject.SetActive(true);
-                    tempQuestionTEX.gameObject.SetActive(true);
-                    QuestionText.gameObject.SetActive(false);
-                    subQuestionText.text = "Write the required coefficient for following:";
+                    QuestionText.text = "Write the coefficient of :";
                     int temp = Random.Range(1, 3);
                     if (temp == 1)
                     {
@@ -858,17 +851,18 @@ namespace Cerebro
                         QuestionTEX.text = "x^{" + a + "}y^{" + b + "}z^{" + c + "} in " + coeff1 + "x^{" + a + "}y^{" + b + "}z^{" + c + "}";
                         Answer = coeff1.ToString() ;
                     }
-                                      
-
                 }
                 else if (selector == 5)
                 {
                     QuestionTEX.gameObject.SetActive(true);
                     ThreeChoice.gameObject.SetActive(true);
+					GeneralButton.gameObject.SetActive(false);
                     numPad.SetActive(false);
-                    coeff1 = Random.Range(-10, 10);
+                    coeff1 = Random.Range(2, 10);
+					if(Random.Range(1,3) == 1)
+						coeff1 *= -1;
                     coeff2 = Random.Range(2, 10);
-                    int temp = Random.Range(1, 3);
+                    int temp = Random.Range(1, 4);
                     if (temp == 1)
                     {
                         expression3 = coeff1 + "\\frac{x}{y}";
@@ -884,7 +878,7 @@ namespace Cerebro
                         expression3 = coeff1 + "\\frac{x}{y} + " + coeff2 + "\\frac{y}{x} + x";
                         Answer = "Trinomial";
                     }
-                    QuestionText.text = "Is the following a monomial, binomial or trrinomial?";
+                    QuestionText.text = "Is the following a monomial, binomial or trinomial?";
                     QuestionTEX.text = expression3;
                     
                     ThreeChoice.transform.Find("Option1").Find("Text").GetComponent<TEXDraw>().text = "Monomial";
@@ -909,18 +903,18 @@ namespace Cerebro
                     coeff1 = Random.Range(2, 10);
                     coeff2 = Random.Range(2, 10);
                     coeff3 = Random.Range(2, 10);
-                    a = Random.Range(2, 10);
-                    b = Random.Range(2, 10);
-                    c = Random.Range(2, 10);
+                    a = Random.Range(2, 6);
+                    b = Random.Range(2, 6);
+                    c = Random.Range(2, 6);
                     while (a + b + c > 11)
                     {
                         a = Random.Range(2, 10);
                         b = Random.Range(2, 10);
                         c = Random.Range(2, 10);
                     }
-                    subQuestionText.gameObject.SetActive(true);
+                    //subQuestionText.gameObject.SetActive(true);
 
-                    subQuestionText.text = "Write the exponential form of the following expression :";
+                    QuestionText.text = "Write the exponential form of the following expression :";
                     QuestionTEX.gameObject.SetActive(true);
 
                     QuestionTEX.text = coeff1.ToString();
@@ -941,15 +935,15 @@ namespace Cerebro
                     }
 
 
-                    Answer = coeff1 + "x^{" + a + "}" + coeff2 + "y^{" + b + "}" + coeff3 + "z^{" + c + "}";
+					Answer = coeff1*coeff2*coeff3 + "x^{" + a + "}" + "y^{" + b + "}" + "z^{" + c + "}";
                 }
                 else if (selector == 2)
                 {
-                    coeff1 = Random.Range(1, 100);
-                    coeff2 = Random.Range(1, 100);
-                    coeff3 = Random.Range(1, 100);
+                    coeff1 = Random.Range(2, 100);
+                    coeff2 = Random.Range(2, 100);
+                    coeff3 = Random.Range(2, 100);
                     //subQuestionText.gameObject.SetActive(true);
-                    QuestionText.text = "Find the degree of ";
+                    QuestionText.text = "Find the degree of :";
                     QuestionTEX.gameObject.SetActive(true);
                     a = Random.Range(2, 10);
                     int temp = Random.Range(1, 3);
@@ -960,14 +954,14 @@ namespace Cerebro
                 }
                 else if (selector == 3)
                 {
-                    coeff1 = Random.Range(1, 10);
-                    coeff2 = Random.Range(1, 10);
-                    coeff3 = Random.Range(1, 10);
-                    coeff4 = Random.Range(1, 10);
-                    coeff5 = Random.Range(1, 10);
+                    coeff1 = Random.Range(2, 10);
+                    coeff2 = Random.Range(2, 10);
+                    coeff3 = Random.Range(2, 10);
+                    coeff4 = Random.Range(2, 10);
+                    coeff5 = Random.Range(2, 10);
                     coeff6 = Random.Range(10, 50);
                     //subQuestionText.gameObject.SetActive(true);
-                    QuestionText.text = "Find the degree of ";
+                    QuestionText.text = "Find the degree of :";
                     QuestionTEX.gameObject.SetActive(true);
                     a = Random.Range(2, 10);
                     b = Random.Range(2, 10);
@@ -984,34 +978,43 @@ namespace Cerebro
                 }
                 else if (selector == 4)
                 {
-                    //subQuestionText.gameObject.SetActive(true);
-                    coeff1 = Random.Range(1, 100);
-                    coeff2 = Random.Range(1, 100);
-                    expression3 = "Sum of X and " + coeff1 + " Subtracted from " + coeff1 + " Y is equal to " + coeff2;
-                    QuestionText.text = expression3;
+                    subQuestionText.gameObject.SetActive(true);
+                    coeff1 = Random.Range(2, 100);
+                    coeff2 = Random.Range(2, 100);
+					QuestionText.text = "Express in algebraic form :";
+                    expression3 = coeff1 + " times x subtracted from " + coeff1 + " times y is equal to " + coeff2;
+                    subQuestionText.text = expression3;
                     string[] answer = new string[4];
                     
-                     answer[0] = coeff1 + "y-x-" + coeff1 + "=" + coeff2;
-                     answer[1] = coeff1 + "y-x=" + coeff2 + coeff1;
-                    answer[2] = "-x+" + coeff1 + "y=" + coeff2 + coeff1;
-                    answer[3] = coeff1 + "y-" + coeff1 + "-x=" + coeff2;
+                    answer[0] = coeff1 + "y-" + coeff1 + "x=" + coeff2;
+					answer[1] = "-" + coeff1 + "x" + coeff1 + "y=" + coeff2;
+					answer[2] = coeff1 + "y=" + coeff1 + "x+" + coeff2;
                     Answerarray = answer; 
-                    Answer = coeff1 + "y-x-" + coeff1 + "=" + coeff2; ;
+					Answer = coeff1 + "y-" + coeff1 + "x=" + coeff2;
                 }
                 else if (selector == 5)
                 {
-                    coeff2 = Random.Range(1, 10);
+					coeff1 = Random.Range(2, 10);
+                    coeff2 = Random.Range(2, 10);
+					while (coeff1 == coeff2)
+						coeff2 = Random.Range(2, 10);
                     coeff3 = Random.Range(1, 100);
-                    //subQuestionText.gameObject.SetActive(true);
+					QuestionText.text = "Express in algebraic form :";
+                    subQuestionText.gameObject.SetActive(true);
                     expression3 = coeff1 + "x added to -" + coeff2 + "x gives " + coeff3;
-                    QuestionText.text = expression3;
+                    subQuestionText.text = expression3;
                     string[] answer = new string[4];
                    
-                     answer[0] = coeff1-coeff2 + "x=" + coeff3;
-                     answer[1] = coeff1 + "x=" + coeff2 + "x+" + coeff3;
-                     answer[2] = coeff1 + "x=" + coeff3 + coeff2 + "x";
+                    answer[0] = coeff1-coeff2 + "x=" + coeff3;
+                    answer[1] = coeff1 + "x=" + coeff2 + "x+" + coeff3;
+                    answer[2] = coeff1 + "x=" + coeff3 + coeff2 + "x";
                     Answerarray = answer;
-                    Answer = coeff1 - coeff2 + "x=" + coeff3;
+					if (coeff1 - coeff2 ==1)
+						Answer = "x=" + coeff3;
+					else if( coeff1 - coeff2 == -1)
+						Answer = "-x=" + coeff3;
+					else
+                    	Answer = coeff1 - coeff2 + "x=" + coeff3;
                 }
             }
             #endregion L3
@@ -1025,99 +1028,104 @@ namespace Cerebro
                 if (selector == 1)
                 {
 
-                    coeff1 = Random.Range(1, 100);
+                    coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(10, 50);
                     coeff3 = Random.Range(10, 50);
-                    coeff4 = Random.Range(1, 100);
+					coeff4 = Random.Range(2, 100);
                     coeff5 = Random.Range(10, 50);
                     coeff6 = Random.Range(10, 50);
-                    subQuestionText.gameObject.SetActive(true);
-                    subQuestionText.text = "Add :";
+					while (coeff2 == coeff5 || Mathf.Abs(coeff2-coeff5) == 1)
+						coeff5 = Random.Range(10,50);
+                    QuestionText.text = "Add :";
                     QuestionTEX.gameObject.SetActive(true);
-                    QuestionTEX.text = coeff1 + "x + " + coeff2 + "y + " + coeff3 + "z^{2}, " + coeff4 + "x + " + coeff5 + "y + " + coeff6 + "z^{2}, ";
-                    Answer = (coeff1 + coeff4) + "x+" + (coeff2 + coeff5) + "y+" + (coeff3 + coeff6) + "z^{2}";
+                    QuestionTEX.text = coeff1 + "x + " + coeff2 + "y + " + coeff3 + "z^{2}, " + coeff4 + "x - " + coeff5 + "y + " + coeff6 + "z^{2}";
+					Answer = (coeff1 + coeff4) + "x" + (coeff2 - coeff5 < 0 ? (coeff2 - coeff5).ToString() : ("+" + (coeff2 - coeff5).ToString())) + "y+" + (coeff3 + coeff6) + "z^{2}";
                 }
                 else if (selector == 2)
                 {
-                    QuestionTEX.gameObject.SetActive(true);
-                    QuestionText.text = " Subtract ";
-                    float[] coeff = new float[6];
-                    string[] var = new string[4];
-                    string tempExp1 = "", tempExp2 = "";
-                    string[] AnswerTemp = new string[3];
-                    string[] exp = new string[9];
-                    var[0] = "x^{2}";
-                    var[1] = "y^{2}";
-                    var[2] = "xy";
+					coeff1 = Random.Range(2, 100);
+					if (Random.Range(1,3) == 1)
+						coeff1 *= -1;
+					coeff2 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff2 *= -1;
+					coeff3 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff3 *= -1;
+					coeff4 = Random.Range(2, 100);
+					if (Random.Range(1,3) == 1)
+						coeff4 *= -1;
+					coeff5 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff5 *= -1;
+					coeff6 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff6 *= -1;
+					
+					QuestionText.text = "Subtract :";
+					QuestionTEX.gameObject.SetActive(true);
+					QuestionTEX.text = coeff1 + "x " + (coeff2 > 0 ? "+" : "") + coeff2 + "y " + (coeff3 > 0 ? "+" : "") + coeff3 + "z^{2} from " + coeff4 + "x " + (coeff5 > 0 ? "+" : "") + coeff5 + "y " + (coeff6 > 0 ? "+" : "") + coeff6 + "z^{2}";
+					Answer = "";
+					if (coeff4 - coeff1 == 1)
+						Answer += "x";
+					else if (coeff4 - coeff1 == -1)
+						Answer += "-x";
+					else if (coeff4 - coeff1 == 0)
+						Answer += "";
+					else
+						Answer += (coeff4 - coeff1 > 0 ? "+" : "") + (coeff4 - coeff1) + "x";
+					
+					if (coeff5 - coeff2 == 1)
+						Answer += "+y";
+					else if (coeff5 - coeff2 == -1)
+						Answer += "-y";
+					else if (coeff5 - coeff2 == 0)
+						Answer += "";
+					else
+						Answer += (coeff5 - coeff2 > 0 ? "+" : "") + (coeff5 - coeff2) + "y";
 
-                    for (int i = 0; i < 6; i++)
-                    {
-                        coeff[i] = Random.Range(-9, 10);
-                        if (coeff[i] == -1 || coeff[i] == 0)
-                            coeff[i] = -1;
-                        if (coeff[i] > 0)
-                        {
-                            if (coeff[i] == 1)
-                            {
-                                if ((i % 3) == 0)
-                                    exp[i] = var[i % 3];
-                                else
-                                    exp[i] = "+" + var[i % 3];
-                            }
-                            else {
-                                if ((i % 3) == 0)
-                                    exp[i] = coeff[i] + var[i % 3];
-                                else
-                                    exp[i] = "+" + coeff[i] + var[i % 3];
-                            }
-                        }
-                        else {
-                            if (coeff[i] == -1)
-                                exp[i] = "-" + var[i % 3];
-                            else
-                                exp[i] = coeff[i] + var[i % 3];
+					if (coeff6 - coeff3 == 1)
+						Answer += "+z^{2}";
+					else if (coeff6 - coeff3 == -1)
+						Answer += "-z^{2}";
+					else if (coeff6 - coeff3 == 0)
+						Answer += "";
+					else
+						Answer += (coeff6 - coeff3 > 0 ? "+" : "") + (coeff6 - coeff3) + "z^{2}";
+					
+					while (Answer[0] == '+')
+						Answer = Answer.Substring(1);
 
-                        }
-                    }
-                    tempExp1 = exp[0] + exp[1] + exp[2];
-                    tempExp2 = exp[3] + exp[4] + exp[5];
-                    //QuestionLatext.text = tempExp1 + " from " + tempExp2;
-                    QuestionTEX.text = tempExp1 + " from " + tempExp2;
 
-                    for (int i = 0; i < 3; i++)
-                    {
-                        if ((coeff[i + 3] - coeff[i]) == 0)
-                            AnswerTemp[i] = "";
-                        else if ((coeff[i + 3] - coeff[i]) == 1)
-                            AnswerTemp[i] = "+" + var[i];
-                        else if ((coeff[i + 3] - coeff[i]) == -1)
-                            AnswerTemp[i] = "-" + var[i];
-                        else if ((coeff[i + 3] - coeff[i]) > 0)
-                            AnswerTemp[i] = "+" + (coeff[i + 3] - coeff[i]).ToString() + var[i];
-                        else
-                            AnswerTemp[i] = (coeff[i + 3] - coeff[i]).ToString() + var[i];
-                    }
-                    Answer = AnswerTemp[0] + AnswerTemp[1] + AnswerTemp[2];
-                }
+				}
                 else if (selector == 3)
                 {
                     QuestionTEX.gameObject.SetActive(true);
 
-                    QuestionText.text = "Subtract ";
-                    coeff1 = Random.Range(1, 100);
-                    coeff1 = 1;
+                    QuestionText.text = "Subtract :";
+                    coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(10, 50);
                     coeff3 = Random.Range(10, 50);
-                    coeff4 = Random.Range(1, 100);
+                    coeff4 = Random.Range(2, 100);
                     coeff5 = Random.Range(10, 50);
                     a = Random.Range(10, 100);
+					while (a == coeff1 || Mathf.Abs(a - coeff1) == 1)
+						a = Random.Range(10, 100);
                     b = Random.Range(10, 50);
+					while (b == coeff2 || Mathf.Abs(b - coeff2) == 1)
+						b = Random.Range(10, 5);
                     c = Random.Range(10, 50);
-                    int d = Random.Range(1, 100);
+					while (c == coeff1 || Mathf.Abs(c - coeff3) == 1)
+						c = Random.Range(10, 50);
+                    int d = Random.Range(2, 100);
+					while (d == coeff1 || Mathf.Abs(d - coeff4) == 1)
+						d = Random.Range(2, 100);
                     int e = Random.Range(10, 50);
+					while (e == coeff1 || Mathf.Abs(e - coeff5) == 1)
+						e = Random.Range(2, 100);
                     QuestionTEX.text = coeff1 + "x^4+" + coeff2 + "x^3+" + coeff3 + "x^2+" + coeff4 + "x+" + coeff5 + " from " + a + "x^4+" + b + "x^3+" + c + "x^2+" + d + "x+" + e;
                     Answer = (a - coeff1) + "x^{4}";
-                    if ((b - coeff2) > 0)
+                    if (b - coeff2 > 0)
                     {
                         Answer += "+" + (b - coeff2) + "x^{3}";
                     }
@@ -1156,45 +1164,47 @@ namespace Cerebro
                 {
                     QuestionTEX.gameObject.SetActive(true);
 
-                    QuestionText.text = "Simplify the following ";
-                    coeff1 = 0;
-                    coeff2 = 0;
-                    coeff3 = 0;
-                    coeff4 = 0;
-                    coeff5 = 0;
-                    a = 0;
-                    b = 0;
-                    c = 0;
-                    int d = 0;
-                    int e = 0;
-                    int f = 0;
-                    int g = 0;
-                    while (coeff1 == 0 || coeff2 == 0 || coeff3 == 0 || coeff4 == 0 || coeff5 == 0)
-                    {
-                        coeff1 = Random.Range(-20, 20);
-                        coeff2 = Random.Range(-20, 20);
-                        coeff3 = Random.Range(-20, 20);
-                        coeff4 = Random.Range(-20, 20);
-                        coeff5 = coeff4;
-                    }
-                    while (a == 0 || b == 0 || c == 0 || d == 0 || e == 0 || f==0 || g==0)
-                    {
-                        a = Random.Range(-20, 20);
-                        b = Random.Range(-20, 20);
-                        c = Random.Range(-20, 20);
-                        d = Random.Range(-20, 20);
-                        e = Random.Range(-20, 20);
-                        f = Random.Range(-20, 20);
-                        g = f;
-                    }
-                    if(coeff1 + coeff5 + c == 1)           
+                    QuestionText.text = "Simplify the following :";
+					coeff1 = Random.Range(2,20);
+					if (Random.Range(1,3) == 1)
+						coeff1 *= -1;
+					coeff2 = Random.Range(2,20);
+					if (Random.Range(1,3) == 1)
+						coeff2 *= -1;
+					coeff3 = Random.Range(2,20);
+					if (Random.Range(1,3) == 1)
+						coeff3 *= -1;
+					coeff4 = Random.Range(2,20);
+					if (Random.Range(1,3) == 1)
+						coeff4 *= -1;
+					coeff5 = coeff4;
+					a = Random.Range(2,20);
+					if (Random.Range(1,3) == 1)
+						a *= -1;       
+					b = Random.Range(2,20);
+					if (Random.Range(1,3) == 1)
+						b *= -1;
+					c = Random.Range(2,20);
+					if (Random.Range(1,3) == 1)
+						c *= -1;
+					int d = Random.Range(2,20);
+					if (Random.Range(1,3) == 1)
+						d *= -1;
+            
+                    if (coeff1 + coeff5 + c == 1)           
                         c++;
-                    if (coeff3 + c + d == 1)
+					if (coeff1 + coeff5 + c == -1)           
+						c--;
+                    if (coeff3 + b + d == 1)
                         d++;
+					if (coeff3 + b + d == -1)
+						d--;
                     if (coeff2 + coeff4 + a == 1)
                         a++;
+					if (coeff2 + coeff4 + a == -1)
+						a--;
 
-                        QuestionTEX.text = coeff1 + "x ";
+                    QuestionTEX.text = coeff1 + "x ";
                     if (coeff2 > 0)
                         QuestionTEX.text +=  "+" + coeff2 + "y ";
                     else QuestionTEX.text +=   coeff2 + "y ";
@@ -1220,35 +1230,51 @@ namespace Cerebro
                         QuestionTEX.text += "+" + d + "x^2y^2 ";
                     else QuestionTEX.text += d + "x^2y^2 ";
 
-                    Answer = (coeff1 + coeff5 + c) + "x";
+					Answer = coeff1 + coeff5 + c == 0 ? "" : ((coeff1 + coeff5 + c) + "x");
                     if (coeff2 + coeff4 + a > 0)
                         Answer += "+" + (coeff2 + coeff4 + a) + "y";
-                    else Answer += (coeff2 + coeff4 + a) + "y";
-                    //if (coeff3 + c + d > 0)
-                    //    Answer += "+" + (coeff3 + c + d) + "x^2y^2";
-                    //else Answer += (coeff3 + c + d) + "x^2y^2";
-                    Answer += "+1x^2y^2";
+					else Answer += coeff2 + coeff4 + a == 0 ? "" : ((coeff2 + coeff4 + a) + "y");
+					if (coeff3 + b + d > 0)
+						Answer += "+" + (coeff3 + b + d) + "x^2y^2";
+					else Answer += coeff3 + b + d == 0 ? "" : ((coeff3 + b + d) + "x^2y^2");
 
                 }
                 else if (selector == 5)
                 {
 
-                    coeff1 = Random.Range(1, 100);
+                    coeff1 = Random.Range(2, 100);
+					if (Random.Range(1,3) == 1)
+						coeff1 *= -1;
                     coeff2 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff2 *= -1;
                     coeff3 = Random.Range(10, 50);
-                    coeff4 = Random.Range(1, 100);
+					if (Random.Range(1,3) == 1)
+						coeff3 *= -1;
+                    coeff4 = Random.Range(2, 100);
+					if (Random.Range(1,3) == 1)
+						coeff4 *= -1;
                     coeff5 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff5 *= -1;
                     coeff6 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff6 *= -1;
+					if (coeff4-coeff1 == 0)
+						coeff1 *= -1;
+					if (coeff5-coeff2 == 0)
+						coeff2 *= -1;
+					if (coeff6-coeff3 == 0)
+						coeff3 *= -1;
                     // subQuestionText.gameObject.SetActive(fa);
-                    QuestionText.text = "What must be subtracted from equation(A) to get equation(B)?";
+                    QuestionText.text = "What must be subtracted from expression A to get expression B?";
                     QuestionTEX.gameObject.SetActive(true);
                     tempQuestionTEX.gameObject.SetActive(true);
-                    QuestionTEX.text = "B : " + coeff1 + "x^3 + " + coeff2 + "x^2y^2 + " + coeff3 + "z";
-                    tempQuestionTEX.text = "A : " + coeff4 + "x^3 + " + coeff5 + "x^2y^2 + " + coeff6 + "z";
+					QuestionTEX.text = "B : " + coeff1 + "x^3 " + (coeff2 < 0 ? "" : "+") + coeff2 + "x^2y^2 " +(coeff3 < 0 ? "" : "+") + coeff3 + "z";
+					tempQuestionTEX.text = "A : " + coeff4 + "x^3 " + (coeff5 < 0 ? "" : "+") + coeff5 + "x^2y^2 " + (coeff6 < 0 ? "" : "+") + coeff6 + "z";
 
-                    Answer = (coeff1 - coeff4) + "x^{3}+" + (coeff2 - coeff5) + "x^{2}y^{2}+" + (coeff3 - coeff6) + "z";
+					Answer = (coeff4 - coeff1) + "x^{3}" + (coeff5 - coeff2 < 0 ? "" : "+") + (coeff5 - coeff2) + "x^{2}y^{2}" + (coeff6 - coeff3 < 0 ? "" : "+") + (coeff6 - coeff3) + "z";
                 }
-
 
             }
             #endregion L4
@@ -1260,123 +1286,291 @@ namespace Cerebro
                 subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -110);
                 if (selector == 1)
                 {
-                    coeff1 = Random.Range(1, 20);
+                    coeff1 = Random.Range(2, 20);
+					if (Random.Range(1,3) == 1)
+						coeff1 *= -1;
                     coeff2 = Random.Range(10, 20);
+					if (Random.Range(1,3) == 1)
+						coeff2 *= -1;
                     coeff3 = Random.Range(10, 20);
-                    coeff4 = Random.Range(1, 20);
+					if (Random.Range(1,3) == 1)
+						coeff3 *= -1;
+                    coeff4 = Random.Range(2, 20);
+					if (Random.Range(1,3) == 1)
+						coeff4 *= -1;
                     coeff5 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff5 *= -1;
                     coeff6 = Random.Range(10, 50);
-                    a = Random.Range(1, 20);
+					if (Random.Range(1,3) == 1)
+						coeff6 *= -1;
+                    a = Random.Range(2, 20);
+					if (Random.Range(1,3) == 1)
+						a *= -1;
                     b = Random.Range(10, 20);
+					if (Random.Range(1,3) == 1)
+						b *= -1;
                     c = Random.Range(10, 20);
+					if (Random.Range(1,3) == 1)
+						c *= -1;
                     //subQuestionText.gameObject.SetActive(true);
-                    QuestionText.text = "Subtract A from the sum of B and C";
+                    QuestionText.text = "Subtract A from the sum of B and C.";
                     QuestionTEX.gameObject.SetActive(true);
                     subQuestionTEX.gameObject.SetActive(true);
                     tempQuestionTEX.gameObject.SetActive(true);
-                    QuestionTEX.text = "B : " + coeff1 + "x^2 + " + coeff2 + "xy + " + coeff3 + "y^2";
-                    subQuestionTEX.text = "A : " + coeff4 + "x^2 + " + coeff5 + "xy + " + coeff6 + "y^2";
-                    tempQuestionTEX.text = "C : " + a + "x^2 + " + b + "xy + " + c + "y^2";
+					QuestionTEX.text = "B : " + coeff1 + "x^2 " + (coeff2 < 0 ? coeff2.ToString() : ("+ " + coeff2.ToString())) + "xy " + (coeff3 < 0 ? coeff3.ToString() :( "+ " + coeff3.ToString())) + "y^2";
+					subQuestionTEX.text = "A : " + coeff4 + "x^2 " + (coeff5 < 0 ? coeff5.ToString() : ("+ " + coeff5.ToString())) + "xy " + (coeff6 < 0 ? coeff6.ToString() : ("+ " + coeff6.ToString())) + "y^2";
+					tempQuestionTEX.text = "C : " + a + "x^2 " + (b < 0 ? b.ToString() : ("+ " + b.ToString())) + "xy " + (c < 0 ? c.ToString() : ("+ " + c.ToString())) + "y^2";
 
-                    Answer = (coeff1 + a - coeff4) + "x^2";
-                    if ((coeff2 + b - coeff5) > 0)
+					if (coeff1 + a - coeff4 == 1)
+						Answer = "x^2";
+					else if (coeff1 + a - coeff4 == -1)
+						Answer = "-x^2";
+					else if (coeff1 + a - coeff4 == 0)
+						Answer = "";
+					else
+                    	Answer = (coeff1 + a - coeff4) + "x^2";
+                    if (coeff2 + b - coeff5 > 0)
                     {
-                        Answer += "+" + (coeff2 + b - coeff5) + "xy";
+						if (coeff2 + b - coeff5 == 1)
+							Answer += "+xy";
+						else
+                        	Answer += "+" + (coeff2 + b - coeff5) + "xy";
                     }
                     else
                     {
-                        Answer += (coeff2 + b - coeff5) + "xy";
+						if (coeff2 + b - coeff5 == -1)
+							Answer += "-xy";
+						else
+                        	Answer += (coeff2 + b - coeff5) + "xy";
                     }
                     if ((coeff3 + c - coeff6) > 0)
                     {
-                        Answer += "+" + (coeff3 + c - coeff6) + "y ^ 2";
+						if (coeff3 + c - coeff6 == 1)
+							Answer += "+y^2";
+						else
+                        	Answer += "+" + (coeff3 + c - coeff6) + "y^2";
                     }
                     else
                     {
-                        Answer += (coeff3 + c - coeff6) + "y^2";
+						if (coeff3 + c - coeff6 == -1)
+							Answer += "-y^2";
+						else
+                        	Answer += (coeff3 + c - coeff6) + "y^2";
                     }
+					while (Answer[0] == '+')
+						Answer = Answer.Substring(1);
 
                 }
                 else if (selector == 2)
                 {
-                    coeff1 = Random.Range(1, 20);
+                    coeff1 = Random.Range(2, 20);
+					if (Random.Range(1,3) == 1)
+						coeff1 *= -1;
                     coeff2 = Random.Range(10, 20);
+					if (Random.Range(1,3) == 1)
+						coeff2 *= -1;
                     coeff3 = Random.Range(10, 20);
-                    coeff4 = Random.Range(1, 20);
+					if (Random.Range(1,3) == 1)
+						coeff3 *= -1;
+                    coeff4 = Random.Range(2, 20);
+					if (Random.Range(1,3) == 1)
+						coeff4 *= -1;
                     coeff5 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff5 *= -1;
                     coeff6 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff6 *= -1;
+					if (coeff3 + coeff6 == 0)
+						coeff3 *= -1;
+					if (coeff1 + coeff4 == 0)
+						coeff1 *= -1;
+					if (coeff2 + coeff5 == 0)
+						coeff2 *= -1;
 
                     // subQuestionText.gameObject.SetActive(true);
                     QuestionText.text = "Find the perimeter of a rectangle whose length and breadth are given as A and B.";
                     QuestionTEX.gameObject.SetActive(true);
                     subQuestionTEX.gameObject.SetActive(true);
 
-                    QuestionTEX.text = "B : " + coeff4 + "x + " + coeff5 + "y + " + coeff6 + "z";
-                    subQuestionTEX.text = "A : " + coeff1 + "x + " + coeff2 + "y + " + coeff3 + "z";
+					QuestionTEX.text = "B : " + coeff4 + "x " + (coeff5 < 0 ? coeff5.ToString() : ("+ " + coeff5.ToString())) + "y " + (coeff6 < 0 ? coeff6.ToString() : ("+ " + coeff6.ToString())) + "z";
+					subQuestionTEX.text = "A : " + coeff1 + "x " + (coeff2 < 0 ? coeff2.ToString() : ("+ " + coeff2.ToString())) + "y " + (coeff3 < 0 ? coeff3.ToString() : ("+ " + coeff3.ToString())) + "z";
 
-                    Answer = 2 * (coeff1 + coeff4) + "x+" + 2 * (coeff2 + coeff5) + "y+" + 2 * (coeff3 + coeff6) + "z";
+					Answer = (2*(coeff1 + coeff4)).ToString() + "x" + (coeff2 + coeff5 > 0 ? "+" : "") + (2*(coeff2 + coeff5)).ToString() + "y" + (coeff3 + coeff6 > 0 ? "+" : "") + (2*(coeff3 + coeff6)).ToString() + "z";
                 }
                 else if (selector == 3)
                 {
-                    coeff1 = Random.Range(1, 20);
+                    coeff1 = Random.Range(2, 20);
+					if (Random.Range(1,3) == 1)
+						coeff1 *= -1;
                     coeff2 = Random.Range(10, 20);
+					if (Random.Range(1,3) == 1)
+						coeff2 *= -1;
                     coeff3 = Random.Range(10, 20);
-                    coeff4 = Random.Range(1, 20);
+					if (Random.Range(1,3) == 1)
+						coeff3 *= -1;
+                    coeff4 = Random.Range(2, 20);
+					if (Random.Range(1,3) == 1)
+						coeff4 *= -1;
                     coeff5 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff5 *= -1;
                     coeff6 = Random.Range(10, 50);
-                    a = 1; b = 1; c = 1;
-                    while ((coeff1 + coeff4 + a) % 2 != 0 )
-                        a = Random.Range(2, 20);
-                    while ((coeff2 + coeff5 + b) % 2 != 0 )
-                        b = Random.Range(2, 20);
-                    while ((coeff3 + coeff6 + c) % 2 != 0 )
-                        c = Random.Range(2, 20);
+					if (Random.Range(1,3) == 1)
+						coeff6 *= -1;
+                    a = 3; b = 3; c = 3;
+					while ((coeff1 + coeff4 + a) % 2 != 0 || coeff1 + coeff4 + a == 0 || coeff1 + coeff4 + a == 1 || coeff1 + coeff4 + a == -1)
+						a = Random.Range(2, 20);
+					while ((coeff2 + coeff5 + b) % 2 != 0 || coeff2 + coeff5 + b == 0 || coeff2 + coeff5 + b == 1 || coeff2 + coeff5 + b == -1)
+						b = Random.Range(2, 20);
+					while ((coeff3 + coeff6 + c) % 2 != 0 || coeff3 + coeff6 + c == 0 || coeff3 + coeff6 + c == 1 || coeff3 + coeff6 + c == -1)
+						c = Random.Range(2, 20);
 
 
                     //  subQuestionText.gameObject.SetActive(true);
-                    QuestionText.text = "Find the semiperimeter(s) of a triangle whose sides are given as A, B and C.";
+                    QuestionText.text = "Find the semiperimeter of a triangle whose sides are given as A, B and C.";
                     QuestionTEX.gameObject.SetActive(true);
                     subQuestionTEX.gameObject.SetActive(true);
                     tempQuestionTEX.gameObject.SetActive(true);
 
-                    subQuestionTEX.text = "A : " + coeff1 + "x + " + coeff2 + "y + " + coeff3 + "z";
-                    QuestionTEX.text = "B : " + coeff4 + "x + " + coeff5 + "y + " + coeff6 + "z";
-                    tempQuestionTEX.text = "C : " + a + "x + " + b + "y + " + c + "z";
+					subQuestionTEX.text = "A : " + coeff1 + "x " + (coeff2 > 0 ? "+" : "") + coeff2 + "y " + (coeff3 > 0 ? "+" : "") + coeff3 + "z";
+					QuestionTEX.text = "B : " + coeff4 + "x " + (coeff5 > 0 ? "+" : "") + coeff5 + "y " + (coeff6 > 0 ? "+" : "") + coeff6 + "z";
+					tempQuestionTEX.text = "C : " + a + "x " + (b > 0 ? "+" : "") + b + "y " + (c > 0 ? "+" : "") + c + "z";
 
-                    Answer = (coeff1 + coeff4 + a) / 2 + "x+" + (coeff2 + coeff5 + b) / 2 + "y+" + (coeff3 + coeff6 + c) / 2 + "z";
+					Answer = (coeff1 + coeff4 + a) / 2 + "x" + (coeff2 + coeff5 + b > 0 ? "+" : "") + (coeff2 + coeff5 + b) / 2 + "y" + (coeff3 + coeff6 + c > 0 ? "+" : "") + (coeff3 + coeff6 + c) / 2 + "z";
                 }
                 else if (selector == 4)
                 {
-                    coeff1 = Random.Range(1, 20);
-                    coeff2 = Random.Range(10, 20);
-                    coeff3 = Random.Range(10, 20);
-                    coeff4 = Random.Range(1, 20);
-                    coeff5 = Random.Range(10, 50);
-                    coeff6 = Random.Range(10, 50);
-                    a = 1; b = 1; c = 1;
-                    while ((coeff1 + coeff4 + a) % 2 != 0)
-                        a = Random.Range(2, 20);
-                    while ((coeff2 + coeff5 + b) % 2 != 0)
-                        b = Random.Range(2, 20);
-                    while ((coeff3 + coeff6 + c) % 2 != 0)
-                        c = Random.Range(2, 20);
+					coeff1 = Random.Range(2, 20);
+					if (Random.Range(1,3) == 1)
+						coeff1 *= -1;
+					coeff2 = Random.Range(10, 20);
+					if (Random.Range(1,3) == 1)
+						coeff2 *= -1;
+					coeff3 = Random.Range(10, 20);
+					if (Random.Range(1,3) == 1)
+						coeff3 *= -1;
+					coeff4 = Random.Range(2, 20);
+					if (Random.Range(1,3) == 1)
+						coeff4 *= -1;
+					coeff5 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff5 *= -1;
+					coeff6 = Random.Range(10, 50);
+					if (Random.Range(1,3) == 1)
+						coeff6 *= -1;
+					a = 3; b = 3; c = 3;
+					while ((coeff1 + coeff4 + a) % 2 != 0 || coeff1 + coeff4 + a == 0 || coeff1 + coeff4 + a == 2 || coeff1 + coeff4 + a == -2)
+						a = Random.Range(2, 20);
+					while ((coeff2 + coeff5 + b) % 2 != 0 || coeff2 + coeff5 + b == 0 || coeff2 + coeff5 + b == 2 || coeff2 + coeff5 + b == -2)
+						b = Random.Range(2, 20);
+					while ((coeff3 + coeff6 + c) % 2 != 0 || coeff3 + coeff6 + c == 0 || coeff3 + coeff6 + c == 2 || coeff3 + coeff6 + c == -2)
+						c = Random.Range(2, 20);
+					
 
 
                     // subQuestionText.gameObject.SetActive(true);
-                    QuestionText.text = "The semiperimeter of a triangle is given by A and the two sides are B and C.Determine the third side.";
+                    QuestionText.text = "The semiperimeter of a triangle is given by A and the two sides are B and C. Determine the third side.";
                     QuestionTEX.gameObject.SetActive(true);
                     subQuestionTEX.gameObject.SetActive(true);
                     tempQuestionTEX.gameObject.SetActive(true);
 
-                    subQuestionTEX.text = "A : " + (coeff1 + coeff4 + a) / 2 + "x + " + (coeff2 + coeff5 + b) / 2 + "y + " + (coeff3 + coeff6 + c) / 2 + "z";
-                    QuestionTEX.text = "B : " + coeff4 + "x + " + coeff5 + "y + " + coeff6 + "z";
-                    tempQuestionTEX.text = "C : " + coeff1 + "x + " + coeff2 + "y + " + coeff3 + "z";
+					subQuestionTEX.text = "A : " + (coeff1 + coeff4 + a) / 2 + "x" + (coeff2 + coeff5 + b > 0 ? "+" : "") + (coeff2 + coeff5 + b) / 2 + "y" + (coeff3 + coeff6 + c > 0 ? "+" : "") + (coeff3 + coeff6 + c) / 2 + "z";
+					QuestionTEX.text = "B : " + coeff4 + "x " + (coeff5 > 0 ? "+" : "") + coeff5 + "y " + (coeff6 > 0 ? "+" : "") + coeff6 + "z";
+					tempQuestionTEX.text = "C : " + coeff1 + "x " + (coeff2 > 0 ? "+" : "") + coeff2 + "y " + (coeff3 > 0 ? "+" : "") + coeff3 + "z";
 
-                    Answer = a + "x+" + b + "y+" + c + "z";
+					Answer = a + "x " + (b > 0 ? "+" : "") + b + "y " + (c > 0 ? "+" : "") + c + "z";
                 }
             }
 
             #endregion L5
+
+			#region L6
+			else if (level == 6)
+			{
+				selector = GetRandomSelector(1, 5);
+				QuestionTEX.gameObject.SetActive(true);
+				subQuestionTEX.gameObject.SetActive(false);
+
+				if (selector == 1)
+				{
+					coeff1 = Random.Range(2, 10);
+					if (Random.Range(1,3) == 1)
+						coeff1 *= -1;
+					coeff2 = Random.Range(2, 10);
+					if (Random.Range(1,3) == 1)
+						coeff2 *= -1;
+					coeff3 = Random.Range(2, 10);
+					if (Random.Range(1,3) == 1)
+						coeff3 *= -1;
+					coeff4 = Random.Range(2, 10);
+					if (Random.Range(1,3) == 1)
+						coeff4 *= -1;
+					QuestionText.text = "Find the remainder :";
+					QuestionTEX.text = "x^{3}" + (coeff1 > 0 ? "+" : "") + coeff1 + "x" + (coeff2 > 0 ? "+" : "") + coeff2 + " by x^{2}" + (coeff3 > 0 ? "+" : "") + coeff3 + "x" + (coeff4 > 0 ? "+" : "") + coeff4;
+					int No1 = (coeff3*coeff3) + coeff1 - coeff4;
+					int No2 = coeff2 + (coeff3*coeff4);
+					if(No1 == 0)
+						Answer = No2.ToString();
+					else if(No1 == 1)
+						Answer = "x" + No2.ToString();
+					else if(No1 == -1)
+						Answer = "-x" + No2.ToString();
+					else
+						Answer = No1 + "x" + (No2 > 0 ? "+" : "") + No2;
+				}
+				else if (selector == 2)
+				{
+					coeff1 = Random.Range(2, 8);
+					if (Random.Range(1,3) == 1)
+						coeff1 *= -1;
+					coeff2 = Random.Range(2, 8);
+					if (Random.Range(1,3) == 1)
+						coeff2 *= -1;
+					coeff3 = Random.Range(2, 8);
+					if (Random.Range(1,3) == 1)
+						coeff3 *= -1;
+					coeff4 = Random.Range(2, 8);
+					if (Random.Range(1,3) == 1)
+						coeff4 *= -1;
+					coeff5 = Random.Range(2, 8);
+					if (Random.Range(1,3) == 1)
+						coeff5 *= -1;
+					coeff6 = Random.Range(2, 8);
+					if (Random.Range(1,3) == 1)
+						coeff6 *= -1;
+					QuestionText.text = "Solve using the laws of exponents :";
+					QuestionTEX.text = "\\frac{x^{"+coeff1+"}y^{"+coeff2+"}z^{"+coeff3+"}}{x^{"+coeff4+"}y^{"+coeff5+"}z^{"+coeff6+"}}";
+					Answer = "x^{" + (coeff1-coeff4) + "}y^{" + (coeff2-coeff5) + "}z^{" + (coeff3-coeff6) + "}";
+				}
+				else if (selector == 3)
+				{
+					QuestionTEX.gameObject.SetActive(false);
+					coeff1 = Random.Range(2, 8); 
+					coeff2 = Random.Range(2, 8);
+					coeff3 = Random.Range(2, 8); 
+					coeff4 = Random.Range(2, 8); 
+					coeff5 = Random.Range(2, 8); 
+					coeff6 = Random.Range(2, 8); 
+					QuestionText.text = "The sides of a rectangle are given by " + coeff1 + "x+" + coeff2 + "y+" + coeff3 + "z and " + coeff4 + "x+" + coeff5 + "y+" + coeff6 + "z. Find its area.";
+					Answer = (coeff1*coeff4) + "x^{2}+" + (coeff2*coeff5) + "y^{2}+" + (coeff3*coeff6) + "z^{2}+" + (coeff1*coeff5 + coeff2*coeff4) + "xy+" + (coeff2*coeff6 + coeff3*coeff5) + "yz+" + (coeff1*coeff6 + coeff3*coeff4) + "xz";
+				}
+				else if (selector == 4)
+				{
+					coeff1 = Random.Range(5, 15) * 2;
+					coeff2 = Random.Range(1, coeff1/2);
+					coeff3 = Random.Range(1, 3);
+					coeff4 = coeff1 - (coeff2+coeff3+1);
+					coeff5 = Random.Range(2, 6);
+					coeff6 = Random.Range(6, 9);
+					QuestionText.text = "Find x :";
+					QuestionTEX.text = "(\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{-" + coeff2 + "}\\times(\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{-" + coeff3 + "}\\times(\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{-" + coeff4 + "} = (\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{1-2x}";
+					Answer = (coeff1/2).ToString();
+				}
+			}
+
+			#endregion L6
 
             CerebroHelper.DebugLog(level + "t" + selector + " @Answer by #DAP ::" + Answer);
             userAnswerLaText = answerButton.gameObject.GetChildByName<TEXDraw>("Text");

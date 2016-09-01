@@ -760,7 +760,7 @@ namespace Cerebro
                     coeff1 = Random.Range(-10, 10);
                 pow1 = Random.Range(2,5);
                 pow2 = Random.Range(2,5);
-                QuestionText.text = "Write co-efficient of :";
+                QuestionText.text = "Write the co-efficient of :";
                 selector = GetRandomSelector(1, 4);
 
                 //selector = 3;

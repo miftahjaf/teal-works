@@ -277,7 +277,6 @@ namespace Cerebro
 			if (Queslevel > scorestreaklvls.Length) {
 				level = UnityEngine.Random.Range (1, scorestreaklvls.Length + 1);
 			}
-
 			#region L1
 			if (level == 1) {
 				selector = GetRandomSelector (1, 6);
@@ -363,18 +362,21 @@ namespace Cerebro
 					Answer = "\\root{" + b + "}";
 					//GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 5) {        
-					int num1 = Random.Range (2, 10); 
+					long num1 = Random.Range (2, 10); 
 					int pow = Random.Range (2, 7);
 					num1 = (int)Mathf.Pow (num1, pow);
-                   
+					Debug.Log("First "+num1);
 					while (num1 % 10 == 0) {
 						num1 = num1 / 10;
 					}
+					Debug.Log("second "+num1);
 					int tot = 0;
 					string temp = num1.ToString ();
 					tot += temp.Length;
+					Debug.Log("length "+tot);
                    
 					int num4 = Random.Range (1, 5);
+					Debug.Log("num4 "+num4);
 					for (int i = 0; i < num4; i++) {
 						num1 *= 10;
 					}
@@ -401,7 +403,7 @@ namespace Cerebro
 						float num3 = Random.Range (1, 10);
 						QuestionText.text = (num3 / 10).ToString ("F2");
 					}
-					int num4 = Random.Range (0, 6);
+					int num4 = Random.Range (1, 6);
 					for (int i = 0; i < num4; i++) {
 						QuestionText.text += '0';
 					}
@@ -514,7 +516,7 @@ namespace Cerebro
 				if (selector == 1) {
 					int num = Random.Range (11111, 1000000);
 					float num1 = ((float)num) / 1000000;
-					QuestionText.text = "Round off " + num1.ToString ("F6") + " correct to nearest thousandths :";
+					QuestionText.text = "Round off " + num1.ToString ("F6") + " correct to nearest ten-thousandths :";
 					int remainder = num % 100;
 					int Ans = 0;
 					if (remainder >= 50) {

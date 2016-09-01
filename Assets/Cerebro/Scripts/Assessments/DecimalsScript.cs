@@ -190,14 +190,15 @@ namespace Cerebro
 						den1 /= hcf;
 					}
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Convert the below fraction to decimal (Round to 2 decimals)";
+					QuestionText.text = "Convert the below fraction to decimal (round to 2 decimal places) :";
 					subQuestionText.text = num1.ToString () + " / " + den1.ToString ();
+					//Answer = Math.Round ((float)num1 / (float)den1 , 2);
 					Answer = (Mathf.Round ((float)(num1 * 100 / den1)) / (float)100).ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 2) {
 					float num1 = (float)UnityEngine.Random.Range (1, 100) / (float)100;
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Convert the below decimal to fraction";
+					QuestionText.text = "Convert the below decimal to fraction :";
 					subQuestionText.text = num1.ToString ();
 					Answer = (num1 * 100).ToString () + "/" + 100;
 					GeneralButton.gameObject.SetActive (true);
