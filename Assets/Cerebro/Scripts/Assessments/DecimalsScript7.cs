@@ -318,12 +318,14 @@ namespace Cerebro
 					Answer = ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 3) {
-					float num1 = (float)UnityEngine.Random.Range (1, 10) / (float)10;
-					float num2 = (float)UnityEngine.Random.Range (1, 10) / (float)10;
-					float ans = num1 * num2;
+					int num1 = Random.Range (1,10);
+					int num2 = Random.Range (1,10);
+					float num3 = num1 / 10f;
+					float num4 = num2 / 10f;
+					float ans = num1 * num2/100f;
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Multiply the following decimals (round to 2 decimal places) :";
-					subQuestionText.text = num1.ToString () + " X " + num2.ToString ();
+					QuestionText.text = "Multiply the following decimals :";
+					subQuestionText.text = num3.ToString () + " X " + num4.ToString ();
 					Answer = ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 4) {                       /// not showing right ans afte wrong attepmt
