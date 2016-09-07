@@ -978,12 +978,13 @@ namespace Cerebro
                 }
                 else if (selector == 4)
                 {
-                    subQuestionText.gameObject.SetActive(true);
+                    subQuestionTEX.gameObject.SetActive(true);
                     coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(2, 100);
 					QuestionText.text = "Express in algebraic form :";
                     expression3 = coeff1 + " times x subtracted from " + coeff1 + " times y is equal to " + coeff2;
-                    subQuestionText.text = expression3;
+					subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -106);
+                    subQuestionTEX.text = expression3;
                     string[] answer = new string[4];
                     
                     answer[0] = coeff1 + "y-" + coeff1 + "x=" + coeff2;
@@ -1000,9 +1001,10 @@ namespace Cerebro
 						coeff2 = Random.Range(2, 10);
                     coeff3 = Random.Range(1, 100);
 					QuestionText.text = "Express in algebraic form :";
-                    subQuestionText.gameObject.SetActive(true);
+                    subQuestionTEX.gameObject.SetActive(true);
                     expression3 = coeff1 + "x added to -" + coeff2 + "x gives " + coeff3;
-                    subQuestionText.text = expression3;
+					subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -106);
+                    subQuestionTEX.text = expression3;
                     string[] answer = new string[4];
                    
                     answer[0] = coeff1-coeff2 + "x=" + coeff3;

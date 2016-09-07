@@ -530,36 +530,36 @@ namespace Cerebro
 				QuestionText.text = "Exact or Rounded figure?";
 				if (selector == 1)
 				{
-					subQuestionText.text = "Shoe size";
+					subQuestionText.text = "Shoe size.";
 					Answer = "Rounded";
 					MCQ.transform.Find("Option1").Find("Text").GetComponent<Text>().text = "Exact";
 					MCQ.transform.Find("Option2").Find("Text").GetComponent<Text>().text = "Rounded";
 				}
 				else if (selector == 2)
 				{
-					subQuestionText.text = "Phone Number";
+					subQuestionText.text = "Phone Number.";
 					Answer = "Exact";
 					MCQ.transform.Find("Option1").Find("Text").GetComponent<Text>().text = "Exact";
 					MCQ.transform.Find("Option2").Find("Text").GetComponent<Text>().text = "Rounded";
 				}
 				else if (selector == 3)
 				{
-					subQuestionText.text = "Number of people on a plane";
+					subQuestionText.text = "Number of people on a plane.";
 					Answer = "Exact";
 					MCQ.transform.Find("Option1").Find("Text").GetComponent<Text>().text = "Exact";
 					MCQ.transform.Find("Option2").Find("Text").GetComponent<Text>().text = "Rounded";
 				}
 				else if (selector == 4)
 				{
-					subQuestionText.text = "People at a fair";
+					subQuestionText.text = "People at a fair.";
 					Answer = "Rounded";
 					MCQ.transform.Find("Option1").Find("Text").GetComponent<Text>().text = "Exact";
 					MCQ.transform.Find("Option2").Find("Text").GetComponent<Text>().text = "Rounded";
 				}
 				else if (selector == 5)
 				{
-					subQuestionText.text = "Speed of light";
-					Answer = "Rounded";
+					subQuestionText.text = "Number of planets in our solar system.";
+					Answer = "Exact";
 					MCQ.transform.Find("Option1").Find("Text").GetComponent<Text>().text = "Exact";
 					MCQ.transform.Find("Option2").Find("Text").GetComponent<Text>().text = "Rounded";
 				}
@@ -1034,7 +1034,7 @@ namespace Cerebro
 	                QuestionText.text = "Complete the pattern: ";                
 	                if (selector == 1)
 	                {
-	                    coeff1 = Random.Range(10, 100);
+	                    coeff1 = Random.Range(10, 97);
 	                    coeff2 = Random.Range(10, 100);
 	                    coeff3 = Random.Range(100, 1000);
 	                    subQuestionText.text = coeff1 + "," + coeff2 + "," + coeff3 + "  ;  " + (coeff1 + 1).ToString() + "," + coeff2 + "," + coeff3 + "  ;  " + (coeff1 + 2).ToString() + "," + coeff2 + "," + coeff3 + "  ; ________";
@@ -1043,7 +1043,7 @@ namespace Cerebro
 	                else if (selector == 2)
 	                {
 	                    coeff1 = Random.Range(1, 10);
-	                    coeff2 = Random.Range(10, 100);
+	                    coeff2 = Random.Range(10, 97);
 	                    coeff3 = Random.Range(100, 1000);
 	                    subQuestionText.text = coeff1 + "," + coeff2 + "," + coeff3 + "  ;  " + coeff1 + "," + (coeff2 + 1).ToString() + "," + coeff3 + "  ;  " + coeff1 + "," + (coeff2 + 2).ToString() + "," + coeff3 + "  ; ________";
 	                    Answer = coeff1 + (coeff2 + 3).ToString() + coeff3;
@@ -1052,8 +1052,8 @@ namespace Cerebro
 					{
 						coeff1 = Random.Range(1, 10);
 						coeff2 = Random.Range(10, 100);
-						coeff3 = Random.Range(100, 1000);
 						coeff4 = Random.Range(4, 10);
+						coeff3 = Random.Range(100, 1000 - 3 * coeff4);
 						subQuestionText.text = coeff1 + "," + coeff2 + "," + coeff3 + "  ;  " + coeff1 + "," + (coeff2 + coeff4).ToString() + "," + coeff3 + "  ;  " + coeff1 + "," + (coeff2 + 2 * coeff4).ToString() + "," + coeff3 + "  ; ________";
 						Answer = coeff1 + (coeff2 + 3 * coeff4).ToString() + coeff3;
 					}
