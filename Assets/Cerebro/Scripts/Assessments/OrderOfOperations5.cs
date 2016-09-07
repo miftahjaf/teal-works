@@ -374,7 +374,7 @@ namespace Cerebro
 					int num5 = Random.Range (1, 10);
 					int num4 = Random.Range (num5 + 1, 15);
 					int num3 = Random.Range (num4 - num5 + 1, 20);
-					subQuestionTEX.text = num1 + " + " + num2 + " - \\lbrace" + num3 + " - \\lbrack" + num4 + " - " + num5 + "\\rbrack\\rbrace"; 
+					subQuestionTEX.text = num1 + " + " + num2 + " - \\lbrace{" + num3 + " - ({" + num4 + " - " + num5 + "})}\\rbrace"; 
 					int ans = num1 + num2 - (num3 - (num4 - num5));
 					Answer = ans.ToString ();
 
@@ -386,7 +386,7 @@ namespace Cerebro
 					int num4 = Random.Range (2, 21);
 					while(num1 % (num2 * num3 + num4) != 0)
 						num1 = Random.Range (10, 100);
-					subQuestionTEX.text = num1 + " \\div \\lbrace\\lbrack" + num2 + " \\times " + num3 + "\\rbrack + " + num4 + "\\rbrace";
+					subQuestionTEX.text = num1 + " \\div \\lbrace{({" + num2 + " \\times " + num3 + "}) + " + num4 + "}\\rbrace";
 					int ans = num1 / (num2 * num3 + num4);
 					Answer = ans.ToString ();
 
@@ -433,7 +433,7 @@ namespace Cerebro
 					float coeff5 = (float)num5 / 10f;
 					float coeff6 = (float)num6 / 10f;
 					float coeff7 = (float)num7 / 10f;
-					subQuestionTEX.text = coeff1 + " \\div " + "\\lsqbrack" + coeff2 + " - \\lbrace" + coeff3 + " - \\lbrack" + coeff4 + " \\div " + coeff5 + " - " + coeff6 + " + " + coeff7 + "\\rbrack\\rbrace\\rsqbrack";
+					subQuestionTEX.text = coeff1 + " \\div " + "[{" + coeff2 + " - \\lbrace{" + coeff3 + " - ({" + coeff4 + " \\div " + coeff5 + " - " + coeff6 + " + " + coeff7 + "})}\\rbrace}]";
 					float ans = (float)num1 / (float)num8;
 					ans = MathFunctions.GetRounded (ans, 4);
 					Answer = ans.ToString ();
@@ -448,7 +448,7 @@ namespace Cerebro
 					int num4 = Random.Range (1, 6);
 					int den3 = Random.Range (2, 5) * num4;
 
-					subQuestionTEX.text = "\\frac{" + num1 + "}{" + den2 + "} + \\lbrace\\frac{" + num2 + "}{" + den1 + "} of \\lbrack\\frac{" + num3 + "}{" + den2 + "} + \\frac{" + num4 + "}{" + den3 + "}\\rbrack\\rbrace"; 
+					subQuestionTEX.text = "\\frac{" + num1 + "}{" + den2 + "} + \\lbrace{\\frac{" + num2 + "}{" + den1 + "} of ({\\frac{" + num3 + "}{" + den2 + "} + \\frac{" + num4 + "}{" + den3 + "}})}\\rbrace"; 
 					int ans_num = num1 * den1 * den3 + num2 * (num3 * den3 + den2 * num4);
 					int ans_den = den1 * den2 * den3;
 					int hcf = MathFunctions.GetHCF (ans_num, ans_den);
@@ -469,7 +469,7 @@ namespace Cerebro
 
 					while(((num2 + num3) % (num5 / num4)) != 0)
 						num2 = Random.Range (1, 21);
-					subQuestionTEX.text = num1 + " - \\lbrack" + num2 + " + " + num3 + "\\rbrack \\div \\frac{1}{" + num4 + "} of " + num5;
+					subQuestionTEX.text = num1 + " - ({" + num2 + " + " + num3 + "}) \\div \\frac{1}{" + num4 + "} of " + num5;
 					int ans = num1 - (num2 + num3) / (num5 / num4);
 					Answer = ans.ToString ();
 
@@ -488,7 +488,7 @@ namespace Cerebro
 						den5 = Random.Range (2, 10);
 					int den4 = Random.Range (2, 6) * den5;
 
-					subQuestionTEX.text = num1 + " \\times \\lsqbrack" + num2 + " + \\lbrace\\frac{" + num3 + "}{" + den3 + "} of \\lbrack\\frac{" + num4 + "}{" + den4 + "} \\div \\frac{" + num5 + "}{" + den5 + "}\\rbrack\\rbrace\\rsqbrack";
+					subQuestionTEX.text = num1 + " \\times [{" + num2 + " + \\lbrace{\\frac{" + num3 + "}{" + den3 + "} of ({\\frac{" + num4 + "}{" + den4 + "} \\div \\frac{" + num5 + "}{" + den5 + "}})}\\rbrace}]";
 					int ans_num = num1 * (num2 * den3 * den4 * num5 + num3 * num4 * den5);
 					int ans_den = num5 * den4 * den3;
 					int hcf = MathFunctions.GetHCF (ans_num, ans_den);
@@ -526,7 +526,7 @@ namespace Cerebro
 					int num12 = Random.Range (num13 +1, 16);
 					int num14 = Random.Range (1, 6);
 
-					subQuestionTEX.text = num1 + "\\frac{" + num2 + "}{" + num3 + "} + \\lsqbrack" + num4 + "\\frac{" + num5 + "}{" + num6 + "} + \\frac{" + num7 + "}{" + num8 + "} \\times \\lbrace" + num9 + "\\frac{" + num10 + "}{" + num11 + "} - \\lbrace\\frac{" + num12 + "}{" + num13 + "} - " + num14 + "\\rbrack\\rbrace\\rsqbrace";
+					subQuestionTEX.text = num1 + "\\frac{" + num2 + "}{" + num3 + "} + [{" + num4 + "\\frac{" + num5 + "}{" + num6 + "} + \\frac{" + num7 + "}{" + num8 + "} \\times \\lbrace{" + num9 + "\\frac{" + num10 + "}{" + num11 + "} - ({\\frac{" + num12 + "}{" + num13 + "} - " + num14 + "})}\\rbrace}]";
 					int ans_num = num8 * num11 * num13 * (num6 * (num1 * num3 + num2) + num3 * (num4 * num6 + num5));
 					ans_num += num3 * num6 * num7 * (num13 * (num9 * num11 + num10) - num11 * (num12 - num13 * num14)); 	
 					int ans_den = num3 * num6 * num8 * num11 * num13;

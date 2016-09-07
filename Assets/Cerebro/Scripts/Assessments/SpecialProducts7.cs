@@ -417,9 +417,9 @@ namespace Cerebro
 					numPad.SetActive(false);
 					List<string> options = new List<string>();
 					options.Add("x^{2}+"+(Ans[1] == 1 ? "" : Ans[1].ToString())+"x+"+Ans[2]);
-					options.Add("x^{2}+"+(coeff1*coeff2)+"x+"+(coeff1+coeff2));
-					options.Add("x^{2}+"+(coeff1*coeff2));
-					options.Add("x^{2}+"+(coeff1+coeff2)+"x+"+(2*coeff1*coeff2));
+					options.Add("x^{2}+"+(Ans[2] == 1 ? "" : Ans[2].ToString())+"x+"+Ans[1]);
+					options.Add("x^{2}+"+Ans[2]);
+					options.Add("x^{2}+"+(Ans[1] == 1 ? "" : Ans[1].ToString())+"x+"+(2*Ans[2]));
 					Answer = options[0];
 					RandomizeMCQOptionsAndFill(options);
 				} 
@@ -433,15 +433,15 @@ namespace Cerebro
 					QuestionText.text = "Solve:";
 					subQuestionTEX.text = "(x+" + coeff1 + ")(x" + coeff2 + ")";
 					int[] Ans = SolveEquation(1, coeff1, 1, coeff2);
-					Answer = "x^{2}"+(Ans[1].ToString().Contains("-")?"":"+")+(Ans[1] == 1 ? "" : Ans[1].ToString())+"x"+Ans[2];
+					Answer = "x^{2}"+(Ans[1].ToString().Contains("-")?(Ans[1] == -1 ? "-" : Ans[1].ToString()):(Ans[1] == 1 ? "+" : Ans[1].ToString()))+"x"+Ans[2];
 					MCQ.SetActive (true);
 					GeneralButton.gameObject.SetActive(false);
 					numPad.SetActive(false);
 					List<string> options = new List<string>();
-					options.Add("x^{2}"+(Ans[1].ToString().Contains("-")?"":"+")+(Ans[1] == 1 ? "" : Ans[1].ToString())+"x"+Ans[2]);
-					options.Add("x^{2}"+(coeff1*coeff2)+"x+"+(coeff1-coeff2));
-					options.Add("x^{2}"+(coeff1*coeff2));
-					options.Add("x^{2}+"+(coeff1-coeff2)+"x"+(2*coeff1*coeff2));
+					options.Add("x^{2}"+(Ans[1].ToString().Contains("-")?(Ans[1] == -1 ? "-" : Ans[1].ToString()):(Ans[1] == 1 ? "+" : Ans[1].ToString()))+"x"+Ans[2]);
+					options.Add("x^{2}"+(Ans[2].ToString().Contains("-")?(Ans[2] == -1 ? "-" : Ans[2].ToString()):(Ans[2] == 1 ? "+" : Ans[2].ToString()))+"x"+(Ans[1].ToString().Contains("-")?"":"+")+Ans[1]);
+					options.Add("x^{2}"+Ans[2]);
+					options.Add("x^{2}"+(Ans[1].ToString().Contains("-")?(Ans[1] == -1 ? "-" : Ans[1].ToString()):(Ans[1] == 1 ? "+" : Ans[1].ToString()))+"x"+(2*Ans[2]));
 					Answer = options[0];
 					RandomizeMCQOptionsAndFill(options);
 				}
@@ -457,7 +457,16 @@ namespace Cerebro
 					QuestionText.text = "Solve:";
 					subQuestionTEX.text = "(xy+" + No1 + ")(xy" + No2 + ")";
 					float[] Ans = SolveEquation(1f, No1, 1f, No2);
-					Answer = "x^{2}y^{2}"+(Ans[1].ToString().Contains("-")?"":"+")+(Ans[1] == 1 ? "" : Ans[1].ToString())+"xy"+(Ans[2].ToString().Contains("-")?"":"+")+Ans[2];  
+					MCQ.SetActive (true);
+					GeneralButton.gameObject.SetActive(false);
+					numPad.SetActive(false);
+					List<string> options = new List<string>();
+					options.Add("x^{2}y^{2}"+(Ans[1].ToString().Contains("-")?(Ans[1] == -1 ? "-" : Ans[1].ToString()):(Ans[1] == 1 ? "+" : Ans[1].ToString()))+"xy"+(Ans[2].ToString().Contains("-")?"":"+")+Ans[2]);
+					options.Add("x^{2}y^{2}"+(Ans[2].ToString().Contains("-")?(Ans[1] == -1 ? "-" : Ans[2].ToString()):(Ans[1] == 1 ? "+" : Ans[1].ToString()))+"xy"+(Ans[1].ToString().Contains("-")?"":"+")+Ans[1]);
+					options.Add("x^{2}y^{2}"+(Ans[2].ToString().Contains("-")?"":"+")+Ans[2]);
+					options.Add("x^{2}y^{2}"+(Ans[1].ToString().Contains("-")?(Ans[1] == -1 ? "-" : Ans[1].ToString()):(Ans[1] == 1 ? "+" : Ans[1].ToString()))+"xy"+(Ans[2].ToString().Contains("-")?"":"+")+(2*Ans[2]));
+					Answer = options[0];
+					RandomizeMCQOptionsAndFill(options);
 				}
 				else if (selector == 4)
 				{
@@ -739,52 +748,9 @@ namespace Cerebro
 			#region level5
 			else if(level == 5)
 			{
+				subQuestionTEX.gameObject.SetActive(true);
 				selector = GetRandomSelector(1, 5);
-
 				if (selector == 1)
-				{
-					coeff1 = Random.Range(2, 10);
-					coeff2 = Random.Range(2, 10);
-					coeff3 = Random.Range(2, 10);
-					coeff4 = Random.Range(2, 10);
-					QuestionText.text = "Find the remainder:";
-					subQuestionTEX.text = "x^{3}+" + coeff1 + "x+" + coeff2 + " by x^{2}+" + coeff3 + "x+" + coeff4;
-					int No1 = (coeff3*coeff3) - coeff1 - coeff4;
-					int No2 = coeff2 + (coeff3*coeff4);
-					if(No1 == 0)
-						Answer = No2.ToString();
-					else if(No1 == 1)
-						Answer = "x" + No2.ToString();
-					else if(No1 == -1)
-						Answer = "-x" + No2.ToString();
-					else
-						Answer = No1 + "x+" + No2;
-				}
-				else if (selector == 2)
-				{
-					coeff1 = Random.Range(-2, -8);
-					coeff2 = Random.Range(-2, -8);
-					coeff3 = Random.Range(-2, -8);
-					coeff4 = Random.Range(2, 8);
-					coeff5 = Random.Range(2, 8);
-					coeff6 = Random.Range(2, 8);
-					QuestionText.text = "Write the following indices in positive form only:";
-					subQuestionTEX.text = "\\frac{x^{"+coeff1+"}y^{"+coeff2+"}z^{"+coeff3+"}}{2x^{"+coeff4+"}y^{"+coeff5+"}z^{"+coeff6+"}}";
-					Answer = "\\frac{1}{2x^{"+(coeff4-coeff1)+"}y^{"+(coeff5-coeff2)+"}z^{"+(coeff6-coeff3)+"}}";
-				}
-				else if (selector == 3)
-				{
-					coeff1 = Random.Range(2, 8);
-					coeff2 = Random.Range(2, 8);
-					coeff3 = Random.Range(2, 8);
-					coeff4 = Random.Range(2, 8);
-					coeff5 = Random.Range(2, 8);
-					coeff6 = Random.Range(2, 8);
-					QuestionText.text = "The sides of a rectangle are given by " + coeff1 + "x+" + coeff2 + "y+" + coeff3 + "z and " + coeff4 + "x+" + coeff5 + "y+" + coeff6 + "z. Find its area.";
-					subQuestionTEX.text = "";
-					Answer = (coeff1*coeff4) + "x^{2}+" + (coeff2*coeff5) + "y^{2}+" + (coeff3*coeff6) + "z^{2}+" + (coeff1*coeff4 + coeff2*coeff4) + "xy+" + (coeff2*coeff6 + coeff3*coeff5) + "yz+" + (coeff1*coeff6 + coeff3*coeff4) + "xz";
-				}
-				else if (selector == 4)
 				{
 					coeff1 = Random.Range(2, 10);
 					QuestionText.text = "Simplify:";
@@ -796,15 +762,8 @@ namespace Cerebro
 					else
 						Answer = "-" + (coeff1-2) + "x^{2}-" + (coeff1-2) + "y^{2}";
 				}
-			}
-            #endregion
-            #region level6
-            if (level == 6)
-            {
-				subQuestionTEX.gameObject.SetActive(true);
-                selector = GetRandomSelector(1, 5);
-                //selector = 6;
-                if (selector == 1)
+			                
+                if (selector == 2)
                 {
 					coeff1 = Random.Range(2, 8);
 					coeff2 = Random.Range(2, 8);
@@ -813,7 +772,7 @@ namespace Cerebro
 					subQuestionTEX.text = (coeff1*coeff1) + "x^{2}+" + coeff3 + "xy+" + (coeff2*coeff2) + "y^{2}";
 					Answer = (coeff1*coeff2*2 - coeff3) + "xy";
                 }
-				else if (selector == 2)
+				else if (selector == 3)
                 {
 					coeff1 = Random.Range(2, 8);
 					coeff3 = Random.Range(2, 8);
@@ -821,26 +780,13 @@ namespace Cerebro
 					subQuestionTEX.text = (coeff1*coeff1) + "x^{2}+" + coeff3 + "\\frac{x}{y}+\\frac{1}{" + (coeff1*coeff1) + "y^{2}}";
 					Answer = (1 - coeff3) + "\\frac{x}{y}";
                 }
-				else if (selector == 3)
+				else if (selector == 4)
                 {
 					coeff1 = Random.Range(2, 12);
 					coeff2 = (coeff1*coeff1) - 2;
 					QuestionText.text = "";
 					subQuestionTEX.text = "If x+\\frac{1}{x}=" + coeff1 + ", Find the value of x^{4}+\\frac{1}{x^{4}}";
 					Answer = ((coeff2*coeff2) - 2).ToString();
-					SingleExpression = true;
-                }
-				else if (selector == 4)
-                {
-					coeff1 = Random.Range(5, 15) * 2;
-					coeff2 = Random.Range(1, coeff1/2);
-					coeff3 = Random.Range(1, 3);
-					coeff4 = coeff1 - (coeff2+coeff3+1);
-					coeff5 = Random.Range(2, 6);
-					coeff6 = Random.Range(6, 9);
-					QuestionText.text = "Find x:";
-					subQuestionTEX.text = "(\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{-" + coeff2 + "}\\times(\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{-" + coeff3 + "}\\times(\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{-" + coeff4 + "} = (\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{1-2x}";
-					Answer = (coeff1/2).ToString();
 					SingleExpression = true;
                 }
             }
