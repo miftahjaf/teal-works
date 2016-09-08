@@ -1237,8 +1237,8 @@ namespace Cerebro
                         Answer += "+" + (coeff2 + coeff4 + a) + "y";
 					else Answer += coeff2 + coeff4 + a == 0 ? "" : ((coeff2 + coeff4 + a) + "y");
 					if (coeff3 + b + d > 0)
-						Answer += "+" + (coeff3 + b + d) + "x^2y^2";
-					else Answer += coeff3 + b + d == 0 ? "" : ((coeff3 + b + d) + "x^2y^2");
+						Answer += "+" + (coeff3 + b + d) + "x^{2}y^{2}";
+					else Answer += coeff3 + b + d == 0 ? "" : ((coeff3 + b + d) + "x^{2}y^{2}");
 
                 }
                 else if (selector == 5)
