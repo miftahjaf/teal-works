@@ -461,7 +461,14 @@ namespace Cerebro
 
 		public void videoIconPressed ()
 		{
+			_RemoveTextView ();
+			VideoHelper.instance.VideoEnded += CloseWebView;
 			VideoHelper.instance.OpenVideoWithUrl (mQuestion.MediaURL);
+		}
+
+		void CloseWebView(object sender, System.EventArgs e) {
+			_AddTextView (textViewRect.x, textViewRect.y, textViewRect.width, textViewRect.height,charLimit,userAnswerText.text);
+			VideoHelper.instance.VideoEnded -= CloseWebView;
 		}
 
 		void Update ()
