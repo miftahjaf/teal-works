@@ -228,6 +228,12 @@ namespace Cerebro
 			ratingPopup.GetComponent<RatingPopup> ().Initialise (type, timeSpent, videoID, question);
 		}
 
+		public void ShowGenericPopup(string question) {
+			GameObject GenericPopup = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.RatingPopup, transform.parent);
+			GenericPopup.transform.SetAsLastSibling ();
+			GenericPopup.GetComponent<GenericPopup> ().Initialise (question);
+		}
+
 		public void RetryFeatureData ()
 		{
 			string forDate = mFeatureDate.ToString ("yyyy-MM-dd");

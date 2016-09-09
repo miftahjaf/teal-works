@@ -251,7 +251,7 @@ namespace Cerebro
 			progressCircle.SetActive (false);
 		}
 
-		public void DoneButtonPressed()
+		public void SubmitButtonPressed()
 		{
 			LaunchList.instance.mVerbalize.UserSubmitted = true;
 			LaunchList.instance.WriteVerbalizeResponseToFile (LaunchList.instance.mVerbalize);

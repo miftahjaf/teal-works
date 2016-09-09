@@ -10,13 +10,16 @@ namespace Cerebro {
 		public GameObject videoText, ProgressCircle, SpeedSelector;
 		public Text SpeedText;
 		public float speed = 1;
+		public Slider mSlider;
 
 		private bool IsTextStartedMoving;
-		private GameObject StartButton, PauseButton, StopButton, NumberText, VideoBG;
+		private GameObject StartButton, PauseButton, StopButton, NumberText, VideoBG, TimeRemaining;
+		private GameObject RecordingButton;
 
 		private string TimeStarted;
 		private float LastClickTimeSpeed;
 		private bool IsSpeedSelectorOpen, IsLandscapeLeft, IsStopEnabled;
+		private float[] SpeedRange;
 
 		void Awake ()
 		{
@@ -43,12 +46,24 @@ namespace Cerebro {
 
 			StartButton = transform.FindChild ("StartButton").gameObject;
 			PauseButton = transform.FindChild ("PauseButton").gameObject;
-			StopButton = transform.FindChild ("StopButton").gameObject;
+			StopButton = transform.FindChild ("DoneButton").gameObject;
 			NumberText = transform.FindChild ("NumberText").gameObject;
 			VideoBG = transform.FindChild ("VideoBG").gameObject;
+			TimeRemaining = transform.FindChild ("TimeRemaining").gameObject;
+			RecordingButton = transform.FindChild ("RecordingButton").gameObject;
+
+			SpeedRange = new float[5];
+			SpeedRange[0] = 0.5f;
+			SpeedRange[1] = 0.75f;
+			SpeedRange[2] = 1.0f;
+			SpeedRange[3] = 1.25f;
+			SpeedRange[4] = 1.5f;
+			speed = SpeedRange [PlayerPrefs.GetInt(PlayerPrefKeys.VerbalizeSpeed)];
+			mSlider.value = PlayerPrefs.GetInt(PlayerPrefKeys.VerbalizeSpeed);
 
 			IsTextStartedMoving = false;
 			StartButton.SetActive (true);
+			NumberText.SetActive (false);
 			videoText.transform.FindChild("Title").GetComponent<Text> ().text = LaunchList.instance.mVerbalize.VerbTitle + "\n";
 			videoText.transform.FindChild("Title").GetComponent<Text> ().text += "by " + LaunchList.instance.mVerbalize.VerbAuthor;
 			videoText.GetComponent<Text> ().text = LaunchList.instance.mVerbalize.PromptText;
@@ -93,15 +108,14 @@ namespace Cerebro {
 		void CalculateRemainingTime()
 		{
 			float diff = videoText.GetComponent<RectTransform>().rect.height - videoText.GetComponent<RectTransform> ().anchoredPosition.y;
-			float time = diff / (50.0f * speed);
-			Debug.Log (time);
+			float seconds = diff / (50.0f * speed);
+			TimeSpan t = TimeSpan.FromSeconds (seconds);
+			TimeRemaining.GetComponent<Text> ().text = String.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
 		}
 
 		void EnableStopButton()
 		{			
 			StopButton.SetActive (true);
-			PauseButton.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-100f, PauseButton.GetComponent<RectTransform> ().anchoredPosition.y);
-			StopButton.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (100f, PauseButton.GetComponent<RectTransform> ().anchoredPosition.y);
 			IsStopEnabled = true;
 		}
 
@@ -130,6 +144,16 @@ namespace Cerebro {
 			StartCoroutine (CountDownTimer ());
 		}
 
+		void EnableRecordingButton()
+		{
+			RecordingButton.SetActive (true);
+		}
+
+		void DisableRecordingButton()
+		{
+			RecordingButton.SetActive (false);
+		}
+
 		IEnumerator CountDownTimer()
 		{
 			yield return new WaitForSeconds (1f);
@@ -139,9 +163,13 @@ namespace Cerebro {
 			yield return new WaitForSeconds (1f);
 			NumberText.SetActive (false);
 			PauseButton.SetActive (true);
+			StopButton.SetActive (true);
 			VideoBG.SetActive (true);
+			TimeRemaining.SetActive (true);
 			IsTextStartedMoving = true;
-			SpeedText.transform.parent.gameObject.SetActive (true);
+			mSlider.gameObject.SetActive (true);
+			InvokeRepeating ("EnableRecordingButton", 0f, 1f);
+			InvokeRepeating ("DisableRecordingButton", 0.5f, 1f);
 			TimeStarted = System.DateTime.Now.ToString ("yyyy-MM-ddTHH:mm:ss");
 			string CurrOrientationLeft = "true";
 			if (Screen.orientation == ScreenOrientation.LandscapeRight)
@@ -158,15 +186,15 @@ namespace Cerebro {
 			} else {
 				ResumeText ();
 			}
-			if (IsSpeedSelectorOpen) {
-				SetSpeed (0f);
-			}
 		}
 
 		void PauseText()
 		{
 			if (IsTextStartedMoving) {
 				IsTextStartedMoving = false;
+				CancelInvoke ("EnableRecordingButton");
+				CancelInvoke ("DisableRecordingButton");
+				RecordingButton.SetActive (false);
 				PauseButton.transform.FindChild ("Text").GetComponent<Text> ().text = "Resume";
 				#if UNITY_IOS && !UNITY_EDITOR
 				_PauseButton ("Pause");
@@ -178,6 +206,8 @@ namespace Cerebro {
 		{
 			if (!IsTextStartedMoving) {
 				IsTextStartedMoving = true;
+				InvokeRepeating ("EnableRecordingButton", 0f, 1f);
+				InvokeRepeating ("DisableRecordingButton", 0.5f, 1f);
 				PauseButton.transform.FindChild ("Text").GetComponent<Text> ().text = "Pause";
 				#if UNITY_IOS && !UNITY_EDITOR
 				_ResumeButton ("Resume");
@@ -206,6 +236,11 @@ namespace Cerebro {
 			HideScreen (true);
 		}
 
+		public void PopupOkPressed()
+		{
+			Debug.Log ("Ok");	
+		}
+
 		public void BackPressed ()
 		{
 			#if UNITY_IOS && !UNITY_EDITOR
@@ -226,20 +261,11 @@ namespace Cerebro {
 			}
 		}
 
-		public void SetSpeed(float value)
+		public void SetSpeed()
 		{
-			if (IsSpeedSelectorOpen) {
-				ResumeText ();
-				IsSpeedSelectorOpen = false;
-				SpeedText.gameObject.SetActive (true);
-				if (value != 0) {
-					SpeedText.text = value + "x";
-					speed = value;
-				}
-				LastClickTimeSpeed = Time.time;
-				SpeedSelector.transform.localPosition = new Vector2 (-70f, -45f);
-				Go.to (SpeedSelector.transform, 0.2f, new GoTweenConfig ().localPosition (new Vector2 (-70f, -200f), false));
-			}
+			int value = (int)mSlider.value;
+			speed = SpeedRange [value];
+			PlayerPrefs.SetInt (PlayerPrefKeys.VerbalizeSpeed, value);
 		}
 
 		void HideScreen(bool IsRecordingCompleted)
@@ -250,6 +276,15 @@ namespace Cerebro {
 			page.BackOnScreen (IsRecordingCompleted);
 			//WelcomeScript.instance.ShowScreen (false);
 			Destroy (gameObject);
+		}
+
+		void OnApplicationFocus( bool focusStatus )
+		{
+			if(!focusStatus)
+			{
+				PauseText ();
+				CerebroHelper.DebugLog ("Going to background");
+			}
 		}
 
 		public void StartPreview()
