@@ -356,7 +356,7 @@ namespace Cerebro
 			landingPage.SetActive (false);
 		}
 
-		public void BackOnScreen ()
+		public void BackOnScreen (bool ShowRatingPopup = false)
 		{
 			landingPage.SetActive (true);
 			if (LaunchList.instance.mVerbalize != null) {
@@ -366,6 +366,19 @@ namespace Cerebro
 
 			transform.localPosition = new Vector2 (transform.localPosition.x, -1152f);
 			Go.to (transform, 0.2f, new GoTweenConfig ().localPosition (new Vector2 (-512f, -384f), false));
+
+			if(ShowRatingPopup)
+				StartCoroutine (ShowPopup());
+		}
+
+		IEnumerator ShowPopup()
+		{
+			yield return new WaitForSeconds (0.2f);
+			DateTime stTime = DateTime.ParseExact (LaunchList.instance.mVerbalize.VerbStartTime, "yyyy-MM-ddTHH:mm:ss", null);
+			DateTime endTime = DateTime.ParseExact (LaunchList.instance.mVerbalize.VerbEndTime, "yyyy-MM-ddTHH:mm:ss", null);
+			float TimeSpent = (float)(endTime.Subtract(stTime).TotalSeconds);
+			Debug.Log ("Total Time "+TimeSpent);
+			WelcomeScript.instance.ShowRatingPopup ("VERBALIZE", TimeSpent,LaunchList.instance.mVerbalize.VerbalizeID, "How was your experience of speaking out loud?");
 		}
 	}
 }

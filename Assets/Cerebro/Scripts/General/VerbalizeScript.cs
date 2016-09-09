@@ -58,7 +58,7 @@ namespace Cerebro {
 		// Update is called once per frame
 		void Update () 
 		{
-
+			CalculateRemainingTime ();
 			if (IsTextStartedMoving) 
 			{
 				//print (videoText.GetComponent<RectTransform> ().offsetMin.y);
@@ -88,6 +88,13 @@ namespace Cerebro {
 				#endif
 			}
 		
+		}
+
+		void CalculateRemainingTime()
+		{
+			float diff = videoText.GetComponent<RectTransform>().rect.height - videoText.GetComponent<RectTransform> ().anchoredPosition.y;
+			float time = diff / (50.0f * speed);
+			Debug.Log (time);
 		}
 
 		void EnableStopButton()
@@ -196,7 +203,7 @@ namespace Cerebro {
 			#if UNITY_EDITOR
 			WelcomeScript.instance.GetSavedVideoPath("Temp path");
 			#endif
-			HideScreen ();
+			HideScreen (true);
 		}
 
 		public void BackPressed ()
@@ -204,7 +211,7 @@ namespace Cerebro {
 			#if UNITY_IOS && !UNITY_EDITOR
 			_BackButton ("Back Pressed");
 			#endif
-			HideScreen ();
+			HideScreen (false);
 		}
 
 		public void EnableSpeedSelector()
@@ -235,12 +242,12 @@ namespace Cerebro {
 			}
 		}
 
-		void HideScreen()
+		void HideScreen(bool IsRecordingCompleted)
 		{
 			WelcomeScript.instance.IsVerbalizeStarted = false;
 			WelcomeScript.instance.dashboardIcon.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-40f, -32f);
 			VerbalizeLandingPage page = gameObject.transform.parent.parent.GetComponent<VerbalizeLandingPage> ();
-			page.BackOnScreen ();
+			page.BackOnScreen (IsRecordingCompleted);
 			//WelcomeScript.instance.ShowScreen (false);
 			Destroy (gameObject);
 		}
