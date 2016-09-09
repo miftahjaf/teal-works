@@ -321,7 +321,7 @@ namespace Cerebro
                 }
                 else if (Queslevel == 8)
                 {
-                    increment = 10;
+                    increment = 15;
                 }
                 else if (Queslevel == 9)
                 {
@@ -331,16 +331,7 @@ namespace Cerebro
                 {
                     increment = 15;
                 }
-                else if (Queslevel == 11)
-                {
-                    increment = 15;
-                }
-                else if (Queslevel == 12)
-                {
-                    increment = 15;
-                }
-
-
+                
                 UpdateStreak(8, 12);
 
                 updateQuestionsAttempted();

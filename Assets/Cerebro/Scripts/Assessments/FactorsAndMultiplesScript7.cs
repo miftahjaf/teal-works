@@ -467,9 +467,9 @@ namespace Cerebro {
 				if (Queslevel == 1) {
 					increment = 5;
 				} else if (Queslevel == 2) {
-					increment = 8;
+					increment = 5;
 				} else if (Queslevel == 3) {
-					increment = 12;
+					increment = 10;
 				}
                 else if (Queslevel == 4)
                 {

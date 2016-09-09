@@ -104,31 +104,31 @@ namespace Cerebro
             {
                 if (Queslevel == 1)
                 {
-                    increment = 2;
+                    increment = 5;
                 }
                 else if (Queslevel == 2)
                 {
-                    increment = 4;
+                    increment = 5;
                 }
                 else if (Queslevel == 3)
                 {
-                    increment = 6;
+                    increment = 10;
                 }
                 else if (Queslevel == 4)
                 {
-                    increment = 8;
+                    increment = 10;
                 }
                 else if (Queslevel == 5)
                 {
-                    increment = 10;
+                    increment = 15;
                 }
                 else if (Queslevel == 6)
                 {
-                    increment = 12;
+                    increment = 15;
                 }
                 else if (Queslevel == 7)
                 {
-                    increment = 14;
+                    increment = 15;
                 }
 
 

@@ -108,6 +108,9 @@ namespace Cerebro
 				} else if (Queslevel == 4) {
 					increment = 15;
 					UpdateStreak (4, 8);
+				} else if (Queslevel == 5) {
+					increment = 15;
+					UpdateStreak (4, 8);
 				}
 
 				//UpdateStreak (8, 12);

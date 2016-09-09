@@ -30,7 +30,7 @@ namespace Cerebro
             StartCoroutine(StartAnimation());
             base.Initialise("M", "LNS06", "S01", "A01");
 
-            scorestreaklvls = new int[8];           //check this
+            scorestreaklvls = new int[7];           //check this
 
             for (var i = 0; i < scorestreaklvls.Length; i++)
             {
@@ -292,6 +292,10 @@ namespace Cerebro
                 {
                     increment = 15;
                 }
+				else if (Queslevel == 8)
+				{
+					increment = 15;
+				}
                 UpdateStreak(8, 12);
 
                 updateQuestionsAttempted();

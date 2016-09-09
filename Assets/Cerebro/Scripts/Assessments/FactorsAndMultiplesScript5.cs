@@ -367,16 +367,10 @@ namespace Cerebro {
 				if (Queslevel == 1) {
 					increment = 5;
 				} else if (Queslevel == 2) {
-					increment = 5;
-				} else if (Queslevel == 3) {
 					increment = 10;
+				} else if (Queslevel == 3) {
+					increment = 15;
 				} else if (Queslevel == 4) {
-					increment = 15;
-				} else if (Queslevel == 5) {
-					increment = 15;
-				} else if (Queslevel == 6) {
-					increment = 15;
-				} else if (Queslevel == 7) {
 					increment = 15;
 				}
 
