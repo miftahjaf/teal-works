@@ -146,6 +146,11 @@ namespace Cerebro
 				inputPanel.transform.Find ("MediaVideo").SetAsLastSibling ();
 				inputPanel.transform.Find ("MediaVideo").gameObject.SetActive (true);
 				inputPanel.transform.Find ("MediaImage").gameObject.SetActive (false);
+				var firstSplit = mQuestion.MediaURL.Split ("v="[1]);
+				var videoID = firstSplit [1].Split ("&"[0])[0];
+				var videoUrl = "https://www.youtube.com/embed/" + videoID;
+				var imgurl = "https://img.youtube.com/vi/" + videoID + "/default.jpg";
+				StartCoroutine (LoadThumbnail(imgurl, mQuestion.ImageID));
 			} else if (mQuestion.MediaType == "Image") {
 				inputPanel.transform.Find ("MediaImage").SetAsLastSibling ();
 				inputPanel.transform.Find ("MediaVideo").gameObject.SetActive (false);
@@ -299,6 +304,24 @@ namespace Cerebro
 			isAnimating = false;
 			if (mQuestion.MediaType == "Image") {
 				StartCoroutine (LoadImage (mQuestion.MediaURL, inputPanel.transform.Find ("MediaImage").gameObject, false));
+			}
+		}
+
+		IEnumerator LoadThumbnail(string imgurl, string ImageID)
+		{
+			Texture2D tex = null;
+			WWW remoteImage = new WWW (imgurl);
+			yield return remoteImage;
+			if (remoteImage.error == null) {
+				GameObject gm = inputPanel.transform.Find ("MediaVideo").FindChild ("BG").gameObject;
+				if (ImageID == mQuestion.ImageID && gm != null) {
+					tex = remoteImage.texture;
+					var newsprite = Sprite.Create (tex, new Rect (0f, 0f, tex.width, tex.height), new Vector2 (0.5f, 0.5f));
+					gm.GetComponent<Image> ().color = new Color (1, 1, 1, 1);
+					gm.GetComponent<Image> ().sprite = newsprite;
+				}
+			} else {
+				print (remoteImage.error + ",for," + imgurl);
 			}
 		}
 
