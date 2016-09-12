@@ -275,7 +275,7 @@ namespace Cerebro
 					while (MathFunctions.GetHCF (num1, num2) > 1)
 						num1 = Random.Range (1, 6);
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Convert the following complex fraction into a simple fraction :";
+					QuestionText.text = "Convert the following mixed fraction into an improper fraction :";
 					subQuestionText.text = num.ToString () + "\\frac{" + num1.ToString () + "}{" + num2.ToString () + "}";
 					Answer = ((num * num2) + num1).ToString () + "/" + num2.ToString ();
 				} else if (selector == 3) {
@@ -306,7 +306,7 @@ namespace Cerebro
 					num3 = Random.Range (2, 10);
 					num1 = num * num3;
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Convert into a simple fraction.";
+					QuestionText.text = "Write the following fraction in its simplest form :";
 					subQuestionText.text = "\\frac{" + num.ToString () + "}{" + num1.ToString () + "}";
 					int hcf = MathFunctions.GetHCF (num, num1);
 					num = num / hcf;
@@ -616,7 +616,7 @@ namespace Cerebro
 					num3 = Random.Range (2, 11);
 					while (num2 == num3)
 						num2 = Random.Range (1, 11);
-					QuestionText.text = "Mary used " + num.ToString () + "/" + num1.ToString () + " metres of thread to stitch 1 dress and " + num2.ToString () + "/" + num3.ToString () + " metres to make another. How many metres of thread did she used for both dresses?";
+					QuestionText.text = "Mary used " + num.ToString () + "/" + num1.ToString () + " metres of thread to stitch 1 dress and " + num2.ToString () + "/" + num3.ToString () + " metres to make another. How many metres of thread did she use for both dresses?";
 					lcm = MathFunctions.GetLCM (num1, num3);
 					num1 = lcm / num1;
 					num3 = lcm / num3;

@@ -224,7 +224,7 @@ namespace Cerebro {
             else if (level == 3)
             {
 
-
+				subQuestionText.gameObject.SetActive(false);
                 selector = GetRandomSelector(1, 5);
 
             
@@ -264,7 +264,6 @@ namespace Cerebro {
                 }
                 else if (selector == 3)
                 {
-                    //subQuestionText.gameObject.SetActive(true);
                     int num1 = Random.Range(1, 101);
                     int number = Random.Range(5, 31);
                     int number1 = Random.Range(2, 11);
@@ -273,7 +272,6 @@ namespace Cerebro {
                     int lcm = MathFunctions.GetLCM(num1, num2);
                     int hcf = MathFunctions.GetHCF(num1, num2);
                     Answer = hcf.ToString();
-                    subQuestionText.text = "HCF X LCM = Product of two numbers";
                     QuestionText.text = "LCM of " + num1 + " and " + num2 + " is " + lcm + ". Find their HCF.";
                     GeneralButton.gameObject.SetActive(true);
 
@@ -292,7 +290,6 @@ namespace Cerebro {
                     int product = num1 * num2;
                     Answer = hcf.ToString();
                     QuestionText.text = "The LCM of two numbers is " + lcm + ". If their product is " + product + ". What is the HCF?";
-                    subQuestionText.text = "HCF X LCM = Product of two numbers";
                     GeneralButton.gameObject.SetActive(true);
                     subQuestionText.gameObject.SetActive(true);
 
