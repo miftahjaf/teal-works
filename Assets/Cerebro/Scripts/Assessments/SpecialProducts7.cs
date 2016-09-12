@@ -43,7 +43,7 @@ namespace Cerebro
             StartCoroutine(StartAnimation());
             base.Initialise("M", "SPP07", "S01", "A01");
 
-            scorestreaklvls = new int[11];
+            scorestreaklvls = new int[5];
             for (var i = 0; i < scorestreaklvls.Length; i++)
             {
                 scorestreaklvls[i] = 0;
@@ -204,13 +204,24 @@ namespace Cerebro
                 }
                 else if (Queslevel == 2)
                 {
-                    increment = 10;
+                    increment = 5;
                 }
                 else if (Queslevel == 3)
                 {
-                    increment = 15;
+                    increment = 10;
                 }
-
+				else if (Queslevel == 4)
+				{
+					increment = 10;
+				}
+				else if (Queslevel == 5)
+				{
+					increment = 15;
+				}
+				else if (Queslevel == 6)
+				{
+					increment = 10;
+				}
 
                 UpdateStreak(12, 16);
 

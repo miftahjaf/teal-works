@@ -122,10 +122,12 @@ namespace Cerebro
 
 			if (correct == true) {
 				if (Queslevel == 1) {
-					increment = 8;
+					increment = 5;
 				} else if (Queslevel == 2) {
-					increment = 15;
+					increment = 10;
 				} else if (Queslevel == 3) {
+					increment = 15;         
+				} else if (Queslevel == 4) {
 					increment = 15;         
 				} 
 

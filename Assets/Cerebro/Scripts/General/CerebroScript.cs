@@ -39,6 +39,7 @@ namespace Cerebro {
 		public const string Feedback = "Feedback";
 		public const string Verbalize = "Verbalize";
 		public const string RatingPopup = "RatingPopup";
+		public const string GenericPopup = "GenericPopup";
 
 		public const string WordTower = "WordTower/WordTower";
 		public const string WordTowerMovableComponent = "WordTower/Movable";
@@ -61,6 +62,7 @@ namespace Cerebro {
 		public const string MissionID = "MissionIDKey";
 		public const string ProfilePicKey = "ProfilePic";
 		public const string TextureLastCleared = "TextureLastCleared";
+		public const string VerbalizeSpeed = "VerbalizeSpeed";
 	}
 
 	public static class PrefabManager
