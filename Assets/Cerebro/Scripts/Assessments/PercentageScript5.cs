@@ -368,6 +368,8 @@ namespace Cerebro {
 
 					num1 = Random.Range (11, 1000);
 					int selectQuantity = Random.Range (0, 4);
+					if (selectQuantity == 1)
+						num1 = Random.Range (11, 100);
 					string[] selectQuantity1 = new string[4]{"g", "p", "ml", "m"};
 					string[] selectQuantity2 = new string[4]{"kg", "Rs.", "l", "km"};
 					int[] conversionFactor = new int[4]{1000, 100, 1000, 1000};
