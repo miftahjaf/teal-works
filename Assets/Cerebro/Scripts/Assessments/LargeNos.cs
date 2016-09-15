@@ -28,7 +28,7 @@ namespace Cerebro
         {
 
             StartCoroutine(StartAnimation());
-            base.Initialise("M", "LNS06", "S01", "A01");
+            base.Initialise("M", "LNS05", "S01", "A01");
 
             scorestreaklvls = new int[7];           //check this
 
