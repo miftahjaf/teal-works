@@ -49,9 +49,6 @@ namespace Cerebro
 		public bool autoTestMissionCorrect = false;
 		public bool autoTestMissionMix = false;
 
-		[HideInInspector]
-		public bool IsVerbalizeStarted;
-
 		private static WelcomeScript m_Instance;
 		List<string> practiceOptions;
 
@@ -222,16 +219,21 @@ namespace Cerebro
 			ShowScreen (false, null, true);
 		}
 
-		public void ShowRatingPopup(string type, float timeSpent, string videoID, string question) {
-			GameObject ratingPopup = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.RatingPopup, transform.parent);
-			ratingPopup.transform.SetAsLastSibling ();
-			ratingPopup.GetComponent<RatingPopup> ().Initialise (type, timeSpent, videoID, question);
+		public void FromGenericPopup()
+		{
+			Debug.Log ("from generic pop up");
 		}
 
-		public void ShowGenericPopup(string question) {
-			GameObject GenericPopup = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.RatingPopup, transform.parent);
+		public void ShowRatingPopup(string type, float timeSpent, string videoID, string question, RatingPopup.OkClicked OkFunction = null) {
+			GameObject ratingPopup = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.RatingPopup, transform.parent);
+			ratingPopup.transform.SetAsLastSibling ();
+			ratingPopup.GetComponent<RatingPopup> ().Initialise (type, timeSpent, videoID, question, OkFunction);
+		}
+
+		public void ShowGenericPopup(string question, int NumberOfButton, bool IsPortrait, GenericPopup.OkClicked OkFunction = null, GenericPopup.CancelClicked CancelFunction = null, Sprite icon = null) {
+			GameObject GenericPopup = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.GenericPopup, transform.parent);
 			GenericPopup.transform.SetAsLastSibling ();
-			GenericPopup.GetComponent<GenericPopup> ().Initialise (question);
+			GenericPopup.GetComponent<GenericPopup> ().Initialise (question, NumberOfButton, IsPortrait, OkFunction, CancelFunction, icon);
 		}
 
 		public void RetryFeatureData ()
@@ -257,7 +259,7 @@ namespace Cerebro
 				BottomBarObject.transform.Find ("TestScreens").gameObject.SetActive (true);
 				BottomBarObject.transform.Find ("TestScreens").Find ("Info").GetComponent<Text> ().text = "Screenshots " + takingScreenshots.ToString ();
 			} else {
-				BottomBarObject.transform.Find ("Verbalize").gameObject.SetActive (false);
+//				BottomBarObject.transform.Find ("Verbalize").gameObject.SetActive (false);
 				BottomBarObject.transform.Find ("WordTower").gameObject.SetActive (false);
 				//BottomBarObject.transform.Find ("GOT").gameObject.SetActive (false);
 				BottomBarObject.transform.Find ("Coding").gameObject.SetActive (false);
@@ -290,14 +292,15 @@ namespace Cerebro
 				wcData.text = "Pending";
 			}
 
-			Dictionary<string,string> VerbalizeIDDict = LaunchList.instance.GetNextVerbalizeID ();
-			string VerbalizeID = VerbalizeIDDict ["VerbalizeID"];
-			bool fetchBoolVerb = VerbalizeIDDict ["fetchBoolVerb"] == "true" ? true : false;
-			if (LaunchList.instance.CheckForSubmittedVerbalize (VerbalizeID) > -1 && !fetchBoolVerb) {
-				verbData.text = "Submitted";
-			} else {
-				verbData.text = "Pending";
-			}
+//			Dictionary<string,string> VerbalizeIDDict = LaunchList.instance.GetNextVerbalizeID ();
+//			string VerbalizeID = VerbalizeIDDict ["VerbalizeID"];
+//			bool fetchBoolVerb = VerbalizeIDDict ["fetchBoolVerb"] == "true" ? true : false;
+//			if (LaunchList.instance.CheckForSubmittedVerbalize (VerbalizeID) > -1 && !fetchBoolVerb) {
+//				verbData.text = "Submitted";
+//			} else {
+//				verbData.text = "Pending";
+//			}
+			verbData.text = "Read out aloud";
 
 			string today = System.DateTime.Now.ToString ("yyyyMMdd");
 			practiceData.text = GetPracticeCount (today)["attempts"].ToString () + " questions solved";
@@ -717,13 +720,6 @@ namespace Cerebro
 
 		public void DashboardPressed ()
 		{
-			if (IsVerbalizeStarted) {
-				WelcomeScript.instance.dashboardIcon.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-40f, -32f);
-				IsVerbalizeStarted = false;
-				#if UNITY_IOS && !UNITY_EDITOR
-				_BackButton ("Back Pressed");
-				#endif
-			}
 			WelcomeScript.instance.ShowScreen ();
 		}
 

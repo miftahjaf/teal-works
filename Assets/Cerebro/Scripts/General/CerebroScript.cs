@@ -468,8 +468,15 @@ namespace Cerebro {
 
 				SendUsageAnalytics ();
 
-				LaunchList.instance.CheckForVerbalizeToUpload ();
+				StartCoroutine (WaitToCheckVerbalize());
 			}
+		}
+
+		IEnumerator WaitToCheckVerbalize()
+		{
+			yield return new WaitForSeconds (15);
+			Debug.Log ("checking for verbalize upload");
+			LaunchList.instance.CheckForVerbalizeToUpload ();
 		}
 
 		public void SendUsageAnalytics() {

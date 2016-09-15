@@ -719,6 +719,12 @@ namespace Cerebro
 							p.RegenRate = jsonResponse [i] ["regen_rate"].Value;
 							p.TotalCoins = jsonResponse [i] ["total_coins"].Value;
 							p.Show = jsonResponse [i] ["show"].Value;
+							char lastChar = p.PracticeItemName[p.PracticeItemName.Length - 1];
+							int lastNumber = -1;
+							if(!int.TryParse(lastChar+"", out lastNumber))
+							{
+								p.PracticeItemName += p.Grade;
+							}
 
 							if (LaunchList.instance.mPracticeItems.ContainsKey (p.PracticeID)) {
 								p.CurrentCoins = LaunchList.instance.mPracticeItems [p.PracticeID].CurrentCoins;
@@ -1030,6 +1036,28 @@ namespace Cerebro
 		//
 		// PUT Requests
 		//
+
+		public void SendFlaggedData (string practiceItemId, string seed, int level, int selector)
+		{
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			N ["myData"] ["component_data"] ["student_id"] = studentID;
+			N ["myData"] ["component_data"] ["practice_item_id"] = practiceItemId;
+			N ["myData"] ["component_data"] ["seed"] = seed;
+			N ["myData"] ["component_data"] ["difficulty"] = level.ToString();
+			N ["myData"] ["component_data"] ["sub_level"] = selector.ToString();
+
+			N ["myData"] ["component_name"] = "flagged_question";
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArray (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
+					CerebroHelper.DebugLog ("Added new row");
+				} else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+				}
+			});
+		}
 
 		public void SendRatingInfo (string type, string studentID, string contentID, float timeSpent, int rating)
 		{

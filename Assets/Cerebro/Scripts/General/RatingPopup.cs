@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.Events;
 
 namespace Cerebro
 {
 	public class RatingPopup : MonoBehaviour
 	{
+		public delegate void OkClicked();
+		public OkClicked OnOkClicked;
 
 		private string mStarNormalColor = "E2E2E2";
 		private string mStarHighlightColor = "29CDB1";
@@ -25,7 +28,7 @@ namespace Cerebro
 			GetComponent<RectTransform> ().anchoredPosition = new Vector3 (0f, 0f);
 		}
 
-		public void Initialise (string type, float timeSpent, string videoID, string question)
+		public void Initialise (string type, float timeSpent, string videoID, string question, OkClicked OkFunction = null)
 		{
 			mVideoID = videoID;
 			mTimeSpent = timeSpent;
@@ -33,6 +36,7 @@ namespace Cerebro
 			Card = transform.Find ("Card").gameObject;
 			questionObject = Card.transform.Find ("Question").GetComponent<Text> ();
 			Stars = Card.transform.Find ("Stars").gameObject;
+			OnOkClicked = OkFunction;
 
 			questionObject.text = question;
 
@@ -61,6 +65,8 @@ namespace Cerebro
 		public void OkPressed() {
 			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 			HTTPRequestHelper.instance.SendRatingInfo (mType, studentID, mVideoID, mTimeSpent, mRating);
+			if (OnOkClicked != null)
+				OnOkClicked ();
 
 			BackPressed ();
 		}

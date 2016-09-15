@@ -101,6 +101,7 @@ namespace Cerebro
 
 		private bool firstTimeNetCheck = true;
 
+		public string mCurrLocalTempPath;
 		public bool WelcomeScreenActive = true;
 		private static LaunchList m_Instance;
 
@@ -142,6 +143,10 @@ namespace Cerebro
 
 			DontDestroyOnLoad (transform.gameObject);
 
+			Debug.Log("Asking for temp path");
+			#if UNITY_IOS && !UNITY_EDITOR
+			_GetTempDirectory("Temp Path");
+			#endif
 		}
 
 		public void LogoutUser() {
@@ -572,7 +577,6 @@ namespace Cerebro
 			if (mCurrentStudent.Coins < 0) {
 				mCurrentStudent.Coins = 0;
 			}
-
 			int currentDeltaValue = PlayerPrefs.GetInt (PlayerPrefKeys.DeltaCoins);	
 			PlayerPrefs.SetInt (PlayerPrefKeys.DeltaCoins, currentDeltaValue + increment);
 
@@ -1973,6 +1977,50 @@ namespace Cerebro
 			sr.Close ();
 		}
 
+		public void DeleteVerbalize(string VerbID)
+		{
+			Debug.Log ("deleting");
+			string fileName = Application.persistentDataPath + "/VerbalizeSubmitted.txt";
+			int cnt = 0;
+			JSONNode N = JSONClass.Parse ("{\"Data\"}");
+			JSONNode N1 = JSONClass.Parse ("{\"Data\"}");
+			if (File.Exists (fileName)) {				
+				string data = File.ReadAllText (fileName);
+				N = JSONClass.Parse (data);
+				cnt = N ["Data"].Count;
+				int currId = CheckForSubmittedVerbalize (VerbID);
+				Debug.Log ("found "+currId+" "+cnt);
+				if (currId > -1) {
+					File.WriteAllText (fileName, string.Empty);
+					int myCnt = 0;
+					for (int i = 0; i < cnt; i++) {
+						Debug.Log ("curr "+currId+" "+i);
+						if (i == currId) {
+							continue;
+						}
+						Debug.Log ("cpoying "+i+" "+myCnt);
+						N1 ["Data"] [myCnt] = N ["Data"] [i];
+//						N1 ["Data"][myCnt]["VerbalizeID"] = N ["Data"][i]["VerbalizeID"].Value;
+//						N1 ["Data"][myCnt]["VerbalizeDate"] = N ["Data"][i]["VerbalizeDate"].Value;
+//						N1 ["Data"][myCnt]["UserSubmitted"] = N ["Data"][i]["UserSubmitted"].Value;
+//						N1 ["Data"][myCnt]["UserResponseURL"] = N ["Data"][i]["UserResponseURL"].Value;
+//						N1 ["Data"][myCnt]["UploadedToServer"] = N ["Data"][i]["UploadedToServer"].Value;
+//						N1 ["Data"][myCnt]["VerbGrade"] = N ["Data"][i]["VerbGrade"].Value;
+//						N1 ["Data"][myCnt]["VerbDifficulty"] = N ["Data"][i]["VerbDifficulty"].Value;
+//						N1 ["Data"][myCnt]["VerbGenre"] = N ["Data"][i]["VerbGenre"].Value;
+//						N1 ["Data"][myCnt]["VerbTitle"] = N ["Data"][i]["VerbTitle"].Value;
+//						N1 ["Data"][myCnt]["VerbAuthor"] = N ["Data"][i]["VerbAuthor"].Value;
+//						N1 ["Data"][myCnt]["PromptText"] = N ["Data"][i]["PromptText"].Value;
+//						N1 ["Data"][myCnt]["VerbSpeed"] = N ["Data"][i]["VerbSpeed"].Value;
+//						N1 ["Data"][myCnt]["VerbStartTime"] = N ["Data"][i]["VerbStartTime"].Value;
+//						N1 ["Data"][myCnt]["VerbEndTime"] = N ["Data"][i]["VerbEndTime"].Value;
+						myCnt++;
+					}
+					File.WriteAllText (fileName, N1.ToString());	
+				}
+			}
+		}
+
 		public int CheckForSubmittedVerbalize (string VerbalizeID)
 		{
 			string fileName = Application.persistentDataPath + "/VerbalizeSubmitted.txt";
@@ -2028,6 +2076,7 @@ namespace Cerebro
 
 		public void CheckForVerbalizeToUpload ()
 		{
+			Debug.Log ("checking for verbalize upload in launchlist");
 			string fileName = Application.persistentDataPath + "/VerbalizeSubmitted.txt";
 			if (File.Exists (fileName)) {
 				string data = File.ReadAllText (fileName);
@@ -2035,17 +2084,28 @@ namespace Cerebro
 				for (int i = 0; i < N ["Data"].Count; i++) {
 					if (N ["Data"][i]["UserSubmitted"].AsBool && !N ["Data"][i]["UploadedToServer"].AsBool) {
 						Verbalize Verb = CheckForSubmittedVerbalizeViaDate (N ["Data"][i]["VerbalizeDate"].Value);
+						Debug.Log ("found one for verbalize upload "+Verb.VerbTitle);
 						#if UNITY_EDITOR
 						HTTPRequestHelper.instance.SubmitVerbalizeResponse(Verb);
 						#endif
 						#if UNITY_IOS && !UNITY_EDITOR
-						HTTPRequestHelper.instance.uploadProfileVid ("vid.mov", Verb.UserResponseURL, Verb);
+						HTTPRequestHelper.instance.uploadProfileVid ("vid.mov", LaunchList.instance.mCurrLocalTempPath + Verb.UserResponseURL, Verb);
 						#endif
 						break;
 					}
 				}
 			}
 		}
+
+		public void GotTempDirectory(string tempPath)
+		{
+			print ("got temp path "+tempPath);
+			mCurrLocalTempPath = tempPath;
+		}
+
+		[DllImport ("__Internal")]
+		private static extern void _GetTempDirectory (
+			string message);
 
 		public bool SetVerbalizeUploaded (Verbalize Verb)
 		{
@@ -2057,7 +2117,7 @@ namespace Cerebro
 				N = JSONClass.Parse (data);
 				cnt = CheckForSubmittedVerbalize (Verb.VerbalizeID);
 				if (cnt > -1) {
-					string OldPath = N ["Data"] [cnt] ["UserResponseURL"].Value;
+					string OldPath = LaunchList.instance.mCurrLocalTempPath + N ["Data"] [cnt] ["UserResponseURL"].Value;
 					#if UNITY_IOS && !UNITY_EDITOR
 					_DeleteLocalVideo (OldPath);
 					#endif

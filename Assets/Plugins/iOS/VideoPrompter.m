@@ -37,6 +37,32 @@
     [self.view.layer addSublayer:_preview];
 }
 
+-(void) generateThumbImage : (NSString *)filepath
+{
+    NSLog(@"into ");
+    
+    NSURL *url = [NSURL fileURLWithPath:filepath];
+    
+    AVAsset *asset = [AVAsset assetWithURL:url];
+    AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc]initWithAsset:asset];
+    CMTime time = [asset duration];
+    time.value = 0;
+    CGImageRef imageRef = [imageGenerator copyCGImageAtTime:time actualTime:NULL error:NULL];
+    UIImage *thumbnail = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);  // CGImageRef won't be released by ARC
+    
+    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    
+    NSData * binaryImageData = UIImagePNGRepresentation(thumbnail);
+    
+    [binaryImageData writeToFile:[basePath stringByAppendingPathComponent:@"vid.jpg"] atomically:YES];
+    
+    const char* localOutputPath = [[basePath stringByAppendingPathComponent:@"vid.jpg"] cStringUsingEncoding:NSASCIIStringEncoding];
+    NSLog(@"out %s", localOutputPath);
+    UnitySendMessage("VerbalizeLandingPage", "GotThumbnailImage", localOutputPath);
+}
+
 -(void) startRecording : (BOOL*) IsLandscapeLeft
 {
     NSLog(@"Stop clicked");
@@ -189,6 +215,19 @@ void _DeleteLocalVideo(const char* path)
 {
     NSLog(@"Native: Deleting local video");
     [r deleteLocalVideo:path];
+}
+
+void _GetTempDirectory(const char* path)
+{
+    NSLog(@"Native: Getting temp directory");
+    NSString* tempPath = NSTemporaryDirectory();
+    const char* localPath = [tempPath cStringUsingEncoding:NSASCIIStringEncoding];
+    UnitySendMessage("LaunchList", "GotTempDirectory", localPath);
+}
+
+void _GetThumbnail(const char* path)
+{
+    NSLog(@"Native: Getting Thumbnail");
 }
 
 void _RotationChanged(const char* message)

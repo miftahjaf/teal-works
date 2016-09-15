@@ -156,15 +156,20 @@ static CameraEngine* theEngine;
             // serialize with audio and video capture
             
             self.isCapturing = NO;
+            NSLog(isSaving ? @"Yes" : @"No");
             dispatch_async(_captureQueue, ^{
                 [_encoder finishWithCompletionHandler:^{
                     self.isCapturing = NO;
                     _encoder = nil;
-                    if(isSaving)
-                    {
                     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
                     [library writeVideoAtPathToSavedPhotosAlbum:url completionBlock:^(NSURL *assetURL, NSError *error){
                         NSLog(@"save completed %@", path);
+                        if(!isSaving)
+                        {
+                          [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+                        }
+                        else
+                        {
                         //const char* localPath = [path cStringUsingEncoding:NSASCIIStringEncoding];
                         //UnitySendMessage("WelcomeScreen", "GetSavedVideoPath", localPath);
                         //[[NSFileManager defaultManager] removeItemAtPath:path error:nil];
@@ -175,8 +180,9 @@ static CameraEngine* theEngine;
                          {
                              if (exportSession.status == AVAssetExportSessionStatusCompleted)
                              {
-                                 NSLog(@"completed compression %@", outputPath);
-                                 const char* localOutputPath = [outputPath cStringUsingEncoding:NSASCIIStringEncoding];
+                                 [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+                                 NSLog(@"completed compression %@", filename1);
+                                 const char* localOutputPath = [filename1 cStringUsingEncoding:NSASCIIStringEncoding];
                                  UnitySendMessage("WelcomeScreen", "GetSavedVideoPath", localOutputPath);
                              }
                              else
@@ -185,8 +191,8 @@ static CameraEngine* theEngine;
                                  
                              }
                          }];
+                        }
                     }];
-                    }
                 }];
             });
         }

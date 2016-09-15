@@ -6,6 +6,7 @@ using System.Linq;
 using System.IO;
 using UnityEngine.EventSystems;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Cerebro
 {
@@ -34,6 +35,9 @@ namespace Cerebro
 		public GameObject startButton;
 		public GameObject ViewRetakeButton;
 		public GameObject ViewButton;
+		public GameObject TranscriptButton;
+
+		private DateTime CurrDateTime;
 
 		private bool isTestUser = false;
 
@@ -43,6 +47,8 @@ namespace Cerebro
 		void Start ()
 		{
 			CerebroAnalytics.instance.ScreenOpen (CerebroScreens.Verbalize);
+
+			this.gameObject.name = "VerbalizeLandingPage";
 
 			GetComponent<RectTransform> ().sizeDelta = new Vector2 (1024f, 768f);
 			GetComponent<RectTransform> ().position = new Vector3 (0, 0);
@@ -95,12 +101,20 @@ namespace Cerebro
 			}
 		}
 
+		public void GotThumbnailImage(string ImagePath)
+		{
+			//StartCoroutine (SetThumbnail(ImagePath));
+		}
+
 		public void ManageCardDataForDate(DateTime currdate, bool autoFetching = false)
 		{
+			#if UNITY_IOS && !UNITY_EDITOR
+			_GetThumbnail("Temp Path");
+			#endif
 			DisableAllButtons ();
 			if (LaunchList.instance.VerbalizeSaving) {
 				message.text = "Please Wait.";
-				cardTitle.text = "Saving Video";
+				cardTitle.text = "Saving Recording";
 
 				progressCircle.SetActive (false);
 				fetchQuestionBtn.SetActive (false);
@@ -112,29 +126,29 @@ namespace Cerebro
 			if (Verb != null && Verb.PromptText != "") {
 				Debug.Log (Verb.VerbalizeDate + " " + Verb.UserSubmitted + " " + Verb.UserResponseURL + " " + Verb.UploadedToServer);
 				if (Verb.UserResponseURL == "") {
-					message.text = "Press the Start button to start your session of the day!";
-					cardTitle.text = "Submit Video";
+					message.text = "Press the Start button to record your speech.";
+					cardTitle.text = "Read out aloud!";
 					cardIcon.SetActive (true);
-					cardIcon.GetComponent<Image> ().sprite = Resources.Load <Sprite> ("Images/QuizIcon");
-					cardIcon.GetComponent<Image> ().color = CerebroHelper.HexToRGB ("6800FF");
 					progressCircle.SetActive (false);
 					startButton.SetActive (true);
 				} else if (!Verb.UserSubmitted) {
-					message.text = "Press the View button to view submitted Video!";
-					cardTitle.text = "View Video";
+					message.text = "";
+					cardTitle.text = "View Recording";
 
 					LaunchList.instance.mVerbalize = Verb;
-
+					cardIcon.SetActive (false);
+					ViewButton.SetActive (true);
 					ViewRetakeButton.SetActive (true);
 					progressCircle.SetActive (false);
 					fetchQuestionBtn.SetActive (false);
 				} else {
-					message.text = "Press the View button to view submitted Video!";
-					cardTitle.text = "View Video";
+					message.text = "";
+					cardTitle.text = "View Recording";
 
 					LaunchList.instance.mVerbalize = Verb;
-
+					cardIcon.SetActive (false);
 					ViewButton.SetActive (true);
+					TranscriptButton.SetActive (true);
 					progressCircle.SetActive (false);
 					fetchQuestionBtn.SetActive (false);
 				}
@@ -143,7 +157,7 @@ namespace Cerebro
 					FetchQuestionForDate (currdate);
 				} else {
 					message.text = "";
-					cardTitle.text = "Fetch Question";
+					cardTitle.text = "Fetch Verbalize";
 
 					startButton.SetActive (false);
 					progressCircle.SetActive (false);
@@ -211,7 +225,7 @@ namespace Cerebro
 				if (Verb.UserResponseURL == "") {
 					progressCircle.SetActive (false);
 					message.text = "Please wait.";
-					cardTitle.text = "Saving Video";
+					cardTitle.text = "Saving Recording";
 					cardIcon.SetActive (false);
 					Card.SetActive (true);
 					return;
@@ -221,7 +235,7 @@ namespace Cerebro
 				prevDateBtn.SetActive (false);
 				progressCircle.SetActive (true);
 				message.text = "";
-				cardTitle.text = "Fetching Question";
+				cardTitle.text = "Fetching Verbalize";
 				cardIcon.SetActive (false);
 				Card.SetActive (true);
 
@@ -230,17 +244,40 @@ namespace Cerebro
 			}
 		}
 
-		public void ViewButtonPressed()
+		public void TranscriptButtonPressed()
 		{
-			CerebroHelper.DebugLog ("Viewing "+LaunchList.instance.mVerbalize.UserResponseURL);
-			Debug.Log ("Viewing "+LaunchList.instance.mVerbalize.UserResponseURL);
+			GameObject Verbalize = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Verbalize, VerbalizeContainer.transform);
+			Verbalize.GetComponent<VerbalizeScript> ().IsTranscriptToShown = true;
+			landingPage.SetActive (false);
+		}
+
+		public void ViewButtonPressed()
+		{			
+			CerebroHelper.DebugLog ("Viewing "+(LaunchList.instance.mCurrLocalTempPath+LaunchList.instance.mVerbalize.UserResponseURL));
+			Debug.Log ("Viewing "+LaunchList.instance.mCurrLocalTempPath+" "+LaunchList.instance.mVerbalize.UserResponseURL);
 			#if UNITY_IOS && !UNITY_EDITOR
 			if(LaunchList.instance.mVerbalize.UploadedToServer)
 				Handheld.PlayFullScreenMovie (LaunchList.instance.mVerbalize.UserResponseURL);
 			else
-				Handheld.PlayFullScreenMovie ("file://"+LaunchList.instance.mVerbalize.UserResponseURL);
+			{
+				String currPath = LaunchList.instance.mCurrLocalTempPath+LaunchList.instance.mVerbalize.UserResponseURL;
+				FileInfo info = new FileInfo(currPath);
+				if (info == null || info.Exists == false) {
+					Debug.Log("File not exists for "+LaunchList.instance.mVerbalize.VerbalizeDate);
+					CurrDateTime = DateTime.ParseExact (LaunchList.instance.mVerbalize.VerbalizeDate, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+					LaunchList.instance.DeleteVerbalize (LaunchList.instance.mVerbalize.VerbalizeID);
+					WelcomeScript.instance.ShowGenericPopup ("Your recording was deleted from device. Please record again.", 1, false, VideoDeletedOkButton);
+				} else {
+				Handheld.PlayFullScreenMovie ("file://"+currPath);
+				}
+			}
 			#endif
 			StartCoroutine (DisableProgressCircle ());
+		}
+
+		public void VideoDeletedOkButton()
+		{
+			ManageCardDataForDate (CurrDateTime);
 		}
 
 		IEnumerator DisableProgressCircle()
@@ -262,7 +299,7 @@ namespace Cerebro
 			HTTPRequestHelper.instance.SubmitVerbalizeResponse(LaunchList.instance.mVerbalize);
 			#endif
 			#if UNITY_IOS && !UNITY_EDITOR
-			HTTPRequestHelper.instance.uploadProfileVid ("vid.mov", LaunchList.instance.mVerbalize.UserResponseURL, LaunchList.instance.mVerbalize);
+			HTTPRequestHelper.instance.uploadProfileVid ("vid.mov", LaunchList.instance.mCurrLocalTempPath + LaunchList.instance.mVerbalize.UserResponseURL, LaunchList.instance.mVerbalize);
 			#endif
 			if (LaunchList.instance.mVerbalize != null) {
 				DateTime dt = DateTime.ParseExact (LaunchList.instance.mVerbalize.VerbalizeDate, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
@@ -283,6 +320,7 @@ namespace Cerebro
 			fetchQuestionBtn.SetActive (false);
 			ViewRetakeButton.SetActive (false);
 			ViewButton.SetActive (false);
+			TranscriptButton.SetActive (false);
 		}
 
 		public void VerbalizeTextLoaded (object sender, EventArgs e)
@@ -307,39 +345,35 @@ namespace Cerebro
 				DisableAllButtons ();
 				fetchQuestionBtn.SetActive (true);
 			} else if (mQuestion.VerbalizeID == null) {
-				message.text = "Oh no! No question has been prepared yet. Check back later";
+				message.text = "Oh no! No Verbalize has been prepared yet. Check back later";
 				progressCircle.SetActive (false);
 				DisableAllButtons ();
 				fetchQuestionBtn.SetActive (true);
-				cardTitle.text = "Fetch Question";
+				cardTitle.text = "Fetch Verbalize";
 				cardIcon.SetActive (true);
-				cardIcon.GetComponent<Image> ().sprite = Resources.Load <Sprite> ("Images/WarningIcon");
-				cardIcon.GetComponent<Image> ().color = CerebroHelper.HexToRGB ("FF5541");
 				return;
-			} /*else if (mQuestion.UserSubmitted && mQuestion.UploadedToServer) {
-				message.text = "Press the View button to view last recorded Video!";
-				cardTitle.text = "Video Video";
+			} else {
+				message.text = "Press the Start button to record your speech.";
+				cardTitle.text = "Read out aloud!";
 				cardIcon.SetActive (true);
-				cardIcon.GetComponent<Image> ().sprite = Resources.Load <Sprite> ("Images/QuizIcon");
-				cardIcon.GetComponent<Image> ().color = CerebroHelper.HexToRGB ("6800FFF");
-				progressCircle.SetActive (false);
-				DisableAllButtons ();
-				ViewRetakeButton.SetActive (true);
-			} else if (mQuestion.UserSubmitted) {
-				message.text = "Please wait.";
-				cardTitle.text = "Uploading Video";
-				cardIcon.SetActive (false);
-				progressCircle.SetActive (false);
-				DisableAllButtons ();
-			}*/ else {
-				message.text = "Press the Start button to start your session of the day!";
-				cardTitle.text = "Submit Video";
-				cardIcon.SetActive (true);
-				cardIcon.GetComponent<Image> ().sprite = Resources.Load <Sprite> ("Images/QuizIcon");
-				cardIcon.GetComponent<Image> ().color = CerebroHelper.HexToRGB ("6800FF");
 				progressCircle.SetActive (false);
 				DisableAllButtons ();
 				startButton.SetActive (true);
+			}
+		}
+
+		IEnumerator SetThumbnail(string url)
+		{
+			CerebroHelper.DebugLog ("Getting Image");
+			WWW remoteImage = new WWW (url);
+			yield return remoteImage;
+			CerebroHelper.DebugLog ("Got Image");
+			if (remoteImage.error == null) {
+				var newsprite = Sprite.Create (remoteImage.texture, new Rect (0f, 0f, remoteImage.texture.width, remoteImage.texture.height), new Vector2 (0.5f, 0.5f));
+				Card.transform.FindChild ("Temp").GetComponent<Image> ().color = new Color (1, 1, 1, 1);
+				Card.transform.FindChild ("Temp").GetComponent<Image> ().sprite = newsprite;
+			} else {
+				Debug.Log ("Error "+remoteImage.error);
 			}
 		}
 
@@ -350,13 +384,18 @@ namespace Cerebro
 			Destroy (gameObject);	
 		}
 
+		public void RetakeButtonPressed()
+		{
+			WelcomeScript.instance.ShowGenericPopup ("Are you sure? Your last recording will be deleted.", 2, false, StartQuestionPressed, null);	
+		}
+
 		public void StartQuestionPressed ()
 		{
 			GameObject Verbalize = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Verbalize, VerbalizeContainer.transform);
 			landingPage.SetActive (false);
 		}
 
-		public void BackOnScreen (bool ShowRatingPopup = false)
+		public void BackOnScreen ()
 		{
 			landingPage.SetActive (true);
 			if (LaunchList.instance.mVerbalize != null) {
@@ -366,19 +405,10 @@ namespace Cerebro
 
 			transform.localPosition = new Vector2 (transform.localPosition.x, -1152f);
 			Go.to (transform, 0.2f, new GoTweenConfig ().localPosition (new Vector2 (-512f, -384f), false));
-
-			if(ShowRatingPopup)
-				StartCoroutine (ShowPopup());
 		}
 
-		IEnumerator ShowPopup()
-		{
-			yield return new WaitForSeconds (0.2f);
-			DateTime stTime = DateTime.ParseExact (LaunchList.instance.mVerbalize.VerbStartTime, "yyyy-MM-ddTHH:mm:ss", null);
-			DateTime endTime = DateTime.ParseExact (LaunchList.instance.mVerbalize.VerbEndTime, "yyyy-MM-ddTHH:mm:ss", null);
-			float TimeSpent = (float)(endTime.Subtract(stTime).TotalSeconds);
-			Debug.Log ("Total Time "+TimeSpent);
-			WelcomeScript.instance.ShowRatingPopup ("VERBALIZE", TimeSpent,LaunchList.instance.mVerbalize.VerbalizeID, "How was your experience of speaking out loud?");
-		}
+		[DllImport ("__Internal")]
+		private static extern void _GetThumbnail (
+			string message);
 	}
 }
