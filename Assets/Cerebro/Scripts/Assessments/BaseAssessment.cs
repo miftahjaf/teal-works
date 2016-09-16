@@ -238,6 +238,15 @@ namespace Cerebro {
 
 		protected void QuestionEnded(bool isCorrect, int difficulty, int _increment, int type) {
 			CerebroHelper.DebugLog ("Question Ended " + isCorrect);
+			string UserAnswer = "";
+			if (userAnswerText && userAnswerText.text != "") {
+				CerebroHelper.DebugLog ("userAnswerText "+userAnswerText.text);
+				UserAnswer = userAnswerText.text;
+			}
+			if (UserAnswer == "" && userAnswerLaText && userAnswerLaText.text != "") {
+				CerebroHelper.DebugLog ("userAnswerLaText "+userAnswerLaText.text);
+				UserAnswer = userAnswerLaText.text;
+			}
 
 			string uniqueTime = System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss");
 			if (isRevisitedQuestion) {
@@ -251,7 +260,7 @@ namespace Cerebro {
 				currentQuestionDifficulty = difficulty;
 			}
 			if (parentAssessmentScript != null) {
-				parentAssessmentScript.QuestionEnded (isCorrect, difficulty, _increment, currentQuestionAssessmentKey, randomSeed, type);
+				parentAssessmentScript.QuestionEnded (isCorrect, difficulty, _increment, currentQuestionAssessmentKey, randomSeed, type, UserAnswer);
 			}
 		}
 
@@ -365,9 +374,9 @@ namespace Cerebro {
 			currentExplanation = null;
 			if (parentAssessmentScript != null) {
 				string key = parentAssessmentScript.mPracticeID + "L" + level + "t" + selector;
-				foreach (var item in LaunchList.instance.mExplanation) {
-					CerebroHelper.DebugLog (item.Key);
-				}
+//				foreach (var item in LaunchList.instance.mExplanation) {
+//					CerebroHelper.DebugLog (item.Key);
+//				}
 				if (LaunchList.instance.mExplanation.ContainsKey (key)) {
 					currentExplanation = LaunchList.instance.mExplanation[key];
 					SolutionButton.SetActive (true);

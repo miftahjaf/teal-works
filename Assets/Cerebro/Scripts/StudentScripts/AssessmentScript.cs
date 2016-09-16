@@ -106,7 +106,7 @@ namespace Cerebro
 			timeStarted = System.DateTime.Now.ToUniversalTime().ToString ("yyyy-MM-ddTHH:mm:ss");
 		}
 
-		public void QuestionEnded (bool isCorrect, int difficulty, int _increment, string assessKey, int randomSeed, int sublevel)
+		public void QuestionEnded (bool isCorrect, int difficulty, int _increment, string assessKey, int randomSeed, int sublevel, string UserAnswer = "")
 		{
 			AddToPracticeCount (isCorrect);
 			timeend = Time.realtimeSinceStartup;
@@ -123,9 +123,9 @@ namespace Cerebro
 				foreach (var str in missionQuestionIds) {
 					missionString = missionString + "@" + str;
 				}
-				Cerebro.LaunchList.instance.WriteAnalyticsToFile (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, missionString);  
+				Cerebro.LaunchList.instance.WriteAnalyticsToFile (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, missionString, UserAnswer);  
 			} else {
-				Cerebro.LaunchList.instance.WriteAnalyticsToFile (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, " ");  
+				Cerebro.LaunchList.instance.WriteAnalyticsToFile (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, " ", UserAnswer);  
 			}
 
 			if (isCorrect) {

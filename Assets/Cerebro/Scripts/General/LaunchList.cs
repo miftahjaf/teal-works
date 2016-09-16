@@ -1226,10 +1226,10 @@ namespace Cerebro
 			return lines;
 		}
 		// for video the signature becomes (videoID, difficulty, isComplete, day, timeStarted, timeTaken, playTime, seed)
-		public void WriteAnalyticsToFile (string assessmentID, int difficulty, bool correct, string day, string timeStarted, int timeTaken, string playTime, int seed, string missionField, bool ignoreInternet = false)
+		public void WriteAnalyticsToFile (string assessmentID, int difficulty, bool correct, string day, string timeStarted, int timeTaken, string playTime, int seed, string missionField, string UserAnswer = "", bool ignoreInternet = false)
 		{
 			if (mhasInternet && !ignoreInternet) {
-				SendAnalytics (assessmentID, difficulty.ToString (), correct, day, timeStarted, timeTaken.ToString (), playTime, seed.ToString (), missionField);
+				SendAnalytics (assessmentID, difficulty.ToString (), correct, day, timeStarted, timeTaken.ToString (), playTime, seed.ToString (), missionField, UserAnswer);
 			} else {
 				if (!PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
 					CerebroHelper.DebugLog ("WriteAnalyticsToFile - no ID set");
@@ -1260,7 +1260,7 @@ namespace Cerebro
 	
 		// if we are offline this function needs to save this data away
 		// and then upload it when we come online
-		public void SendAnalytics (string assessmentID, string difficulty, bool correct, string day, string timeStarted, string timeTaken, string playTime, string seed, string missionField)
+		public void SendAnalytics (string assessmentID, string difficulty, bool correct, string day, string timeStarted, string timeTaken, string playTime, string seed, string missionField, string UserAnswer = "")
 		{
 			if (!PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
 				CerebroHelper.DebugLog ("SendAnalytics - no ID set");
@@ -1268,7 +1268,7 @@ namespace Cerebro
 			}
 				
 			if (mHitServer) {
-				HTTPRequestHelper.instance.SendAnalytics (assessmentID, difficulty, correct, day, timeStarted, timeTaken, playTime, seed, missionField);
+				HTTPRequestHelper.instance.SendAnalytics (assessmentID, difficulty, correct, day, timeStarted, timeTaken, playTime, seed, missionField, UserAnswer);
 			}
 
 		}

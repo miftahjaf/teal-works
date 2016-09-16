@@ -100,7 +100,7 @@ namespace Cerebro
 			});
 		}
 
-		public void SendAnalytics (string assessmentID, string difficulty, bool correct, string day, string timeStarted, string timeTaken, string playTime, string seed, string missionField)
+		public void SendAnalytics (string assessmentID, string difficulty, bool correct, string day, string timeStarted, string timeTaken, string playTime, string seed, string missionField, string UserAnswer = "")
 		{
 			var studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 
@@ -184,6 +184,7 @@ namespace Cerebro
 			N ["myData"] ["component_data"] ["sub_level"] = subLevel;
 			N ["myData"] ["component_data"] ["item_type"] = itemType;
 			N ["myData"] ["component_data"] ["level_up"] = isLevelUp.ToString ();
+			N ["myData"] ["component_data"] ["answer"] = UserAnswer;
 			N ["myData"] ["component_name"] = "analytics";
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
@@ -193,7 +194,7 @@ namespace Cerebro
 					LaunchList.instance.WriteSentAnalytics (assessmentID);
 				} else {
 					CerebroHelper.DebugLog ("Error in request");
-					LaunchList.instance.WriteAnalyticsToFile (assessmentID, int.Parse (difficulty), correct, day, timeStarted, int.Parse (timeTaken), playTime, int.Parse (seed), missionField, true);
+					LaunchList.instance.WriteAnalyticsToFile (assessmentID, int.Parse (difficulty), correct, day, timeStarted, int.Parse (timeTaken), playTime, int.Parse (seed), missionField, UserAnswer, true);
 				}
 			});
 		}
