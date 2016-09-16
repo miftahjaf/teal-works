@@ -162,7 +162,7 @@ static CameraEngine* theEngine;
                     self.isCapturing = NO;
                     _encoder = nil;
                     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-                    [library writeVideoAtPathToSavedPhotosAlbum:url completionBlock:^(NSURL *assetURL, NSError *error){
+                    {
                         NSLog(@"save completed %@", path);
                         if(!isSaving)
                         {
@@ -176,7 +176,7 @@ static CameraEngine* theEngine;
                         NSString* filename1 = [NSString stringWithFormat:@"capture%d.mp4", _currentFile+1];
                         NSString* outputPath = [NSTemporaryDirectory() stringByAppendingPathComponent:filename1];
                         NSURL* outputURL = [NSURL fileURLWithPath:outputPath];
-                        [self convertVideoToLowQuailtyWithInputURL:assetURL outputURL:outputURL handler:^(AVAssetExportSession *exportSession)
+                        [self convertVideoToLowQuailtyWithInputURL:url outputURL:outputURL handler:^(AVAssetExportSession *exportSession)
                          {
                              if (exportSession.status == AVAssetExportSessionStatusCompleted)
                              {
@@ -192,7 +192,7 @@ static CameraEngine* theEngine;
                              }
                          }];
                         }
-                    }];
+                    };
                 }];
             });
         }
