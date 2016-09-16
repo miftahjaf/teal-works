@@ -73,7 +73,7 @@ namespace Cerebro {
 
 			if (!IsTranscriptToShown) {
 				StartButton.SetActive (true);
-				videoText.SetActive (true);
+				videoText.transform.parent.gameObject.SetActive (true);
 				videoText.transform.FindChild("Title").GetComponent<Text> ().text = LaunchList.instance.mVerbalize.VerbTitle + "\n";
 				videoText.transform.FindChild("Title").GetComponent<Text> ().text += "by " + LaunchList.instance.mVerbalize.VerbAuthor;
 				videoText.GetComponent<Text> ().text = LaunchList.instance.mVerbalize.PromptText;

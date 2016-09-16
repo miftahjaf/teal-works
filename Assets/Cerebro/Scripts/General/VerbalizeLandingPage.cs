@@ -261,15 +261,16 @@ namespace Cerebro
 			else
 			{
 				String currPath = LaunchList.instance.mCurrLocalTempPath+LaunchList.instance.mVerbalize.UserResponseURL;
-				FileInfo info = new FileInfo(currPath);
-				if (info == null || info.Exists == false) {
-					Debug.Log("File not exists for "+LaunchList.instance.mVerbalize.VerbalizeDate);
-					CurrDateTime = DateTime.ParseExact (LaunchList.instance.mVerbalize.VerbalizeDate, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
-					LaunchList.instance.DeleteVerbalize (LaunchList.instance.mVerbalize.VerbalizeID);
-					WelcomeScript.instance.ShowGenericPopup ("Your recording was deleted from device. Please record again.", 1, false, VideoDeletedOkButton);
-				} else {
+//				FileInfo info = new FileInfo(currPath);
+//				if (info == null || info.Exists == false) {
+//					Debug.Log("File not exists for "+LaunchList.instance.mVerbalize.VerbalizeDate);
+//					CurrDateTime = DateTime.ParseExact (LaunchList.instance.mVerbalize.VerbalizeDate, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+//					LaunchList.instance.DeleteVerbalize (LaunchList.instance.mVerbalize.VerbalizeID);
+//					WelcomeScript.instance.ShowGenericPopup ("Your recording was deleted from device. Please record again.", 1, false, VideoDeletedOkButton);
+//				} else {
+//				Handheld.PlayFullScreenMovie ("file://"+currPath);
+//				}
 				Handheld.PlayFullScreenMovie ("file://"+currPath);
-				}
 			}
 			#endif
 			StartCoroutine (DisableProgressCircle ());
