@@ -19,7 +19,7 @@ namespace Cerebro {
 			StartCoroutine(StartAnimation ());
 			base.Initialise ("M", "PER07", "S01", "A01");
 
-			scorestreaklvls = new int[3];
+			scorestreaklvls = new int[4];
 			for (var i = 0; i < scorestreaklvls.Length; i++) {
 				scorestreaklvls [i] = 0;
 			}
@@ -64,8 +64,15 @@ namespace Cerebro {
 				correct = MathFunctions.checkFractions (userAnswers, correctAnswers);
 			
 			
-			}
-			else {
+			} else if(Answer.Contains("%")) {
+
+				if (userAnswerText.text == Answer)
+					correct = true;
+				else
+					correct = false;
+
+
+			} else {
 				float correctAns = float.Parse (Answer);
 				float userAns = float.MinValue;
 				if (float.TryParse (userAnswerText.text, out userAns)) {
@@ -86,6 +93,8 @@ namespace Cerebro {
 				} else if (Queslevel == 3) {
 					increment = 15;
 				} else if (Queslevel == 4) {
+					increment = 15;
+				} else if (Queslevel == 5) {
 					increment = 15;
 				}
 				UpdateStreak(6,10);
@@ -175,23 +184,26 @@ namespace Cerebro {
 				selector = GetRandomSelector (1, 5);
 				if (selector == 1) {
 					//07
-					num = Random.Range (2, 11);
-					num = num * 5;
-					num1 = Random.Range (11, 20);
-					num1 = num1 * 5;
-					QuestionText.text = "Express as percent: " + num.ToString () + " out of " + num1.ToString () + ". Round off your answer to the nearest 2 decimal places.";
-					per = ((float)num / (float)num1) * 100;
-					per = Mathf.Round (per * 100) / (float)100;
-					Answer = per.ToString ();
-				} else if (selector == 2) {
-					num = Random.Range (1, 10);
-					num1 = Random.Range (1, 10);
-					num2 = Random.Range (1, 10);
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Express as ratio: ";
+					num = Random.Range (2, 16);
+					num1 = Random.Range (num + 1, 20);
+					QuestionText.text = "Express as percent (round off to two decimal places) :";
+					subQuestionText.text = num + " out of " + num1;
+					per = ((float)num / (float)num1) * 100;
+					per = MathFunctions.GetRounded (per, 2);
+					Answer = per.ToString () + "%";
+
+				} else if (selector == 2) {
+					num = Random.Range (1, 4);
+					num1 = Random.Range (1, 6);
+					num2 = Random.Range (num1 + 1, 10);
+					while (MathFunctions.GetHCF (num1, num2) > 1)
+						num1 = Random.Range (1, 6);
+					subQuestionText.gameObject.SetActive (true);
+					QuestionText.text = "Express as ratio (simplest form) :";
 					subQuestionText.text = num.ToString () + " \\frac{" + num1.ToString () + "}{" + num2.ToString () + "} %";
-					num4 = (num * num2) + num1;
-					num3 = num2 * 100;
+					num4 = ((num * num2) + num1) * 100;
+					num3 = num2;
 					int hcf = MathFunctions.GetHCF (num4, num3);
 					num4 = num4 / hcf;
 					num3 = num3 / hcf;
@@ -199,128 +211,83 @@ namespace Cerebro {
 					Answer = num4.ToString () + ":" + num3.ToString ();
 				
 				} else if (selector == 3) {
-				//not accepting 090
+					//not accepting 090
 					num = Random.Range (20, 100);
 					num = num * 100;
 					num1 = Random.Range (2, 10);
 					num1 = num1 * 5;
-					QuestionText.text = "A broker purchases goods worth Rs." + num.ToString () + ". What is his commission at " + num1.ToString () + "%.";
+					QuestionText.text = "A broker purchases goods worth Rs. " + num.ToString () + ". What is his commission (in Rs.) at " + num1.ToString () + "%?";
 					per = (float)(num * num1) / 100;
 					Answer = per.ToString ();
+
 				} else if (selector == 4) {
 				
 					num = Random.Range (1, 10);
 					num = num * 5;
 					num1 = Random.Range (10, 50);
-					QuestionText.text = num.ToString () + "% of a number is " + num1.ToString () + ". Find the number. Round off your answer to the nearest integer.";
+					QuestionText.text = num.ToString () + "% of a number is " + num1.ToString () + ". Find the number (round off to two decimal places).";
 					per = (float)(num1 * 100) / (float)num;
-					per = Mathf.Round (per);
+					per = MathFunctions.GetRounded (per, 2);
 					Answer = per.ToString ();
 				}
-			}
-			else if (level == 2) {
+
+			} else if (level == 2) {
 				GeneralButton.gameObject.SetActive (true);
 				answerButton = GeneralButton;
-				selector = GetRandomSelector (1, 10);
+				selector = GetRandomSelector (1, 6);
 
 				if (selector == 1) {
-					num = Random.Range (1, 15);
-					num = num * 10;
+
 					num1 = Random.Range (2, 10);
 					num1 = num1 * 10;
-					QuestionText.text = "Speed of car A is " + num.ToString () + "km/h. Speed of car B is " + num1.ToString () + "% of the speed of car A. What is the ratio of the speed of car B to the speed of car A?";
-					per = (float)(num1 * num) / 100;
-					Answer = per.ToString () + ":" + num.ToString ();
+					QuestionText.text = "Speed of car B is " + num1.ToString () + "% of the speed of car A. What is the ratio of the speed of car B to the speed of car A?";
+					int hcf = MathFunctions.GetHCF (num1, 100);
+					num1 /= hcf;
+					Answer = num1.ToString () + ":" + (100/hcf).ToString ();
+
 				} else if (selector == 2) {
 				
-					num = Random.Range (1, 10);
-					num = num * 5;
-					num1 = Random.Range (50, 100);
-					num1 = num1 * 10;
-					QuestionText.text = "The value of a cycle is reduced by " + num.ToString () + "%. If the present value is Rs." + num1.ToString () + ", what was its value before? Round off your answer to the nearest 2 decimal places.";
-					num = 100 - num;
-					per = (float)num / 100;
-					per = Mathf.Round (per * 100) / (float)100;
-					per = (float)num1 / per;
-					per = Mathf.Round (per * 100) / (float)100;
-					Answer = per.ToString ();
+					num = 5 * Random.Range (1, 10);
+					num1 = 10 * Random.Range (50, 100);
+					while ((num * num1) % 100 != 0)
+						num = 5 * Random.Range (1, 10);
+					num2 = num1 - (num * num1) / 100;
+					QuestionText.text = "The value of a cycle is reduced by " + num.ToString () + "%. If the present value is Rs. " + num2.ToString () + ", what was its value before reduction?";
+					Answer = num1.ToString ();
+
 				} else if (selector == 3) {
 	
-					num = Random.Range (10, 30);
-
-					num1 = Random.Range (10, 30);
-					QuestionText.text = "Amit obtained " + num.ToString () + " and " + num1.ToString () + " marks respectively in two monthly tests. What is the change in percent? Round off your answer to the nearest 2 decimal places.";
-					per = ((float)(num - num1) /(float) num) * 100;
-					per = Mathf.Abs (per);
-					per = Mathf.Round (per * 100) / (float)100;
-					Answer = per.ToString ();
+					num = Random.Range (30, 80);
+					num1 = Random.Range (num - 20, num + 20);
+					while (num == num1)
+						num1 = Random.Range (num - 20, num + 20);
+					QuestionText.text = "Amit obtained " + num.ToString () + " and " + num1.ToString () + " marks respectively in two monthly tests. What is the percentage change in his marks (round off to two decimal places)?";
+					per = ((float)(num - num1) * 100f) /(float) num;
+					per = MathFunctions.GetRounded (Mathf.Abs (per), 2);
+					Answer = per.ToString () + "%";
 				
-
 				} else if (selector == 4) {
 				
-					num = Random.Range (2, 17);
-					num = num * 5;
-					num1 = Random.Range (5, 21);
-					num1 = num1 * 10;
-					QuestionText.text = "A number when decreased by " + num.ToString () + "% gives " + num1.ToString () + ". What is the number? Round off your answer to the nearest 2 decimal places.";
-					per = (float)(100 - num) / 100;
-					per = (float)num1 /(float) per;
-					per = Mathf.Round (per * 100) / (float)100;
-					Answer = per.ToString ();
+					num = 5 * Random.Range (1, 10);
+					num1 = 10 * Random.Range (50, 100);
+					while ((num * num1) % 100 != 0)
+						num = 5 * Random.Range (1, 10);
+					num2 = num1 - (num * num1) / 100;
+					QuestionText.text = "A number when decreased by " + num.ToString () + "% gives " + num2.ToString () + ". What is the number?";
+					Answer = num1.ToString ();
+
 				} else if (selector == 5) {
-				//not accepting decimal
-					num = Random.Range (2, 10);
-					num = num * 5;
-					num1 = Random.Range (5, 15);
-					num1 = num1 * 10;
-					QuestionText.text = "The price of mangoes is increased by " + num.ToString () + "%. If the price before the increase was Rs." + num1.ToString () + " per kg. What is the present price per kg?";
-					per = (float)(100 + num) / 100;
-					per = per * num1;
-					per = Mathf.Round (per);
-					Answer = per.ToString ();
-				} else if (selector == 6) {
-					num = Random.Range (1, 11);
-					num1 = Random.Range (1, 11);
-					QuestionText.text = "A trader mixes two blends of tea, Darjeeling and Assam, in the ratio " + num.ToString () + ":" + num1.ToString () + ". What percent of the total mixture is Darjeeling tea? Round off your answer to the nearest 2 decimal digit.";
-					per = (((float)num /(float) (num + num1)) * 100);
-					per = Mathf.Round (per * 100) / (float)100;
-					Answer = per.ToString ();
-				} else if (selector == 7) {
-				
-					num = Random.Range (1, 10);
-					num = num * 5;
-					QuestionText.text = "The side length of a square is increased by " + num.ToString () + "%. What is the percentage increase of its area? Round off your answer to the nearest 2 decimal places.";
-					per = (float)(100 + num) / 100;
-					per = ((per * per) - (1)) * 100;
-					per = Mathf.Round (per * 100) / (float)100;
-					Answer = per.ToString ();
-				} else if (selector == 8) {
-				
-					num = Random.Range (10, 30);
-					num = num * 1000;
-					num1 = Random.Range (10, 30);
-					num1 = num1 * 1000;
-					QuestionText.text = "A computer costs Rs." + num.ToString () + " this year. It costed Rs." + num1.ToString () + " a year ago. What is the percentage change in the value? Round off your answer to the nearest 2 decimal places.";
-					per = ((float)(num1 - num) /(float) num1) * 100;
-					per = Mathf.Abs (per);
-					per = Mathf.Round (per * 100) / (float)100;
-					Answer = per.ToString ();
-				} else if (selector == 9) {
-				
-					num = Random.Range (2, 11);
-					num = num * 5;
-					num1 = Random.Range (5, 21);
-					num1 = num1 * 10;
-					num2 = Random.Range (2, 11);
-					num2 = num2 * 5;
-					QuestionText.text = num.ToString () + "% of an amount is Rs." + num1.ToString () + ". Calculate " + num2.ToString () + "% of the same amount. Round off your answer to the nearest 2 decimal places.";
-					per = (float)(num1 * 100) /(float) num;
-					per = (float)(per * num2) / 100;
-					per = Mathf.Round (per * 100) / (float)100;
-					Answer = per.ToString ();
+					//not accepting decimal
+					num = 5 * Random.Range (1, 10);
+					num1 = 10 * Random.Range (50, 100);
+					while ((num * num1) % 100 != 0)
+						num = 5 * Random.Range (1, 10);
+					num2 = num1 + (num * num1) / 100;
+					QuestionText.text = "The price of mangoes is increased by " + num.ToString () + "%. If the price before the increase was Rs. " + num1.ToString () + " per kg. What is the present price per kg (in Rs.)?";
+					Answer = num2.ToString ();
+
 				}
-			
-			
+
 			} else if (level == 3) {
 
 				selector = GetRandomSelector (1, 5);
@@ -328,56 +295,103 @@ namespace Cerebro {
 				answerButton = GeneralButton;
 
 				if (selector == 1) {
-					//changes
+					num = Random.Range (1, 11);
+					num1 = Random.Range (2, 11);
+					while (MathFunctions.GetHCF (num, num1) > 1)
+						num = Random.Range (1, 11);
+					QuestionText.text = "A trader mixes two blends of tea, Darjeeling and Assam, in the ratio " + num.ToString () + " : " + num1.ToString () + ". What percent of the total mixture is Darjeeling tea (round off to 2 decimal places)?";
+					per = (((float)num /(float) (num + num1)) * 100);
+					per = MathFunctions.GetRounded (per, 2);
+					Answer = per.ToString () + "%";
+
+				} else if (selector == 2) {
 				
-					num = Random.Range (5, 10);
-					num = num * 10;
-					num1 = (100 - num) / 2;
-					num2 = Random.Range (2, 21);
-					num2 = num2 * 100;
-					QuestionText.text = "Harvey spends " + num.ToString () + "% of his income in household expenses. " + num1.ToString () + "% of the remainder in personal necessities and " + num1.ToString () + "% of the amount left in his savings. Find his income if the amount he saves per month is Rs." + num2.ToString ()+".";
-					per = ((float)(100 - num) / (float)100) * ((float)(100 - num1) / (float)100) * ((float)num1 / (float)100);
-					per = (float)num2 / (float)per;
-					Answer = per.ToString ();
+					num = Random.Range (1, 10);
+					num = num * 5;
+					QuestionText.text = "The side length of a square is increased by " + num.ToString () + "%. What is the percentage increase in its area (round off to two decimal places)?";
+					per = (float)(100 + num) / 100;
+					per = (per * per - 1) * 100;
+					per = MathFunctions.GetRounded (per, 2);
+					Answer = per.ToString () + "%";
+
+				} else if (selector == 3) {
+				
+					num = Random.Range (5, 30);
+					num1 = 1000 * Random.Range (50, 100);
+					num2 = num1 + (num * num1) / 100;
+					QuestionText.text = "A computer costs Rs. " + num1.ToString () + " this year. It costed Rs. " + num2.ToString () + " a year ago. What is the percentage change in its value?";
+					Answer = num.ToString () + "%";
+
+				} else if (selector == 4) {
+				
+					num = Random.Range (2, 11);
+					num = num * 5;
+					num1 = Random.Range (5, 21);
+					num1 = num1 * 10;
+					num2 = Random.Range (2, 11);
+					num2 = num2 * 5;
+					while ((num1 * num2) % num != 0)
+						num = 5 * Random.Range (2, 11);
+					QuestionText.text = num.ToString () + "% of an amount is Rs. " + num1.ToString () + ". Calculate " + num2.ToString () + "% of the same amount.";
+					num3 = (num1 * num2) / num;
+					Answer = num3.ToString ();
+				}
+			} else if (level == 4) {
+
+				selector = GetRandomSelector (1, 5);
+				GeneralButton.gameObject.SetActive (true);
+				answerButton = GeneralButton;
+
+				if (selector == 1) {
+
+					num1 = 5 * Random.Range (1, 10);
+					num2 = 5 * Random.Range (1, 10);
+					num3 = 5 * Random.Range (1, 10);
+					num4 = 500 * Random.Range (10, 65);
+					while ((((100 - num1) * (100 - num2) * num3 * num4)) % 1000000 != 0)
+						num4 = 500 * Random.Range (10, 65);
+					num = ((100 - num1) * (100 - num2) * num3 * num4) / 1000000;
+					QuestionText.text = "Harvey spends " + num1.ToString () + "% of his income in household expenses, " + num2.ToString () + "% of the remainder in personal necessities and " + num3.ToString () + "% of the amount left in his savings. Find his income (in Rs.) if the amount he saves per month is Rs. " + num.ToString ()+".";
+					Answer = num4.ToString ();
 
 				} else if (selector == 2) {
 				
 
-					num = Random.Range (1, 11);
-					num = num * 100;
-					num1 = Random.Range (1, 10);
-					num1 = num1 * 10;
-					num2 = Random.Range (1, 10);
-					num2 = num2 * 10;
-					QuestionText.text = "A school has " + num.ToString () + " students. In an election of student council " + num1.ToString () + "% did not vote. Rohit received " + num2.ToString () + "% of the total votes polled. How many votes did Rohit got?";
-					per = (float)(num * num1) / 100;
-					per = num - per;
-					per = (float)(per * num2) / 100;
-					Answer = per.ToString ();
+					num1 = 5 * Random.Range (1, 10);
+					num2 = 5 * Random.Range (1, 20);
+					num4 = 25 * Random.Range (40, 400);
+					while ((((100 - num1) * num4)) % 100 != 0 || (((100 - num1) * num2 * num4)) % 10000 != 0) 
+						num4 = 25 * Random.Range (40, 400);
+					num = ((100 - num1) * num2 * num4) / 10000;
+					QuestionText.text = "A school has " + num4.ToString () + " students. In an election of student council " + num1.ToString () + "% did not vote. Rohit received " + num2.ToString () + "% of the total votes polled. How many votes did Rohit get?";
+					Answer = num.ToString ();
+
 				} else if (selector == 3) {
 				
 					num = Random.Range (1, 5);
 					num1 = num + 1;
 					num2 = Random.Range (1, 11);
 					num2 = num2 * (2 * num + 1);
-					QuestionText.text = "In a group of "+num2.ToString()+" children the ratio of boys to girls is " + num.ToString () + ":" + num1.ToString () + ". 5 more girls join the group. What is the percentage decrease of the boys? Round off your answer to the nearest 2 decimal places.";
+					num3 = Random.Range (5, 10);
+					QuestionText.text = "In a group of " + num2.ToString() + " children the ratio of the number of boys to the number of girls is " + num.ToString () + " : " + num1.ToString () + ". If " + num3 + " more girls join the group, what is the decrease in percentage of boys (round off to two decimal places)?";
 					per = ((float)num / (float)(num + num1)) * num2;
-					per1 = ((float)per / (float)(num2 + 5)) * 100;
+					per1 = ((float)per / (float)(num2 + num3)) * 100;
 					per = ((float)per / (float)num2) * 100;
 					per = per - per1;
-					per = Mathf.Round (per * 100) / (float)100;
-					Answer = per.ToString ();
+					per = MathFunctions.GetRounded (per, 2);
+					Answer = per.ToString () + "%";
+
 				} else if (selector == 4) {
 				
-					num = Random.Range (1, 6);
-					num = num * 10;
-					num1 = Random.Range (1, 20);
-					num1 = num1 * 100;
-					QuestionText.text = "Mr. Louis receives an annual increment of " + num.ToString () + "% on his base salary. Last year his base salary was Rs." + num1.ToString () + ". The new base salary is the old base salary added to the increment. So, how much increment will he receive at the end of this year?";
-					per = num1 + ((float)(num * num1) / (float)100);
-					per = (float)(per * num) / (float)100;
-					per = Mathf.Round (per * 100) / (float)100;
+					num = 5 * Random.Range (1, 10);
+					num1 = 1000 *  Random.Range (15, 50);
+					while (((100 + num) * (100 + num) * num1) % 10000 != 0)
+						num1 = 1000 *  Random.Range (15, 50);
+					QuestionText.text = "Mr. Louis receives an annual increment of " + num.ToString () + "% on his base salary. Last year his base salary was Rs. " + num1.ToString () + ". The new base salary equals the old base salary added to the increment. So, how much increment will he receive at the end of this year?";
+					per = num1 + (num * num1) / 100;
+					per = (per * num) / 100;
 					Answer = per.ToString ();
+
 				}
 			}
 
@@ -415,6 +429,12 @@ namespace Cerebro {
 					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
 				}
 				userAnswerText.text += ":";
+			}
+			else if (value == 14) {   // :
+				if (checkLastTextFor (new string[1]{ "%" })) {
+					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
+				}
+				userAnswerText.text += "%";
 			}
 		}
 
