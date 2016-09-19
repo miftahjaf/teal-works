@@ -75,14 +75,16 @@ namespace Cerebro {
 				StartButton.SetActive (true);
 				videoText.transform.parent.gameObject.SetActive (true);
 				videoText.transform.FindChild("Title").GetComponent<Text> ().text = LaunchList.instance.mVerbalize.VerbTitle + "\n";
-				videoText.transform.FindChild("Title").GetComponent<Text> ().text += "by " + LaunchList.instance.mVerbalize.VerbAuthor;
+				if(LaunchList.instance.mVerbalize.VerbAuthor.Length > 0)
+					videoText.transform.FindChild("Title").GetComponent<Text> ().text += "by " + LaunchList.instance.mVerbalize.VerbAuthor;
 				videoText.GetComponent<Text> ().text = LaunchList.instance.mVerbalize.PromptText;
 				WelcomeScript.instance.ShowGenericPopup ("Please rotate your device to portrait mode.", 1, true, RotationPopupOkPressed);
 			} else {
 				TranscriptView.SetActive (true);
 				TranscriptView.transform.FindChild ("Content").FindChild("PromptText").GetComponent<Text>().text = LaunchList.instance.mVerbalize.PromptText;
 				TranscriptView.transform.FindChild ("Content").FindChild("Title").GetComponent<Text>().text = LaunchList.instance.mVerbalize.VerbTitle + "\n";
-				TranscriptView.transform.FindChild ("Content").FindChild("Title").GetComponent<Text>().text += "by " + LaunchList.instance.mVerbalize.VerbAuthor + "\n\n";
+				if(LaunchList.instance.mVerbalize.VerbAuthor.Length > 0)
+					TranscriptView.transform.FindChild ("Content").FindChild("Title").GetComponent<Text>().text += "by " + LaunchList.instance.mVerbalize.VerbAuthor + "\n\n";
 				StartCoroutine (SetSizeOfScrollRect());
 			}
 		}

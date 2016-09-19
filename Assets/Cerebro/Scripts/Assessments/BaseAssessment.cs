@@ -102,6 +102,14 @@ namespace Cerebro {
 			return mSubjectID + mTopicID + mSubTopicID + mAssessmentID;
 		}
 		protected void QuestionStarted() {
+
+			if (userAnswerText) {
+				userAnswerText.text = "";
+			}
+			if (userAnswerLaText) {
+				userAnswerLaText.text = "";
+			}
+
 			forceSelector = -1;
 			didLevelUp = false;
 			if (parentAssessmentScript != null) {
