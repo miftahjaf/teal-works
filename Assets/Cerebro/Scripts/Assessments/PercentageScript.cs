@@ -225,6 +225,8 @@ namespace Cerebro {
 					num = Random.Range (1, 10);
 					num = num * 5;
 					num1 = Random.Range (10, 50);
+					while(num == num1)
+						num1 = Random.Range (10, 50);
 					QuestionText.text = num.ToString () + "% of a number is " + num1.ToString () + ". Find the number (round off to two decimal places).";
 					per = (float)(num1 * 100) / (float)num;
 					per = MathFunctions.GetRounded (per, 2);
