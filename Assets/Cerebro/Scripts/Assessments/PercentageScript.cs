@@ -202,8 +202,8 @@ namespace Cerebro {
 					subQuestionText.gameObject.SetActive (true);
 					QuestionText.text = "Express as ratio (simplest form) :";
 					subQuestionText.text = num.ToString () + " \\frac{" + num1.ToString () + "}{" + num2.ToString () + "} %";
-					num4 = ((num * num2) + num1) * 100;
-					num3 = num2;
+					num4 = (num * num2) + num1;
+					num3 = num2 * 100;
 					int hcf = MathFunctions.GetHCF (num4, num3);
 					num4 = num4 / hcf;
 					num3 = num3 / hcf;
@@ -318,8 +318,8 @@ namespace Cerebro {
 				
 					num = Random.Range (5, 30);
 					num1 = 1000 * Random.Range (50, 100);
-					num2 = num1 + (num * num1) / 100;
-					QuestionText.text = "A computer costs Rs. " + num1.ToString () + " this year. It costed Rs. " + num2.ToString () + " a year ago. What is the percentage change in its value?";
+					num2 = num1 - (num * num1) / 100;
+					QuestionText.text = "A computer costs Rs. " + num2.ToString () + " this year. It costed Rs. " + num1.ToString () + " a year ago. What is the percentage change in its value?";
 					Answer = num.ToString () + "%";
 
 				} else if (selector == 4) {
@@ -332,7 +332,7 @@ namespace Cerebro {
 					num2 = num2 * 5;
 					while ((num1 * num2) % num != 0)
 						num = 5 * Random.Range (2, 11);
-					QuestionText.text = num.ToString () + "% of an amount is Rs. " + num1.ToString () + ". Calculate " + num2.ToString () + "% of the same amount.";
+					QuestionText.text = num.ToString () + "% of an amount is Rs. " + num1.ToString () + ". Calculate " + num2.ToString () + "% of the same amount (in Rs.).";
 					num3 = (num1 * num2) / num;
 					Answer = num3.ToString ();
 				}
@@ -368,10 +368,11 @@ namespace Cerebro {
 
 				} else if (selector == 3) {
 				
-					num = Random.Range (1, 5);
-					num1 = num + 1;
-					num2 = Random.Range (1, 11);
-					num2 = num2 * (2 * num + 1);
+					num = Random.Range (2, 10);
+					num1 = Random.Range (2, 10);
+					while (num == num1)
+						num = Random.Range (2, 10);
+					num2 = (num + num1) * Random.Range (5, 11);
 					num3 = Random.Range (5, 10);
 					QuestionText.text = "In a group of " + num2.ToString() + " children the ratio of the number of boys to the number of girls is " + num.ToString () + " : " + num1.ToString () + ". If " + num3 + " more girls join the group, what is the decrease in percentage of boys (round off to two decimal places)?";
 					per = ((float)num / (float)(num + num1)) * num2;
