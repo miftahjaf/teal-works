@@ -122,7 +122,6 @@
      <None Include="Assets\TEXDraw\XMLs\TexSymbolDefinitions.xml" />
      <None Include="Assets\TEXDraw\Script\TEXShaderLitShadow.shader" />
      <None Include="Assets\JSON\readme.txt" />
-     <None Include="Assets\What to import!.txt" />
      <None Include="Assets\Resources\words.txt" />
      <None Include="Assets\TEXDraw\XMLs\TexFontDefinitions.xml" />
      <None Include="Assets\MaterialUI\README.txt" />
@@ -184,6 +183,12 @@
  <Reference Include="ICSharpCode.SharpZipLib">
  <HintPath>/Users/shalin/tealcerebro/Assets/Plugins/SimpleJSON/ICSharpCode.SharpZipLib.dll</HintPath>
  </Reference>
+ <Reference Include="Vectrosity">
+ <HintPath>/Users/shalin/tealcerebro/Assets/Plugins/Vectrosity/Vectrosity.dll</HintPath>
+ </Reference>
+ <Reference Include="VectrosityEditor">
+ <HintPath>/Users/shalin/tealcerebro/Assets/Plugins/Vectrosity/Editor/VectrosityEditor.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.Graphs.dll</HintPath>
  </Reference>
@@ -207,12 +212,6 @@
  </Reference>
  <Reference Include="UnityEditor.OSXStandalone.Extensions">
  <HintPath>/Applications/Unity/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
- </Reference>
- <Reference Include="VectrosityEditor">
- <HintPath>/Users/shalin/tealcerebro/Assets/Plugins/Vectrosity/Editor/VectrosityEditor.dll</HintPath>
- </Reference>
- <Reference Include="Vectrosity">
- <HintPath>/Users/shalin/tealcerebro/Assets/Plugins/Vectrosity/Vectrosity.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/PlaybackEngines/AppleTVSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>

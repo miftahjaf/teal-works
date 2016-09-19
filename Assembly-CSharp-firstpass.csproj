@@ -121,7 +121,6 @@
      <None Include="Assets\TEXDraw\XMLs\TexSymbolDefinitions.xml" />
      <None Include="Assets\TEXDraw\Script\TEXShaderLitShadow.shader" />
      <None Include="Assets\JSON\readme.txt" />
-     <None Include="Assets\What to import!.txt" />
      <None Include="Assets\Resources\words.txt" />
      <None Include="Assets\TEXDraw\XMLs\TexFontDefinitions.xml" />
      <None Include="Assets\MaterialUI\README.txt" />

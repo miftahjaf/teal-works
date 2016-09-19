@@ -55,6 +55,102 @@ namespace Cerebro {
 				GetComponent<CellGrid> ().GameDataLoaded ();
 			}
 		}
+
+		public void ChooseUnit(string groupID, Unit unit, int hairID = 1, int faceID = 1, int bodyID = 1)
+		{
+			/*int borg = UnityEngine.Random.Range (1, 4);
+			if (borg > 2) {
+				hairID = UnityEngine.Random.Range (1, 4);
+				faceID = UnityEngine.Random.Range (1, 4);
+				bodyID = UnityEngine.Random.Range (1, 4);
+			} else {
+				hairID = UnityEngine.Random.Range (5, 8);
+				faceID = UnityEngine.Random.Range (5, 8);
+				bodyID = UnityEngine.Random.Range (5, 8);
+			}
+			Debug.Log ("HAIR " + hairID + " FACE  " + faceID + " BODY " + bodyID);*/
+			var hairString = "baba_hair_1";
+			var hairString2 = "";
+			var bodyString = "baba_body_1";
+			var faceString = "baba_head_1";
+
+			if (hairID == 1) {
+				hairString = "baba_hair_1";
+			} else if (hairID == 2) {
+				hairString = "baba_hair_2";
+			} else if (hairID == 3) {
+				hairString = "baba_hair_3";
+			} else if (hairID == 4) {
+				hairString = "baba_hair_4";
+			} else if (hairID == 5) {
+				hairString = "baba_hair_5_front";
+				hairString2 = "baba_hair_5_back";
+			} else if (hairID == 6) {
+				hairString = "baba_hair_6_front";
+			} else if (hairID == 7) {
+				hairString = "baba_hair_7_front";
+				hairString2 = "baba_hair_7_back";
+			} else if (hairID == 8) {
+				hairString = "baba_hair_8_front";
+				hairString2 = "baba_hair_8_back";
+			}
+
+			bodyString = "baba_body_" + bodyID.ToString();
+			faceString = "baba_head_" + faceID.ToString();
+/*
+
+			if (groupID == GroupMapping.Group2) {	
+				hairString = "baba_hair_2";
+				bodyString = "baba_body_2";
+				faceString = "baba_head_2";
+			} else if (groupID == GroupMapping.Group3) {
+				hairString = "baba_hair_3";
+				bodyString = "baba_body_3";
+				faceString = "baba_head_3";
+			} else if (groupID == GroupMapping.Group4) {
+				hairString = "baba_hair_4";
+				bodyString = "baba_body_4";
+				faceString = "baba_head_4";
+			} else {
+				Debug.Log ("INVALUD GROUP ID IN CHOOSE UNIT : " + groupID);
+			}
+		*/
+
+			var body = unit.transform.Find (bodyString);
+			var hair = unit.transform.Find (hairString);
+			Transform hair2 = null;
+			SpriteRenderer hair2Rndr = null;
+			if (hairString != "") {
+				hair2 = unit.transform.Find (hairString2);
+			}
+			var face = unit.transform.Find (faceString);
+
+			face.gameObject.SetActive (true);
+			body.gameObject.SetActive (true);
+			hair.gameObject.SetActive (true);
+			if(hair2)
+			{
+				hair2.gameObject.SetActive (true);
+				hair2Rndr = hair2.GetComponent<SpriteRenderer> ();
+			}
+			var bodyRndr = body.GetComponent<SpriteRenderer> ();
+			var hairRndr =  hair.GetComponent<SpriteRenderer> ();
+
+			var teamColor = new Color (0, 0, 0);
+			if (groupID == GroupMapping.Group1) {
+				teamColor = new Color (0.99f, 0.39f, 0.15f);
+			} else if (groupID == GroupMapping.Group2) {
+				teamColor = new Color (0.05f, 0.9f, 0.9f);
+			} else if (groupID == GroupMapping.Group3) {
+				teamColor = new Color (0.62f, 0.62f, 0.62f);
+			} else if (groupID == GroupMapping.Group4) {
+				teamColor = new Color (0.39f, 0.62f, 0.92f);
+			}
+			hair2Rndr.color = teamColor;
+			bodyRndr.color = teamColor;
+			hairRndr.color = teamColor;
+		}
+
 	    /// <summary>
 	    /// Returns units that are already children of UnitsParent object.
 	    /// </summary>
@@ -65,20 +161,32 @@ namespace Cerebro {
 				var cell = cells [i];
 				Unit unit = null;
 				if (cell.groupID == GroupMapping.Group1) {
-					unit = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group1Player, UnitsParent.transform).GetComponent<Unit>();
+					GameObject unitGameObj = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group1Player, UnitsParent.transform);
+					unit = unitGameObj.GetComponent<Unit>();
+					unit.PlayerNumber = 0;
 				} else if (cell.groupID == GroupMapping.Group2) {
-					unit = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group2Player, UnitsParent.transform).GetComponent<Unit>();
+					GameObject unitGameObj = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group1Player, UnitsParent.transform);
+					unit = unitGameObj.GetComponent<Unit>();
+					unit.PlayerNumber = 1;
 				} else if (cell.groupID == GroupMapping.Group3) {
-					unit = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group3Player, UnitsParent.transform).GetComponent<Unit>();
+					GameObject unitGameObj = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group1Player, UnitsParent.transform);
+					unit = unitGameObj.GetComponent<Unit>();
+					unit.PlayerNumber = 2;
 				} else if (cell.groupID == GroupMapping.Group4) {
-					unit = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group4Player, UnitsParent.transform).GetComponent<Unit>();
+					GameObject unitGameObj = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group1Player, UnitsParent.transform);
+					unit = unitGameObj.GetComponent<Unit>();
+					unit.PlayerNumber = 3;
 				}
+
 				if (unit != null) {
 					cell.IsTaken = true;
 					unit.gameObject.transform.localScale = new Vector3 (0.15f, 0.15f, 1);  // SET SCALE HERE
 					unit.Cell = cell;
 					unit.transform.position = cell.transform.position;
 					unit.Initialize ();
+
+					ChooseUnit (cell.groupID, unit);
+
 					ret.Add (unit);
 					mCurrentGameObject = unit.gameObject;
 				}
@@ -110,20 +218,32 @@ namespace Cerebro {
 
 		public Unit AddNewUnit(Cell cell, string groupID) {
 			Unit unit = null;
+
 			if (groupID == GroupMapping.Group1) {
-				unit = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group1Player, UnitsParent.transform).GetComponent<Unit>();
+				GameObject unitGameObj = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group1Player, UnitsParent.transform);
+				unit = unitGameObj.GetComponent<Unit>();
+				unit.PlayerNumber = 0;
 			} else if (groupID == GroupMapping.Group2) {
-				unit = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group2Player, UnitsParent.transform).GetComponent<Unit>();
+				GameObject unitGameObj = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group1Player, UnitsParent.transform);
+				unit = unitGameObj.GetComponent<Unit>();
+				unit.PlayerNumber = 1;
 			} else if (groupID == GroupMapping.Group3) {
-				unit = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group3Player, UnitsParent.transform).GetComponent<Unit>();
+				GameObject unitGameObj = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group1Player, UnitsParent.transform);
+				unit = unitGameObj.GetComponent<Unit>();
+				unit.PlayerNumber = 2;
 			} else if (groupID == GroupMapping.Group4) {
-				unit = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group4Player, UnitsParent.transform).GetComponent<Unit>();
+				GameObject unitGameObj = Cerebro.PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Group1Player, UnitsParent.transform);
+				unit = unitGameObj.GetComponent<Unit>();
+				unit.PlayerNumber = 3;
 			}
+
+
 			if (unit != null) {
 				cell.IsTaken = true;
 				unit.gameObject.transform.localScale = new Vector3 (0.15f, 0.15f, 1);  // SET SCALE HERE
 				unit.Cell = cell;
 				unit.transform.position = cell.transform.position;
+				ChooseUnit (groupID, unit);
 				unit.Initialize ();
 			}
 			return unit;

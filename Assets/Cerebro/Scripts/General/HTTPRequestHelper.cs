@@ -31,7 +31,7 @@ namespace Cerebro
 
 		//		private string SERVER_URL = "http://192.168.1.28:3000/";
 		private string SERVER_URL = "https://teal-server.herokuapp.com/";
-//		private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
+	//	private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
 
 		public event EventHandler MoveValidated;
 		public event EventHandler DescribeImageResponseSubmitted;
@@ -211,6 +211,7 @@ namespace Cerebro
 			form.AddField ("coin_value", currentDeltaValue);
 			CreatePostRequestSimpleJSON (SERVER_URL + "games/got/increment_coin", form, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
+					// save any new coins earnt during this async query into DeltaCoins
 					int newDeltaValue = PlayerPrefs.GetInt (PlayerPrefKeys.DeltaCoins);	
 					PlayerPrefs.SetInt (PlayerPrefKeys.DeltaCoins, newDeltaValue - currentDeltaValue);
 

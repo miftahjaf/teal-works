@@ -5,7 +5,6 @@ namespace Cerebro
 {
 	public class GenericUnit : Unit
 	{
-		public string UnitName;
 
 		private Coroutine PulseCoroutine;
 

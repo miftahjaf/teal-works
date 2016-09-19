@@ -46,12 +46,15 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Cerebro\Scripts\Assessments\AlgebraicExpression.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\AnglesAndParallelLines7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\ApplicationsOfPercentage5.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\Averages7.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\BaseAssessment.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\DecimalsScript.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\DecimalsScript5.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\DecimalsScript7.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\EquationsAndInequations7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\FactorisationOfAlgebraicExpressions7.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\FactorsAndMultiplesScript.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\FactorsAndMultiplesScript5.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\FactorsAndMultiplesScript7.cs" />
@@ -66,12 +69,15 @@
      <Compile Include="Assets\Cerebro\Scripts\Assessments\NumberSystemScript.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\NumbersScript7.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\OperationsAndApplications5.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\OrderOfOperations5.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\PercentageScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\PercentageScript5.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\PowerAndRootsScript.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\PowerAndRootsScript7.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\ProfitAndLoss6.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\ProfitAndLoss7.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\RatioAndProportionScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\RatioAndProportionScript5.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\RatioAndProportionScript7.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\Revisit.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\Sets.cs" />
@@ -82,6 +88,7 @@
      <Compile Include="Assets\Cerebro\Scripts\Assessments\SpecialProducts7.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\SubstitutionAndFormulae.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Assessments\UnitaryMethod7.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\Assessments\VolumeAndSurfaceArea7.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Game\CalloutBGScript.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Game\Cell.cs" />
      <Compile Include="Assets\Cerebro\Scripts\Game\CellGrid.cs" />
@@ -103,6 +110,7 @@
      <Compile Include="Assets\Cerebro\Scripts\General\Coding.cs" />
      <Compile Include="Assets\Cerebro\Scripts\General\ConsoleScreenScript.cs" />
      <Compile Include="Assets\Cerebro\Scripts\General\FeedbackScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\GenericPopup.cs" />
      <Compile Include="Assets\Cerebro\Scripts\General\HTTPRequestHelper.cs" />
      <Compile Include="Assets\Cerebro\Scripts\General\LaunchList.cs" />
      <Compile Include="Assets\Cerebro\Scripts\General\MathFunctions.cs" />
@@ -114,6 +122,7 @@
      <Compile Include="Assets\Cerebro\Scripts\General\PushNotificator.cs" />
      <Compile Include="Assets\Cerebro\Scripts\General\RatingPopup.cs" />
      <Compile Include="Assets\Cerebro\Scripts\General\SettingsDialogScript.cs" />
+     <Compile Include="Assets\Cerebro\Scripts\General\TilePurchaseScript.cs" />
      <Compile Include="Assets\Cerebro\Scripts\General\VerbalizeLandingPage.cs" />
      <Compile Include="Assets\Cerebro\Scripts\General\VerbalizeScript.cs" />
      <Compile Include="Assets\Cerebro\Scripts\General\WelcomeScript.cs" />
@@ -459,7 +468,6 @@
      <None Include="Assets\TEXDraw\XMLs\TexSymbolDefinitions.xml" />
      <None Include="Assets\TEXDraw\Script\TEXShaderLitShadow.shader" />
      <None Include="Assets\JSON\readme.txt" />
-     <None Include="Assets\What to import!.txt" />
      <None Include="Assets\Resources\words.txt" />
      <None Include="Assets\TEXDraw\XMLs\TexFontDefinitions.xml" />
      <None Include="Assets\MaterialUI\README.txt" />
