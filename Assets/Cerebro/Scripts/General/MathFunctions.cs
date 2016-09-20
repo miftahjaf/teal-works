@@ -4,7 +4,13 @@ using System.Collections.Generic;
 
 public class MathFunctions : MonoBehaviour {
 
-	public static int GetHCF(int a, int b) {
+
+	public static char deg = '˚';
+	public static char min = '\'';
+	public static char sec = '\"';
+
+	public static int GetHCF(int a, int b) 
+	{
 		return b == 0 ? a : GetHCF(b, a % b);
 	}
 
@@ -88,5 +94,39 @@ public class MathFunctions : MonoBehaviour {
 			return true;
 		}
 		return false;
+	}
+
+	public static Vector2 PointAtDirection(Vector2 origin,float angle,float radius)
+	{
+		return new Vector2(origin.x+radius * Mathf.Cos(Mathf.Deg2Rad * angle), origin.y+radius*Mathf.Sin(Mathf.Deg2Rad*angle));
+	}
+
+	public static string GetAngleValueInString(float ans)
+	{
+		string answer = "";
+
+		ans = MathFunctions.GetRounded (ans, 5);
+
+		if(Mathf.Floor(ans)!=0)
+			answer = "" + Mathf.Floor(ans) + deg;
+
+		ans -= Mathf.Floor(ans);
+		ans *= 60f;
+		if (ans > 0.0001)
+		{
+			ans = MathFunctions.GetRounded (ans, 3);
+
+			if(Mathf.Floor(ans)!=0)
+				answer += "" + Mathf.Floor(ans) + min;
+			
+			ans -= Mathf.Floor(ans);
+			if (ans > 0.001){
+				ans *= 60f;
+				ans = MathFunctions.GetRounded (ans,0);
+			    answer += "" + ans + sec;
+			}
+		}
+
+		return answer;
 	}
 }
