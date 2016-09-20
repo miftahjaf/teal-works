@@ -63,6 +63,8 @@ namespace Cerebro {
 		public const string ProfilePicKey = "ProfilePic";
 		public const string TextureLastCleared = "TextureLastCleared";
 		public const string VerbalizeSpeed = "VerbalizeSpeed";
+		public const string BabaID = "BabaID";
+		public const string GOTGameTeamID = "GOTGameTeamID";
 	}
 
 	public static class PrefabManager

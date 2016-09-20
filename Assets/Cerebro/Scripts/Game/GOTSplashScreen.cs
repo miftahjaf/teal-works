@@ -20,6 +20,12 @@ namespace Cerebro
 		public Text[] GroupCellTexts;
 		public Text[] GroupCoinTexts;
 
+		public GameObject UICamera, CurrAvatar;
+
+		private bool IsLerpStarted, IsScreenOpening;
+		private float LerpStartTime, LerpValue;
+		private float LerpTotalTime = 0.5f;
+
 		void Start() {
 			// when you want to start game directly     
 			// StartGame ();
@@ -79,6 +85,30 @@ namespace Cerebro
 					TimeStatus.text = "Game Ends in " + timeStr;
 				} else {					
 					TimeStatus.text = "Next Game Starts in " + timeStr;
+				}
+			}
+
+			if (IsLerpStarted) 
+			{
+				if (Time.time - LerpStartTime < LerpTotalTime) 
+				{
+					LerpValue = Mathf.Lerp (0f, 1f, (Time.time - LerpStartTime) / LerpTotalTime);
+				}
+				else 
+				{
+					IsLerpStarted = false;
+					LerpValue = 1;
+					if (IsScreenOpening) {
+						CurrAvatar.transform.parent.FindChild ("Buttons").gameObject.SetActive (true);
+					} else {
+						UICamera.GetComponent<Blur> ().enabled = false;
+					}
+				}
+
+				if (IsScreenOpening) {
+					OpenAvatarCustomization ();
+				} else {
+					CloseAvatarCustomization ();
 				}
 			}
 		}
@@ -185,6 +215,36 @@ namespace Cerebro
 			} else {
 				Start ();
 			}
+		}
+
+		public void ChangeButtonClicked()
+		{
+			IsLerpStarted = true;
+			LerpValue = 0;
+			LerpStartTime = Time.time;
+			UICamera.GetComponent<Blur> ().enabled = true;
+			IsScreenOpening = true;
+		}
+
+		public void CloseButtonClicked()
+		{
+			IsLerpStarted = true;
+			LerpValue = 0;
+			LerpStartTime = Time.time;
+			UICamera.GetComponent<Blur> ().enabled = true;
+			IsScreenOpening = false;
+		}
+
+		public void OpenAvatarCustomization()
+		{
+			UICamera.GetComponent<Blur> ().iterations = (int)(Mathf.Lerp (0, 5, LerpValue));
+			CurrAvatar.GetComponent<RectTransform> ().localScale = Vector2.Lerp (new Vector2(0.25f, 0.25f), new Vector2(0.6f, 0.6f), LerpValue);
+		}
+
+		public void CloseAvatarCustomization()
+		{
+			UICamera.GetComponent<Blur> ().iterations = (int)(Mathf.Lerp (5, 0, LerpValue));
+			CurrAvatar.GetComponent<RectTransform> ().localScale = Vector2.Lerp (new Vector2(0.6f, 0.6f), new Vector2(0.25f, 0.25f), LerpValue);
 		}
 
 		public void BackOnScreen(bool fromFocus) {
