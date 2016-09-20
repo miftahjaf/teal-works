@@ -399,7 +399,7 @@ namespace Cerebro
 			{
 				selector = GetRandomSelector(1, 7);
 
-				if(selector==1)
+				if(selector == 1)
 				{
 					coeff1 = 10 * Random.Range(20, 50);
 					QuestionLatext.text = "An angle measures " + coeff1 + MathFunctions.min + ". What is its measure in degrees and minutes?";
@@ -407,7 +407,7 @@ namespace Cerebro
 					this.SetAnswerValue(new float[]{coeff1 / 60f});
 
 				}
-				else if(selector==2)
+				else if(selector == 2)
 				{
 					coeff1 = Random.Range (2, 10);
 					while (coeff1 == 6)
@@ -445,7 +445,7 @@ namespace Cerebro
 
 					this.SetAnswerValue(new float[]{coeff1});
 				}
-				else if(selector==5)
+				else if(selector == 5)
 				{
 					QuestionLatext.text = "Calculate the value of x. ACB in a straight line :";
 					//Diagram
@@ -467,7 +467,7 @@ namespace Cerebro
 					this.SetAnswerValue(new float[]{angle});
 				}
 
-				else if(selector ==6)
+				else if(selector == 6)
 				{
 					QuestionLatext.text = "In the given figure, lines AC and BD intersect each other at O. Find angles x, y, z :";
 
@@ -539,7 +539,7 @@ namespace Cerebro
 					ans = 180f - ans;
 					this.SetAnswerValue(new float[]{ans});
 				}
-				else if(selector ==3)
+				else if(selector == 3)
 				{
 					QuestionLatext.text = "Find x :";
 					float angle ;
@@ -566,7 +566,7 @@ namespace Cerebro
 
 					   this.SetAnswerValue(new float[]{angle});
 				}
-				else if(selector ==4)
+				else if(selector == 4)
 				{
 					QuestionLatext.text = "In the figure, AB & CD are parallel lines and PQ is a traversal intersecting the lines at R and S. What is the measure of \\angle{ASQ}?";
 					int angle =Random.Range(50,80);
@@ -595,7 +595,7 @@ namespace Cerebro
 
 					this.SetAnswerValue(new float[]{180f-angle});
 				}
-				else if(selector ==5)
+				else if(selector == 5)
 				{
 					QuestionLatext.text = "Find x :";
 					int angle =Random.Range(110,130);
@@ -603,7 +603,7 @@ namespace Cerebro
 					 coeff3 = Random.Range (2, 10);
 					 coeff4 = Random.Range (3, 10);
 
-					while((80*(angle+coeff3))%coeff4 !=0)
+					while((80*(angle+coeff4))%coeff3 !=0)
 					{
 						coeff3 = Random.Range (2, 10);
 					}
@@ -685,14 +685,13 @@ namespace Cerebro
 					this.SetAnswerValue(new float[]{(180-angle-coeff2)/(float)coeff1});
 
 				} 
-				else if(selector ==2)
+				else if(selector == 2)
 				{
 					QuestionLatext.text ="Find the measure of reflex angle at O :";
 
 					int angle = Random.Range(40,80);
 
 					float answer = angle / 2f;
-
 
 					diagramHelper.AddLinePoint (new LinePoint ("Q", Vector2.zero, 90f-answer,false,new Vector2(0,20f),70f));
 					diagramHelper.AddLinePoint (new LinePoint ("O", Vector2.zero, 90f-answer+angle,false,new Vector2(0,20f),70f));
@@ -713,7 +712,7 @@ namespace Cerebro
 					this.SetAnswerValue(new float[]{360f-answer});
 
 				}
-				else if(selector==3)
+				else if(selector == 3)
 				{
 					QuestionLatext.text = "Find x :";
 
@@ -741,7 +740,7 @@ namespace Cerebro
 
 					this.SetAnswerValue(new float[]{180f-angle});
 				}
-				else if(selector ==4)
+				else if(selector == 4)
 				{
 					QuestionLatext.text ="Find x :";
 					int angle = Random.Range(95,115);
@@ -810,7 +809,7 @@ namespace Cerebro
 			if (level == 5) 
 			{
 				selector = GetRandomSelector(1, 6);
-				if(selector==1)
+				if(selector == 1)
 				{
 					QuestionLatext.text ="Find a, x, y, z :";
 					int angle1=Random.Range(70,110);
@@ -857,7 +856,7 @@ namespace Cerebro
 					diagramHelper.SetScale (0.8f);
 
 				}
-				else if(selector==2)
+				else if(selector == 2)
 				{
 					QuestionLatext.text ="Find x, y, z :";
 					int angle =Random.Range(80,110);
@@ -900,7 +899,7 @@ namespace Cerebro
 					diagramHelper.SetScale (0.8f);
 
 				}
-				else if(selector ==3)
+				else if(selector == 3)
 				{
 					coeff1 = Random.Range(10, 61);
 					coeff2 = Random.Range(50, 101);
@@ -912,7 +911,7 @@ namespace Cerebro
 					float ans = (float)(coeff2 - coeff1) / (float)(coeff3 - 1);
 					this.SetAnswerValue(new float[]{ans});
 				}
-				else if(selector ==4)
+				else if(selector == 4)
 				{
 					
 					QuestionLatext.text ="Find X :";
@@ -939,7 +938,7 @@ namespace Cerebro
 
 
 				}
-				else if(selector==5)
+				else if(selector == 5)
 				{
 					QuestionLatext.text = "Find \\angle{PFQ} :";
 					int angle = Random.Range (120, 140);
