@@ -11,7 +11,7 @@ namespace Cerebro
 
 		public Text subQuestionText;
 		public GameObject MCQ;
-		public LineAndAngle lineAndAngle;
+		public DiagramHelper diagramHelper;
 		private string Answer;
 		private string alternateAnswer;
 		private int coeff1;
@@ -24,6 +24,7 @@ namespace Cerebro
 	
 		void Start()
 		{
+			
 
 			StartCoroutine(StartAnimation());
 			base.Initialise("M", "APL07", "S01", "A01");
@@ -281,7 +282,7 @@ namespace Cerebro
 			GeneralButton.gameObject.SetActive(true);
 			numPad.SetActive(true);
 			MCQ.SetActive (false);
-			lineAndAngle.Reset ();
+			diagramHelper.Reset ();
 
 			for (int i = 1; i < 5; i++) {
 				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.textDark;
@@ -340,15 +341,15 @@ namespace Cerebro
 
 					float angle = (180 -value1);
 
-					lineAndAngle.AddLinePoint(new LinePoint("C", Vector2.zero,0,false,0));
-					lineAndAngle.AddLinePoint (new LinePoint ("A", Vector2.zero, 180,true));
-					lineAndAngle.AddLinePoint (new LinePoint ("B", Vector2.zero, 0,true));
-					lineAndAngle.AddLinePoint (new LinePoint ("D", Vector2.zero, value1,true));
+					diagramHelper.AddLinePoint(new LinePoint("C", Vector2.zero,0,false,0));
+					diagramHelper.AddLinePoint (new LinePoint ("A", Vector2.zero, 180,true));
+					diagramHelper.AddLinePoint (new LinePoint ("B", Vector2.zero, 0,true));
+					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, value1,true));
 
-					lineAndAngle.AddAngleArc(new AngleArc(value1.ToString()+MathFunctions.deg,Vector2.zero,0,value1));
-					lineAndAngle.AddAngleArc(new AngleArc("x",Vector2.zero,value1,180));
+					diagramHelper.AddAngleArc(new AngleArc(value1.ToString()+MathFunctions.deg,Vector2.zero,0,value1));
+					diagramHelper.AddAngleArc(new AngleArc("x",Vector2.zero,value1,180));
 
-					lineAndAngle.DrawDiagram();
+					diagramHelper.Draw();
 
 
 					this.SetAnswerValue(new float[]{angle});
@@ -452,15 +453,15 @@ namespace Cerebro
 					int value2 =Random.Range(20,50);
 					float angle = (180 + value2- value1)/2;
 
-					lineAndAngle.AddLinePoint(new LinePoint("C", Vector2.zero,0,false,0));
-					lineAndAngle.AddLinePoint (new LinePoint ("A", Vector2.zero, 180,true));
-					lineAndAngle.AddLinePoint (new LinePoint ("B", Vector2.zero, 0,true));
-					lineAndAngle.AddLinePoint (new LinePoint ("D", Vector2.zero, angle-value2,true));
+					diagramHelper.AddLinePoint(new LinePoint("C", Vector2.zero,0,false,0));
+					diagramHelper.AddLinePoint (new LinePoint ("A", Vector2.zero, 180,true));
+					diagramHelper.AddLinePoint (new LinePoint ("B", Vector2.zero, 0,true));
+					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, angle-value2,true));
 
-					lineAndAngle.AddAngleArc(new AngleArc("x-"+value2+MathFunctions.deg,Vector2.zero,0,angle-value2,50f));
-					lineAndAngle.AddAngleArc(new AngleArc("x+"+value1+MathFunctions.deg,Vector2.zero,angle-value2,180,40f));
+					diagramHelper.AddAngleArc(new AngleArc("x-"+value2+MathFunctions.deg,Vector2.zero,0,angle-value2,50f));
+					diagramHelper.AddAngleArc(new AngleArc("x+"+value1+MathFunctions.deg,Vector2.zero,angle-value2,180,40f));
 
-					lineAndAngle.DrawDiagram();
+					diagramHelper.Draw();
 
 
 					this.SetAnswerValue(new float[]{angle});
@@ -471,18 +472,18 @@ namespace Cerebro
 					QuestionLatext.text = "In the given figure, lines AC and BD intersect each other at O. Find angles x, y, z :";
 
 					int angle = Random.Range(55,75);
-					lineAndAngle.AddLinePoint(new LinePoint("O", Vector2.zero,0,false,0));
-					lineAndAngle.AddLinePoint(new LinePoint("A", Vector2.zero,angle/2f,true));
-					lineAndAngle.AddLinePoint(new LinePoint("B", Vector2.zero,(180 -(angle/2f)),true));
-					lineAndAngle.AddLinePoint(new LinePoint("C", Vector2.zero,(180 +(angle/2f)),true));
-					lineAndAngle.AddLinePoint(new LinePoint("D", Vector2.zero,(360 -(angle/2f)),true));
+					diagramHelper.AddLinePoint(new LinePoint("O", Vector2.zero,0,false,0));
+					diagramHelper.AddLinePoint(new LinePoint("A", Vector2.zero,angle/2f,true));
+					diagramHelper.AddLinePoint(new LinePoint("B", Vector2.zero,(180 -(angle/2f)),true));
+					diagramHelper.AddLinePoint(new LinePoint("C", Vector2.zero,(180 +(angle/2f)),true));
+					diagramHelper.AddLinePoint(new LinePoint("D", Vector2.zero,(360 -(angle/2f)),true));
 
-					lineAndAngle.AddAngleArc(new AngleArc("x",Vector2.zero,angle/2f,(180 -(angle/2f)),60f));
-					lineAndAngle.AddAngleArc(new AngleArc("y",Vector2.zero,(180 -(angle/2f)),(180 +(angle/2f)),45f));
-					lineAndAngle.AddAngleArc(new AngleArc("z",Vector2.zero,(180 +(angle/2f)),(360 -(angle/2f)),60f));
-					lineAndAngle.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg.ToString(),Vector2.zero,(360 -(angle/2f)),(360 +(angle/2f)),45f));
+					diagramHelper.AddAngleArc(new AngleArc("x",Vector2.zero,angle/2f,(180 -(angle/2f)),60f));
+					diagramHelper.AddAngleArc(new AngleArc("y",Vector2.zero,(180 -(angle/2f)),(180 +(angle/2f)),45f));
+					diagramHelper.AddAngleArc(new AngleArc("z",Vector2.zero,(180 +(angle/2f)),(360 -(angle/2f)),60f));
+					diagramHelper.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg.ToString(),Vector2.zero,(360 -(angle/2f)),(360 +(angle/2f)),45f));
 
-					lineAndAngle.DrawDiagram();
+					diagramHelper.Draw();
 
 					this.SetAnswerValue(new float[]{180-angle,angle,180-angle});
 
@@ -500,30 +501,30 @@ namespace Cerebro
 					QuestionLatext.text = "Find x :";
 					int angle =Random.Range(55,75);
 
-					lineAndAngle.AddLinePoint(new LinePoint("C",new Vector2(0f,50f),0,true));
-					lineAndAngle.AddLinePoint(new LinePoint("D",new Vector2(0f,50f),180,true));
-					lineAndAngle.AddLinePoint(new LinePoint("A",new Vector2(0f,-50f),0,true));
-					lineAndAngle.AddLinePoint(new LinePoint("B",new Vector2(0f,-50f),180,true));
+					diagramHelper.AddLinePoint(new LinePoint("C",new Vector2(0f,50f),0,true));
+					diagramHelper.AddLinePoint(new LinePoint("D",new Vector2(0f,50f),180,true));
+					diagramHelper.AddLinePoint(new LinePoint("A",new Vector2(0f,-50f),0,true));
+					diagramHelper.AddLinePoint(new LinePoint("B",new Vector2(0f,-50f),180,true));
 
 					newRadius = Mathf.Abs(50f/Mathf.Sin(Mathf.Deg2Rad * angle));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,angle,false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,angle,false,newRadius));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero,angle,newRadius); 
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint,angle,true,70f));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint,angle,true,70f));
 
 
-					lineAndAngle.AddAngleArc(new AngleArc("x",newPoint,0,angle));
+					diagramHelper.AddAngleArc(new AngleArc("x",newPoint,0,angle));
 
 					newRadius = Mathf.Abs(50f/Mathf.Sin(Mathf.Deg2Rad *  (angle+180f)));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero, (angle+180f),false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero, (angle+180f),false,newRadius));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero,(angle+180),newRadius); 
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint, (angle+180f),true,70f));
-					lineAndAngle.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,0,angle));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint, (angle+180f),true,70f));
+					diagramHelper.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,0,angle));
 
-					lineAndAngle.DrawDiagram();
+					diagramHelper.Draw();
 
-					lineAndAngle.SetScale(0.8f);
+					diagramHelper.SetScale(0.8f);
 
 					this.SetAnswerValue(new float[]{angle});
 				}
@@ -551,17 +552,17 @@ namespace Cerebro
 					}
 					while(21600%(coeff1+coeff2+coeff3)!=0 || (angle*coeff1==90) || (angle*coeff2==90)||(angle*coeff3==90));
 
-						lineAndAngle.AddLinePoint (new LinePoint ("A", Vector2.zero, 90,true));
-						lineAndAngle.AddLinePoint (new LinePoint ("B", Vector2.zero, 0,true));
-						lineAndAngle.AddLinePoint (new LinePoint ("D", Vector2.zero, 90+(angle * coeff1),true));
-						lineAndAngle.AddLinePoint (new LinePoint ("C", Vector2.zero, 90+(angle*(coeff2 +coeff1)),true));
+						diagramHelper.AddLinePoint (new LinePoint ("A", Vector2.zero, 90,true));
+						diagramHelper.AddLinePoint (new LinePoint ("B", Vector2.zero, 0,true));
+						diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, 90+(angle * coeff1),true));
+						diagramHelper.AddLinePoint (new LinePoint ("C", Vector2.zero, 90+(angle*(coeff2 +coeff1)),true));
 
-						lineAndAngle.AddAngleArc(new AngleArc("",Vector2.zero,0f,90f));
-						lineAndAngle.AddAngleArc(new AngleArc(coeff1 +"x",Vector2.zero,90f,90+(angle*coeff1)));
-						lineAndAngle.AddAngleArc(new AngleArc(coeff2 +"x",Vector2.zero,90+(angle*coeff1),90+(angle*(coeff2 +coeff1))));
-						lineAndAngle.AddAngleArc(new AngleArc(coeff3 +"x",Vector2.zero,90+(angle*(coeff2 +coeff1)),90+(angle*(coeff2 +coeff1+coeff3))));	
+						diagramHelper.AddAngleArc(new AngleArc("",Vector2.zero,0f,90f));
+						diagramHelper.AddAngleArc(new AngleArc(coeff1 +"x",Vector2.zero,90f,90+(angle*coeff1)));
+						diagramHelper.AddAngleArc(new AngleArc(coeff2 +"x",Vector2.zero,90+(angle*coeff1),90+(angle*(coeff2 +coeff1))));
+						diagramHelper.AddAngleArc(new AngleArc(coeff3 +"x",Vector2.zero,90+(angle*(coeff2 +coeff1)),90+(angle*(coeff2 +coeff1+coeff3))));	
 
-						lineAndAngle.DrawDiagram();
+						diagramHelper.Draw();
 
 					   this.SetAnswerValue(new float[]{angle});
 				}
@@ -569,28 +570,28 @@ namespace Cerebro
 				{
 					QuestionLatext.text = "In the figure, AB & CD are parallel lines and PQ is a traversal intersecting the lines at R and S. What is the measure of \\angle{ASQ}?";
 					int angle =Random.Range(50,80);
-					lineAndAngle.AddLinePoint(new LinePoint("B",new Vector2(0f,50f),0,true));
-					lineAndAngle.AddLinePoint(new LinePoint("A",new Vector2(0f,50f),180,true));
-					lineAndAngle.AddLinePoint(new LinePoint("C",new Vector2(0f,-50f),0,true));
-					lineAndAngle.AddLinePoint(new LinePoint("D",new Vector2(0f,-50f),180,true));
+					diagramHelper.AddLinePoint(new LinePoint("B",new Vector2(0f,50f),0,true));
+					diagramHelper.AddLinePoint(new LinePoint("A",new Vector2(0f,50f),180,true));
+					diagramHelper.AddLinePoint(new LinePoint("C",new Vector2(0f,-50f),0,true));
+					diagramHelper.AddLinePoint(new LinePoint("D",new Vector2(0f,-50f),180,true));
 
 					newRadius = Mathf.Abs (50 / Mathf.Sin (angle*Mathf.Deg2Rad));
-					lineAndAngle.AddLinePoint(new LinePoint("S",Vector2.zero,angle,false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("S",Vector2.zero,angle,false,newRadius));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero,angle,newRadius); 
-					lineAndAngle.AddLinePoint(new LinePoint("Q",newPoint,angle,true,70f));
+					diagramHelper.AddLinePoint(new LinePoint("Q",newPoint,angle,true,70f));
 
 					newRadius = Mathf.Abs (50 / Mathf.Sin ((180+angle)*Mathf.Deg2Rad));
-					lineAndAngle.AddLinePoint(new LinePoint("R",Vector2.zero,180+angle,false,newRadius,-1));
+					diagramHelper.AddLinePoint(new LinePoint("R",Vector2.zero,180+angle,false,newRadius,-1));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero,(180+angle),newRadius);
-					lineAndAngle.AddLinePoint(new LinePoint("P",newPoint,180+angle,true,70f));
+					diagramHelper.AddLinePoint(new LinePoint("P",newPoint,180+angle,true,70f));
 
-					lineAndAngle.AddAngleArc(new AngleArc(angle.ToString() +MathFunctions.deg,newPoint,0f,angle,70));	
+					diagramHelper.AddAngleArc(new AngleArc(angle.ToString() +MathFunctions.deg,newPoint,0f,angle,70));	
 
-					lineAndAngle.DrawDiagram();
+					diagramHelper.Draw();
 
-					lineAndAngle.SetScale(0.8f);
+					diagramHelper.SetScale(0.8f);
 
 					this.SetAnswerValue(new float[]{180f-angle});
 				}
@@ -607,31 +608,31 @@ namespace Cerebro
 						coeff3 = Random.Range (2, 10);
 					}
 						
-					lineAndAngle.AddLinePoint(new LinePoint("",new Vector2(0f,50f),0,true));
-					lineAndAngle.AddLinePoint(new LinePoint("",new Vector2(0f,50f),180,true));
-					lineAndAngle.AddLinePoint(new LinePoint("",new Vector2(0f,-50f),0,true));
-					lineAndAngle.AddLinePoint(new LinePoint("",new Vector2(0f,-50f),180,true));
+					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(0f,50f),0,true));
+					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(0f,50f),180,true));
+					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(0f,-50f),0,true));
+					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(0f,-50f),180,true));
 
 					newRadius = Mathf.Abs(50f/Mathf.Sin(Mathf.Deg2Rad * angle));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,angle,false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,angle,false,newRadius));
 
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero,angle,newRadius);
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint,angle,true,70f));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint,angle,true,70f));
 
 
-					lineAndAngle.AddAngleArc(new AngleArc(coeff3+"x-"+coeff4+MathFunctions.deg,newPoint,0,angle));
+					diagramHelper.AddAngleArc(new AngleArc(coeff3+"x-"+coeff4+MathFunctions.deg,newPoint,0,angle));
 
 					newRadius = Mathf.Abs(50f/Mathf.Sin(Mathf.Deg2Rad *  (angle+180f)));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero, (angle+180f),false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero, (angle+180f),false,newRadius));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero, (angle+180),newRadius);
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint, (angle+180f),true,70f));
-					lineAndAngle.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,180,180+angle));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint, (angle+180f),true,70f));
+					diagramHelper.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,180,180+angle));
 
-					lineAndAngle.DrawDiagram();
+					diagramHelper.Draw();
 
-					lineAndAngle.SetScale(0.8f);
+					diagramHelper.SetScale(0.8f);
 
 					this.SetAnswerValue(new float[]{(angle+coeff4)/(float)coeff3});
 				}
@@ -655,31 +656,31 @@ namespace Cerebro
 					}
 
 
-					lineAndAngle.AddLinePoint(new LinePoint("",new Vector2(0f,50f),0,true));
-					lineAndAngle.AddLinePoint(new LinePoint("",new Vector2(0f,50f),180,true));
-					lineAndAngle.AddLinePoint(new LinePoint("",new Vector2(0f,-50f),0,true));
-					lineAndAngle.AddLinePoint(new LinePoint("",new Vector2(0f,-50f),180,true));
+					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(0f,50f),0,true));
+					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(0f,50f),180,true));
+					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(0f,-50f),0,true));
+					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(0f,-50f),180,true));
 
 					newRadius = Mathf.Abs(50f/Mathf.Sin(Mathf.Deg2Rad * angle));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,angle,false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,angle,false,newRadius));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero, angle,newRadius);
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint,angle,true,70f));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint,angle,true,70f));
 
-					lineAndAngle.AddAngleArc(new AngleArc(coeff1+"y+"+coeff2+MathFunctions.deg,newPoint,angle,180f,50f));
+					diagramHelper.AddAngleArc(new AngleArc(coeff1+"y+"+coeff2+MathFunctions.deg,newPoint,angle,180f,50f));
 				
 
 					newRadius = Mathf.Abs(50f/Mathf.Sin(Mathf.Deg2Rad *  (angle+180f)));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero, (angle+180f),false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero, (angle+180f),false,newRadius));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero, (angle+180),newRadius);
 
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint, (angle+180f),true,70f));
-					lineAndAngle.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,180,180+angle));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint, (angle+180f),true,70f));
+					diagramHelper.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,180,180+angle));
 
-					lineAndAngle.DrawDiagram();
+					diagramHelper.Draw();
 
-					lineAndAngle.SetScale(0.8f);
+					diagramHelper.SetScale(0.8f);
 
 					this.SetAnswerValue(new float[]{(180-angle-coeff2)/(float)coeff1});
 
@@ -693,21 +694,21 @@ namespace Cerebro
 					float answer = angle / 2f;
 
 
-					lineAndAngle.AddLinePoint (new LinePoint ("Q", Vector2.zero, 90f-answer,false,new Vector2(0,20f),70f));
-					lineAndAngle.AddLinePoint (new LinePoint ("O", Vector2.zero, 90f-answer+angle,false,new Vector2(0,20f),70f));
+					diagramHelper.AddLinePoint (new LinePoint ("Q", Vector2.zero, 90f-answer,false,new Vector2(0,20f),70f));
+					diagramHelper.AddLinePoint (new LinePoint ("O", Vector2.zero, 90f-answer+angle,false,new Vector2(0,20f),70f));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero, (90f-answer),70f);
-					lineAndAngle.AddAngleArc(new AngleArc("x",newPoint,270f-answer,270,40f));
+					diagramHelper.AddAngleArc(new AngleArc("x",newPoint,270f-answer,270,40f));
 
-					lineAndAngle.AddLinePoint (new LinePoint ("R", newPoint, 270,true));
+					diagramHelper.AddLinePoint (new LinePoint ("R", newPoint, 270,true));
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero, (90f-answer+angle),70f);
 				
-					lineAndAngle.AddLinePoint (new LinePoint ("N", newPoint, 270f,true));
-					lineAndAngle.AddAngleArc(new AngleArc("x",newPoint,270f,270+answer,40f));
+					diagramHelper.AddLinePoint (new LinePoint ("N", newPoint, 270f,true));
+					diagramHelper.AddAngleArc(new AngleArc("x",newPoint,270f,270+answer,40f));
 
-					lineAndAngle.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,Vector2.zero,90f-answer,90f-answer+angle));
+					diagramHelper.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,Vector2.zero,90f-answer,90f-answer+angle));
 
-					lineAndAngle.DrawDiagram();
+					diagramHelper.Draw();
 
 					this.SetAnswerValue(new float[]{360f-answer});
 
@@ -717,26 +718,26 @@ namespace Cerebro
 					QuestionLatext.text = "Find x :";
 
 					int angle = Random.Range (100, 130);
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,angle-90f,true));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,angle+90f,true));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,angle-90f,true));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,angle+90f,true));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero,  (angle-90f),50f);
 
-					lineAndAngle.AddLinePoint (new LinePoint ("", newPoint, 90f,true));
-					lineAndAngle.AddLinePoint (new LinePoint ("", newPoint, 270f,true));
+					diagramHelper.AddLinePoint (new LinePoint ("", newPoint, 90f,true));
+					diagramHelper.AddLinePoint (new LinePoint ("", newPoint, 270f,true));
 
-					lineAndAngle.AddAngleArc(new AngleArc("x",newPoint,90+angle,270f));
+					diagramHelper.AddAngleArc(new AngleArc("x",newPoint,90+angle,270f));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero,  (angle+90f),50f);
 
-					lineAndAngle.AddLinePoint (new LinePoint ("", newPoint, 90f,true));
-					lineAndAngle.AddLinePoint (new LinePoint ("", newPoint, 270f,true));
+					diagramHelper.AddLinePoint (new LinePoint ("", newPoint, 90f,true));
+					diagramHelper.AddLinePoint (new LinePoint ("", newPoint, 270f,true));
 
-					lineAndAngle.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,270f,270+angle));
+					diagramHelper.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,270f,270+angle));
 
-					lineAndAngle.DrawDiagram();
+					diagramHelper.Draw();
 
-					lineAndAngle.SetScale(0.8f);
+					diagramHelper.SetScale(0.8f);
 
 					this.SetAnswerValue(new float[]{180f-angle});
 				}
@@ -752,31 +753,31 @@ namespace Cerebro
 					}
 					float answer = (float)angle / (float)(coeff1 + coeff2);
 					newRadius = Mathf.Abs(50f / Mathf.Sin (((answer *coeff1)) * Mathf.Deg2Rad));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,((answer *coeff1)),false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,((answer *coeff1)),false,newRadius));
 					newPoint = MathFunctions.PointAtDirection (Vector2.zero, (answer * coeff1) , newRadius); 
-					lineAndAngle.AddAngleArc(new AngleArc(coeff1+"x",newPoint,180f,180+(answer * coeff1)));
+					diagramHelper.AddAngleArc(new AngleArc(coeff1+"x",newPoint,180f,180+(answer * coeff1)));
 
 
-					lineAndAngle.AddLinePoint(new LinePoint("Q",newPoint,(answer * coeff1) ,true,60f));
+					diagramHelper.AddLinePoint(new LinePoint("Q",newPoint,(answer * coeff1) ,true,60f));
 					newRadius = Mathf.Abs(50f / Mathf.Sin ((360f-(coeff2*answer))* Mathf.Deg2Rad));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,360f-(coeff2*answer),false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,360f-(coeff2*answer),false,newRadius));
 					newPoint = MathFunctions.PointAtDirection (Vector2.zero, (360f-(coeff2*answer)) , newRadius); 
-					lineAndAngle.AddLinePoint(new LinePoint("R",newPoint,(360f-(coeff2*answer)) ,true,60f,-1));
+					diagramHelper.AddLinePoint(new LinePoint("R",newPoint,(360f-(coeff2*answer)) ,true,60f,-1));
 
-					lineAndAngle.AddAngleArc(new AngleArc(coeff2+"x",newPoint,180-((answer *coeff2)),180f));
+					diagramHelper.AddAngleArc(new AngleArc(coeff2+"x",newPoint,180-((answer *coeff2)),180f));
 
-					lineAndAngle.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,Vector2.zero,360f-(coeff2*answer),360f-(coeff2*answer)+angle));
+					diagramHelper.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,Vector2.zero,360f-(coeff2*answer),360f-(coeff2*answer)+angle));
 
-					lineAndAngle.AddLinePoint(new LinePoint("C",new Vector2(0f,50f),0,true));
-					lineAndAngle.AddLinePoint(new LinePoint("D",new Vector2(0f,50f),180,true));
-					lineAndAngle.AddLinePoint(new LinePoint("A",new Vector2(0f,-50f),0,true));
-					lineAndAngle.AddLinePoint(new LinePoint("B",new Vector2(0f,-50f),180,true));
+					diagramHelper.AddLinePoint(new LinePoint("C",new Vector2(0f,50f),0,true));
+					diagramHelper.AddLinePoint(new LinePoint("D",new Vector2(0f,50f),180,true));
+					diagramHelper.AddLinePoint(new LinePoint("A",new Vector2(0f,-50f),0,true));
+					diagramHelper.AddLinePoint(new LinePoint("B",new Vector2(0f,-50f),180,true));
 
-					lineAndAngle.DrawDiagram();
+					diagramHelper.Draw();
 
 					this.SetAnswerValue(new float[]{answer});
 
-					lineAndAngle.SetScale (0.8f);
+					diagramHelper.SetScale (0.8f);
 				}
 				else if (selector == 5)
 				{
@@ -788,14 +789,14 @@ namespace Cerebro
 					}
 					float angle =MathFunctions.GetRounded( val/ 400f,4);
 
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,90,true));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,90-angle,true));
-					lineAndAngle.AddLinePoint (new LinePoint ("", Vector2.zero, 0,true));	
-					lineAndAngle.AddAngleArc(new AngleArc("",Vector2.zero,0f,90f,15f));
-					lineAndAngle.AddAngleArc(new AngleArc(MathFunctions.GetAngleValueInString(angle),Vector2.zero,90-angle,90,120f));
-					lineAndAngle.AddAngleArc(new AngleArc("x",Vector2.zero,0f,90f-angle));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,90,true));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,90-angle,true));
+					diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 0,true));	
+					diagramHelper.AddAngleArc(new AngleArc("",Vector2.zero,0f,90f,15f));
+					diagramHelper.AddAngleArc(new AngleArc(MathFunctions.GetAngleValueInString(angle),Vector2.zero,90-angle,90,120f));
+					diagramHelper.AddAngleArc(new AngleArc("x",Vector2.zero,0f,90f-angle));
 
-					lineAndAngle.DrawDiagram ();
+					diagramHelper.Draw ();
 
 					this.SetAnswerValue (new float[]{90f-angle});
 
@@ -819,41 +820,41 @@ namespace Cerebro
 					}
 					int angle2=Random.Range(40,angle1-20);
 
-					lineAndAngle.AddLinePoint(new LinePoint("B",new Vector2(0f,50f),0,true,140f,1));
-					lineAndAngle.AddLinePoint(new LinePoint("A",new Vector2(0f,50f),180,true,140f,-1));
-					lineAndAngle.AddLinePoint(new LinePoint("D",new Vector2(0f,-50f),0,true,140f));
-					lineAndAngle.AddLinePoint(new LinePoint("C",new Vector2(0f,-50f),180,true,140f));
+					diagramHelper.AddLinePoint(new LinePoint("B",new Vector2(0f,50f),0,true,140f,1));
+					diagramHelper.AddLinePoint(new LinePoint("A",new Vector2(0f,50f),180,true,140f,-1));
+					diagramHelper.AddLinePoint(new LinePoint("D",new Vector2(0f,-50f),0,true,140f));
+					diagramHelper.AddLinePoint(new LinePoint("C",new Vector2(0f,-50f),180,true,140f));
 
 					newRadius = Mathf.Abs(50f/Mathf.Sin(Mathf.Deg2Rad * angle1));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,angle1,false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,angle1,false,newRadius));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero,angle1,newRadius); 
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint,angle1,true,70f));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint,angle1,true,70f));
 
 
-					lineAndAngle.AddAngleArc(new AngleArc(angle1.ToString()+MathFunctions.deg,newPoint,180,180+angle1));
+					diagramHelper.AddAngleArc(new AngleArc(angle1.ToString()+MathFunctions.deg,newPoint,180,180+angle1));
 
 					newRadius = Mathf.Abs(50f/Mathf.Sin(Mathf.Deg2Rad *  (angle1+180f)));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero, (angle1+180f),false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero, (angle1+180f),false,newRadius));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero,(angle1+180),newRadius); 
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint, (angle1+180f),true,70f));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint, (angle1+180f),true,70f));
 					newRadius = Mathf.Abs(100f/Mathf.Sin(Mathf.Deg2Rad * angle2));
 
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint, angle2,false,newRadius));
-					lineAndAngle.AddAngleArc(new AngleArc("y",newPoint,180,180+angle1,35f));
-					lineAndAngle.AddAngleArc(new AngleArc(angle2.ToString()+MathFunctions.deg,newPoint,0,angle2));
-					lineAndAngle.AddAngleArc(new AngleArc("x",newPoint,angle2,angle1,35f));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint, angle2,false,newRadius));
+					diagramHelper.AddAngleArc(new AngleArc("y",newPoint,180,180+angle1,35f));
+					diagramHelper.AddAngleArc(new AngleArc(angle2.ToString()+MathFunctions.deg,newPoint,0,angle2));
+					diagramHelper.AddAngleArc(new AngleArc("x",newPoint,angle2,angle1,35f));
 				
 					newPoint = MathFunctions.PointAtDirection(newPoint,angle2,newRadius);
-					lineAndAngle.AddAngleArc(new AngleArc("z",newPoint,180,180+angle2,35f));
-					lineAndAngle.AddAngleArc(new AngleArc("a",newPoint,180+angle2,360,35f));
+					diagramHelper.AddAngleArc(new AngleArc("z",newPoint,180,180+angle2,35f));
+					diagramHelper.AddAngleArc(new AngleArc("a",newPoint,180+angle2,360,35f));
 
-					lineAndAngle.DrawDiagram ();
+					diagramHelper.Draw ();
 
 					this.SetAnswerValue (new float[]{180- angle2,angle1-angle2,angle1,angle2});
 
-					lineAndAngle.SetScale (0.8f);
+					diagramHelper.SetScale (0.8f);
 
 				}
 				else if(selector==2)
@@ -866,37 +867,37 @@ namespace Cerebro
 					}
 					int angle1 =Random.Range(40,60);
 
-					lineAndAngle.AddLinePoint(new LinePoint("A",new Vector2(-80f,0f),90f,true,130,1));
-					lineAndAngle.AddLinePoint(new LinePoint("B",new Vector2(-80f,0f),270f,true,130,-1));
+					diagramHelper.AddLinePoint(new LinePoint("A",new Vector2(-80f,0f),90f,true,130,1));
+					diagramHelper.AddLinePoint(new LinePoint("B",new Vector2(-80f,0f),270f,true,130,-1));
 
 
 
-					lineAndAngle.AddLinePoint(new LinePoint("D",new Vector2(80f,0f),90f,true,130));
-					lineAndAngle.AddLinePoint(new LinePoint("C",new Vector2(80f,0f),270f,true,130));
+					diagramHelper.AddLinePoint(new LinePoint("D",new Vector2(80f,0f),90f,true,130));
+					diagramHelper.AddLinePoint(new LinePoint("C",new Vector2(80f,0f),270f,true,130));
 
 					newRadius =  Mathf.Abs(160f / Mathf.Cos ((270+angle1)* Mathf.Deg2Rad));
-					lineAndAngle.AddLinePoint(new LinePoint("",new Vector2(-80f,60f),270+angle1,false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(-80f,60f),270+angle1,false,newRadius));
 					newPoint = MathFunctions.PointAtDirection (new Vector2 (-80f, 60f), 270 + angle1, newRadius);
-					lineAndAngle.AddAngleArc(new AngleArc(angle1.ToString()+MathFunctions.deg,newPoint,90f,90f+angle1));
+					diagramHelper.AddAngleArc(new AngleArc(angle1.ToString()+MathFunctions.deg,newPoint,90f,90f+angle1));
 
 					newRadius =  Mathf.Abs(160f / Mathf.Cos ((270+angle)* Mathf.Deg2Rad));
-					lineAndAngle.AddLinePoint(new LinePoint("",new Vector2(-80f,60f),270+angle,false,newRadius));
+					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(-80f,60f),270+angle,false,newRadius));
 					newPoint = MathFunctions.PointAtDirection (new Vector2 (-80f, 60f), 270 + angle, newRadius);
-					lineAndAngle.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,90f,90f+angle));
+					diagramHelper.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,90f,90f+angle));
 
-					lineAndAngle.AddAngleArc(new AngleArc("x",new Vector2(-80f,60f),270f+angle,270+180));
-
-
-					lineAndAngle.AddAngleArc(new AngleArc("z",new Vector2(-80f,60f),270f,270+angle1));
-
-					lineAndAngle.AddAngleArc(new AngleArc("y",new Vector2(-80f,60f),270f+angle1,270+angle));
+					diagramHelper.AddAngleArc(new AngleArc("x",new Vector2(-80f,60f),270f+angle,270+180));
 
 
-					lineAndAngle.DrawDiagram ();
+					diagramHelper.AddAngleArc(new AngleArc("z",new Vector2(-80f,60f),270f,270+angle1));
+
+					diagramHelper.AddAngleArc(new AngleArc("y",new Vector2(-80f,60f),270f+angle1,270+angle));
+
+
+					diagramHelper.Draw ();
 
 					this.SetAnswerValue (new float[]{180- angle,angle-angle1,angle1});
 
-					lineAndAngle.SetScale (0.8f);
+					diagramHelper.SetScale (0.8f);
 
 				}
 				else if(selector ==3)
@@ -920,18 +921,18 @@ namespace Cerebro
 				    coeff1 = Random.Range (10, 30);
 					int answer = 180 - angle - coeff1;
 					float angle1 = (answer + coeff1) / 2f;
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,angle1,false,70));
-					lineAndAngle.AddLinePoint(new LinePoint("",Vector2.zero,180+angle1,false,70));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,angle1,false,70));
+					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,180+angle1,false,70));
 					newPoint = MathFunctions.PointAtDirection (Vector2.zero, angle1, 70f); 
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint,360-angle1,true,70f));
-					lineAndAngle.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,180+angle1,180+angle1+angle));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint,360-angle1,true,70f));
+					diagramHelper.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,newPoint,180+angle1,180+angle1+angle));
 					newPoint =MathFunctions.PointAtDirection (Vector2.zero, 180+angle1, 70f); 
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint,180-angle1,true,70f));
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint,360-angle1,true));
-					lineAndAngle.AddLinePoint(new LinePoint("",newPoint,180+angle1,true,70));
-					lineAndAngle.AddAngleArc(new AngleArc("x +"+coeff1+MathFunctions.deg,newPoint,-angle1,angle1+10,55f));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint,180-angle1,true,70f));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint,360-angle1,true));
+					diagramHelper.AddLinePoint(new LinePoint("",newPoint,180+angle1,true,70));
+					diagramHelper.AddAngleArc(new AngleArc("x +"+coeff1+MathFunctions.deg,newPoint,-angle1,angle1+10,55f));
 
-					lineAndAngle.DrawDiagram ();
+					diagramHelper.Draw ();
 
 					this.SetAnswerValue(new float[]{answer});
 
@@ -943,36 +944,36 @@ namespace Cerebro
 					QuestionLatext.text = "Find \\angle{PFQ} :";
 					int angle = Random.Range (120, 140);
 					int angle1 = Random.Range (60, 80);
-					lineAndAngle.AddLinePoint (new LinePoint ("F", Vector2.zero, 0, false, 0, 1));
+					diagramHelper.AddLinePoint (new LinePoint ("F", Vector2.zero, 0, false, 0, 1));
 
 					newRadius = Mathf.Abs (50f / Mathf.Sin (angle * Mathf.Deg2Rad));
-					lineAndAngle.AddLinePoint (new LinePoint ("P", Vector2.zero, angle, false, newRadius, 1));
+					diagramHelper.AddLinePoint (new LinePoint ("P", Vector2.zero, angle, false, newRadius, 1));
 
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero,  angle,newRadius);
-					lineAndAngle.AddLinePoint (new LinePoint ("E", newPoint, angle, true, 70));
+					diagramHelper.AddLinePoint (new LinePoint ("E", newPoint, angle, true, 70));
 
-					lineAndAngle.AddAngleArc (new AngleArc (angle.ToString () + MathFunctions.deg, newPoint, 0, angle));
+					diagramHelper.AddAngleArc (new AngleArc (angle.ToString () + MathFunctions.deg, newPoint, 0, angle));
 
 					float newAngle = (180 + angle1);
 					newRadius = Mathf.Abs (50f / Mathf.Sin (newAngle * Mathf.Deg2Rad));
-					lineAndAngle.AddLinePoint (new LinePoint ("Q", Vector2.zero, newAngle, false, newRadius, -1));
+					diagramHelper.AddLinePoint (new LinePoint ("Q", Vector2.zero, newAngle, false, newRadius, -1));
 
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero,  newAngle,newRadius);
-					lineAndAngle.AddLinePoint (new LinePoint ("G", newPoint, newAngle, true, 70f));
+					diagramHelper.AddLinePoint (new LinePoint ("G", newPoint, newAngle, true, 70f));
 
-					lineAndAngle.AddAngleArc (new AngleArc (angle1.ToString () + MathFunctions.deg, newPoint, 0, angle1));
+					diagramHelper.AddAngleArc (new AngleArc (angle1.ToString () + MathFunctions.deg, newPoint, 0, angle1));
 
-					lineAndAngle.AddLinePoint (new LinePoint ("C", new Vector2 (0f, 50f), 0, true));
-					lineAndAngle.AddLinePoint (new LinePoint ("D", new Vector2 (0f, 50f), 180, true));
-					lineAndAngle.AddLinePoint (new LinePoint ("A", new Vector2 (0f, -50f), 0, true));
-					lineAndAngle.AddLinePoint (new LinePoint ("B", new Vector2 (0f, -50f), 180, true));
+					diagramHelper.AddLinePoint (new LinePoint ("C", new Vector2 (0f, 50f), 0, true));
+					diagramHelper.AddLinePoint (new LinePoint ("D", new Vector2 (0f, 50f), 180, true));
+					diagramHelper.AddLinePoint (new LinePoint ("A", new Vector2 (0f, -50f), 0, true));
+					diagramHelper.AddLinePoint (new LinePoint ("B", new Vector2 (0f, -50f), 180, true));
 
-					lineAndAngle.DrawDiagram ();
+					diagramHelper.Draw ();
 
 					this.SetAnswerValue (new float[]{180-angle+angle1});
 
-					lineAndAngle.SetScale (0.8f);
+					diagramHelper.SetScale (0.8f);
 				}
 			}
 			#endregion

@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
-
+namespace Cerebro {
 
 	public class LinePointScript : MonoBehaviour
 	{
@@ -58,4 +58,5 @@ using UnityEngine.UI.Extensions;
 
 		}
 	}
+}
 

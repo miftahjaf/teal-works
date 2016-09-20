@@ -4,58 +4,11 @@ using System.Collections.Generic;
 using Vectrosity;
 using UnityEngine.UI.Extensions;
 using UnityEngine.UI;
+using Cerebro;
+namespace Cerebro {	
+	
 
-	public class LinePoint
-	{
-		public string name;
-		public Vector2 origin;
-		public float angle;
-		public float radius;
-		public bool shouldShowArrow;
-		public int textDirection;
-		public Vector2 textOffset;
-	    public LinePoint(string name,Vector2 origin,float angle,bool shouldShowArrow,float radius =100f,int textDirection=0)
-	   {
-			this.name = name;
-			this.origin = origin;
-			this.angle = angle;
-			this.radius = radius;
-			this.shouldShowArrow = shouldShowArrow;
-			this.textDirection = textDirection;
-			this.textOffset = textOffset;
-		}
-		public LinePoint(string name,Vector2 origin,float angle,bool shouldShowArrow,Vector2 textOffset,float radius =100f)
-		{
-			this.name = name;
-			this.origin = origin;
-			this.angle = angle;
-			this.radius = radius;
-			this.shouldShowArrow = shouldShowArrow;
-			this.textDirection = textDirection;
-			this.textOffset = textOffset;
-		}
-
-	}
-
-	public class AngleArc
-	{
-		public string value;
-		public float startAngle;
-		public float endAngle;
-		public Vector2 origin;
-		public float radius;
-
-		public AngleArc(string value,Vector2 origin,float startAngle,float endAngle,float radius=0)
-		{
-			this.value = value;
-			this.startAngle = startAngle;
-			this.endAngle = endAngle;
-			this.origin = origin;
-			this.radius = radius;
-		}
-	}
-
-	public class LineAndAngle : MonoBehaviour 
+	public class DiagramHelper : MonoBehaviour 
 	{
 		private List<LinePoint> linePoints = new List<LinePoint> ();
 		private List<AngleArc> angleArcs = new List<AngleArc> ();
@@ -79,7 +32,7 @@ using UnityEngine.UI;
 		}
 
 
-		public void DrawDiagram()
+		public void Draw()
 		{
 			//Add pairs of point to generate disrete line
 			List <Vector2> lineValues = new List <Vector2> ();
@@ -225,4 +178,4 @@ using UnityEngine.UI;
 
 
 	}
-
+}
