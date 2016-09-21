@@ -325,7 +325,7 @@ namespace Cerebro
 						}
 					}
 					if (createCell && cellData.GroupID != "-1") {
-						var unit = customGenerator.AddNewUnit (cell, cellData.GroupID);
+						var unit = customGenerator.AddNewUnit (cell, cellData.GroupID, cellData.BabaHairId, cellData.BabaFaceId, cellData.BabaBodyId);
 						unit.UnitClicked += OnUnitClicked;
 						unit.UnitDestroyed += OnUnitDestroyed;
 					}

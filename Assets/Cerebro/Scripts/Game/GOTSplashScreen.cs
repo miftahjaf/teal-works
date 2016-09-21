@@ -22,9 +22,11 @@ namespace Cerebro
 
 		public GameObject UICamera, CurrAvatar;
 
-		private bool IsLerpStarted, IsScreenOpening;
+		private bool IsLerpStarted, IsScreenOpening, IsAvatarSelectionOpen;
 		private float LerpStartTime, LerpValue;
 		private float LerpTotalTime = 0.5f;
+
+		private GameObject AvatarSelectorButtons, BackButton;
 
 		void Start() {
 			// when you want to start game directly     
@@ -34,6 +36,13 @@ namespace Cerebro
 			ProgressBar.SetActive (true);
 			var studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 			HTTPRequestHelper.instance.GetGamesForStudent (studentID, GotGames);
+
+			if (!IsAvatarSelectionOpen) {
+				AvatarSelectorButtons = CurrAvatar.transform.parent.FindChild ("Buttons").gameObject;
+				BackButton = CurrAvatar.transform.root.FindChild ("BackButton").gameObject;
+				AvatarSelectorButtons.SetActive (false);
+				BackButton.SetActive (false);
+			}
 		}
 
 		void GotGames(int status) {
@@ -99,12 +108,14 @@ namespace Cerebro
 					IsLerpStarted = false;
 					LerpValue = 1;
 					if (IsScreenOpening) {
-						CurrAvatar.transform.parent.FindChild ("Buttons").gameObject.SetActive (true);
+						AvatarSelectorButtons.SetActive (true);
+						BackButton.SetActive (true);
 					} else {
+						Debug.Log ("disable");
 						UICamera.GetComponent<Blur> ().enabled = false;
 					}
 				}
-
+				Debug.Log ("lerp "+LerpValue);
 				if (IsScreenOpening) {
 					OpenAvatarCustomization ();
 				} else {
@@ -224,6 +235,7 @@ namespace Cerebro
 			LerpStartTime = Time.time;
 			UICamera.GetComponent<Blur> ().enabled = true;
 			IsScreenOpening = true;
+			IsAvatarSelectionOpen = true;
 		}
 
 		public void CloseButtonClicked()
@@ -231,8 +243,10 @@ namespace Cerebro
 			IsLerpStarted = true;
 			LerpValue = 0;
 			LerpStartTime = Time.time;
-			UICamera.GetComponent<Blur> ().enabled = true;
 			IsScreenOpening = false;
+			IsAvatarSelectionOpen = false;
+			AvatarSelectorButtons.SetActive (false);
+			BackButton.SetActive (false);
 		}
 
 		public void OpenAvatarCustomization()

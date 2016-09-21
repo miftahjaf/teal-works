@@ -2252,6 +2252,9 @@ namespace Cerebro
 		public string GroupID{ get; set; }
 		public string StudentID{ get; set; }
 		public string Cost{ get; set; }
+		public int BabaHairId{ get; set; }
+		public int BabaFaceId{ get; set; }
+		public int BabaBodyId{ get; set; }
 	}
 
 	public class CellGame

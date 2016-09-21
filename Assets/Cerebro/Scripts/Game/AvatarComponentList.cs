@@ -14,13 +14,14 @@ namespace Cerebro
 		private float LerpStartTime, LerpValue;
 		private float LerpTotalTime = 0.2f, OffsetPosition = 2400f;
 
-		private Vector2[] StartPosition, EndPosition;
+		private Vector2[] StartPosition, EndPosition, InitialPosition;
 		private CustomizeAvatar parentAvatar;
 
-		void Start () 
+		void Awake () 
 		{
 			StartPosition = new Vector2[4];
 			EndPosition = new Vector2[4];
+			InitialPosition = new Vector2[4];
 			ChildComponents = new GameObject[4];
 			parentAvatar = transform.parent.GetComponent<CustomizeAvatar> ();
 
@@ -29,31 +30,35 @@ namespace Cerebro
 			{
 				ChildComponents [i] = transform.FindChild (prefix+(i+1+offset)).gameObject;
 				Vector2 currPos = ChildComponents [i].GetComponent<RectTransform> ().anchoredPosition;
-				StartPosition[i] = new Vector2 (currPos.x + i * OffsetPosition, currPos.y);
-				ChildComponents [i].GetComponent<RectTransform> ().anchoredPosition = StartPosition [i];
-			}
-			if (!transform.name.Contains ("head")) {
-				Initialize ();
+				InitialPosition [i] = currPos;
 			}
 		}
 
-		public void Initialize()
+		public void Initialize(int id)
 		{
-			var teamColor = new Color (0, 0, 0);
-			string groupID = parentAvatar.CurrGroupID;
-			if (groupID == GroupMapping.Group1) {
-				teamColor = new Color (0.99f, 0.39f, 0.15f);
-			} else if (groupID == GroupMapping.Group2) {
-				teamColor = new Color (0.05f, 0.9f, 0.9f);
-			} else if (groupID == GroupMapping.Group3) {
-				teamColor = new Color (0.62f, 0.62f, 0.62f);
-			} else if (groupID == GroupMapping.Group4) {
-				teamColor = new Color (0.39f, 0.62f, 0.92f);
+			if (!transform.name.Contains ("head")) {
+				var teamColor = new Color (0, 0, 0);
+				string groupID = parentAvatar.CurrGroupID;
+				if (groupID == GroupMapping.Group1) {
+					teamColor = new Color (0.99f, 0.39f, 0.15f);
+				} else if (groupID == GroupMapping.Group2) {
+					teamColor = new Color (0.05f, 0.9f, 0.9f);
+				} else if (groupID == GroupMapping.Group3) {
+					teamColor = new Color (0.62f, 0.62f, 0.62f);
+				} else if (groupID == GroupMapping.Group4) {
+					teamColor = new Color (0.39f, 0.62f, 0.92f);
+				}
+
+				for (int i = 0; i < 4; i++) {
+					ChildComponents [i].GetComponent<Image> ().color *= teamColor;
+				}
 			}
 
-			for (int i = 0; i < 4; i++) 
-			{
-				ChildComponents [i].GetComponent<Image> ().color *= teamColor;
+			for (int i = 0; i < 4; i++) {
+				Vector2 currPos = InitialPosition[i];
+				currPos = new Vector2 (currPos.x + i * OffsetPosition, currPos.y);
+				StartPosition[i] = new Vector2 (currPos.x - (id - 1) * OffsetPosition, currPos.y);
+				ChildComponents [i].GetComponent<RectTransform> ().anchoredPosition = StartPosition [i];
 			}
 		}
 

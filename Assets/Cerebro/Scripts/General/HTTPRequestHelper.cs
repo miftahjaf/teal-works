@@ -30,8 +30,8 @@ namespace Cerebro
 		
 
 		//		private string SERVER_URL = "http://192.168.1.28:3000/";
-		private string SERVER_URL = "https://teal-server.herokuapp.com/";
-	//	private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
+//		private string SERVER_URL = "https://teal-server.herokuapp.com/";
+		private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
 
 		public event EventHandler MoveValidated;
 		public event EventHandler DescribeImageResponseSubmitted;
@@ -245,32 +245,24 @@ namespace Cerebro
 
 			WWWForm form = new WWWForm ();
 			form.AddField ("game_id", gameID);
-			CreatePostRequest (SERVER_URL + "games/got/get_world", form, (jsonResponse) => {
-				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
-					JSONObject Wrld = (JSONObject)jsonResponse.list [0];
+			CreatePostRequestSimpleJSON (SERVER_URL + "games/got/get_world", form, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString () != "") {
 
 					bool worldExists = false;
 					if (LaunchList.instance.mWorld.Count > 0) {
 						worldExists = true;
 					}
-					foreach (JSONObject j in Wrld.list) {
+					for(int i = 0; i < jsonResponse["world"].Count; i++)
+					{
 						World newRecord = new World ();
-						for (int i = 0; i < j.list.Count; i++) {
-							string key = (string)j.keys [i];
-							JSONObject stringObject = (JSONObject)j.list [i];
+						newRecord.CellID = jsonResponse["world"]["CellID"].Value;
+						newRecord.Cost = jsonResponse["world"]["Cost"].Value;
+						newRecord.StudentID = jsonResponse["world"]["StudentID"].Value;
+						newRecord.GroupID = jsonResponse["world"]["GroupID"].Value;
+						newRecord.BabaHairId = jsonResponse["world"]["BabaData"]["head"].AsInt;
+						newRecord.BabaFaceId = jsonResponse["world"]["BabaData"]["face"].AsInt;
+						newRecord.BabaBodyId = jsonResponse["world"]["BabaData"]["body"].AsInt;
 
-							if (key == "CellID") {
-								newRecord.CellID = stringObject.n.ToString ();
-							} else if (key == "Cost") {
-								newRecord.Cost = stringObject.n.ToString ();
-							} else if (key == "GroupID") {
-								newRecord.GroupID = stringObject.n.ToString ();
-							} else if (key == "StudentID") {
-								newRecord.StudentID = stringObject.n.ToString ();
-							} else {
-								CerebroHelper.DebugLog ("UNRECOGNIZED ATTRIB " + key);
-							}
-						}
 						if (!worldExists) {
 							LaunchList.instance.mWorld.Add (newRecord);
 						} else {
@@ -280,11 +272,15 @@ namespace Cerebro
 								LaunchList.instance.mWorld [cellID].Cost = newRecord.Cost;
 								LaunchList.instance.mWorld [cellID].StudentID = newRecord.StudentID;
 								LaunchList.instance.mWorld [cellID].GroupID = newRecord.GroupID;
+								LaunchList.instance.mWorld [cellID].BabaHairId = newRecord.BabaHairId;
+								LaunchList.instance.mWorld [cellID].BabaFaceId = newRecord.BabaFaceId;
+								LaunchList.instance.mWorld [cellID].BabaBodyId = newRecord.BabaBodyId;
 							} else {
 								CerebroHelper.DebugLog ("Couldn't update cuz cell id not foudn " + newRecord.CellID);
 							}
 						}
 					}
+
 					LaunchList.instance.WorldLoaded (singleTime);
 				} else {
 					LaunchList.instance.mDoingWorldUpdate = false;
@@ -401,35 +397,30 @@ namespace Cerebro
 			CerebroHelper.DebugLog ("FETCH STUDENT DATA FOR " + studentID);
 			WWWForm form = new WWWForm ();
 			form.AddField ("student_id", studentID);
-			CreatePostRequest (SERVER_URL + "student/get_student_data", form, (jsonResponse) => {
-				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
+			CreatePostRequestSimpleJSON (SERVER_URL + "student/get_student_data", form, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString () != "") {
 					CerebroHelper.DebugLog (jsonResponse);
-					JSONObject jsonObject = (JSONObject)jsonResponse;
 					string name = "";
 					int coins = 0;
-					for (int i = 0; i < jsonObject.Count; i++) {
-						string key = (string)jsonObject.keys [i];
-						JSONObject stringObject = (JSONObject)jsonObject.list [i];
-
-						if (key == "first_name") {
-							name = stringObject.str + name;
-						} else if (key == "last_name") {
-							name += " " + stringObject.str;
-						} else if (key == "mission" && stringObject.str != null) {
-							PlayerPrefs.SetString (PlayerPrefKeys.MissionID, stringObject.str);
-						} else if (key == "student_playlist") {
-							LaunchList.instance.mCurrentStudent.ContentIDs = new SortedDictionary<int, string> ();
-							for (int j = 0; stringObject.list != null && j < stringObject.list.Count; j++) {
-								LaunchList.instance.mCurrentStudent.ContentIDs.Add (j, stringObject.list [j].str);
-							}
-						} else if (key == "profile_image" && stringObject.str != null) {
-							PlayerPrefs.SetString (PlayerPrefKeys.ProfilePicKey, stringObject.str);
-						} else if (key == "coins") {
-							coins = Mathf.FloorToInt (stringObject.n);
-						} else {
-							CerebroHelper.DebugLog ("UNRECOGNIZED ATTRIB " + key);
-						}
+					LaunchList.instance.mCurrentStudent.StudentName = jsonResponse ["first_name"].Value + " " + jsonResponse ["last_name"].Value;
+					LaunchList.instance.mCurrentStudent.StudentID = studentID;
+					LaunchList.instance.mCurrentStudent.GradeID = gradeID;
+					LaunchList.instance.mCurrentStudent.Coins = jsonResponse ["coins"].AsInt;
+					if(jsonResponse ["mission"].Value != null)
+						PlayerPrefs.SetString (PlayerPrefKeys.MissionID, jsonResponse ["mission"].Value);
+					if(jsonResponse ["profile_image"].Value != null)
+						PlayerPrefs.SetString (PlayerPrefKeys.ProfilePicKey, jsonResponse ["profile_image"].Value);
+					LaunchList.instance.mCurrentStudent.ContentIDs = new SortedDictionary<int, string> ();
+					for(int i = 0; i < jsonResponse ["student_playlist"].Count; i++)
+					{
+						LaunchList.instance.mCurrentStudent.ContentIDs.Add (i, jsonResponse ["student_playlist"][i].Value);
 					}
+					string BabaId = "";
+					BabaId += jsonResponse ["baba_data"] ["head"].Value;
+					BabaId += jsonResponse ["baba_data"] ["face"].Value;
+					BabaId += jsonResponse ["baba_data"] ["body"].Value;
+					PlayerPrefs.SetString(PlayerPrefKeys.BabaID, BabaId);
+
 					LaunchList.instance.mCurrentStudent.StudentID = studentID;
 					LaunchList.instance.mCurrentStudent.GradeID = gradeID;
 					LaunchList.instance.mCurrentStudent.StudentName = name;
@@ -1038,6 +1029,28 @@ namespace Cerebro
 		//
 		// PUT Requests
 		//
+
+		public void SendAvatarSet(string BabaId, Action<bool> callback)
+		{
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			N ["myData"] ["student_id"] = studentID;
+			N ["myData"] ["baba_data"]["head"] = BabaId[0].ToString();
+			N ["myData"] ["baba_data"]["face"] = BabaId[1].ToString();
+			N ["myData"] ["baba_data"]["body"] = BabaId[2].ToString();
+
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArray (SERVER_URL + "student/baba/set", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
+					CerebroHelper.DebugLog ("Added new row");
+					callback(true);
+				} else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					callback(false);
+				}
+			});
+		}
 
 		public void SendFlaggedData (string practiceItemId, string seed, int level, int selector)
 		{

@@ -216,7 +216,7 @@ namespace Cerebro {
 			return ret;
 		}
 
-		public Unit AddNewUnit(Cell cell, string groupID) {
+		public Unit AddNewUnit(Cell cell, string groupID, int HairId = 1, int FaceId = 1, int BodyId = 1) {
 			Unit unit = null;
 
 			if (groupID == GroupMapping.Group1) {
@@ -243,7 +243,7 @@ namespace Cerebro {
 				unit.gameObject.transform.localScale = new Vector3 (0.15f, 0.15f, 1);  // SET SCALE HERE
 				unit.Cell = cell;
 				unit.transform.position = cell.transform.position;
-				ChooseUnit (groupID, unit);
+				ChooseUnit (groupID, unit, HairId, FaceId, BodyId);
 				unit.Initialize ();
 			}
 			return unit;
