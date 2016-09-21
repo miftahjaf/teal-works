@@ -9,6 +9,8 @@ namespace Cerebro {
 
 		public Text subQuestionText;
 		public GameObject MCQ;
+		public GameObject pictureParent;
+		public Sprite[] fruitSprites;
 		private string Answer;
 		private int isProportion = 0;
 
@@ -233,6 +235,7 @@ namespace Cerebro {
 			GeneralButton.gameObject.SetActive (true);
 			MCQ.SetActive (false);
 			numPad.SetActive (true);
+			ResetPicture ();
 
 			for (int i = 1; i < 5; i++) {
 				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().color = MaterialColor.textDark;
@@ -249,12 +252,32 @@ namespace Cerebro {
 
 				if (selector == 1) {												//
 
-					int num1 = Random.Range (2, 6);
-					int num2 = Random.Range (num1 + 1, 10);
-					int commonRatio = Random.Range (2, 10);
-					int num3 = commonRatio * num1;
-					int num4 = commonRatio * num2;
-					QuestionText.text = "Find the missing number :";
+					string[] fruits = new string[]{"apples","mangoes","pineapples","oranges","bananas"};
+					int randIndex1 = Random.Range (0, fruits.Length);
+					int randIndex2 = Random.Range (0, fruits.Length);
+					while (randIndex1 == randIndex2) 
+					{
+						randIndex2 = Random.Range (0, fruits.Length);
+					}
+
+					QuestionText.text = "Using the given picture, find the ratio of "+ fruits[randIndex1] +" to "+fruits[randIndex2] +" :";
+
+					int[] numbers = new int[fruits.Length];
+					int length = numbers.Length;
+					int total = 0;
+					int value = 0;
+					for (int i = 0; i < length; i++) 
+					{
+						value = Random.Range (2, 6);
+					    numbers [i] = value;
+						total += value;
+						for (int j = 0; j < value; j++)
+						{
+							AddObjectInPicture (fruitSprites [i]);
+						}
+					}
+						
+					Answer = numbers [randIndex1] + ":" + numbers [randIndex2];
 
 				} else if (selector == 2) {											//Find missing term
 
@@ -599,6 +622,22 @@ namespace Cerebro {
 				}
 				userAnswerText.text += "/";
 			} 
+		}
+
+		private void AddObjectInPicture(Sprite sprite)
+		{
+			GameObject g = new GameObject ();
+			Image image= g.AddComponent<Image> ();
+			image.sprite = sprite;
+			g.transform.SetParent (pictureParent.transform, false);
+		}
+
+		private void ResetPicture()
+		{
+			foreach (Transform child in pictureParent.transform) 
+			{
+				Destroy (child.gameObject);
+			}
 		}
 	}
 }
