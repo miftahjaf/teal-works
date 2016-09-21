@@ -6,7 +6,7 @@ using MaterialUI;
 
 namespace Cerebro
 {
-	public class AnglesAndParallelLines7 : BaseAssessment
+	public class AnglesAndLines6 : BaseAssessment
 	{
 
 		public Text subQuestionText;
@@ -27,7 +27,7 @@ namespace Cerebro
 			
 
 			StartCoroutine(StartAnimation());
-			base.Initialise("M", "APL07", "S01", "A01");
+			base.Initialise("M", "AAL06", "S01", "A01");
 
 			scorestreaklvls = new int[5];
 			for (var i = 0; i < scorestreaklvls.Length; i++)
@@ -150,6 +150,7 @@ namespace Cerebro
 					UpdateStreak(8, 12);
 					increment = 15;
 				}
+
 
 				updateQuestionsAttempted();
 				StartCoroutine(ShowCorrectAnimation());

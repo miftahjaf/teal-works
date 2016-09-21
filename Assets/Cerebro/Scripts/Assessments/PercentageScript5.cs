@@ -136,7 +136,7 @@ namespace Cerebro {
 				} else if (Queslevel == 5) {
 					increment = 15;
 				}
-				UpdateStreak(6,10);
+				UpdateStreak(8, 12);
 
 				StartCoroutine (ShowCorrectAnimation());
 			} 
