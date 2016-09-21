@@ -14,7 +14,7 @@ namespace Cerebro {
 		public void SetPoint( LinePoint linePoint)
 		{
 			//Calculate arrow positin
-			Vector2 position =new Vector2( linePoint.origin.x+linePoint.radius * Mathf.Cos(Mathf.Deg2Rad * linePoint.angle), linePoint.origin.y+linePoint.radius*Mathf.Sin(Mathf.Deg2Rad*linePoint.angle));
+			Vector2 position = MathFunctions.PointAtDirection(linePoint.origin,linePoint.angle, linePoint.radius * 0.98f);
 
 			//Disable or enbale arrow
 			this.arrow.enabled = linePoint.shouldShowArrow;
@@ -30,7 +30,7 @@ namespace Cerebro {
 			//Calculate dot postion
 			if ((linePoint.radius > 0 || linePoint.radius < 0 ) && linePoint.shouldShowArrow) 
 			{
-				position =new Vector2( linePoint.origin.x+linePoint.radius *0.75f * Mathf.Cos(Mathf.Deg2Rad * linePoint.angle), linePoint.origin.y+linePoint.radius*0.75f*Mathf.Sin(Mathf.Deg2Rad*linePoint.angle));
+				position = MathFunctions.PointAtDirection(linePoint.origin,linePoint.angle, linePoint.radius * 0.75f);
 			}
 
 			//Set dot position
@@ -41,7 +41,7 @@ namespace Cerebro {
 			//Get point position 15 angle up down 
 			float newAngle = linePoint.textDirection == 0 ? (linePoint.angle < 180 ? linePoint.angle - 15 : linePoint.angle + 15) : linePoint.angle + (15 * linePoint.textDirection);
 			if (linePoint.radius > 0 || linePoint.radius < 0) {
-				position = new Vector2 (linePoint.origin.x + linePoint.radius * 0.75f * Mathf.Cos (Mathf.Deg2Rad * newAngle), linePoint.origin.y + linePoint.radius * 0.75f * Mathf.Sin (Mathf.Deg2Rad * newAngle));
+					position = MathFunctions.PointAtDirection(linePoint.origin, newAngle, linePoint.radius * 0.98f);
 			} else {
 				position = position + new Vector2 (linePoint.textDirection == 0 ? 0f : 15f * linePoint.textDirection, linePoint.textDirection == 0 ? -20f : 0);
 			}
