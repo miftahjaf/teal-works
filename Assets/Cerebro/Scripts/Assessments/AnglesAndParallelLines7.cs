@@ -138,7 +138,7 @@ namespace Cerebro
 				}
 
 
-				UpdateStreak(5, 12);
+				UpdateStreak(8, 12);
 
 				updateQuestionsAttempted();
 				StartCoroutine(ShowCorrectAnimation());
@@ -1000,7 +1000,7 @@ namespace Cerebro
 				userAnswerLaText.text += ".";
 			}
 			else if (value == 11)
-			{   // All Clear
+			{   // Back
 				if (userAnswerLaText.text.Length > 0)
 				{
 					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
@@ -1040,6 +1040,9 @@ namespace Cerebro
 					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
 				}
 				userAnswerLaText.text += ",";
+			}
+			else if (value == 16) {   // All Clear
+				userAnswerLaText.text = "";
 			}
 		}
 

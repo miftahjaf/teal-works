@@ -5,22 +5,22 @@ using UnityEngine.UI;
 using MaterialUI;
 
 namespace Cerebro {
-	public class PercentageScript5 : BaseAssessment {
+	public class PercentageScript6 : BaseAssessment {
 
 		public TEXDraw subQuestionText;
 		public GameObject[] FractionNumber;
 		private string Answer;
-		private int num1, num2, num3, num4;
+		private int num1, num2, num3, num4, num5;
 		private float ans;
 
 		private bool IsFractionEnable;
+		private bool IsComparison;
 		private string[] AnswerArray;
-
 
 		void Start () {
 
 			StartCoroutine(StartAnimation ());
-			base.Initialise ("M", "PER05", "S01", "A01");
+			base.Initialise ("M", "PER06", "S01", "A01");
 
 			scorestreaklvls = new int[4];
 			for (var i = 0; i < scorestreaklvls.Length; i++) {
@@ -87,6 +87,7 @@ namespace Cerebro {
 			float answer = 0;
 
 			if (IsFractionEnable) {
+				
 				string[] UserAns = new string[3];
 				UserAns [0] = FractionNumber [0].transform.FindChild ("Text").GetComponent<Text> ().text;
 				UserAns [1] = FractionNumber [1].transform.FindChild ("Text").GetComponent<Text> ().text;
@@ -96,10 +97,24 @@ namespace Cerebro {
 				} else {
 					correct = false;
 				}
+			} else if (IsComparison) {
+				
+				if (Answer == userAnswerText.text)
+					correct = true;
+				else 
+					correct = false;
+
 			} else if(Answer.Contains("/")){
 
 				var correctAnswers = Answer.Split (new string[] { "/" }, System.StringSplitOptions.None);
 				var userAnswers = userAnswerText.text.Split (new string[] { "/" }, System.StringSplitOptions.None);
+				correct = MathFunctions.checkFractions (userAnswers, correctAnswers);
+
+
+			} else if(Answer.Contains(":")){
+
+				var correctAnswers = Answer.Split (new string[] { ":" }, System.StringSplitOptions.None);
+				var userAnswers = userAnswerText.text.Split (new string[] { ":" }, System.StringSplitOptions.None);
 				correct = MathFunctions.checkFractions (userAnswers, correctAnswers);
 
 
@@ -112,6 +127,7 @@ namespace Cerebro {
 			
 			
 			} else {
+				
 				float correctAns = float.Parse (Answer);
 				float userAns = float.MinValue;
 				if (float.TryParse (userAnswerText.text, out userAns)) {
@@ -126,17 +142,21 @@ namespace Cerebro {
 
 			if(correct == true) {
 				if (Queslevel == 1) {
+					UpdateStreak (12, 17);
 					increment = 5;
 				} else if (Queslevel == 2) {
+					UpdateStreak (10, 15);
 					increment = 10;
 				} else if (Queslevel == 3) {
+					UpdateStreak (10, 15);
 					increment = 15;
 				} else if (Queslevel == 4) {
+					UpdateStreak (8, 12);
 					increment = 15;
 				} else if (Queslevel == 5) {
+					UpdateStreak (8, 12);
 					increment = 15;
 				}
-				UpdateStreak(6,10);
 
 				StartCoroutine (ShowCorrectAnimation());
 			} 
@@ -194,7 +214,6 @@ namespace Cerebro {
 					userAnswerText.color = MaterialColor.textDark;
 				}
 			}
-		//	CerebroHelper.DebugLog ("hie");
 			ShowContinueButton ();
 		}
 
@@ -258,6 +277,7 @@ namespace Cerebro {
 			subQuestionText.gameObject.SetActive (true);
 			FractionNumber [0].transform.parent.gameObject.SetActive (false);
 			IsFractionEnable = false;
+			IsComparison = false;
 			for (int i = 0; i < 3; i++) {
 				FractionNumber [i].transform.FindChild ("Text").GetComponent<Text> ().text = "";
 				FractionNumber [i].transform.FindChild ("Text").GetComponent<Text> ().color = MaterialColor.textDark;
@@ -272,9 +292,9 @@ namespace Cerebro {
 			if (level == 1) {
 				GeneralButton.gameObject.SetActive (true);
 				answerButton = GeneralButton;
-				selector = GetRandomSelector (1, 6);
+				selector = GetRandomSelector (1, 8);
 				if (selector == 1) {
-					
+
 					num1 = Random.Range (1, 21);
 					num2 = Random.Range (2, 21);
 					while ((num1 >= num2) || ((num1 * 100) % num2 != 0)) {
@@ -297,7 +317,7 @@ namespace Cerebro {
 					Answer = num1.ToString () + "%";
 				
 				} else if (selector == 3) {
-					
+
 					num1 = 5 * Random.Range (1, 20);
 					QuestionText.text = "Convert to fraction (answer in shortest form) :";
 					subQuestionText.text = num1 + "%";
@@ -312,8 +332,8 @@ namespace Cerebro {
 					QuestionText.text = "Convert to decimal :";
 					subQuestionText.text = num1 + "%";
 					Answer = ans.ToString ();
-				}
-				else if (selector == 5) {
+
+				} else if (selector == 5) {
 
 					num1 = Random.Range (10, 51);
 					num2 = Random.Range (num1 + 1, 96);
@@ -324,12 +344,35 @@ namespace Cerebro {
 					QuestionText.text = "Find the value :";
 					subQuestionText.text = num1 + "% of " + num2;
 					Answer = ans.ToString ();
+
+				} else if (selector == 6) {
+
+					num1 = Random.Range (1, 21);
+					num2 = Random.Range (2, 21);
+					while ((num1 == num2) || ((num1 * 100) % num2 != 0)) {
+						num1 = Random.Range (1, 21);
+						num2 = Random.Range (2, 21);
+					}
+					QuestionText.text = "Convert to percent :";
+					subQuestionText.text = num1 + " : " + num2;
+					ans = (num1 * 100f) / (float)num2;
+					ans = MathFunctions.GetRounded (ans, 2);
+					Answer = ans.ToString () + "%";
+
+				} else if (selector == 7) {
+
+					num1 = 5 * Random.Range (1, 20);
+					QuestionText.text = "Convert to ratio (answer in shortest form) :";
+					subQuestionText.text = num1 + "%";
+					int hcf = MathFunctions.GetHCF (num1, 100);
+					Answer = (num1/hcf) + ":" + (100/hcf);
+
 				}
 			}
 			else if (level == 2) {
 				GeneralButton.gameObject.SetActive (true);
 				answerButton = GeneralButton;
-				selector = GetRandomSelector (1, 6);
+				selector = GetRandomSelector (1, 7);
 				if (selector == 1) {
 					
 					num1 = Random.Range (4, 31);
@@ -358,7 +401,7 @@ namespace Cerebro {
 					QuestionText.text = "Convert to fraction (answer in shortest form) :";
 					subQuestionText.text = num1 + "%";
 					int hcf = MathFunctions.GetHCF (num1, 100);
-					Answer = (num1/hcf) + "/" + (100/hcf);
+					Answer = (num1 / hcf) + "/" + (100 / hcf);
 
 				} else if (selector == 4) {
 
@@ -368,32 +411,128 @@ namespace Cerebro {
 					QuestionText.text = "Convert to decimal :";
 					subQuestionText.text = num1 + "%";
 					Answer = ans.ToString ();
-				}
-				else if (selector == 5) {
+
+				} else if (selector == 5) {
 
 					num1 = Random.Range (11, 1000);
 					int selectQuantity = Random.Range (0, 4);
 					if (selectQuantity == 1)
 						num1 = Random.Range (11, 100);
-					string[] selectQuantity1 = new string[4]{"g", "p", "ml", "m"};
-					string[] selectQuantity2 = new string[4]{"kg", "Rs.", "l", "km"};
-					int[] conversionFactor = new int[4]{1000, 100, 1000, 1000};
-					ans = (float)(num1 * 100) /(float)conversionFactor[selectQuantity];
+					string[] selectQuantity1 = new string[4]{ "g", "p", "ml", "m" };
+					string[] selectQuantity2 = new string[4]{ "kg", "Rs.", "l", "km" };
+					int[] conversionFactor = new int[4]{ 1000, 100, 1000, 1000 };
+					ans = (float)(num1 * 100) / (float)conversionFactor [selectQuantity];
 					ans = MathFunctions.GetRounded (ans, 3);
 					QuestionText.text = "Express as percent :";
-					subQuestionText.text = num1 + " " + selectQuantity1[selectQuantity] + " of 1 " + selectQuantity2[selectQuantity];
+					subQuestionText.text = num1 + " " + selectQuantity1 [selectQuantity] + " of 1 " + selectQuantity2 [selectQuantity];
 					Answer = ans.ToString () + "%";
+
+				} else if (selector == 6) {
+
+					float fraction, percentDecimal;
+					IsComparison = true;
+
+					do {
+						num1 = Random.Range (3, 20); 
+						num2 = Random.Range (num1 + 1, 3 * num1);
+						num3 = Random.Range (11, 100); 
+						while (num3 % 10 == 0)
+							num3 = Random.Range (11, 100); 
+						num4 = 10 * Random.Range (1, 10); 
+						fraction = (float)num1 * 100f / (float)num2;
+					} while (fraction == num3 || fraction == num4);
+
+					percentDecimal = (float)num4 / 100f; 
+					percentDecimal = MathFunctions.GetRounded (percentDecimal, 2);
+					QuestionText.text = "Arrange in ascending order :";
+					subQuestionText.text = num1 + "/" + num2 + ", " + num3 + "%, " + percentDecimal;
+
+					Answer = "";
+					if (num3 < num4) {
+						if (num3 < fraction) {
+							Answer += num3 + "%,";
+							if (fraction < num4)
+								Answer += num1 + "/" + num2 + "," + percentDecimal;
+							else
+								Answer += percentDecimal + "," + num1 + "/" + num2;
+						} else
+							Answer += num1 + "/" + num2 + "," + num3 + "%," + percentDecimal;
+					} else {
+						if (num4 < fraction) {
+							Answer += percentDecimal + ",";
+							if (fraction < num3)
+								Answer += num1 + "/" + num2 + "," + num3 + "%";
+							else
+								Answer += num3 + "%," + num1 + "/" + num2;
+						} else
+							Answer += num1 + "/" + num2 + "," + percentDecimal + "," + num3 + "%";
+					}
 				}
 			}
 		 	else if (level == 3) {
 
-				selector = GetRandomSelector (1, 6);
+				selector = GetRandomSelector (1, 7);
 				GeneralButton.gameObject.SetActive (true);
 				answerButton = GeneralButton;
 				subQuestionText.gameObject.SetActive (false);
 
 
 				if (selector == 1) {
+					
+					num1 = 1000 * Random.Range (5, 25);
+					num2 = Random.Range (11, 50);
+					num3 = Random.Range (11, 30);
+					QuestionText.text = "Aazar gets a salary of Rs. " + num1 + " per month. He spends " + num2 + "% of his income in household expenses, " + num3 + "% of the income in other personal necessities and the rest goes to his savings. Find the amount (in Rs.) he manages to save every month.";
+					ans = (float)(num1 * (100 - num2 - num3)) / 100f;
+					ans = MathFunctions.GetRounded (ans, 2);
+					Answer = ans.ToString ();
+
+				} else if (selector == 2) {
+					
+					num1 = Random.Range (1, 21);
+					num2 = Random.Range (2, 21);
+					while ((num1 == num2) || ((num1 * 100) % (num1 + num2) != 0)) {
+						num1 = Random.Range (1, 21);
+						num2 = Random.Range (2, 21);
+					}
+					QuestionText.text = "The ratio of the number of males to the number of females in a community is " + num1 + " : " + num2 + ". What is the percentage of males in the community?";
+					ans = (num1 * 100f) / (float)(num1 + num2);
+					ans = MathFunctions.GetRounded (ans, 2);
+					Answer = ans.ToString () + "%";
+
+				} else if (selector == 3) {
+					
+					num1 = 100 * Random.Range (5, 25);
+					num2 = Random.Range (11, 40);
+					num3 = Random.Range (11, 40);
+					while (num2 == num3)
+						num3 = Random.Range (11, 40);
+					QuestionText.text = "In a village, " + num2 + "% are children, " + num3 + "% are women and the rest are men. If there are " + num1 + " people in the village, calculate the number of men.";
+					ans = (float)(num1 * (100 - num2 - num3)) / 100f;
+					ans = MathFunctions.GetRounded (ans, 2);
+					Answer = ans.ToString ();
+
+				} else if (selector == 4) {
+					
+					num1 = Random.Range (1000, 2000);
+					num2 = Random.Range (30, 70);
+					while ((num1 * num2) % 100 != 0)
+						num1 = Random.Range (1000, 2000);
+					QuestionText.text = "In a school, " + num2 + "% of the students are girls. The school has " + num1 + " students. Calculate the number of boys in the school.";
+					ans = (float)(num1 * (100 - num2)) / 100f;
+					ans = MathFunctions.GetRounded (ans, 2);
+					Answer = ans.ToString ();
+
+				} else if (selector == 5) {
+
+					num1 = 10000 * Random.Range (21, 210);
+					num2 = Random.Range (5, 20);
+					ans = (float)(num1 * (100 - num2)) / 100f;
+					ans = MathFunctions.GetRounded (ans, 2);
+					QuestionText.text = "A car costing Rs. " + num1 + " reduces its price by " + num2 + "%. Find the new price (in Rs.).";
+					Answer = ans.ToString ();
+
+				} else if (selector == 6) { 
 					
 					num1 = Random.Range (1, 12);
 					num2 = Random.Range (2, 12);
@@ -414,42 +553,7 @@ namespace Cerebro {
 					IsFractionEnable = true;
 					GeneralButton.gameObject.SetActive (false);
 					FractionNumber [0].transform.parent.gameObject.SetActive (true);
-					SetFocusFractionNumber(0);
-
-				} else if (selector == 2) {
-					
-					num1 = Random.Range (2, 100);
-					ans = (float)num1 / 100f;
-					ans = MathFunctions.GetRounded (ans, 2);
-					QuestionText.text = "Sheela saves " + ans + " of her pocket money every month. What percent of her pocket money does she save?";
-					Answer = num1.ToString () + "%";
-
-				} else if (selector == 3) {
-					
-					num1 = 100 * Random.Range (3, 21);
-					num2 = 5 * Random.Range (2, 11);
-					QuestionText.text = "Arjun's mother bought a pair of shoes for him at a sale. The shoes cost Rs. " + num1 + ", but she got it at " + num2 + "% less than that. How much money (in Rs.) did she save?";
-					ans = (float)(num1 * num2) / 100f;
-					ans = MathFunctions.GetRounded (ans, 2);
-					Answer = ans.ToString ();
-
-				} else if (selector == 4) {
-					
-					num1 = 5 * Random.Range (1,16);
-					QuestionText.text = num1 + "% of a class says that maths is their favourite subject. What fraction of the class has maths as their favourite subject?";
-					int hcf = MathFunctions.GetHCF (num1, 100);
-					Answer = (num1/hcf) + "/" + (100/hcf);
-
-				} else if (selector == 5) {
-
-					num1 = 5 * Random.Range (15, 101);
-					num2 = Random.Range (50, 251);
-					while ((num2 * 1000) % num1 != 0)
-						num2 = Random.Range (50, 251);
-					ans = (float)(num2 * 100) / num1;
-					ans = MathFunctions.GetRounded (ans, 2);
-					QuestionText.text = "Ankita got Rs. " + num1 + " from making and selling Diwali cards during the school fete. She spent Rs. " + num2 + " on buying a present at the fete for her mother. What percent of her money did she spend?";
-					Answer = ans.ToString () + "%";
+					SetFocusFractionNumber (0);
 				}
 
 			}
@@ -463,79 +567,62 @@ namespace Cerebro {
 
 				if (selector == 1) {
 
-					num1 = Random.Range (5, 31);
-					num2 = Random.Range (10, 31);
-					while ((num1 >= num2) || ((num1 * 1000) % num2 != 0)) {
-						num1 = Random.Range (5, 31);
-						num2 = Random.Range (10, 31);
-					}
-					QuestionText.text = "In a test, Trisha got " + num1 + " sums correct out of " + num2 + ". What percent of the sums did she get correct?";
-					ans = (num1 * 100f) / (float)num2;
-					ans = MathFunctions.GetRounded (ans, 2);
-					Answer = ans.ToString () + "%";
+					num1 = Random.Range (1000, 2000);
+					num3 = Random.Range (5, 51);
+					while ((num1 * num3) % 100 != 0)
+						num1 = Random.Range (1000, 2000);
+					num2 = (num1 * (100 + num3)) / 100;
+					QuestionText.text = "The population of a village increases from " + num1 + " to " + num2 + " in 10 years. What is the percentage increase in population?";
+					Answer = num3.ToString () + "%";
 
 				} else if (selector == 2) {
 
-					num1 = Random.Range (100, 151);
-					num2 = Random.Range (60, 100);
-					while ((num1 * 100) % num2 == 0 || MathFunctions.GetHCF(num1, num2) == 1) {
-						num1 = Random.Range (100, 151);
-						num2 = Random.Range (60, 100);
-					}
-					QuestionText.text = "AB de Villiers faced " + num2 + " balls and made " + num1 + " runs. What was his strike rate? (Strike rate is the percentage of runs scored per ball.)";
-					num3 = (num1 * 100) / num2;
-					num4 = (num1 * 100) % num2;
-					int hcf = MathFunctions.GetHCF (num4, num2);
-					num4 /= hcf;
-					num2 /= hcf;
-					AnswerArray = new string[3];
-					AnswerArray [0] = "" + num3;
-					AnswerArray [1] = "" + num4;
-					AnswerArray [2] = "" + num2;
-					IsFractionEnable = true;
-					GeneralButton.gameObject.SetActive (false);
-					FractionNumber [0].transform.parent.gameObject.SetActive (true);
-					SetFocusFractionNumber(0);
+					num1 = Random.Range (10000, 30000);
+					num3 = Random.Range (5, 21);
+					while ((num1 * num3) % 100 != 0)
+						num1 = Random.Range (1000, 2000);
+					num2 = (num1 * (100 + num3)) / 100;
+					QuestionText.text = "A television set costs Rs. " + num1 + ". Its price increases by " + num3 + "%. What is the price (in Rs.) after the increase?";
+					Answer = num2.ToString ();
 
 
 				} else if (selector == 3) {
 
-					num1 = Random.Range (45, 101);
-					num2 = Random.Range (num1 + 1, 200);
-					while ((num1 >= num2) || (((num2 - num1) * 1000) % num2 != 0)) {
-						num1 = Random.Range (45, 101);
-						num2 = Random.Range (num1 + 1, 200);
-					}
-					QuestionText.text = "In a test match, Dravid hit " + num1 + " balls out of " + num2 + " balls that he faced. What percent of balls did he not hit?";
-					ans = ((num2 - num1) * 100f) / (float)num2;
-					ans = MathFunctions.GetRounded (ans, 2);
-					Answer = ans.ToString () + "%";
+					num1 = 100000 * Random.Range (2, 20);
+					num3 = Random.Range (5, 21);
+					num2 = (num1/10000) * (100 + num3) * (100 + num3);
+					QuestionText.text = "If the annual increase in the population of a town is " + num3 + "% and the present number of inhabitants is " + (num1/100000) + " lakh, calculate the population of the town after 2 years.";
+					Answer = num2.ToString ();
 
 				} else if (selector == 4) {
 
-					num1 = 10 * Random.Range (10, 51);
-					num2 = 5 * Random.Range (2, 11);
-					QuestionText.text = "A calculator that costs Rs. " + num1 + " is being sold for " + num2 + "% less at a sale. How much would you pay if you buy the calculator?";
-					ans = (float)num1 - (float)(num1 * num2) / 100f;
-					ans = MathFunctions.GetRounded (ans, 2);
-					Answer = ans.ToString ();
+					num1 = Random.Range (1000, 2000);
+					num2 = Random.Range (30, 50);
+					while ((num1 * num2) % 100 != 0)
+						num1 = Random.Range (1000, 2000);
+					num3 = (num1 * (100 - num2)) / 100;
+					QuestionText.text = "In a school, " + num2 + "% of the students are girls. The number of boys is " + ((num1 * (100 - 2 * num2))/100) + " more than the number of girls. Calculate the number of boys.";
+					Answer = num3.ToString ();
 
 				} else if (selector == 5) {
 
-					num1 = 5 * Random.Range (1, 20);
-					num2 = 5 * Random.Range (1, 20);
-					num3 = 5 * Random.Range (1, 20);
-					num4 = Random.Range (50, 251);
-					while ((((100 - num1) * num4) % 100 != 0) || (((100 - num1) * (100 - num2) * num4) % 10000 != 0) || (((100 - num1) * (100 - num2) * (100 - num3) * num4) % 1000000 != 0)) {
-						num1 = 5 * Random.Range (1, 20);
-						num2 = 5 * Random.Range (1, 20);
-						num3 = 5 * Random.Range (1, 20);
-						num4 = Random.Range (50, 251);
-					}
-					ans = ((100 - num1) * (100 - num2) * (100 - num3) * num4) / 1000000;
-					ans = MathFunctions.GetRounded (ans, 2);
-					QuestionText.text = "Shalini has " + num4 + " stickers. She gave " + num1 + "% of them to Vinita. She then gave " + num2 + "% of the remaining stickers to Smita. Again, she gave " + num3 + "% of the rest to Eshita. How many stickers are still with Shalini?";
-					Answer = ans.ToString ();
+					num1 = 10 * Random.Range (10, 51);
+					num2 = 10 * Random.Range (50, 151);
+					num3 = Random.Range (2, 10);
+					num4 = Random.Range (2, 10);
+					while (num3 == num4)
+						num4 = Random.Range (2, 10);
+					
+					while ((num1 * num3) % 100 != 0)
+						num1 = 10 * Random.Range (10, 51);
+
+					while ((num2 * num4) % 100 != 0)
+						num2 = 10 * Random.Range (50, 151);
+
+					num5 = ((num1 * (100 + num3)) / 100) * ((num2 * (100 + num4)) / 100); 
+					 
+					QuestionText.text = "In 2012, a club has " + num1 + " members who pay Rs. " + num2 + " each as annual subscription. In 2013, the membership increases by " + num3 + "% and the annual subscription by " + num4 + "%. What is the total income from the subscription in 2013?";
+					Answer = num5.ToString ();
 				}
 
 			}
@@ -582,6 +669,12 @@ namespace Cerebro {
 					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
 				}
 				userAnswerText.text += "/";
+			}
+			else if (value == 15) {   // :
+				if (checkLastTextFor (new string[1]{ ":" })) {
+					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
+				}
+				userAnswerText.text += ":";
 			}
 		}
 	}
