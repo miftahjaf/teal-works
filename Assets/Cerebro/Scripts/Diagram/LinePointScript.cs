@@ -41,7 +41,7 @@ namespace Cerebro {
 			//Get point position 15 angle up down 
 			float newAngle = linePoint.textDirection == 0 ? (linePoint.angle < 180 ? linePoint.angle - 15 : linePoint.angle + 15) : linePoint.angle + (15 * linePoint.textDirection);
 			if (linePoint.radius > 0 || linePoint.radius < 0) {
-					position = MathFunctions.PointAtDirection(linePoint.origin, newAngle, linePoint.radius * 0.98f);
+					position = MathFunctions.PointAtDirection(linePoint.origin, newAngle, linePoint.radius * 0.75f);
 			} else {
 				position = position + new Vector2 (linePoint.textDirection == 0 ? 0f : 15f * linePoint.textDirection, linePoint.textDirection == 0 ? -20f : 0);
 			}

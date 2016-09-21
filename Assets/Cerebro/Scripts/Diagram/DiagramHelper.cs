@@ -166,16 +166,23 @@ namespace Cerebro {
 			this.linePoints.Clear ();
 			this.angleArcs.Clear ();
 			this.vectorLine.Draw ();
+			this.ShiftPosition (Vector2.zero);
 
 		}
 
-		public void SetScale(float scale)
+		public void SetScale (float scale)
 		{
 			this.transform.localScale = Vector3.one * scale;
 		}
 
-
-
+		public void ShiftPosition (Vector2 position)
+		{
+			this.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 140f) + position;
+		}
+		public void RotatePosition (float angle)
+		{
+			this.GetComponent<RectTransform> ().localEulerAngles = new Vector3 (0, 0, angle);
+		}
 
 	}
 }
