@@ -252,6 +252,7 @@ namespace Cerebro {
 
 				if (selector == 1) {												//
 
+					subQuestionText.gameObject.SetActive (false);
 					string[] fruits = new string[]{"apples","mangoes","pineapples","oranges","bananas"};
 					int randIndex1 = Random.Range (0, fruits.Length);
 					int randIndex2 = Random.Range (0, fruits.Length);
@@ -260,7 +261,7 @@ namespace Cerebro {
 						randIndex2 = Random.Range (0, fruits.Length);
 					}
 
-					QuestionText.text = "Using the given picture, find the ratio of "+ fruits[randIndex1] +" to "+fruits[randIndex2] +" :";
+					QuestionText.text = "Write the ratio of "+ fruits[randIndex1] +" to "+fruits[randIndex2] +".";
 
 					int[] numbers = new int[fruits.Length];
 					int length = numbers.Length;
