@@ -67,8 +67,11 @@ namespace Cerebro {
 				hairID = UnityEngine.Random.Range (5, 8);
 				faceID = UnityEngine.Random.Range (5, 8);
 				bodyID = UnityEngine.Random.Range (5, 8);
-			}
-			Debug.Log ("HAIR " + hairID + " FACE  " + faceID + " BODY " + bodyID);*/
+			}*/
+			hairID = Mathf.Clamp (hairID, 1, 8);
+			faceID = Mathf.Clamp (faceID, 1, 8);
+			bodyID = Mathf.Clamp (bodyID, 1, 8);
+			Debug.Log ("HAIR " + hairID + " FACE  " + faceID + " BODY " + bodyID);
 			var hairString = "baba_hair_1";
 			var hairString2 = "";
 			var bodyString = "baba_body_1";
@@ -115,7 +118,7 @@ namespace Cerebro {
 				Debug.Log ("INVALUD GROUP ID IN CHOOSE UNIT : " + groupID);
 			}
 		*/
-
+			Debug.Log (faceString+" "+bodyString+" "+hairString+" "+hairString2);
 			var body = unit.transform.Find (bodyString);
 			var hair = unit.transform.Find (hairString);
 			Transform hair2 = null;
@@ -185,7 +188,7 @@ namespace Cerebro {
 					unit.transform.position = cell.transform.position;
 					unit.Initialize ();
 
-					ChooseUnit (cell.groupID, unit);
+					ChooseUnit (cell.groupID, unit, cell.BabaHairId, cell.BabaFaceId, cell.BabaBodyId);
 
 					ret.Add (unit);
 					mCurrentGameObject = unit.gameObject;

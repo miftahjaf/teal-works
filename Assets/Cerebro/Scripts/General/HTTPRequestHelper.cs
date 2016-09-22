@@ -252,16 +252,29 @@ namespace Cerebro
 					if (LaunchList.instance.mWorld.Count > 0) {
 						worldExists = true;
 					}
-					for(int i = 0; i < jsonResponse["world"].Count; i++)
+					Debug.Log("Count "+jsonResponse["World"].Count);
+					for(int i = 0; i < jsonResponse["World"].Count; i++)
 					{
 						World newRecord = new World ();
-						newRecord.CellID = jsonResponse["world"]["CellID"].Value;
-						newRecord.Cost = jsonResponse["world"]["Cost"].Value;
-						newRecord.StudentID = jsonResponse["world"]["StudentID"].Value;
-						newRecord.GroupID = jsonResponse["world"]["GroupID"].Value;
-						newRecord.BabaHairId = jsonResponse["world"]["BabaData"]["head"].AsInt;
-						newRecord.BabaFaceId = jsonResponse["world"]["BabaData"]["face"].AsInt;
-						newRecord.BabaBodyId = jsonResponse["world"]["BabaData"]["body"].AsInt;
+						newRecord.CellID = jsonResponse["World"][i]["CellID"].Value;
+						newRecord.Cost = jsonResponse["World"][i]["Cost"].Value;
+						newRecord.StudentID = jsonResponse["World"][i]["StudentID"].Value;
+						newRecord.GroupID = jsonResponse["World"][i]["GroupID"].Value;
+						if(jsonResponse["World"][i]["BabaData"] != null)
+						{
+							if(jsonResponse["World"][i]["BabaData"]["head"] != null)
+							{
+								newRecord.BabaHairId = jsonResponse["World"][i]["BabaData"]["head"].AsInt;
+							}
+							if(jsonResponse["World"]["BabaData"][i]["face"] != null)
+							{
+								newRecord.BabaFaceId = jsonResponse["World"][i]["BabaData"]["face"].AsInt;
+							}
+							if(jsonResponse["World"]["BabaData"][i]["body"] != null)
+							{
+								newRecord.BabaBodyId = jsonResponse["World"][i]["BabaData"]["body"].AsInt;
+							}
+						}
 
 						if (!worldExists) {
 							LaunchList.instance.mWorld.Add (newRecord);

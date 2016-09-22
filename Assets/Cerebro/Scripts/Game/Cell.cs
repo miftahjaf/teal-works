@@ -23,6 +23,10 @@ public abstract class Cell : MonoBehaviour, IGraphNode
 	public string groupID = "-1";
 	public bool isInvincible = false;
 
+	public int BabaHairId = -1;
+	public int BabaFaceId = -1;
+	public int BabaBodyId = -1;
+
     /// <summary>
     /// CellClicked event is invoked when user clicks the unit. It requires a collider on the cell game object to work.
     /// </summary>
