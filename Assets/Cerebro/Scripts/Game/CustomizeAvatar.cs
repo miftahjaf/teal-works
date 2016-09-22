@@ -94,9 +94,9 @@ namespace Cerebro
 		public void SaveButtonPressed()
 		{
 			string BabaId = "";
-			BabaId += CurrHairID;
-			BabaId += CurrHeadId;
-			BabaId += CurrBodyId;
+			BabaId += CurrHairID + (IsBoy?0:4);
+			BabaId += CurrHeadId + (IsBoy?0:4);
+			BabaId += CurrBodyId + (IsBoy?0:4);
 			ProgressCircle.SetActive (true);
 			HTTPRequestHelper.instance.SendAvatarSet (BabaId, OnSaveResponse);
 		}
@@ -106,9 +106,9 @@ namespace Cerebro
 			ProgressCircle.SetActive (false);
 			if (IsSuccess) {
 				string BabaId = "";
-				BabaId += CurrHairID;
-				BabaId += CurrHeadId;
-				BabaId += CurrBodyId;
+				BabaId += CurrHairID + (IsBoy?0:4);
+				BabaId += CurrHeadId + (IsBoy?0:4);
+				BabaId += CurrBodyId + (IsBoy?0:4);
 				PlayerPrefs.SetString (PlayerPrefKeys.BabaID, BabaId);
 				CurrSplashScreen.CloseButtonClicked ();
 			} else {

@@ -266,14 +266,15 @@ namespace Cerebro
 							{
 								newRecord.BabaHairId = jsonResponse["World"][i]["BabaData"]["head"].AsInt;
 							}
-							if(jsonResponse["World"]["BabaData"][i]["face"] != null)
+							if(jsonResponse["World"][i]["BabaData"]["face"] != null)
 							{
 								newRecord.BabaFaceId = jsonResponse["World"][i]["BabaData"]["face"].AsInt;
 							}
-							if(jsonResponse["World"]["BabaData"][i]["body"] != null)
+							if(jsonResponse["World"][i]["BabaData"]["body"] != null)
 							{
 								newRecord.BabaBodyId = jsonResponse["World"][i]["BabaData"]["body"].AsInt;
 							}
+							Debug.Log(newRecord.BabaBodyId+" "+newRecord.BabaHairId+" "+newRecord.BabaFaceId);
 						}
 
 						if (!worldExists) {

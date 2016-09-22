@@ -16,6 +16,7 @@ namespace Cerebro
 
 		private Vector2[] StartPosition, EndPosition, InitialPosition;
 		private CustomizeAvatar parentAvatar;
+		private Color[] InitialTeamColor;
 
 		void Awake () 
 		{
@@ -23,12 +24,14 @@ namespace Cerebro
 			EndPosition = new Vector2[4];
 			InitialPosition = new Vector2[4];
 			ChildComponents = new GameObject[4];
+			InitialTeamColor = new Color[4];
 			parentAvatar = transform.parent.GetComponent<CustomizeAvatar> ();
 
 			int offset = transform.name.Contains("girl") ? 4 : 0;
 			for (int i = 0; i < 4; i++) 
 			{
 				ChildComponents [i] = transform.FindChild (prefix+(i+1+offset)).gameObject;
+				InitialTeamColor [i] = ChildComponents [i].GetComponent<Image> ().color;
 				Vector2 currPos = ChildComponents [i].GetComponent<RectTransform> ().anchoredPosition;
 				InitialPosition [i] = currPos;
 			}
@@ -50,7 +53,7 @@ namespace Cerebro
 				}
 
 				for (int i = 0; i < 4; i++) {
-					ChildComponents [i].GetComponent<Image> ().color *= teamColor;
+					ChildComponents [i].GetComponent<Image> ().color = InitialTeamColor[i] * teamColor;
 				}
 			}
 

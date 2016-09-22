@@ -269,7 +269,6 @@ namespace Cerebro
 
 			for (int i = 0; i < Cerebro.LaunchList.instance.mWorld.Count; i++) {
 				var currentCell = Cerebro.LaunchList.instance.mWorld [i];
-				Debug.Log ("cell id "+currentCell.CellID);
 				var index = int.Parse (currentCell.CellID);
 				var cell = transform.GetChild (index).gameObject.GetComponent<Cell> ();
 				cell.cellIndex = index;
@@ -281,7 +280,7 @@ namespace Cerebro
 				cell.BabaHairId = Cerebro.LaunchList.instance.mWorld [i].BabaHairId;
 				cell.BabaFaceId = Cerebro.LaunchList.instance.mWorld [i].BabaFaceId;
 				cell.BabaBodyId = Cerebro.LaunchList.instance.mWorld [i].BabaBodyId;
-
+				Debug.Log (cell.BabaHairId+" "+cell.BabaFaceId+" "+cell.BabaBodyId);
 				cell.OffsetCoord = new Vector2 (index % 8, Mathf.Floor (index / 8f));
 				cell.studentID = currentCell.StudentID;
 				cell.groupID = currentCell.GroupID;
