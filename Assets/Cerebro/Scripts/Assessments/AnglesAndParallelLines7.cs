@@ -877,7 +877,7 @@ namespace Cerebro
 					{
 						angle=Random.Range(80,110);
 					}
-					int angle1 =Random.Range(30,50);
+					int angle1 =Random.Range(40,60);
 
 					diagramHelper.AddLinePoint(new LinePoint("A",new Vector2(-80f,0f),90f,true,140,1));
 					diagramHelper.AddLinePoint(new LinePoint("B",new Vector2(-80f,0f),270f,true,130,-1));
@@ -1068,7 +1068,7 @@ namespace Cerebro
 			for(int i=0;i<length;i++)
 			{
 				Answer += MathFunctions.GetAngleValueInString (answers[i]);
-				alternateAnswer += answers[i] + MathFunctions.deg;
+				alternateAnswer += "" + answers[i] + MathFunctions.deg;
 
 				if ( i < length - 1) 
 				{
