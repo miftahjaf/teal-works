@@ -21,10 +21,10 @@ namespace Cerebro
 		private int coeff5;
 		private int coeff6;
 
-	
+
 		void Start()
 		{
-			
+
 
 			StartCoroutine(StartAnimation());
 			base.Initialise("M", "APL07", "S01", "A01");
@@ -150,6 +150,7 @@ namespace Cerebro
 					UpdateStreak(8, 12);
 					increment = 15;
 				}
+
 
 				updateQuestionsAttempted();
 				StartCoroutine(ShowCorrectAnimation());
@@ -458,11 +459,11 @@ namespace Cerebro
 				}
 				else if(selector == 5)
 				{
-					QuestionLatext.text = "Calculate the value of x. ACB in a straight line.";
+					QuestionLatext.text = "Calculate the value of x. ACB in a straight line :";
 					//Diagram
 					int value1 =Random.Range(10,40);
 					int value2 =Random.Range(20,50);
-					float angle = (180 + value2- value1)/2;
+					float angle = (float)((180f + value2- value1)/2f);
 
 					diagramHelper.AddLinePoint(new LinePoint("C", Vector2.zero,0,false,0));
 					diagramHelper.AddLinePoint (new LinePoint ("A", Vector2.zero, 180,true));
@@ -480,7 +481,7 @@ namespace Cerebro
 
 				else if(selector == 6)
 				{
-					QuestionLatext.text = "In the given figure, lines AC and BD intersect each other at O.\n Find angles x, y, z.";
+					QuestionLatext.text = "In the given figure, lines AC and BD intersect each other at O. Find angles x, y, z :";
 
 					int angle = Random.Range(55,75);
 					diagramHelper.AddLinePoint(new LinePoint("O", Vector2.zero,0,false,0));
@@ -509,7 +510,7 @@ namespace Cerebro
 
 				if (selector == 1)
 				{
-					QuestionLatext.text = "Find x.";
+					QuestionLatext.text = "Find x :";
 					int angle =Random.Range(55,75);
 
 					diagramHelper.AddLinePoint(new LinePoint("C",new Vector2(0f,50f),0,true));
@@ -552,30 +553,29 @@ namespace Cerebro
 				}
 				else if(selector == 3)
 				{
-					QuestionLatext.text = "Find x.";
+					QuestionLatext.text = "Find x :";
 					float angle ;
 					do
 					{
 						coeff1 = Random.Range(2,6);
 						coeff2 = Random.Range(2,10);
-					    coeff3 = Random.Range(2,10);
-					    angle= (270f/(coeff1+coeff2+coeff3));
+						coeff3 = Random.Range(2,10);
+						angle= (270f/(float)(coeff1+coeff2+coeff3));
 					}
 					while(21600%(coeff1+coeff2+coeff3)!=0 || (angle*coeff1==90) || (angle*coeff2==90)||(angle*coeff3==90));
 
-					diagramHelper.AddLinePoint (new LinePoint ("A", Vector2.zero, 90,true, 120));
-					diagramHelper.AddLinePoint (new LinePoint ("B", Vector2.zero, 0,true, 120));
-					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, 90+(angle * coeff1),true,120));
-					diagramHelper.AddLinePoint (new LinePoint ("C", Vector2.zero, 90+(angle*(coeff2 +coeff1)),true,120));
+					diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 90,true));
+					diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 0,true));
+					diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 90+(angle * coeff1),true));
+					diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 90+(angle*(coeff2 +coeff1)),true));
 
 					diagramHelper.AddAngleArc(new AngleArc("",Vector2.zero,0f,90f));
 					diagramHelper.AddAngleArc(new AngleArc(coeff1 +"x",Vector2.zero,90f,90+(angle*coeff1)));
 					diagramHelper.AddAngleArc(new AngleArc(coeff2 +"x",Vector2.zero,90+(angle*coeff1),90+(angle*(coeff2 +coeff1))));
 					diagramHelper.AddAngleArc(new AngleArc(coeff3 +"x",Vector2.zero,90+(angle*(coeff2 +coeff1)),90+(angle*(coeff2 +coeff1+coeff3))));	
-					diagramHelper.ShiftPosition ( new Vector2 (0, 30));
 
 					diagramHelper.Draw();
-					diagramHelper.SetScale (0.8f);
+
 					this.SetAnswerValue(new float[]{angle});
 				}
 				else if(selector == 4)
@@ -603,23 +603,23 @@ namespace Cerebro
 
 					diagramHelper.Draw();
 
-					diagramHelper.SetScale (0.8f);
+					diagramHelper.SetScale(0.8f);
 
 					this.SetAnswerValue(new float[]{180f-angle});
 				}
 				else if(selector == 5)
 				{
-					QuestionLatext.text = "Find x.";
+					QuestionLatext.text = "Find x :";
 					int angle =Random.Range(110,130);
-				
-					 coeff3 = Random.Range (2, 10);
-					 coeff4 = Random.Range (3, 10);
+
+					coeff3 = Random.Range (2, 10);
+					coeff4 = Random.Range (3, 10);
 
 					while((80*(angle+coeff4))%coeff3 !=0)
 					{
 						coeff3 = Random.Range (2, 10);
 					}
-						
+
 					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(0f,50f),0,true));
 					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(0f,50f),180,true));
 					diagramHelper.AddLinePoint(new LinePoint("",new Vector2(0f,-50f),0,true));
@@ -646,7 +646,7 @@ namespace Cerebro
 
 					diagramHelper.SetScale(0.8f);
 
-					this.SetAnswerValue(new float[]{(angle+coeff4)/(float)coeff3});
+					this.SetAnswerValue(new float[]{(float)(angle+coeff4)/(float)coeff3});
 				}
 			}
 			#endregion
@@ -656,7 +656,7 @@ namespace Cerebro
 				selector = GetRandomSelector (1, 6);
 
 				if (selector == 1) {
-					QuestionLatext.text = "Find y.";
+					QuestionLatext.text = "Find y :";
 					int angle =Random.Range(110,130);
 					coeff1 = Random.Range (2, 10);
 					coeff2 = Random.Range (5, 15);
@@ -680,7 +680,7 @@ namespace Cerebro
 					diagramHelper.AddLinePoint(new LinePoint("",newPoint,angle,true,70f));
 
 					diagramHelper.AddAngleArc(new AngleArc(coeff1+"y+"+coeff2+MathFunctions.deg,newPoint,angle,180f,50f));
-				
+
 
 					newRadius = Mathf.Abs(50f/Mathf.Sin(Mathf.Deg2Rad *  (angle+180f)));
 					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero, (angle+180f),false,newRadius));
@@ -694,12 +694,12 @@ namespace Cerebro
 
 					diagramHelper.SetScale(0.8f);
 
-					this.SetAnswerValue(new float[]{(180-angle-coeff2)/(float)coeff1});
+					this.SetAnswerValue(new float[]{(180f-angle-coeff2)/(float)coeff1});
 
 				} 
 				else if(selector == 2)
 				{
-					QuestionLatext.text ="Find the measure of reflex angle at O.";
+					QuestionLatext.text ="Find the measure of reflex angle at O :";
 
 					int angle = Random.Range(40,80);
 
@@ -713,7 +713,7 @@ namespace Cerebro
 
 					diagramHelper.AddLinePoint (new LinePoint ("R", newPoint, 270,true));
 					newPoint =MathFunctions.PointAtDirection(Vector2.zero, (90f-answer+angle),70f);
-				
+
 					diagramHelper.AddLinePoint (new LinePoint ("N", newPoint, 270f,true));
 					diagramHelper.AddAngleArc(new AngleArc("x",newPoint,270f,270+answer,40f));
 
@@ -726,7 +726,7 @@ namespace Cerebro
 				}
 				else if(selector == 3)
 				{
-					QuestionLatext.text = "Find x.";
+					QuestionLatext.text = "Find x :";
 
 					int angle = Random.Range (100, 130);
 					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,angle-90f,true));
@@ -754,10 +754,10 @@ namespace Cerebro
 				}
 				else if(selector == 4)
 				{
-					QuestionLatext.text ="Find x.";
+					QuestionLatext.text ="Find x :";
 					int angle = Random.Range(95,115);
-					 coeff1 = Random.Range (2, 6);
-					 coeff2 = Random.Range (2, 6);
+					coeff1 = Random.Range (2, 6);
+					coeff2 = Random.Range (2, 6);
 					while((400*angle)%(coeff1+coeff2)!=0)
 					{
 						angle = Random.Range (95, 115);
@@ -779,9 +779,9 @@ namespace Cerebro
 
 					diagramHelper.AddAngleArc(new AngleArc(angle.ToString()+MathFunctions.deg,Vector2.zero,360f-(coeff2*answer),360f-(coeff2*answer)+angle));
 
-					diagramHelper.AddLinePoint(new LinePoint("C",new Vector2(0f,50f),0,true, 130));
+					diagramHelper.AddLinePoint(new LinePoint("C",new Vector2(0f,50f),0,true));
 					diagramHelper.AddLinePoint(new LinePoint("D",new Vector2(0f,50f),180,true));
-					diagramHelper.AddLinePoint(new LinePoint("A",new Vector2(0f,-50f),0,true, 130));
+					diagramHelper.AddLinePoint(new LinePoint("A",new Vector2(0f,-50f),0,true));
 					diagramHelper.AddLinePoint(new LinePoint("B",new Vector2(0f,-50f),180,true));
 
 					diagramHelper.Draw();
@@ -792,7 +792,7 @@ namespace Cerebro
 				}
 				else if (selector == 5)
 				{
-					QuestionLatext.text = "Find x.";
+					QuestionLatext.text = "Find x :";
 					int val = Random.Range(16000,24000);
 					while (val % 400 == 0) 
 					{
@@ -804,10 +804,10 @@ namespace Cerebro
 					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,90-angle,true));
 					diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 0,true));	
 					diagramHelper.AddAngleArc(new AngleArc("",Vector2.zero,0f,90f,15f));
-					diagramHelper.AddAngleArc(new AngleArc(MathFunctions.GetAngleValueInString(angle),Vector2.zero,90-angle,90,100f));
+					diagramHelper.AddAngleArc(new AngleArc(MathFunctions.GetAngleValueInString(angle),Vector2.zero,90-angle,90,120f));
 					diagramHelper.AddAngleArc(new AngleArc("x",Vector2.zero,0f,90f-angle));
 
-					diagramHelper.ShiftPosition (new Vector2 (-40,-40));
+					diagramHelper.ShiftPosition (new Vector2 (-60,-60));
 					diagramHelper.Draw ();
 
 					this.SetAnswerValue (new float[]{90f-angle});
@@ -824,7 +824,7 @@ namespace Cerebro
 				selector = GetRandomSelector(1, 6);
 				if(selector == 1)
 				{
-					QuestionLatext.text = "Find a, x, y, z.";
+					QuestionLatext.text ="Find a, x, y, z :";
 					int angle1=Random.Range(70,110);
 					while(angle1==90)
 					{
@@ -832,9 +832,9 @@ namespace Cerebro
 					}
 					int angle2=Random.Range(40,angle1-20);
 
-					diagramHelper.AddLinePoint(new LinePoint("B",new Vector2(0f,50f),0,true,160f,1));
+					diagramHelper.AddLinePoint(new LinePoint("B",new Vector2(0f,50f),0,true,140f,1));
 					diagramHelper.AddLinePoint(new LinePoint("A",new Vector2(0f,50f),180,true,140f,-1));
-					diagramHelper.AddLinePoint(new LinePoint("D",new Vector2(0f,-50f),0,true,160f));
+					diagramHelper.AddLinePoint(new LinePoint("D",new Vector2(0f,-50f),0,true,140f));
 					diagramHelper.AddLinePoint(new LinePoint("C",new Vector2(0f,-50f),180,true,140f));
 
 					newRadius = Mathf.Abs(50f/Mathf.Sin(Mathf.Deg2Rad * angle1));
@@ -857,7 +857,7 @@ namespace Cerebro
 					diagramHelper.AddAngleArc(new AngleArc("y",newPoint,180,180+angle1,35f));
 					diagramHelper.AddAngleArc(new AngleArc(angle2.ToString()+MathFunctions.deg,newPoint,0,angle2));
 					diagramHelper.AddAngleArc(new AngleArc("x",newPoint,angle2,angle1,35f));
-				
+
 					newPoint = MathFunctions.PointAtDirection(newPoint,angle2,newRadius);
 					diagramHelper.AddAngleArc(new AngleArc("z",newPoint,180,180+angle2,35f));
 					diagramHelper.AddAngleArc(new AngleArc("a",newPoint,180+angle2,360,35f));
@@ -871,20 +871,20 @@ namespace Cerebro
 				}
 				else if(selector == 2)
 				{
-					QuestionLatext.text = "Find x, y, z.";
-					int angle =Random.Range(70,100);
+					QuestionLatext.text ="Find x, y, z :";
+					int angle =Random.Range(85,105);
 					while(angle==90)
 					{
-						angle=Random.Range(80,110);
+						angle=Random.Range(85,105);
 					}
-					int angle1 =Random.Range(40,60);
+					int angle1 =Random.Range(45,65);
 
-					diagramHelper.AddLinePoint(new LinePoint("A",new Vector2(-80f,0f),90f,true,140,1));
+					diagramHelper.AddLinePoint(new LinePoint("A",new Vector2(-80f,0f),90f,true,130,1));
 					diagramHelper.AddLinePoint(new LinePoint("B",new Vector2(-80f,0f),270f,true,130,-1));
 
 
 
-					diagramHelper.AddLinePoint(new LinePoint("D",new Vector2(80f,0f),90f,true,140));
+					diagramHelper.AddLinePoint(new LinePoint("D",new Vector2(80f,0f),90f,true,130));
 					diagramHelper.AddLinePoint(new LinePoint("C",new Vector2(80f,0f),270f,true,130));
 
 					newRadius =  Mathf.Abs(160f / Mathf.Cos ((270+angle1)* Mathf.Deg2Rad));
@@ -920,17 +920,17 @@ namespace Cerebro
 					coeff4 = Random.Range(2,10);
 					while ((40 * (coeff2 - coeff1) % (coeff3 - 1)) != 0 || (coeff2 < (coeff1 + 10)))
 						coeff1 = Random.Range(10, 61);
-					QuestionLatext.text = "A line cuts two parallel lines and two of the corresponding angles measure \n" +coeff4 +"x^{2} + "+ coeff3 + "x + " + coeff1 + MathFunctions.deg + " and "+coeff4 +"x^{2} + x + " + coeff2 + MathFunctions.deg + ". Find x.";
+					QuestionLatext.text = "A line cuts two parallel lines and two of the corresponding angles measure \n" +coeff4 +"x^{2} + "+ coeff3 + "x + " + coeff1 + MathFunctions.deg + " and "+coeff4 +"x^{2} + x + " + coeff2 + MathFunctions.deg + ". Find x :";
 					float ans = (float)(coeff2 - coeff1) / (float)(coeff3 - 1);
 					this.SetAnswerValue(new float[]{ans});
 				}
 				else if(selector == 4)
 				{
-					
-					QuestionLatext.text ="Find x.";
+
+					QuestionLatext.text ="Find x :";
 
 					int angle = Random.Range (120, 150);
-				    coeff1 = Random.Range (10, 30);
+					coeff1 = Random.Range (10, 30);
 					int answer = 180 - angle - coeff1;
 					float angle1 = (answer + coeff1) / 2f;
 					diagramHelper.AddLinePoint(new LinePoint("",Vector2.zero,angle1,false,70));
@@ -953,7 +953,7 @@ namespace Cerebro
 				}
 				else if(selector == 5)
 				{
-					QuestionLatext.text = "Find \\angle{PFQ}.";
+					QuestionLatext.text = "Find \\angle{PFQ} :";
 					int angle = Random.Range (120, 140);
 					int angle1 = Random.Range (60, 80);
 					diagramHelper.AddLinePoint (new LinePoint ("F", Vector2.zero, 0, false, 0, 1));
@@ -977,9 +977,9 @@ namespace Cerebro
 					diagramHelper.AddAngleArc (new AngleArc (angle1.ToString () + MathFunctions.deg, newPoint, 0, angle1));
 
 					diagramHelper.AddLinePoint (new LinePoint ("C", new Vector2 (0f, 50f), 0, true));
-					diagramHelper.AddLinePoint (new LinePoint ("D", new Vector2 (0f, 50f), 180, true, 120));
+					diagramHelper.AddLinePoint (new LinePoint ("D", new Vector2 (0f, 50f), 180, true));
 					diagramHelper.AddLinePoint (new LinePoint ("A", new Vector2 (0f, -50f), 0, true));
-					diagramHelper.AddLinePoint (new LinePoint ("B", new Vector2 (0f, -50f), 180, true, 120));
+					diagramHelper.AddLinePoint (new LinePoint ("B", new Vector2 (0f, -50f), 180, true));
 
 					diagramHelper.Draw ();
 
@@ -1044,7 +1044,7 @@ namespace Cerebro
 					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
 				}
 				userAnswerLaText.text += ""+MathFunctions.deg;
-			
+
 			}
 			else if (value == 15)
 			{   // comma
@@ -1063,7 +1063,7 @@ namespace Cerebro
 		{
 			Answer = "";
 			alternateAnswer = "";
-				
+
 			int length = answers.Length;
 			for(int i=0;i<length;i++)
 			{
@@ -1079,7 +1079,7 @@ namespace Cerebro
 			}
 		}
 
-	
+
 	}
 
 
