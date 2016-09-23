@@ -296,7 +296,7 @@ namespace Cerebro
 					subQuestionText.gameObject.SetActive (true);
 					QuestionText.text = "Multiply :";
 					subQuestionText.text = num1.ToString () + " \\times " + num2.ToString ();
-					Answer = (((float)System.Math.Round((num1 * num2) * 100f, System.MidpointRounding.AwayFromZero)) / 100f).ToString (); //((float)(num1 * 100 / num2) / (float)100).ToString ();
+					Answer = (((float)System.Math.Round((num1 * num2) * 1000f, System.MidpointRounding.AwayFromZero)) / 1000f).ToString (); //((float)(num1 * 100 / num2) / (float)100).ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} 
 			} else if (level == 2) {

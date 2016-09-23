@@ -417,7 +417,7 @@ namespace Cerebro {
 					int commonRatio = Random.Range (2, 10);
 					int num3 = commonRatio * num1;
 					int num4 = commonRatio * num2;
-					QuestionText.text = "There are " + num1 + " red pencils and " + num2 + " blue pencils in a box. " + num3 + " red pencils and " + num4 + "blue pencils are there in another box. Write down the ratios as a proportion.";
+					QuestionText.text = "There are " + num1 + " red pencils and " + num2 + " blue pencils in a box. " + num3 + " red pencils and " + num4 + " blue pencils are there in another box. Write down the ratios as a proportion.";
 					Answer = num1 + ":" + num2 + "::" + num3 + ":" + num4;
 
 				} else if (selector == 4) {		// Find missing number in proportion
@@ -550,7 +550,7 @@ namespace Cerebro {
 					int num2 = Random.Range (2, 10);
 					while (MathFunctions.GetHCF (num1, num2) > 1)
 						num2 = Random.Range (2, 10);
-					QuestionText.text = "Zaheeda and her friend Smita brought " + (num1 * commonRatio) + " pasteries for the class party. If they had brought it in the ratio of " + num1 + " : " + num2 + ", how many pasteries did Smita bring?";
+					QuestionText.text = "Zaheeda and her friend Smita brought " + ((num1 + num2) * commonRatio) + " pasteries for the class party. If they had brought it in the ratio of " + num1 + " : " + num2 + ", how many pasteries did Smita bring?";
 					Answer = (num2 * commonRatio).ToString ();
 
 				} else if (selector == 2) {    										
