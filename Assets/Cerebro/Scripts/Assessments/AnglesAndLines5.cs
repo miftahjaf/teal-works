@@ -10,6 +10,7 @@ namespace Cerebro
 	{
 
 		public Text subQuestionText;
+		public GameObject MCQ;
 		public DiagramHelper diagramHelper;
 		private string Answer;
 		private string alternateAnswer;
@@ -300,7 +301,7 @@ namespace Cerebro
 			subQuestionText.gameObject.SetActive(false);
 			QuestionText.gameObject.SetActive(false);
 			QuestionLatext.gameObject.SetActive(true);
-			base.SetNumpadMode ();
+			SetNumpadMode ();
 			diagramHelper.Reset ();
 
 			for (int i = 1; i < 5; i++) {
@@ -339,7 +340,7 @@ namespace Cerebro
 					diagramHelper.Draw ();
 					QuestionLatext.text = "What type of lines are the following?";
 
-					base.SetMCQMode ();
+					SetMCQMode ();
 					options.Add("Parallel");
 					options.Add("Intersecting");
 					options.Add("Perpendicular");
@@ -368,7 +369,7 @@ namespace Cerebro
 					diagramHelper.Draw ();
 					QuestionLatext.text = "What type of lines are the following?";
 
-					base.SetMCQMode ();
+					SetMCQMode ();
 					options.Add("Parallel");
 					options.Add("Intersecting");
 					options.Add("Perpendicular");
@@ -396,7 +397,7 @@ namespace Cerebro
 					diagramHelper.Draw ();
 					QuestionLatext.text = "What type of lines are the following?";
 
-					base.SetMCQMode ();
+					SetMCQMode ();
 					options.Add("Parallel");
 					options.Add("Intersecting");
 					options.Add("Perpendicular");
@@ -411,7 +412,7 @@ namespace Cerebro
 					if (coeff1 == 180 || coeff1 >= 270)
 						coeff1 = 90;
 					QuestionLatext.text = "If \\angle{A} = " + coeff1 + MathFunctions.deg + ", what type of angle is \\angle{A}?";
-					base.SetMCQMode ();
+					SetMCQMode ();
 					options.Add("Acute");
 					options.Add("Obtuse");
 					options.Add("Right");
@@ -474,7 +475,7 @@ namespace Cerebro
 					diagramHelper.SetScale (0.8f);
 					QuestionLatext.text = "In the given figure, which of the angles are adjacent?";
 
-					base.SetMCQMode ();
+					SetMCQMode ();
 					options.Add("\\angle{AOB} and \\angle{AOE}");
 					options.Add("\\angle{BOC} and \\angle{AOE}");
 					options.Add("\\angle{EOD} and \\angle{BOC}");
@@ -530,7 +531,7 @@ namespace Cerebro
 
 				if (selector < 4)
 				{
-					base.SetMCQMode ();
+					SetMCQMode ();
 
 					float randAngle = 90 + Random.Range (-50, 50);
 					float AOE = Random.Range (30, 70);
@@ -1014,6 +1015,46 @@ namespace Cerebro
 			}
 		}
 
+
+		protected void SetMCQMode (int NumberOfMCQ = 4)
+		{
+			this.MCQ.SetActive (true);
+			Vector2[] fourChoicePositions = new Vector2[] {
+				new Vector2 (-180, -80f),
+				new Vector2 (180, -80f),
+				new Vector2 (-180, 0f),
+				new Vector2 (180, 0f)
+			};
+			for (int i = 1; i <= 4; i++)
+			{
+				MCQ.transform.Find ("Option" + i).gameObject.SetActive (i<=NumberOfMCQ);
+				MCQ.transform.Find ("Option" + i).GetComponent<RectTransform> ().anchoredPosition = fourChoicePositions[i-1];
+			}
+			this.MCQ.SetActive (true);
+			this.numPad.SetActive (false);
+			this.GeneralButton.gameObject.SetActive (false);
+
+			float[] threeChoicePositions = new float[]{ -255f, 0f, 255f };
+			if (NumberOfMCQ == 3)
+			{
+				for (int i = 1; i <= 3; i++)
+				{
+					MCQ.transform.Find ("Option" + i).GetComponent<RectTransform> ().anchoredPosition = new Vector2 (threeChoicePositions[i-1],0f);
+				}
+			}
+
+			for (int i = 1; i <= 4; i++) {
+				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.textDark;
+			}
+
+
+		}
+		protected void SetNumpadMode ()
+		{
+			this.numPad.SetActive (true);
+			this.MCQ.SetActive (false);
+			this.GeneralButton.gameObject.SetActive (true);
+		}
 	
 	}
 
