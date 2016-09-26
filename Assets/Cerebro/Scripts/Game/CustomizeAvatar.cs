@@ -14,8 +14,6 @@ namespace Cerebro
 		public int CurrBodyId, CurrHairID, CurrHeadId;
 		[HideInInspector]
 		public bool IsBoy, IsTransitionOn;
-		[HideInInspector]
-		public string CurrGroupID;
 
 		private GameObject GenericPopup;
 
@@ -25,7 +23,7 @@ namespace Cerebro
 			InitializeAvatar (BabaId);
 		}
 
-		void InitializeAvatar(string BabaId)
+		public void InitializeAvatar(string BabaId)
 		{
 			CurrHairID = int.Parse (BabaId [0].ToString());
 			CurrHeadId = int.Parse (BabaId [1].ToString());

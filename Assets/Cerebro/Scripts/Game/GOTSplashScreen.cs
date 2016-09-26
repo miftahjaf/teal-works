@@ -115,7 +115,6 @@ namespace Cerebro
 						UICamera.GetComponent<Blur> ().enabled = false;
 					}
 				}
-				Debug.Log ("lerp "+LerpValue);
 				if (IsScreenOpening) {
 					OpenAvatarCustomization ();
 				} else {

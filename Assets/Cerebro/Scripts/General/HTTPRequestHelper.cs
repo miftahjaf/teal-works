@@ -274,7 +274,6 @@ namespace Cerebro
 							{
 								newRecord.BabaBodyId = jsonResponse["World"][i]["BabaData"]["body"].AsInt;
 							}
-							Debug.Log(newRecord.BabaBodyId+" "+newRecord.BabaHairId+" "+newRecord.BabaFaceId);
 						}
 
 						if (!worldExists) {
@@ -289,6 +288,10 @@ namespace Cerebro
 								LaunchList.instance.mWorld [cellID].BabaHairId = newRecord.BabaHairId;
 								LaunchList.instance.mWorld [cellID].BabaFaceId = newRecord.BabaFaceId;
 								LaunchList.instance.mWorld [cellID].BabaBodyId = newRecord.BabaBodyId;
+								if(newRecord.StudentID == "9000004")
+								{
+									Debug.Log("my hair "+newRecord.BabaHairId+" face "+newRecord.BabaFaceId+" body "+newRecord.BabaBodyId);
+								}
 							} else {
 								CerebroHelper.DebugLog ("Couldn't update cuz cell id not foudn " + newRecord.CellID);
 							}
@@ -434,11 +437,10 @@ namespace Cerebro
 					BabaId += jsonResponse ["baba_data"] ["face"].Value;
 					BabaId += jsonResponse ["baba_data"] ["body"].Value;
 					PlayerPrefs.SetString(PlayerPrefKeys.BabaID, BabaId);
-
-					LaunchList.instance.mCurrentStudent.StudentID = studentID;
-					LaunchList.instance.mCurrentStudent.GradeID = gradeID;
-					LaunchList.instance.mCurrentStudent.StudentName = name;
-					LaunchList.instance.mCurrentStudent.Coins = coins;
+					if(jsonResponse ["baba_data"] ["color"] != null)
+					{
+						PlayerPrefs.SetString(PlayerPrefKeys.GOTGameTeamID, jsonResponse ["baba_data"] ["color"]);
+					}
 
 					PlayerPrefs.SetInt (PlayerPrefKeys.Coins, LaunchList.instance.mCurrentStudent.Coins);
 					int currentDeltaValue = PlayerPrefs.GetInt (PlayerPrefKeys.DeltaCoins);	
@@ -1052,6 +1054,7 @@ namespace Cerebro
 			N ["myData"] ["baba_data"]["head"] = BabaId[0].ToString();
 			N ["myData"] ["baba_data"]["face"] = BabaId[1].ToString();
 			N ["myData"] ["baba_data"]["body"] = BabaId[2].ToString();
+			N ["myData"] ["baba_data"] ["color"] = PlayerPrefs.GetString (PlayerPrefKeys.GOTGameTeamID, "1");
 
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());

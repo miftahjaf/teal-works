@@ -118,7 +118,6 @@ namespace Cerebro {
 				Debug.Log ("INVALUD GROUP ID IN CHOOSE UNIT : " + groupID);
 			}
 		*/
-			Debug.Log (faceString+" "+bodyString+" "+hairString+" "+hairString2);
 			var body = unit.transform.Find (bodyString);
 			var hair = unit.transform.Find (hairString);
 			Transform hair2 = null;
@@ -187,7 +186,7 @@ namespace Cerebro {
 					unit.Cell = cell;
 					unit.transform.position = cell.transform.position;
 					unit.Initialize ();
-
+					Debug.Log ("spawn hair "+cell.BabaHairId+" face "+cell.BabaFaceId+" body "+cell.BabaBodyId);
 					ChooseUnit (cell.groupID, unit, cell.BabaHairId, cell.BabaFaceId, cell.BabaBodyId);
 
 					ret.Add (unit);

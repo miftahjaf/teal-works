@@ -32,7 +32,7 @@ namespace Cerebro
 		public event EventHandler GameEnded;
 		public event EventHandler TurnEnded;
 
-		public GameObject callOut;
+		public GameObject callOut, CapturePopup;
 
 		public UnityEngine.UI.Text CallOutValueText;
 		public UnityEngine.UI.Text coinsText;
@@ -119,6 +119,8 @@ namespace Cerebro
 
 			waitingForGameData = true;
 
+			CapturePopup = GameObject.Find ("CanvasGame").GetComponentInChildren<CapturePopup> (true).gameObject;
+
 			//hide units during start
 			GetComponent<CustomUnitGenerator> ().UnitsParent.gameObject.SetActive (false);
 //			StartCoroutine (ReproduceGame ());
@@ -128,7 +130,7 @@ namespace Cerebro
 			waitingForGameData = false;
 			CurrentPlayerNumber = GetComponent<CustomUnitGenerator> ().currentGroupNumber;
 			GetComponent<CustomUnitGenerator> ().UnitsParent.gameObject.SetActive (true);
-			SetWorld (true);
+//			SetWorld (true);
 		}
 
 		IEnumerator ReproduceGame ()
@@ -280,7 +282,10 @@ namespace Cerebro
 				cell.BabaHairId = Cerebro.LaunchList.instance.mWorld [i].BabaHairId;
 				cell.BabaFaceId = Cerebro.LaunchList.instance.mWorld [i].BabaFaceId;
 				cell.BabaBodyId = Cerebro.LaunchList.instance.mWorld [i].BabaBodyId;
-				Debug.Log (cell.BabaHairId+" "+cell.BabaFaceId+" "+cell.BabaBodyId);
+				if (cell.cellIndex == 0) {
+					Debug.Log ("Set cells hair "+cell.BabaHairId+" face "+cell.BabaFaceId+" body "+cell.BabaBodyId);
+				}
+
 				cell.OffsetCoord = new Vector2 (index % 8, Mathf.Floor (index / 8f));
 				cell.studentID = currentCell.StudentID;
 				cell.groupID = currentCell.GroupID;
@@ -324,10 +329,16 @@ namespace Cerebro
 								createCell = true;
 							} else if (unit.isWaiting) {
 								unit.MarkAsReady ();
+								customGenerator.ChooseUnit (cellData.GroupID, unit, cellData.BabaHairId, cellData.BabaFaceId, cellData.BabaBodyId);
+							} else {
+								customGenerator.ChooseUnit (cellData.GroupID, unit, cellData.BabaHairId, cellData.BabaFaceId, cellData.BabaBodyId);
 							}
 						}
 					}
 					if (createCell && cellData.GroupID != "-1") {
+						if (index == 0) {
+							Debug.Log ("from cell hair " + cellData.BabaHairId + " face " + cellData.BabaFaceId + " body " + cellData.BabaBodyId);
+						}
 						var unit = customGenerator.AddNewUnit (cell, cellData.GroupID, cellData.BabaHairId, cellData.BabaFaceId, cellData.BabaBodyId);
 						unit.UnitClicked += OnUnitClicked;
 						unit.UnitDestroyed += OnUnitDestroyed;
