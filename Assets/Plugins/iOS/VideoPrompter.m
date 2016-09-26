@@ -262,6 +262,8 @@ void _StartPreview(const char* message)
     NSLog(@"Message from framework ");
     NSLog(@"%s",message);
     BOOL IsLandscapeLeft = true;
+    __block BOOL IsPermissionGranted = true;
+    
     
     if(strcmp(message, "true") != 0)
     {
@@ -286,5 +288,61 @@ void _StartPreview(const char* message)
     [rootVC addChildViewController:r];
     [rootVC.view addSubview:r.view];
     [r didMoveToParentViewController:rootVC];
-    [r recordAndPlay : IsLandscapeLeft];
+    
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        if (granted) {
+            NSLog(@"enabled microphone");
+        }
+        else {
+            NSLog(@"disabled microphone");
+            UIAlertController * alert=   [UIAlertController
+                                          alertControllerWithTitle:@"Microphone Access Denied"
+                                          message:@"You must allow microphone access in Settings > Privacy > Microphone"
+                                          preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* ok = [UIAlertAction
+                                 actionWithTitle:@"OK"
+                                 style:UIAlertActionStyleDefault
+                                 handler:^(UIAlertAction * action)
+                                 {
+                                     [alert dismissViewControllerAnimated:YES completion:nil];
+                                     
+                                 }];
+            [alert addAction:ok];
+            
+            [r presentViewController:alert animated:YES completion:nil];
+            IsPermissionGranted = false;
+            return;
+        }
+    }];
+    
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    
+    if(status == AVAuthorizationStatusAuthorized) { // authorized
+        NSLog(@"camera authorized");
+    } else {
+        NSLog(@"disabled camera");
+        UIAlertController * alert=   [UIAlertController
+                                      alertControllerWithTitle:@"Camera Access Denied"
+                                      message:@"You must allow camera access in Settings > Privacy > Camera"
+                                      preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* ok = [UIAlertAction
+                             actionWithTitle:@"OK"
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+        [alert addAction:ok];
+        
+        [r presentViewController:alert animated:YES completion:nil];
+        IsPermissionGranted = false;
+        return;
+    }
+
+    if(IsPermissionGranted)
+    {
+        [r recordAndPlay : IsLandscapeLeft];
+    }
+    
 }

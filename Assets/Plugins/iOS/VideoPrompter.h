@@ -13,6 +13,7 @@ extern "C" {
 #import <MediaPlayer/MediaPlayer.h>
 #import <UIKit/UIKit.h>
 #import "AVFoundation/AVAssetImageGenerator.h"
+#import <AVFoundation/AVAudioSession.h>
     
 @interface RecordVideoViewController: UIViewController
 //-(void)recordAndPlay;
