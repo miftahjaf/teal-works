@@ -347,7 +347,7 @@ namespace Cerebro {
 					num1 = Random.Range (2, 10);
 					num2 = Random.Range (2, 10);
 					while (MathFunctions.GetHCF (num1, num2) > 1)
-						num2 = Random.Range (2, num1);
+						num2 = Random.Range (2, 10);
 
 					QuestionText.text = "A trader sells at " + num1 + "/" + num2 + " of his cost price. Find the profit percent (round off to 2 decimal places).";
 					profitPer = (((float)num1 / (float)num2) - 1);
@@ -435,7 +435,7 @@ namespace Cerebro {
 					num1 = Random.Range (2, 10);
 					num2 = Random.Range (2, 10);
 					while (MathFunctions.GetHCF (num1, num2) > 1)
-						num2 = Random.Range (2, num1);
+						num2 = Random.Range (2, 10);
 					
 					QuestionText.text = "A trader sells his article in the ratio " + num1.ToString () + " : " + num2.ToString () + " to its cost price. What is his profit percent (round off to 2 decimal places)?";
 					profitPer = ((float)num1 / (float)num2) - 1;
