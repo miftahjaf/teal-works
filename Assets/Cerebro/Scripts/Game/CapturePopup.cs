@@ -36,6 +36,7 @@ namespace Cerebro
 		{
 			yield return new WaitForSeconds (0.4f);
 			transform.FindChild("Parent").gameObject.SetActive (true);
+			cellPosition = new Vector3 (cellPosition.x, cellPosition.y + 0.01f, cellPosition.z);
 			Vector2 stPoint = Camera.main.WorldToScreenPoint (cellPosition);
 			Vector3 pos = Camera.main.WorldToViewportPoint (transform.FindChild("Parent").FindChild ("Pointer").transform.position);
 			Vector2 endPoint = new Vector2 (pos.x * Screen.width, pos.y * Screen.height);

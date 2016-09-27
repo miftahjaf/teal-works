@@ -18,6 +18,8 @@ namespace Cerebro
 		private CustomizeAvatar parentAvatar;
 		private Color[] InitialTeamColor;
 
+		private int CurrID = 1;
+
 		void Awake () 
 		{
 			StartPosition = new Vector2[4];
@@ -39,6 +41,9 @@ namespace Cerebro
 
 		public void Initialize(int id, string groupID = "")
 		{
+			if (InitialTeamColor == null || InitialTeamColor.Length <= 0) {
+				Awake ();
+			}
 			if (!transform.name.Contains ("head")) {
 				var teamColor = new Color (0, 0, 0);
 				if (groupID == "") {
@@ -60,12 +65,15 @@ namespace Cerebro
 				}
 			}
 
+			CurrID = id;
 			for (int i = 0; i < 4; i++) {
 				Vector2 currPos = InitialPosition[i];
 				currPos = new Vector2 (currPos.x + i * OffsetPosition, currPos.y);
 				StartPosition[i] = new Vector2 (currPos.x - (id - 1) * OffsetPosition, currPos.y);
 				ChildComponents [i].GetComponent<RectTransform> ().anchoredPosition = StartPosition [i];
+				ChildComponents [i].SetActive (false);
 			}
+			ChildComponents [CurrID - 1].SetActive (true);
 		}
 
 		void Update()
@@ -81,31 +89,40 @@ namespace Cerebro
 					IsLerpStarted = false;
 					LerpValue = 1;
 					parentAvatar.IsTransitionOn = false;
+					for (int i = 0; i < 4; i++) 
+					{
+						ChildComponents [i].SetActive (false);
+					}
+					ChildComponents [CurrID - 1].SetActive (true);
 				}
 
 				MakeTransition ();
 			}
 		}
 
-		public void NextButtonPressed()
+		public void NextButtonPressed(int NextId)
 		{
+			CurrID = NextId;
 			IsLerpStarted = true;
 			LerpValue = 0;
 			LerpStartTime = Time.time;
 			for (int i = 0; i < 4; i++) 
 			{
 				EndPosition[i] = new Vector2 (StartPosition[i].x - OffsetPosition, StartPosition[i].y);
+				ChildComponents [i].SetActive (true);
 			}
 		}
 
-		public void PreviousButtonPressed()
+		public void PreviousButtonPressed(int NextId)
 		{
+			CurrID = NextId;
 			IsLerpStarted = true;
 			LerpValue = 0;
 			LerpStartTime = Time.time;
 			for (int i = 0; i < 4; i++) 
 			{
 				EndPosition[i] = new Vector2 (StartPosition[i].x + OffsetPosition, StartPosition[i].y);
+				ChildComponents [i].SetActive (true);
 			}
 		}
 
