@@ -346,6 +346,7 @@ namespace Cerebro
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
 					CerebroHelper.DebugLog ("GAME LOADED------------------------------------------");
 					LaunchList.instance.mCurrentGame.GroupID = jsonResponse ["group_color"].Value;
+					PlayerPrefs.SetString(PlayerPrefKeys.GOTGameTeamID, LaunchList.instance.mCurrentGame.GroupID);
 					LaunchList.instance.mCurrentGame.GroupIDDB = jsonResponse ["group_id"].Value;
 					LaunchList.instance.mCurrentGame.StudentID = studentID;
 					callback (1);

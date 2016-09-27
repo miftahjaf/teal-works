@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Cerebro {
 	class CellGridStateUnitsSelected : CellGridState
@@ -10,6 +11,10 @@ namespace Cerebro {
 		private List<Unit> _unitsInRange;
 
 		private Cell _unitCell;
+		private GameObject CapturePopup;
+
+		private Unit currUnit;
+		private Cell currCell;
 
 		public CellGridStateUnitsSelected(CellGrid cellGrid, List<Unit> units) : base(cellGrid)
 		{
@@ -20,7 +25,15 @@ namespace Cerebro {
 
 		public override void OnCellClicked(Cell cell)
 		{
-			CerebroHelper.DebugLog ("Cell Clicked");
+			if (EventSystem.current.IsPointerOverGameObject ()) {
+				CerebroHelper.DebugLog ("returning Cell Clicked "+cell.transform.position.y);
+				return;
+			}
+			CerebroHelper.DebugLog ("Cell Clicked "+cell.transform.position.y);
+			float pos = cell.transform.position.y;
+			pos = Mathf.Abs(-0.3831128f - pos) + 0.3831128f;
+			Debug.Log ("setting "+pos);
+			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (Camera.main.transform.position.x, pos, Camera.main.transform.position.z), true).setEaseType (GoEaseType.BackOut));
 			foreach (var _unit in _units) {
 				if (_unit.isMoving) {
 					return;
@@ -47,13 +60,15 @@ namespace Cerebro {
 				CerebroHelper.DebugLog ("Will Cost " + cell.MovementCost + " Coins");
 
 				if (_cellGrid.GetCoins () >= cell.MovementCost && !cell.isInvincible) {
-				//_cellGrid.showCallOutForCell (cell, fromUnit);   // uncomment this to start the callout thing
-
-//                    _cellGrid.UseCoinsOf(cell.MovementCost);
-                    fromUnit.Move(cell, null);
-                    _cellGrid.EndTurn();
-
-                    //				CerebroHelper.DebugLog ("Coins Left " + _cellGrid.GetCoinsOf(fromUnit.PlayerNumber));
+					string BabaId = "";
+					if (cell.BabaHairId > 0) {
+						BabaId += cell.BabaHairId;
+						BabaId += cell.BabaFaceId;
+						BabaId += cell.BabaBodyId;
+					}
+					cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", cell.MovementCost, BabaId, cell.groupID, OnCaptureButtonPressed, cell.transform.position);
+					currUnit = fromUnit;
+					currCell = cell;
                 } else {
 					if (cell.isInvincible) {
 						_cellGrid.SetStatusText (Cerebro.GameStatuses.isInvincible);
@@ -63,6 +78,16 @@ namespace Cerebro {
 				}
 			}
 		}
+
+		public void OnCaptureButtonPressed()
+		{
+			currUnit.Move(currCell, null);
+			_cellGrid.EndTurn();
+			Debug.Log ("before "+Camera.main.transform.position);
+			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (Camera.main.transform.position.x, 0f, Camera.main.transform.position.z), true).setEaseType (GoEaseType.BackOut));
+			Debug.Log ("after "+Camera.main.transform.position);
+		}
+
 		public override void OnUnitClicked(Unit unit)
 		{
 			CerebroHelper.DebugLog ("Unit Clicked");
@@ -92,14 +117,15 @@ namespace Cerebro {
 
 				CerebroHelper.DebugLog ("Will Cost " + unit.Cell.MovementCost + " Coins");
 				if (_cellGrid.GetCoins () >= unit.Cell.MovementCost && !unit.Cell.isInvincible) {
-
-                    //_cellGrid.showCallOutForCell (unit.Cell, fromUnit, unit);   // uncomment this to start the callout thing
-
-                    _cellGrid.DeleteUnit(unit.gameObject);
-//                    _cellGrid.UseCoinsOf(unit.Cell.MovementCost);
-                    fromUnit.Move(unit.Cell, minPath);
-                    _cellGrid.EndTurn();
-
+					string BabaId = "";
+					if (unit.Cell.BabaHairId > 0) {
+						BabaId += unit.Cell.BabaHairId;
+						BabaId += unit.Cell.BabaFaceId;
+						BabaId += unit.Cell.BabaBodyId;
+					}
+					unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position);
+					currUnit = unit;
+					currCell = unit.Cell;
                     CerebroHelper.DebugLog ("Coins Left " + _cellGrid.GetCoins());
 				} else {
 					if (unit.Cell.isInvincible) {
@@ -110,6 +136,15 @@ namespace Cerebro {
 				}
 			}
 		}
+
+		public void OnCaptureUnitButtonPressed()
+		{
+			currUnit.Move(currCell, null);
+			_cellGrid.EndTurn();
+			_cellGrid.DeleteUnit(currUnit.gameObject);
+			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (Camera.main.transform.position.x, 0f, Camera.main.transform.position.z), true).setEaseType (GoEaseType.BackOut));
+		}
+
 		public override void OnCellDeselected(Cell cell)
 		{
 			base.OnCellDeselected(cell);

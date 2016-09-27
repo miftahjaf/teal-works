@@ -37,11 +37,14 @@ namespace Cerebro
 			}
 		}
 
-		public void Initialize(int id)
+		public void Initialize(int id, string groupID = "")
 		{
 			if (!transform.name.Contains ("head")) {
 				var teamColor = new Color (0, 0, 0);
-				string groupID = PlayerPrefs.GetString (PlayerPrefKeys.GOTGameTeamID, "1");
+				if (groupID == "") {
+					groupID = PlayerPrefs.GetString (PlayerPrefKeys.GOTGameTeamID, "1");
+				}
+				Debug.Log ("curr "+groupID);
 				if (groupID == GroupMapping.Group1) {
 					teamColor = new Color (0.99f, 0.39f, 0.15f);
 				} else if (groupID == GroupMapping.Group2) {
