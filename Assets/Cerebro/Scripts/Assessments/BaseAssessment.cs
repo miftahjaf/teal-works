@@ -78,6 +78,8 @@ namespace Cerebro {
 		private int currentMappingIndex;
 		private string currenKCMapping;
 
+		private bool isQuestionStarted;
+
 
 		protected void Initialise(string subjectID, string topicID, string subTopicID, string assessmentID) {
 			parentAssessmentScript = gameObject.transform.parent.GetComponent<AssessmentScript> ();
@@ -190,6 +192,7 @@ namespace Cerebro {
 
 		protected void QuestionStarted() {
 
+			isQuestionStarted = true;
 			if (KCMappings == null)
 			{
 				LoadKnowledgeComponentMappings ();
@@ -390,7 +393,8 @@ namespace Cerebro {
 			}
 
 			currenKCMapping = difficulty + "t" + type;
-
+			isQuestionStarted = false;
+		
 		}
 
 		protected void showNextQuestion() {
@@ -412,8 +416,12 @@ namespace Cerebro {
 			PlayerPrefs.SetInt (CurrentLevelKey, level);
 		}
 
-		public void SetSeedToLocalDB() {
-			PlayerPrefs.SetInt (CurrentLevelSeed, randomSeed);
+		public void SetSeedToLocalDB() 
+		{
+			if(isQuestionStarted)
+				PlayerPrefs.SetInt (CurrentLevelSeed, randomSeed);
+			else
+		    	PlayerPrefs.DeleteKey (CurrentLevelSeed);
 		}
 
 			
