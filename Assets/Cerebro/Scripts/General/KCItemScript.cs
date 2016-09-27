@@ -31,14 +31,12 @@ namespace Cerebro
 			get { return m_KnowledgeComponent; }
 			set { m_KnowledgeComponent = value; }
 		}
-
-
-
-		public void Initialise(string _practiceId, KnowledgeComponent _knowledgeComponent,Action<string,string> _OnClickAction)
+			
+		public void Initialise(int index,string _practiceId, KnowledgeComponent _knowledgeComponent,Action<string,string> _OnClickAction)
 		{
 			knowledgeComponent = _knowledgeComponent;
 			praticeId = _practiceId;
-	    	name.text = _knowledgeComponent.KCName;
+			name.text = index+". "+ _knowledgeComponent.KCName;
 			this.CoinTextAnimation ();
 			onClickAction = _OnClickAction;
 		}

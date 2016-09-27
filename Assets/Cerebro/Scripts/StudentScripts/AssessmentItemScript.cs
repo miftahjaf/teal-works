@@ -134,6 +134,7 @@ namespace Cerebro
 
 		public void CreateKCList()
 		{
+			int cnt = 1;
 			foreach (var KC in practiceItems.KnowledgeComponents) 
 			{
 				GameObject KCObj = Instantiate (KCprefab);
@@ -143,7 +144,9 @@ namespace Cerebro
 				KCObj.GetComponent<RectTransform>().localScale = Vector3.one;
 				KCObj.GetComponent<RectTransform>().localEulerAngles = Vector3.zero;
 
-				kcItemScript.Initialise (practiceItems.PracticeID, KC.Value,m_OnClickAction);
+				kcItemScript.Initialise (cnt,practiceItems.PracticeID, KC.Value,m_OnClickAction);
+
+				cnt++;
 			}
 			this.KCParent.transform.localScale = Vector3.zero;
 
