@@ -22,6 +22,7 @@ namespace Cerebro {
 		private int num,num1,num2;
 
 		private string Answer;
+		private string ProfitOrLoss;
 		//	private float multiplier;
 		public Text SPText;
 		public Text CPText;
@@ -244,8 +245,6 @@ namespace Cerebro {
 			if (Queslevel > scorestreaklvls.Length) {
 				level = UnityEngine.Random.Range (1, scorestreaklvls.Length + 1);
 			}
-				
-
 
 			if (level == 1) {
 				selector = GetRandomSelector (1, 6);
@@ -305,10 +304,11 @@ namespace Cerebro {
 					} while (CP == SP);
 					CPQuestion.text = "Rs. " + CP.ToString ();
 					SPQuestion.text = "Rs. " + SP.ToString ();
-					profit = CP - SP;
-					profitPer = (float)loss / (float)CP * 100f;
-					profitPer = MathFunctions.GetRounded (profitPer, 2);
-					QuestionText.text = "Find the profit percent (round off to 2 decimal places).";
+					profit = SP - CP;
+					profitPer = (float)profit / (float)CP * 100f;
+					profitPer = Mathf.Abs (MathFunctions.GetRounded (profitPer, 2));
+					ProfitOrLoss = profitPer > 0 ? "profit" : "loss";
+					QuestionText.text = "Find the " + ProfitOrLoss + " percent (round off to 2 decimal places).";
 					Answer = profitPer.ToString () + "%";
 
 				} else if (selector == 3) {
@@ -349,10 +349,12 @@ namespace Cerebro {
 					while (MathFunctions.GetHCF (num1, num2) > 1)
 						num2 = Random.Range (2, 10);
 
-					QuestionText.text = "A trader sells at " + num1 + "/" + num2 + " of his cost price. Find the profit percent (round off to 2 decimal places).";
 					profitPer = (((float)num1 / (float)num2) - 1);
 					profitPer = (float)(profitPer * 100);
-					profitPer = MathFunctions.GetRounded (profitPer, 2);
+					ProfitOrLoss = profitPer > 0 ? "profit" : "loss";
+					profitPer = Mathf.Abs (MathFunctions.GetRounded (profitPer, 2));
+
+					QuestionText.text = "A trader sells at " + num1 + "/" + num2 + " of his cost price. Find the " + ProfitOrLoss + " percent (round off to 2 decimal places).";
 					Answer = profitPer.ToString () + "%";
 
 				} else if (selector == 2) {
@@ -408,7 +410,6 @@ namespace Cerebro {
 			} else if (level == 3) {
 				selector = GetRandomSelector (1, 8);
 
-
 				if (selector == 1) {
 					
 					GeneralButton.gameObject.SetActive (true);
@@ -419,12 +420,14 @@ namespace Cerebro {
 					CP = 100 * Random.Range (5, 15);
 					SPm = 100 * Random.Range (3, CP / 100);
 					do {
-						SP = 100 * Random.Range (5, 15);
+						SP = 100 * Random.Range (CP / 100 + 1, CP / 100 + 6);
 					} while ((num1 * SP) + (num2 * SPm) - (num * CP) == 0);
 
-					QuestionText.text = "A dealer bought " + num.ToString () + " chairs at Rs. " + CP.ToString () + " each. " + num1.ToString () + " of them are sold at Rs. " + SP.ToString () + " each and the remaining at Rs. " + SPm.ToString () + " each. Find the profit percent (round off to 2 decimal places).";
 					profitPer = ((float)((num1 * SP) + (num2 * SPm) - (num * CP)) / (float)(num * CP)) * 100f;
-					profitPer = MathFunctions.GetRounded (profitPer, 2);
+					ProfitOrLoss = profitPer > 0 ? "profit" : "loss";
+					profitPer = Mathf.Abs (MathFunctions.GetRounded (profitPer, 2));
+
+					QuestionText.text = "A dealer bought " + num.ToString () + " chairs at Rs. " + CP.ToString () + " each. " + num1.ToString () + " of them are sold at Rs. " + SP.ToString () + " each and the remaining at Rs. " + SPm.ToString () + " each. Find the " + ProfitOrLoss + " percent (round off to 2 decimal places).";
 					Answer = profitPer.ToString () + "%";
 				
 				} else if (selector == 2) {
@@ -436,11 +439,13 @@ namespace Cerebro {
 					num2 = Random.Range (2, 10);
 					while (MathFunctions.GetHCF (num1, num2) > 1)
 						num2 = Random.Range (2, 10);
-					
-					QuestionText.text = "A trader sells his article in the ratio " + num1.ToString () + " : " + num2.ToString () + " to its cost price. What is his profit percent (round off to 2 decimal places)?";
+
 					profitPer = ((float)num1 / (float)num2) - 1;
 					profitPer = (float)(profitPer * 100);
-					profitPer = MathFunctions.GetRounded (profitPer, 2);
+					ProfitOrLoss = profitPer > 0 ? "profit" : "loss";
+					profitPer = Mathf.Abs (MathFunctions.GetRounded (profitPer, 2));
+
+					QuestionText.text = "A trader sells his article in the ratio " + num1.ToString () + " : " + num2.ToString () + " to its cost price. What is his " + ProfitOrLoss + " percent (round off to 2 decimal places)?";
 					Answer = profitPer.ToString () + "%";
 
 				} else if (selector == 3) {
@@ -497,7 +502,6 @@ namespace Cerebro {
 					profit = 5 * Random.Range (1, 10);
 					loss = 5 * Random.Range (profit / 5 - 2, profit / 5 + 3);
 
-					QuestionText.text = "John sold 2 cameras at Rs. " + SP.ToString () + " each. He makes a profit of " + profit.ToString () + "% on one and loss of " + loss.ToString () + "% on the other. Find the net profit percent (round off to 2 decimal places).";
 					profitPer = (float)(100 + profit) / (float)100;
 					profitPer = (float)SP / (float)profitPer;
 					lossPer = (float)(100 - loss) / (float)100;
@@ -506,7 +510,10 @@ namespace Cerebro {
 					profitPer = (float)(2 * SP - lossPer);
 					profitPer = (float)profitPer / (float)lossPer;
 					profitPer = profitPer * 100f;
-					profitPer = MathFunctions.GetRounded (profitPer, 2);
+					ProfitOrLoss = profitPer > 0 ? "profit" : "loss";
+					profitPer = Mathf.Abs (MathFunctions.GetRounded (profitPer, 2));
+
+					QuestionText.text = "John sold 2 cameras at Rs. " + SP.ToString () + " each. He makes a profit of " + profit.ToString () + "% on one and loss of " + loss.ToString () + "% on the other. Find the net " + ProfitOrLoss + " percent (round off to 2 decimal places).";
 					Answer = profitPer.ToString () + "%";
 				
 				} else if (selector == 7) {
@@ -515,12 +522,15 @@ namespace Cerebro {
 
 					CP = Random.Range (5, 15);
 					num = 10 * Random.Range (10, 21);
-					num1 = Random.Range (5, num - 1);
 					profit = 10 * Random.Range (1, 5);
-					num1 = Random.Range (10, num / 2);
-					while ((num * CP * (100 + profit)) % ((num - num1) * 100) != 0)
-						num1 = Random.Range (10, num / 2);
-					QuestionText.text = "Jenny buys " + num.ToString () + " eggs at Rs. " + CP.ToString () + " each. " + num1.ToString () + " of them break. What should be the SP of the remaining eggs per egg so that she makes a " + profit.ToString () + "% profit overall.";
+					num1 = Random.Range (5, num / 2);
+
+					while ((num * CP * (100 + profit)) % ((num - num1) * 100) != 0) {
+						num1 = Random.Range (5, num / 2);
+						num = 10 * Random.Range (10, 21);
+					}
+					
+					QuestionText.text = "Jenny buys " + num.ToString () + " toys at Rs. " + CP.ToString () + " each. " + num1.ToString () + " of them break. What should be the SP of the remaining toys per toy so that she makes a " + profit.ToString () + "% profit overall.";
 			
 					Answer = ((num * CP * (100 + profit)) / ((num - num1) * 100)).ToString ();
 				}
