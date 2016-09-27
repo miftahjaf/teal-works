@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -704,7 +704,8 @@ namespace Cerebro
 
 		public void GetPracticeItems ()
 		{
-			string fileName = Application.persistentDataPath + "/PracticeItems.txt";
+			//string fileName = Application.persistentDataPath + "/PracticeItems.txt";
+			string fileName = Application.persistentDataPath + "/PracticeItemsWithKC.txt";
 			try {
 
 				StreamWriter sr = null;
@@ -716,7 +717,7 @@ namespace Cerebro
 				sr = File.CreateText (fileName);														
 //				}
 
-				CreatePostRequestNoFormSimpleJSON (SERVER_URL + "practice_item/get_practice_items", (jsonResponse) => {
+				/*CreatePostRequestNoFormSimpleJSON (SERVER_URL + "practice_item/get_practice_items", (jsonResponse) => {
 					if (jsonResponse != null && jsonResponse.ToString () != "") {
 						LaunchList.instance.mQuizAnalytics.Clear ();
 						for (int i = 0; i < jsonResponse.Count; i++) {
@@ -754,6 +755,24 @@ namespace Cerebro
 						CerebroHelper.DebugLog ("LOAD COMPLETE");
 						LaunchList.instance.GotPracticeItems ();
 //						}
+
+					} else {
+						CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					}
+				});*/
+				WWWForm form = new WWWForm ();
+				form.AddField ("grade", PlayerPrefs.GetString (PlayerPrefKeys.GradeKey,"0"));
+				Debug.Log("Load practice items");
+				CreatePostRequestSimpleJSON (SERVER_URL + "practice_item/with_kc",form, (jsonResponse) => {
+					if (jsonResponse != null && jsonResponse.ToString () != "") {
+						LaunchList.instance.mQuizAnalytics.Clear ();
+
+						sr.WriteLine (jsonResponse.ToString());
+						sr.Close ();
+
+						CerebroHelper.DebugLog ("LOAD COMPLETE");
+						LaunchList.instance.GotPracticeItems ();
+
 
 					} else {
 						CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");

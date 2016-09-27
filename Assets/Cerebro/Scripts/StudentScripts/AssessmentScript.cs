@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using MaterialUI;
 using System.IO;
 using System.Collections.Generic;
+using SimpleJSON;
 
 namespace Cerebro
 {
@@ -44,6 +45,8 @@ namespace Cerebro
 
 		private int incrementBy = 1;
 
+
+
 		public Text testingText;
 		// Use this for initialization
 		void Start ()
@@ -73,7 +76,7 @@ namespace Cerebro
 			}
 		}
 
-		public void Initialize (string assessmentType, string _title, GameObject _chooseAssessment, MissionItemData missionItemData = null, bool testMode = false)
+		public void Initialize (string assessmentType, string _title, GameObject _chooseAssessment, MissionItemData missionItemData = null, bool testMode = false,string practiceId="", string KCID ="")
 		{
 			GetComponent<RectTransform> ().sizeDelta = new Vector2 (0f, 0f);
 			chooseAssessment = _chooseAssessment;
@@ -89,7 +92,10 @@ namespace Cerebro
 			baseAssessment = gameobject.GetComponent<BaseAssessment> ();
 			baseAssessment.assessmentName = _title.Replace (" ", "");
 			baseAssessment.missionItemData = missionItemData;
+			baseAssessment.practiceID = practiceId;
+			baseAssessment.KCID = KCID;
 			baseAssessment.testMode = testMode;
+
 			if (testMode) {
 				testingText.gameObject.SetActive (true);
 			} else {
@@ -147,7 +153,8 @@ namespace Cerebro
 
 					if (CerebroProperties.instance.ShowCoins) {
 						StartCoroutine (animateScoreIncrement (_increment));
-						UpdatePracticeItems (baseAssessment.GetPracticeItemID (), increment);
+						//UpdatePracticeItems (baseAssessment.GetPracticeItemID (), increment);
+						UpdatePracticeItems (baseAssessment.GetPracticeItemID(), baseAssessment.GetCurrentKCID (), increment);
 					}
 					LaunchList.instance.SetCoins ( increment);
 				}
@@ -273,6 +280,7 @@ namespace Cerebro
 
 		public void BackPressed ()
 		{
+			baseAssessment.SetSeedToLocalDB ();
 			chooseAssessment.gameObject.SetActive (true);
 			chooseAssessment.GetComponent<RectTransform> ().sizeDelta = new Vector2 (0f, 0f);
 			chooseAssessment.GetComponent<ChooseAssessmentScript> ().BackOnScreen ();
@@ -295,7 +303,59 @@ namespace Cerebro
 			levelUp.gameObject.SetActive (false);
 		}
 
-		public void UpdatePracticeItems (string practiceID, int increment)
+		public void UpdatePracticeItems(string practiceID,string KCID,int increment)
+		{
+			Debug.Log ("Practice ID " + practiceID + " KCID " + KCID);
+			if(string.IsNullOrEmpty(practiceID) || string.IsNullOrEmpty (KCID))
+			{
+				return;
+			}
+			if (LaunchList.instance.mPracticeItems.ContainsKey (practiceID)) 
+			{
+				PracticeItems practiceItem = LaunchList.instance.mPracticeItems[practiceID];
+
+				if (practiceItem.KnowledgeComponents.ContainsKey (KCID))
+				{
+					KnowledgeComponent KCComponent = practiceItem.KnowledgeComponents [KCID];
+				
+					if (KCComponent.CurrentCoins + increment > KCComponent.TotalCoins) 
+					{
+						increment = (KCComponent.TotalCoins - KCComponent.CurrentCoins);
+					} 
+
+					KCComponent.CurrentCoins += increment;
+					practiceItem.CurrentCoins += increment;
+					LaunchList.instance.mPracticeItems [practiceID] = practiceItem;
+
+				}
+				else
+					return;
+
+				LaunchList.instance.mPracticeItems [practiceID] = practiceItem;
+			}
+			else
+				return;
+
+
+
+			if (increment <= 0)
+				return;
+			
+
+			if (!LaunchList.instance.mKCCoins.ContainsKey (KCID))
+			{
+				LaunchList.instance.mKCCoins.Add (KCID,increment);
+			}
+			else 
+			{
+				LaunchList.instance.mKCCoins [KCID] = LaunchList.instance.mKCCoins [KCID] + increment;
+			}
+
+			LaunchList.instance.UpdateKCCoinsData ();
+
+		}
+
+		/*public void UpdatePracticeItems (string practiceID, int increment)
 		{
 			string fileName = Application.persistentDataPath + "/PracticeItems.txt";
 
@@ -316,7 +376,7 @@ namespace Cerebro
 							pItem.CurrentCoins = currentCoins;
 							LaunchList.instance.mPracticeItems [pItem.PracticeID] = pItem;
 							string regenerationStarted = "";
-							if (currentCoins >= int.Parse (pItem.TotalCoins)) {
+							if (currentCoins >= pItem.TotalCoins) {
 								regenerationStarted = MaxCoinsReached (pItem.PracticeID);
 							}
 							string newLine = splitArr [0] + "," + splitArr [1] + "," + splitArr [2] + "," + splitArr [3] + "," + splitArr [4] + "," + splitArr [5] + "," + currentCoins.ToString () + "," + regenerationStarted + "," + splitArr[8];
@@ -337,7 +397,7 @@ namespace Cerebro
 				writesr.WriteLine (lines [i]);
 			}
 			writesr.Close ();
-		}
+		}*/
 
 		string MaxCoinsReached (string practiceID)
 		{

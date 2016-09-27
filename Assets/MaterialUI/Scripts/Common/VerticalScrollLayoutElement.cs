@@ -93,6 +93,8 @@ namespace MaterialUI
 
         private void RefreshLayout()
         {
+			
+
             if (!m_ScrollRect)
             {
                 m_ScrollRect = GetComponent<ScrollRect>();
@@ -110,7 +112,8 @@ namespace MaterialUI
             {
                 m_Height = maxHeight;
                 m_ScrollRect.movementType = movementTypeWhenScrollable;
-                m_ScrollHandleImage.enabled = true;
+				if(!m_ScrollHandleImage.enabled)
+              	  m_ScrollHandleImage.enabled = true;
 
                 m_ScrollEnabled = true;
 
@@ -123,7 +126,9 @@ namespace MaterialUI
             {
                 m_Height = tempHeight;
                 m_ScrollRect.movementType = ScrollRect.MovementType.Clamped;
-                m_ScrollHandleImage.enabled = false;
+
+				if(m_ScrollHandleImage.enabled)
+                	m_ScrollHandleImage.enabled = false;
 
                 m_ScrollEnabled = false;
 
@@ -131,9 +136,12 @@ namespace MaterialUI
                 {
                     m_ShowWhenScrollable[i].enabled = false;
                 }
+				m_ScrollRect.verticalNormalizedPosition = 0f;
             }
 
             m_ScrollRectTransform.sizeDelta = new Vector2(m_ScrollRectTransform.sizeDelta.x, m_Height);
+
+			m_ScrollRect.verticalNormalizedPosition = Mathf.Clamp (m_ScrollRect.verticalNormalizedPosition, 0f, 1f);
         }
 
         public void CalculateLayoutInputHorizontal() { }
