@@ -6,17 +6,41 @@ using UnityEngine.UI.Extensions.Tweens;
 
 namespace UnityEngine.UI.Extensions
 {
-	[RequireComponent(typeof(RectTransform), typeof(LayoutElement))]
+	//[RequireComponent(typeof(RectTransform), typeof(LayoutElement))]
 	[AddComponentMenu("UI/Extensions/Accordion/Accordion Element")]
+
 	public class AccordionElement : Toggle
 	{
 
 		[SerializeField] private float m_MinHeight = 18f;
+
+
+		public GameObject m_Parent;
+		public GameObject m_Root;
 		
 		private Accordion m_Accordion;
 		private RectTransform m_RectTransform;
 		private LayoutElement m_LayoutElement;
-		
+
+		private bool state;
+
+		private Action<bool> m_OnAnimationComplete;
+
+		public Action<bool> onAnimationCompleted
+		{
+			get { return m_OnAnimationComplete; }
+			set { m_OnAnimationComplete = value; }
+		}
+
+
+		private Action<bool> m_OnAnimationStarted;
+
+		public Action<bool> onAnimationStarted
+		{
+			get { return m_OnAnimationStarted; }
+			set { m_OnAnimationStarted = value; }
+		}
+
 		[NonSerialized]
 		private readonly TweenRunner<FloatTween> m_FloatTweenRunner;
 		
@@ -31,11 +55,18 @@ namespace UnityEngine.UI.Extensions
 		protected override void Awake()
 		{
 			base.Awake();
+		
 			base.transition = Transition.None;
 			base.toggleTransition = ToggleTransition.None;
-			this.m_Accordion = this.gameObject.GetComponentInParent<Accordion>();
-			this.m_RectTransform = this.transform as RectTransform;
-			this.m_LayoutElement = this.gameObject.GetComponent<LayoutElement>();
+
+			if (this.m_Parent == null)
+			{
+				this.m_Parent = this.gameObject;
+			}
+
+			this.m_Accordion = this.m_Root.GetComponentInParent<Accordion>();
+			this.m_RectTransform = this.m_Parent.transform as RectTransform;
+			this.m_LayoutElement = this.m_Parent.GetComponent<LayoutElement>();
 			this.onValueChanged.AddListener(OnValueChanged);
 		}
 
@@ -43,10 +74,15 @@ namespace UnityEngine.UI.Extensions
 		protected override void OnValidate()
 		{
 			base.OnValidate();
+
+			if (this.m_Parent == null) 
+			{
+				return;
+			}
 			
 			if (this.group == null)
 			{
-				ToggleGroup tg = this.GetComponentInParent<ToggleGroup>();
+				ToggleGroup tg = this.m_Parent.GetComponentInParent<ToggleGroup>();
 				
 				if (tg != null)
 				{
@@ -54,7 +90,7 @@ namespace UnityEngine.UI.Extensions
 				}
 			}
 			
-			LayoutElement le = this.gameObject.GetComponent<LayoutElement>();
+			LayoutElement le = this.m_Parent.GetComponent<LayoutElement>();
 			
 			if (le != null)
 			{
@@ -70,13 +106,25 @@ namespace UnityEngine.UI.Extensions
 		}
 #endif
 
+	
+
 		public void OnValueChanged(bool state)
 		{
+			
 			if (this.m_LayoutElement == null)
 				return;
 			
+			this.state = state;
+
+			if (m_OnAnimationStarted != null)
+			{
+				m_OnAnimationStarted.Invoke (state);
+			}
+
 			Accordion.Transition transition = (this.m_Accordion != null) ? this.m_Accordion.transition : Accordion.Transition.Instant;
-			
+
+
+
 			if (transition == Accordion.Transition.Instant)
 			{
 				if (state)
@@ -116,6 +164,7 @@ namespace UnityEngine.UI.Extensions
 		
 		protected void StartTween(float startFloat, float targetFloat)
 		{
+			
 			float duration = (this.m_Accordion != null) ? this.m_Accordion.transitionDuration : 0.3f;
 			
 			FloatTween info = new FloatTween
@@ -126,6 +175,7 @@ namespace UnityEngine.UI.Extensions
 			};
 			info.AddOnChangedCallback(SetHeight);
 			info.ignoreTimeScale = true;
+			info.AddOnFinishCallback (OnAnimationCallBack);
 			this.m_FloatTweenRunner.StartTween(info);
 		}
 		
@@ -135,6 +185,15 @@ namespace UnityEngine.UI.Extensions
 				return;
 				
 			this.m_LayoutElement.preferredHeight = height;
+		}
+
+		public void OnAnimationCallBack()
+		{
+			if (m_OnAnimationComplete != null)
+			{
+				m_OnAnimationComplete.Invoke (state);
+			}
+
 		}
 	}
 }

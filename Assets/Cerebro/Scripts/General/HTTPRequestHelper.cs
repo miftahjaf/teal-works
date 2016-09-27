@@ -274,6 +274,7 @@ namespace Cerebro
 							{
 								newRecord.BabaBodyId = jsonResponse["World"][i]["BabaData"]["body"].AsInt;
 							}
+							Debug.Log(newRecord.BabaBodyId+" "+newRecord.BabaHairId+" "+newRecord.BabaFaceId);
 						}
 
 						if (!worldExists) {
@@ -288,10 +289,6 @@ namespace Cerebro
 								LaunchList.instance.mWorld [cellID].BabaHairId = newRecord.BabaHairId;
 								LaunchList.instance.mWorld [cellID].BabaFaceId = newRecord.BabaFaceId;
 								LaunchList.instance.mWorld [cellID].BabaBodyId = newRecord.BabaBodyId;
-								if(newRecord.StudentID == "9000004")
-								{
-									Debug.Log("my hair "+newRecord.BabaHairId+" face "+newRecord.BabaFaceId+" body "+newRecord.BabaBodyId);
-								}
 							} else {
 								CerebroHelper.DebugLog ("Couldn't update cuz cell id not foudn " + newRecord.CellID);
 							}
@@ -437,10 +434,8 @@ namespace Cerebro
 					BabaId += jsonResponse ["baba_data"] ["face"].Value;
 					BabaId += jsonResponse ["baba_data"] ["body"].Value;
 					PlayerPrefs.SetString(PlayerPrefKeys.BabaID, BabaId);
-					if(jsonResponse ["baba_data"] ["color"] != null)
-					{
-						PlayerPrefs.SetString(PlayerPrefKeys.GOTGameTeamID, jsonResponse ["baba_data"] ["color"]);
-					}
+
+
 
 					PlayerPrefs.SetInt (PlayerPrefKeys.Coins, LaunchList.instance.mCurrentStudent.Coins);
 					int currentDeltaValue = PlayerPrefs.GetInt (PlayerPrefKeys.DeltaCoins);	
@@ -704,7 +699,8 @@ namespace Cerebro
 
 		public void GetPracticeItems ()
 		{
-			string fileName = Application.persistentDataPath + "/PracticeItems.txt";
+			//string fileName = Application.persistentDataPath + "/PracticeItems.txt";
+			string fileName = Application.persistentDataPath + "/PracticeItemsWithKC.txt";
 			try {
 
 				StreamWriter sr = null;
@@ -716,7 +712,7 @@ namespace Cerebro
 				sr = File.CreateText (fileName);														
 //				}
 
-				CreatePostRequestNoFormSimpleJSON (SERVER_URL + "practice_item/get_practice_items", (jsonResponse) => {
+				/*CreatePostRequestNoFormSimpleJSON (SERVER_URL + "practice_item/get_practice_items", (jsonResponse) => {
 					if (jsonResponse != null && jsonResponse.ToString () != "") {
 						LaunchList.instance.mQuizAnalytics.Clear ();
 						for (int i = 0; i < jsonResponse.Count; i++) {
@@ -754,6 +750,24 @@ namespace Cerebro
 						CerebroHelper.DebugLog ("LOAD COMPLETE");
 						LaunchList.instance.GotPracticeItems ();
 //						}
+
+					} else {
+						CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					}
+				});*/
+				WWWForm form = new WWWForm ();
+				form.AddField ("grade", PlayerPrefs.GetString (PlayerPrefKeys.GradeKey,"0"));
+				Debug.Log("Load practice items");
+				CreatePostRequestSimpleJSON (SERVER_URL + "practice_item/with_kc",form, (jsonResponse) => {
+					if (jsonResponse != null && jsonResponse.ToString () != "") {
+						LaunchList.instance.mQuizAnalytics.Clear ();
+
+						sr.WriteLine (jsonResponse.ToString());
+						sr.Close ();
+
+						CerebroHelper.DebugLog ("LOAD COMPLETE");
+						LaunchList.instance.GotPracticeItems ();
+
 
 					} else {
 						CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
@@ -1054,7 +1068,6 @@ namespace Cerebro
 			N ["myData"] ["baba_data"]["head"] = BabaId[0].ToString();
 			N ["myData"] ["baba_data"]["face"] = BabaId[1].ToString();
 			N ["myData"] ["baba_data"]["body"] = BabaId[2].ToString();
-			N ["myData"] ["baba_data"] ["color"] = PlayerPrefs.GetString (PlayerPrefKeys.GOTGameTeamID, "1");
 
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());

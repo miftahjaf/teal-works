@@ -12,7 +12,8 @@ namespace Cerebro
 {
 	public class AssessmentEventArgs : EventArgs
 	{
-		public string assessmentSelected;
+		public string practiceId;
+		public string KCID;
 	}
 
 
@@ -44,6 +45,10 @@ namespace Cerebro
 
 		[SerializeField]
 		private GameObject m_OptionTemplate;
+
+		[SerializeField]
+		private GameObject m_OptionChildTemplate;
+
 		public event EventHandler AssessmentSelected;
 
 		private List<int> coinBarValues;
@@ -51,49 +56,48 @@ namespace Cerebro
 
 		private float listHeight = 700f;
 		private string[] stripColors = new string[]{"ff5541","2c96dc","29cdb1","7d33ff","ff9633"};
-		void OnEnable()
-		{
-
-		}
-
+	
 		public void RefreshCellData () {
 			coinBarValues = new List<int> ();
 			decrementValues = new List<int> ();
 
-			for (var i = 0; i < m_OptionDataList.Count; i++) {
-				ClickableOption option = m_SelectionItems[i].GetComponent<ClickableOption>();
-				Text stats = option.gameObject.GetChildByName<Text>("Stats");
-
-				if (PracticeData.mPracticeData.ContainsKey (m_OptionDataList[i].PracticeID)) {
-					stats.gameObject.SetActive (true);
-					stats.text = PracticeData.mPracticeData [m_OptionDataList[i].PracticeID].totalCorrect + " Correct | " + PracticeData.mPracticeData [m_OptionDataList[i].PracticeID].totalAttempts + " Attempts";
-				} else {
-					stats.gameObject.SetActive (false);
-				}
-
-				if (CerebroProperties.instance.ShowCoins) {
-					animateCoinsBar (option, i);
-				} else {
-					option.gameObject.transform.Find ("bg").gameObject.SetActive (false);
-					option.gameObject.transform.Find ("Coins").gameObject.SetActive (false);
-				}
+			for (var i = 0; i < m_OptionDataList.Count; i++)
+			{
+				AssessmentItemScript assessmentItem = m_SelectionItems[i].GetComponentInChildren<AssessmentItemScript>();
+				assessmentItem.Refresh ();
+//				ClickableOption option = m_SelectionItems[i].GetComponent<ClickableOption>();
+//				Text stats = option.gameObject.GetChildByName<Text>("Stats");
+//
+//				if (PracticeData.mPracticeData.ContainsKey (m_OptionDataList[i].PracticeID)) {
+//					stats.gameObject.SetActive (true);
+//					stats.text = PracticeData.mPracticeData [m_OptionDataList[i].PracticeID].totalCorrect + " Correct | " + PracticeData.mPracticeData [m_OptionDataList[i].PracticeID].totalAttempts + " Attempts";
+//				} else {
+//					stats.gameObject.SetActive (false);
+//				}
+//
+//				if (CerebroProperties.instance.ShowCoins) {
+//					animateCoinsBar (option, i);
+//				} else {
+//					option.gameObject.transform.Find ("bg").gameObject.SetActive (false);
+//					option.gameObject.transform.Find ("Coins").gameObject.SetActive (false);
+//				}
 			}
 		}
 
 		void animateCoinsBar(ClickableOption option, int index) {
-			GameObject bg = option.gameObject.transform.Find ("bg").gameObject;
-			GameObject coinsText = option.gameObject.transform.Find ("Coins").gameObject;
+			GameObject bg = option.gameObject.transform.Find ("Header/bg").gameObject;
+			GameObject coinsText = option.gameObject.transform.Find ("Header/Coins").gameObject;
 			string optionText = m_OptionDataList [index].PracticeItemName;
 
 			if (LaunchList.instance.mPracticeItems.ContainsKey (m_OptionDataList [index].PracticeID)) {
 				bg.SetActive (true);
 				coinsText.SetActive (true);
-				int totalCoins = int.Parse (LaunchList.instance.mPracticeItems [m_OptionDataList [index].PracticeID].TotalCoins);
+				int totalCoins = LaunchList.instance.mPracticeItems [m_OptionDataList [index].PracticeID].TotalCoins;
 				int currentCoins = LaunchList.instance.mPracticeItems [m_OptionDataList [index].PracticeID].CurrentCoins;
 				int coinsLeft = totalCoins - currentCoins;
 				coinsText.GetComponent<Text> ().text = totalCoins.ToString () + " Coins Left";
 
-				float ratio = (float)coinsLeft / (float)totalCoins;
+				float ratio =totalCoins >0f?( (float)coinsLeft / (float)totalCoins):0;
 
 				coinBarValues.Add (coinsLeft);
 				int decrementBy = (totalCoins - coinsLeft) / 30;
@@ -140,10 +144,12 @@ namespace Cerebro
 
 			float availableHeight = DialogManager.rectTransform.rect.height;
 
-			m_ListScrollLayoutElement.maxHeight = listHeight;
+			UpdateVerticalScrolllLayout ();
 
 			//			            Destroy(m_OptionTemplate);
 			m_OptionTemplate.gameObject.SetActive(false);
+
+			m_OptionChildTemplate.gameObject.SetActive(false);
 
 			GetComponent<RectTransform>().sizeDelta = new Vector2(1024f,GetComponent<RectTransform>().sizeDelta.y);
 			GetComponent<RectTransform> ().localPosition = new Vector3 (GetComponent<RectTransform> ().localPosition.x, 316f);
@@ -159,16 +165,22 @@ namespace Cerebro
 			return 150;
 		}
 
-		private GameObject CreateSubListItem(int i, PracticeItems optionData)
+		private GameObject CreateSubListItem(int index, PracticeItems optionData)
 		{
 			GameObject abc = Instantiate (m_OptionTemplate);
 			abc.SetActive (true);
-			ClickableOption option = abc.GetComponent<ClickableOption>();
+			AssessmentItemScript assessmentItemScript = abc.GetComponentInChildren<AssessmentItemScript> ();
+
+			//ClickableOption option = abc.GetComponent<ClickableOption>();
 			abc.GetComponent<RectTransform>().SetParent(m_OptionTemplate.transform.parent);
 			abc.GetComponent<RectTransform>().localScale = Vector3.one;
 			abc.GetComponent<RectTransform>().localEulerAngles = Vector3.zero;
 
-			Text name = option.gameObject.GetChildByName<Text>("Name");
+			Color stripColor = CerebroHelper.HexToRGB (stripColors [index % stripColors.Length]);
+
+			assessmentItemScript.Initialise (optionData,OnItemClick, stripColor,UpdateVerticalScrolllLayout);
+
+			/*Text name = option.gameObject.GetChildByName<Text>("Name");
 			Text stats = option.gameObject.GetChildByName<Text>("Stats");
 			Text masteryLevel = option.gameObject.GetChildByName<Text>("Level");
 
@@ -182,25 +194,40 @@ namespace Cerebro
 			}
 
 
-			Color stripColor = CerebroHelper.HexToRGB (stripColors [i % stripColors.Length]);
+
+
+			
 //			option.gameObject.transform.Find ("Strip").GetComponent<Image> ().color = stripColor;
-			option.gameObject.transform.Find ("bg").GetComponent<Image> ().color = stripColor;
+			option.gameObject.transform.Find ("Header/bg").GetComponent<Image> ().color = stripColor;
 //			option.gameObject.transform.Find ("Strip").gameObject.SetActive (false);
 
 			if (CerebroProperties.instance.ShowCoins) {
 				animateCoinsBar (option, i);
 			} else {
-				option.gameObject.transform.Find ("bg").gameObject.SetActive (false);
-				option.gameObject.transform.Find ("Coins").gameObject.SetActive (false);
+				option.gameObject.transform.Find ("Header/bg").gameObject.SetActive (false);
+				option.gameObject.transform.Find ("Header/Coins").gameObject.SetActive (false);
 			}
 
 			option.onClickAction += OnItemClick;
 			option.index = i;
 
+			foreach (string key in optionData.KnowledgeComponents.Keys) 
+			{
+				KnowledgeComponent KC = optionData.KnowledgeComponents [key];
+				GameObject KCObj = Instantiate (m_OptionChildTemplate);
+				KCObj.SetActive (true);
+				KCObj.GetComponent<RectTransform>().SetParent(abc.transform.Find("KCS"));
+				KCObj.GetComponent<RectTransform>().localScale = Vector3.one;
+				KCObj.GetComponent<RectTransform>().localEulerAngles = Vector3.zero;
+				Text KCname = KCObj.gameObject.GetChildByName<Text>("Name");
+				KCname.text = KC.KCName;
+
+			}
+*/
 			return abc;
 		}
 
-		public void OnItemClick(int index)
+		public void OnItemClick(string practiceId,string KCID)
 		{	
 
 			// TO LOCK Assessment ON NO COINS
@@ -217,27 +244,38 @@ namespace Cerebro
 
 			if (AssessmentSelected != null) {
 				AssessmentEventArgs args = new AssessmentEventArgs ();
-				args.assessmentSelected = m_OptionDataList [index].PracticeItemName;
+				args.practiceId = practiceId;
+				args.KCID = KCID;
 				AssessmentSelected.Invoke (this, args);
 			}
 		}
 
-		void Update() {
-			if (coinBarValues != null) {
-				for (var i = 0; i < coinBarValues.Count; i++) {
-					ClickableOption option = m_SelectionItems [i].GetComponent<ClickableOption> ();
-					GameObject coinsText = option.gameObject.transform.Find ("Coins").gameObject;
-					var currentValue = int.Parse (coinsText.GetComponent<Text> ().text.Split (new string[] { " Coins Left" }, System.StringSplitOptions.None) [0]);
-					if (currentValue > coinBarValues [i]) {
-						currentValue -= decrementValues [i];
-					} else {
-						currentValue = coinBarValues [i];
-					}
-					if (currentValue < 0)
-						currentValue = 0;
-					coinsText.GetComponent<Text> ().text = currentValue + " Coins Left";
-				}	
-			}
+		public void UpdateVerticalScrolllLayout()
+		{
+			Invoke ("UpdateVerticalScrolllLayoutAfterTime", 0.1f);
 		}
+
+		public void UpdateVerticalScrolllLayoutAfterTime()
+		{
+			this.m_ListScrollLayoutElement.maxHeight = listHeight;
+		}
+
+//		void Update() {
+//			if (coinBarValues != null) {
+//				for (var i = 0; i < coinBarValues.Count; i++) {
+//					ClickableOption option = m_SelectionItems [i].GetComponent<ClickableOption> ();
+//					GameObject coinsText = option.gameObject.transform.Find ("Header/Coins").gameObject;
+//					var currentValue = int.Parse (coinsText.GetComponent<Text> ().text.Split (new string[] { " Coins Left" }, System.StringSplitOptions.None) [0]);
+//					if (currentValue > coinBarValues [i]) {
+//						currentValue -= decrementValues [i];
+//					} else {
+//						currentValue = coinBarValues [i];
+//					}
+//					if (currentValue < 0)
+//						currentValue = 0;
+//					coinsText.GetComponent<Text> ().text = currentValue + " Coins Left";
+//				}	
+//			}
+//		}
 	}
 }

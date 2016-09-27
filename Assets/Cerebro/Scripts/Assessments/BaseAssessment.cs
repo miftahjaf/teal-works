@@ -17,6 +17,7 @@ namespace Cerebro {
 
 		protected string QuestionsAttemptedKey;	//PlayerPrefs Key to store questions attempted in the current level
 		protected string CurrentLevelKey;		//PlayerPrefs Key to store the current level
+		protected string CurrentLevelSeed;
 
 		public Text QuestionText;				//Main Question Text UI
 		public TEXDraw QuestionLatext;			//Main Question with Latex requirements
@@ -43,6 +44,8 @@ namespace Cerebro {
 		protected int questionsAttempted;		//Total Questions Attempted for a particular level of a particular assessment
 
 		protected int Queslevel;				//Current level of the user for particular assessment. Could be the last level in which random question from any other level is chosen
+
+
 		protected int level;					//Level of the current question shown on screen
 
 		public Button GeneralButton;			//General Button for user Input Answer
@@ -68,6 +71,14 @@ namespace Cerebro {
 		private bool didLevelUp = false;
 		private Explanation currentExplanation;
 
+		public string practiceID = "";
+		public string KCID = "";
+		private List<string> KCMappings;
+
+		private int currentMappingIndex;
+		private string currenKCMapping;
+
+
 		protected void Initialise(string subjectID, string topicID, string subTopicID, string assessmentID) {
 			parentAssessmentScript = gameObject.transform.parent.GetComponent<AssessmentScript> ();
 			revisitScript = gameObject.transform.parent.GetComponent<Revisit> ();
@@ -78,7 +89,7 @@ namespace Cerebro {
 			string PracticeItemID = subjectID + topicID + subTopicID + assessmentID;
 			QuestionsAttemptedKey = PracticeItemID + "QuestionsAttempted";
 			CurrentLevelKey = PracticeItemID + "LevelKey";
-
+			CurrentLevelSeed = practiceID + KCID + "Seed";
 			if (parentAssessmentScript != null) {
 				parentAssessmentScript.mPracticeID = subjectID + topicID + subTopicID + assessmentID;
 			}
@@ -98,10 +109,91 @@ namespace Cerebro {
 			}
 		}
 
-		public string GetPracticeItemID() {
-			return mSubjectID + mTopicID + mSubTopicID + mAssessmentID;
+		private void LoadKnowledgeComponentMappings()
+		{
+			currentMappingIndex = 0;
+			KCMappings = new List<string> ();
+
+			if (!string.IsNullOrEmpty(practiceID) && !string.IsNullOrEmpty(KCID)) 
+			{
+				if (LaunchList.instance.mPracticeItems.ContainsKey (practiceID))
+				{
+					PracticeItems practiceItem = LaunchList.instance.mPracticeItems [practiceID];
+					if (practiceItem.KnowledgeComponents.ContainsKey (KCID)) 
+					{
+						KnowledgeComponent KC =practiceItem.KnowledgeComponents[KCID];
+						KCMappings = KC.Mappings;
+
+					}
+				}
+			}
 		}
+
+		private string GetKCMapping()
+		{ 
+			foreach (string s in KCMappings) 
+			{
+				Debug.Log ("Mapping " + s);
+			}
+
+			if (this.KCMappings.Count > 0 )
+			{
+				int index = 0;
+				if (testMode)
+				{
+					index = currentMappingIndex;
+					currentMappingIndex++;
+					if (currentMappingIndex >= this.KCMappings.Count) 
+					{
+						currentMappingIndex = 0;
+					}
+				}
+				else 
+				{
+					index = Random.Range (0, KCMappings.Count);
+				}
+				return KCMappings [index];
+			} 
+
+			return "";
+		}
+
+		public string GetCurrentKCID()
+		{
+			if(!string.IsNullOrEmpty(KCID))
+			{
+			   return KCID;
+			}
+			else if(!string.IsNullOrEmpty(currenKCMapping)  && !string.IsNullOrEmpty(practiceID) && LaunchList.instance.mPracticeItems.ContainsKey(practiceID))
+			{
+				PracticeItems practiceItem = LaunchList.instance.mPracticeItems [practiceID];
+
+				foreach (var KC in practiceItem.KnowledgeComponents)
+				{
+					if (KC.Value.Mappings.Exists (x => x == currenKCMapping)) 
+					{
+						return KC.Value.ID;
+					}
+				}
+			}
+			return "";
+		}
+
+
+
+	
+
+		public string GetPracticeItemID() {
+			return practiceID; // mSubjectID + mTopicID + mSubTopicID + mAssessmentID;
+		}
+
+
 		protected void QuestionStarted() {
+
+			if (KCMappings == null)
+			{
+				LoadKnowledgeComponentMappings ();
+			}
 
 			if (userAnswerText) {
 				userAnswerText.text = "";
@@ -116,6 +208,7 @@ namespace Cerebro {
 				parentAssessmentScript.testingText.text = "";
 			}
 
+
 			if (isRevisitedQuestion) {
 				Queslevel = int.Parse (revisitedQuestionData ["difficulty"]);
 				forceSelector = int.Parse (revisitedQuestionData ["sublevel"]);
@@ -125,10 +218,10 @@ namespace Cerebro {
 				int randomIndex = -1;
 
 				if (missionItemData.QuestionLevel.Contains ("@")) {
-					string[] options = missionItemData.QuestionLevel.Split ("@"[0]);
+					string[] options = missionItemData.QuestionLevel.Split ("@" [0]);
 					List<int> levels = new List<int> ();
 					foreach (var str in options) {
-						levels.Add(int.Parse (str));
+						levels.Add (int.Parse (str));
 					}
 					randomIndex = Random.Range (0, levels.Count);
 					Queslevel = levels [randomIndex];
@@ -140,10 +233,10 @@ namespace Cerebro {
 				}
 
 				if (missionItemData.SubLevel.Contains ("@")) {
-					string[] options = missionItemData.SubLevel.Split ("@"[0]);
+					string[] options = missionItemData.SubLevel.Split ("@" [0]);
 					List<int> levels = new List<int> ();
 					foreach (var str in options) {
-						levels.Add(int.Parse (str));
+						levels.Add (int.Parse (str));
 					}
 					if (randomIndex == -1) {
 						randomIndex = Random.Range (0, levels.Count);
@@ -154,9 +247,20 @@ namespace Cerebro {
 						forceSelector = int.Parse (missionItemData.SubLevel);
 					}
 				}
-				if((WelcomeScript.instance.autoTestMissionMix || WelcomeScript.instance.autoTestMissionCorrect)&& CerebroHelper.isTestUser())
-					StartCoroutine (autoCorrectMission());
-			} else if (testMode && scorestreaklvls != null) {
+				if ((WelcomeScript.instance.autoTestMissionMix || WelcomeScript.instance.autoTestMissionCorrect) && CerebroHelper.isTestUser ())
+					StartCoroutine (autoCorrectMission ());
+			} 
+			else if (KCMappings.Count > 0)
+			{
+				string randomMapping = GetKCMapping ();
+				Debug.Log (randomMapping);
+				string[] spiltRandomMapping = randomMapping.Split (new char[]{ 't' }, System.StringSplitOptions.RemoveEmptyEntries);
+				Queslevel = int.Parse (spiltRandomMapping[0]);
+				forceSelector = int.Parse (spiltRandomMapping[1]);
+
+
+			}
+			else if (testMode && scorestreaklvls != null) {
 				Queslevel = testQuestionLevel;
 				if (Queslevel > scorestreaklvls.Length) {
 					if (WelcomeScript.instance.testingAllScreens) {
@@ -216,8 +320,13 @@ namespace Cerebro {
 			if (forceSelector != -1) {
 				if (forceSelector >= lowerLimit && forceSelector < upperLimit) {
 					randomSelector = forceSelector;
+					if (parentAssessmentScript != null && testMode) {
+						parentAssessmentScript.testingText.text = Queslevel.ToString () + "t" + forceSelector.ToString ();
+					}
 				}
-			} else if (testMode && testQuestionLevel <= scorestreaklvls.Length) {
+			}
+			else if (testMode && testQuestionLevel <= scorestreaklvls.Length)
+			{
 				if (testSelector+lowerLimit < upperLimit) {
 					testSelector++;
 					int returnSelector = (testSelector + lowerLimit) - 1;
@@ -231,15 +340,24 @@ namespace Cerebro {
 					randomSelector = returnSelector;
 				}
 			}
+
+			if (isRevisitedQuestion) {
+				randomSeed = int.Parse (revisitedQuestionData ["seed"]);
+			} else if (PlayerPrefs.HasKey (CurrentLevelSeed)) 
+			{
+				randomSeed = PlayerPrefs.GetInt (CurrentLevelSeed);
+				PlayerPrefs.DeleteKey (CurrentLevelSeed);
+			}
+			else
+			{
+				randomSeed = Mathf.RoundToInt (Time.time * 10000) + Random.Range (0, 999999);
+
+			}
+			Random.seed = randomSeed;
+
 			if (randomSelector == -1) {
 				randomSelector = Random.Range (lowerLimit, upperLimit);
 			}
-			if (isRevisitedQuestion) {
-				randomSeed = int.Parse (revisitedQuestionData ["seed"]);
-			} else {
-				randomSeed = Mathf.RoundToInt (Time.time * 10000) + Random.Range (0, 999999);
-			}
-			Random.seed = randomSeed;
 
 			return randomSelector;
 		}
@@ -270,6 +388,8 @@ namespace Cerebro {
 			if (parentAssessmentScript != null) {
 				parentAssessmentScript.QuestionEnded (isCorrect, difficulty, _increment, currentQuestionAssessmentKey, randomSeed, type, UserAnswer);
 			}
+
+			currenKCMapping = difficulty + "t" + type;
 		}
 
 		protected void showNextQuestion() {
@@ -290,6 +410,12 @@ namespace Cerebro {
 		protected void SetLevelToLocalDB(int level) {
 			PlayerPrefs.SetInt (CurrentLevelKey, level);
 		}
+
+		public void SetSeedToLocalDB() {
+			PlayerPrefs.SetInt (CurrentLevelSeed, randomSeed);
+		}
+
+			
 		protected void updateQuestionsAttempted() {
 			PlayerPrefs.SetInt (QuestionsAttemptedKey, questionsAttempted);
 		}
@@ -455,6 +581,8 @@ namespace Cerebro {
 
 			VideoHelper.instance.VideoEnded -= CloseWebView;
 		}
+
+
 
 		public abstract void numPadButtonPressed (int value);
 		public abstract void SubmitClick();

@@ -139,7 +139,7 @@ namespace Cerebro
 			isInitialised = true;
 			GetComponent<RectTransform> ().sizeDelta = new Vector2 (0f, 0f);
 
-			CheckForRegeneration ();
+			LaunchList.instance.PracticeRegeneration ();
 
 			list = transform.Find ("AssessmentSelector").GetComponent<AssessmentSelector> ();
 			list.Initialize (assessments);
@@ -156,7 +156,7 @@ namespace Cerebro
 			}
 		}
 
-		private void CheckForRegeneration ()
+	/*	private void CheckForRegeneration ()
 		{
 			List<string> resetRegenerationList = new List<string> ();
 			Dictionary<string,PracticeItems> dirtyItems = new Dictionary<string,PracticeItems> ();
@@ -178,13 +178,16 @@ namespace Cerebro
 			}
 
 			LaunchList.instance.ResetRegenerationinPracticeItems (resetRegenerationList);
-		}
+		}*/
 
 		void List_AssessmentSelected (object sender, System.EventArgs e)
 		{
-			string prefabName = (e as AssessmentEventArgs).assessmentSelected;
-			prefabName = prefabName.Replace (" ", "");
-			OpenAssessment ("Assessments/" + prefabName, (e as AssessmentEventArgs).assessmentSelected, null);
+			string practiceId = (e as AssessmentEventArgs).practiceId;
+			string KCID = (e as AssessmentEventArgs).KCID;
+			string practiceName = LaunchList.instance.mPracticeItems [practiceId].PracticeItemName;
+			string prefabName = practiceName.Replace (" ", "");
+			 
+		    OpenAssessment ("Assessments/" + prefabName, practiceName, null,practiceId,KCID);
 		}
 
 		public void DownArrowPressed ()
@@ -244,12 +247,12 @@ namespace Cerebro
 			//ss.ShowHeading ();
 		}
 
-		private void OpenAssessment (string type, string title, MissionItemData missionItemData)
+		private void OpenAssessment (string type, string title, MissionItemData missionItemData,string practiceId="",string KCId ="")
 		{
 			
 			GameObject assessmentgameobject = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Assessments, gameObject.transform.parent.transform);
 			assessmentgameobject.transform.SetAsLastSibling ();
-			assessmentgameobject.GetComponent<AssessmentScript> ().Initialize (type, title, gameObject, missionItemData, testModeActive);
+			assessmentgameobject.GetComponent<AssessmentScript> ().Initialize (type, title, gameObject, missionItemData, testModeActive,practiceId,KCId);
 
 			gameObject.SetActive (false);
 		}
