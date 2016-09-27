@@ -390,6 +390,7 @@ namespace Cerebro {
 			}
 
 			currenKCMapping = difficulty + "t" + type;
+
 		}
 
 		protected void showNextQuestion() {

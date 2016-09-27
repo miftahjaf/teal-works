@@ -15,6 +15,7 @@ namespace Cerebro
 		public Text stats;
 		public Text mastryLevel;
 		public Text coins;
+		public FreeModifier bgModifier;
 		public GameObject bg;
 		public GameObject KCprefab;
 		public GameObject KCParent;
@@ -65,11 +66,15 @@ namespace Cerebro
 
 		private void RefreshStats()
 		{
-			if (PracticeData.mPracticeData.ContainsKey (practiceItems.PracticeID)) {
+			if (PracticeData.mPracticeData.ContainsKey (practiceItems.PracticeID))
+			{
+				name.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (name.GetComponent<RectTransform> ().anchoredPosition.x, 12f);
 				stats.gameObject.SetActive (true);
 				stats.text = PracticeData.mPracticeData [practiceItems.PracticeID].totalCorrect + " Correct | " + PracticeData.mPracticeData [practiceItems.PracticeID].totalAttempts + " Attempts";
 			} else {
 				stats.gameObject.SetActive (false);
+				name.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (name.GetComponent<RectTransform> ().anchoredPosition.x, 0f);
+
 			}
 		}
 
@@ -147,8 +152,10 @@ namespace Cerebro
 		public  void OnAccordionAnimationStarted(bool state)
 		{
 			if (state) {
+				
 				this.KCParent.transform.localScale = Vector3.one;
-
+				bgModifier.Radius = new Vector4(4f, 4f, 0f, 0f);
+				Debug.Log (bgModifier.Radius);
 			}
 			RefreshKCList ();
 			if (m_OnScrollChanged != null) 
@@ -161,7 +168,7 @@ namespace Cerebro
 		{
 			
 			this.KCParent.transform.localScale = state ? Vector3.one:Vector3.zero;
-
+			bgModifier.Radius =state ? new Vector4(4f, 4f, 0f, 0f): new Vector4(4f, 4f, 4f, 4f);
 			if (m_OnScrollChanged != null) 
 			{
 				m_OnScrollChanged.Invoke ();

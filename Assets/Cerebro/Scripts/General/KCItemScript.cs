@@ -61,14 +61,7 @@ namespace Cerebro
 
 		public void CoinTextAnimation()
 		{
-			int remainingCoins = knowledgeComponent.TotalCoins - knowledgeComponent.CurrentCoins;
-			iTween.ValueTo(this.gameObject, iTween.Hash(
-				"from", knowledgeComponent.TotalCoins,
-				"to", remainingCoins,
-				"time",0.4f,
-				"onUpdate", (Action<object>) (value =>{this.coins.text = ((float)value).ToString("0") +" coins left";})
-			));
-
+			this.coins.text = (knowledgeComponent.TotalCoins - knowledgeComponent.CurrentCoins).ToString() +" coins left";
 		}
 
 		public void Refresh()
