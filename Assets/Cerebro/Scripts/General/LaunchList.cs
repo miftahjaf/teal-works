@@ -58,6 +58,7 @@ namespace Cerebro
 		public List<GOTGameStatus> mGameStatus = new List<GOTGameStatus> ();
 		public List<StartableGame> mStartableGames = new List<StartableGame> ();
 		public Dictionary<string,int> mKCCoins =new Dictionary<string, int>();
+		public Dictionary<string,string> mRegenerationData =new Dictionary<string, string>();
 
 		public bool mUpdateTimer = false;
 		public System.TimeSpan mTimer;
@@ -1613,6 +1614,30 @@ namespace Cerebro
 				}
 				sr.Close ();
 			}
+
+			fileName = Application.persistentDataPath + "/PracticeItemRegeneration.txt";
+			if (File.Exists (fileName)) 
+			{
+				mRegenerationData.Clear ();
+				var sr = File.OpenText (fileName);
+				string json = sr.ReadToEnd ();
+				JSONNode jsonNode = JSONNode.Parse (json);
+				if (jsonNode != null) 
+				{
+					int length = jsonNode.Count;
+					for (int i = 0; i < length; i++)
+					{
+						string practiceID = jsonNode [i] ["PracticeId"].Value;
+						string regenerationDate = jsonNode [i] ["RegenerationDate"].Value;
+						if (mRegenerationData.ContainsKey (practiceID)) {
+							mRegenerationData [practiceID] = regenerationDate;
+						} else {
+							mRegenerationData.Add (practiceID, regenerationDate);
+						}
+					}
+				}
+				sr.Close ();
+			}
 			fileName = Application.persistentDataPath + "/PracticeItemsWithKC.txt";
 			//List<string> resetRegenerationList = new List<string> ();
 
@@ -1758,52 +1783,48 @@ namespace Cerebro
 
 		public void PracticeRegeneration()
 		{
-			string fileName = Application.persistentDataPath + "/PracticeItemRegeneration.txt";
-
-			JSONNode regenerationData;
-			if (File.Exists (fileName))
+			foreach (var pItem in mPracticeItems) 
 			{
-				string json = File.ReadAllText (fileName);
-				regenerationData = JSONNode.Parse (json);
-				int length = regenerationData.Count;
-				for (int i = 0; i < length; i++)
+				if (mRegenerationData.ContainsKey (pItem.Value.PracticeID)) 
 				{
-					if(!LaunchList.instance.mPracticeItems.ContainsKey(regenerationData[i]["PracticeId"]))
-						continue;
-					PracticeItems pItem = LaunchList.instance.mPracticeItems[regenerationData[i]["PracticeId"]];
-					System.DateTime timestarted = System.DateTime.ParseExact (regenerationData[i]["RegenerationDate"], "yyyyMMddHHmmss", null);
-
+					System.DateTime timestarted = System.DateTime.ParseExact (mRegenerationData [pItem.Value.PracticeID], "yyyyMMddHHmmss", null);
 					System.DateTime timeNow = System.DateTime.Now;
 					System.TimeSpan differenceTime = timeNow.Subtract (timestarted);
 					float diff = (float)differenceTime.TotalSeconds;
-					float secondsForRegeneration = float.Parse (pItem.RegenRate) * 60 * 60 * 24;
+					float secondsForRegeneration = float.Parse (pItem.Value.RegenRate) * 60 * 60 * 24;
 					if (diff < secondsForRegeneration) {
 						continue;
 					}
-					bool isFinishedKCS = IsFinishedCertainKCS (pItem);
-					if (isFinishedKCS) 
-					{
-						ResetCoinsAfterRegenration (pItem);
-						regenerationData[i] ["RegenerationDate"] = DateTime.Now.ToString("yyyyMMddHHmmss");
+					bool isFinishedKCS = IsFinishedCertainKCS (pItem.Value);
+					if (isFinishedKCS) {
+						ResetCoinsAfterRegenration (pItem.Value);
+						mRegenerationData [pItem.Value.PracticeID] = DateTime.Now.ToString ("yyyyMMddHHmmss");
 					}
 				}
-			}
-			else
-			{
-				regenerationData = JSONNode.Parse ("[]");
-				foreach (var pItem in mPracticeItems)
+				else if(pItem.Value.Show == "true" || CerebroHelper.isTestUser())
 				{
-					JSONNode practiceRegenerationData = JSONNode.Parse ("{}");
-					practiceRegenerationData ["PracticeId"] = pItem.Value.PracticeID;
-					practiceRegenerationData ["RegenerationDate"] = DateTime.Now.ToString("yyyyMMddHHmmss");
-					regenerationData.Add (practiceRegenerationData);
-
+					mRegenerationData [pItem.Value.PracticeID] = DateTime.Now.ToString ("yyyyMMddHHmmss");
 					ResetCoinsAfterRegenration (pItem.Value);
 				}
 			}
-				
-			File.WriteAllText (fileName,regenerationData.ToString());
+
 			UpdateKCCoinsData ();
+			UpdateRegenerationData ();
+		}
+
+		public void UpdateRegenerationData()
+		{
+			string fileName = Application.persistentDataPath + "/PracticeItemRegeneration.txt";
+			JSONNode jsonNode = JSONNode.Parse ("[]");
+			foreach(var reg in mRegenerationData)
+			{
+				JSONNode data = JSONNode.Parse ("{}");
+				data ["PracticeId"] = reg.Key.ToString();
+				data["RegenerationDate"]= reg.Value.ToString();
+				jsonNode.Add (data);
+			}
+
+			File.WriteAllText (fileName, jsonNode.ToString ());
 		}
 
 		public void ResetCoinsAfterRegenration(PracticeItems pItem)
@@ -1812,9 +1833,9 @@ namespace Cerebro
 			foreach (var KC in pItem.KnowledgeComponents)
 			{
 				KC.Value.CurrentCoins = 0;
-				if(LaunchList.instance.mKCCoins.ContainsKey(KC.Value.ID))
+				if(mKCCoins.ContainsKey(KC.Value.ID))
 				{
-					LaunchList.instance.mKCCoins [KC.Value.ID] = 0;
+					mKCCoins [KC.Value.ID] = 0;
 				}
 			}
 		}
@@ -1836,7 +1857,7 @@ namespace Cerebro
 		{
 			string fileName = Application.persistentDataPath + "/PracticeItemCoins.txt";
 			JSONNode jsonNode = JSONNode.Parse ("[]");
-			foreach(var KCCoin in LaunchList.instance.mKCCoins)
+			foreach(var KCCoin in mKCCoins)
 			{
 				JSONNode data = JSONNode.Parse ("{}");
 				data ["ID"] = KCCoin.Key.ToString();
