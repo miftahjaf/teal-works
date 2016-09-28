@@ -51,13 +51,13 @@ namespace Cerebro
 				}
 				Debug.Log ("curr "+groupID);
 				if (groupID == GroupMapping.Group1) {
-					teamColor = new Color (0.99f, 0.39f, 0.15f);
+					teamColor = GroupMapping.Color1;
 				} else if (groupID == GroupMapping.Group2) {
-					teamColor = new Color (0.05f, 0.9f, 0.9f);
+					teamColor = GroupMapping.Color2;
 				} else if (groupID == GroupMapping.Group3) {
-					teamColor = new Color (0.62f, 0.62f, 0.62f);
+					teamColor = GroupMapping.Color3;
 				} else if (groupID == GroupMapping.Group4) {
-					teamColor = new Color (0.39f, 0.62f, 0.92f);
+					teamColor = GroupMapping.Color4;
 				}
 
 				for (int i = 0; i < 4; i++) {

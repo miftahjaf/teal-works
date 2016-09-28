@@ -45,6 +45,7 @@ namespace Cerebro
 				BackButton = CurrAvatar.transform.root.FindChild ("BackButton").gameObject;
 				AvatarSelectorButtons.SetActive (false);
 				BackButton.SetActive (false);
+				CurrAvatar.SetActive (false);
 			}
 
 			if (!IsLeaderboardOpen) {
@@ -241,8 +242,7 @@ namespace Cerebro
 				PreviousGameData.SetActive (false);
 				TimeStatus.text = "No active games!";
 			}
-
-			transform.Find("EditButton").gameObject.SetActive(true);
+				
 			DisplayView.transform.Find("WinnerList").gameObject.SetActive(true);
 			ProgressBar.SetActive (false);
 			DisplayView.SetActive (true);
@@ -281,6 +281,7 @@ namespace Cerebro
 			AvatarCamera.GetComponent<Blur> ().enabled = true;
 			LeaderboardCamera.SetActive (true);
 			IsLeaderboardOpening = true;
+			IsLeaderboardOpen = true;
 			Leaderboard.SetActive (true);
 		}
 
@@ -290,6 +291,7 @@ namespace Cerebro
 			LerpValue = 0;
 			LerpStartTime = Time.time;
 			IsLeaderboardOpening = false;
+			IsLeaderboardOpen = false;
 		}
 
 		public void ChangeButtonClicked()

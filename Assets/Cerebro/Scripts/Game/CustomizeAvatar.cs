@@ -273,13 +273,13 @@ namespace Cerebro
 			var teamColor = new Color (0, 0, 0);
 			groupID = LaunchList.instance.mCurrentGame.GroupID;
 			if (groupID == GroupMapping.Group1) {
-				teamColor = new Color (0.99f, 0.39f, 0.15f);
+				teamColor = GroupMapping.Color1;
 			} else if (groupID == GroupMapping.Group2) {
-				teamColor = new Color (0.05f, 0.9f, 0.9f);
+				teamColor = GroupMapping.Color2;
 			} else if (groupID == GroupMapping.Group3) {
-				teamColor = new Color (0.62f, 0.62f, 0.62f);
+				teamColor = GroupMapping.Color3;
 			} else if (groupID == GroupMapping.Group4) {
-				teamColor = new Color (0.39f, 0.62f, 0.92f);
+				teamColor = GroupMapping.Color4;
 			}
 			hair2Rndr.color = teamColor;
 			bodyRndr.color = teamColor;

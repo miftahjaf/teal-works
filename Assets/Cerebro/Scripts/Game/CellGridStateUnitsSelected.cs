@@ -26,7 +26,7 @@ namespace Cerebro {
 
 		public override void OnCellClicked(Cell cell)
 		{
-			if (EventSystem.current.IsPointerOverGameObject ()) {
+			if (cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().IsPopupEnabled && EventSystem.current.IsPointerOverGameObject ()) {
 				CerebroHelper.DebugLog ("returning Cell Clicked "+cell.transform.position.y);
 				return;
 			}
@@ -84,7 +84,6 @@ namespace Cerebro {
 
 		public void OnCaptureButtonPressed()
 		{
-			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (0f, 0f, -10f), false).setEaseType (GoEaseType.BackIn));
 			currUnit.Move(currCell, null);
 			_cellGrid.EndTurn();
 		}
@@ -149,7 +148,6 @@ namespace Cerebro {
 			currUnit.Move(currCell, currMinPath);
 			_cellGrid.EndTurn();
 			_cellGrid.DeleteUnit(currUnit.gameObject);
-			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (0f, 0f, -10f), false).setEaseType (GoEaseType.BackIn));
 		}
 
 		public override void OnCellDeselected(Cell cell)

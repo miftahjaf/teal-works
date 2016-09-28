@@ -12,6 +12,7 @@ namespace Cerebro
 		public GameObject AvatartGameobject, DefaultAvatar;
 		public GameObject VectorLineGm;
 		public Texture2D EndCapTexture;
+		public bool IsPopupEnabled;
 
 		public delegate void CaptureClicked();
 		public CaptureClicked OnCaptureClicked;
@@ -19,6 +20,7 @@ namespace Cerebro
 		public void InitializePopup(string title, int coins, string BabaId, string groupId, CaptureClicked CaptureFunction, Vector3 cellPosition)
 		{
 			OnCaptureClicked = CaptureFunction;
+			IsPopupEnabled = true;
 			if (BabaId == "") {
 				DefaultAvatar.SetActive (true);
 				AvatartGameobject.SetActive (false);
@@ -68,12 +70,16 @@ namespace Cerebro
 			if (OnCaptureClicked != null) {
 				OnCaptureClicked ();
 			}
+			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (0f, 0f, -10f), false).setEaseType (GoEaseType.BackIn));
+			IsPopupEnabled = false;
 			transform.FindChild("Parent").gameObject.SetActive (false);
 		}
 
 		public void BackPressed()
 		{
+			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (0f, 0f, -10f), false).setEaseType (GoEaseType.BackIn));
 			OnCaptureClicked = null;
+			IsPopupEnabled = false;
 			transform.FindChild("Parent").gameObject.SetActive (false);
 		}
 
