@@ -222,8 +222,12 @@ namespace Cerebro
 					int rndselector = UnityEngine.Random.Range (0, main.Length);
 
 					int number = UnityEngine.Random.Range (1, conversion [rndselector] * 10);
+					while (number % conversion [rndselector] == 0)
+						number = UnityEngine.Random.Range (1, conversion [rndselector] * 10);
 					if (rndselector == 5) {
 						number -= number % 6;
+						if (number % 60 == 0)
+							number -= 6;
 					}
 					if (conversion [rndselector] >= 1000) {
 						number = UnityEngine.Random.Range (1, conversion [rndselector]) * 10;
@@ -235,9 +239,9 @@ namespace Cerebro
 					dec = MathFunctions.GetRounded (dec, 2);
 					float ans = (float)preDec + (float)dec;
 
-					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Express " + preDec.ToString() + " " + main[rndselector] + " " + postDec + " " + sub[rndselector] + " as " + main[rndselector] + " (round to 2 decimal places).";
-					subQuestionText.text = "";
+					QuestionText.text = "Express ";
+					QuestionText.text += (preDec == 0) ? "" : (preDec + " " + main [rndselector]) + " ";
+					QuestionText.text += postDec + " " + sub[rndselector] + " as " + main[rndselector] + " (round to 2 decimal places).";
 					Answer = ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);
 
