@@ -147,7 +147,12 @@ namespace Cerebro
 					CerebroHelper.DebugLog ("Already loaded");
 				} else {
 					CerebroHelper.DebugLog ("Loading image");
-					textureLoading.Add (i, true);
+
+					if (textureLoading.ContainsKey (i))
+						textureLoading [i] = true;
+					else
+						textureLoading.Add (i, true);
+					
 					Graphic graphic = arr [i].gameObject.GetChildByName<Graphic> ("Icon");
 					var imgurl = arr [i].PhotoUrl;
 					Texture2D tex = null;
@@ -159,14 +164,25 @@ namespace Cerebro
 						yield return remoteImage;
 						if (remoteImage.error == null) {
 							tex = remoteImage.texture;
-							CerebroHelper.remoteWatchTextures.Add (imgurl, tex);
+							if (CerebroHelper.remoteWatchTextures.ContainsKey (imgurl))
+							{
+								CerebroHelper.remoteWatchTextures [imgurl] = tex;
+							} 
+							else
+							{
+								CerebroHelper.remoteWatchTextures.Add (imgurl, tex);
+							}
 						}
 					}
 					if (tex != null && screenActive) {
 						var newsprite = Sprite.Create (tex, new Rect (0f, 0f, tex.width, tex.height), new Vector2 (0.5f, 0.5f));
 						graphic.GetComponent<Image> ().color = new Color (1, 1, 1, 1);
 						graphic.GetComponent<Image> ().sprite = newsprite;
-						textureLoaded.Add (i, true);
+
+						if (textureLoaded.ContainsKey (i))
+							textureLoaded [i] = true;
+						else
+							textureLoaded.Add (i, true);
 					}
 				}
 				textureLoading.Remove (i);
