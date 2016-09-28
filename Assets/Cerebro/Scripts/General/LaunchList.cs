@@ -2734,6 +2734,7 @@ namespace Cerebro
 		public int GroupCoin;
 		public string GroupID;
 		public int GroupCell;
+		public int GroupPoint;
 	}
 
 

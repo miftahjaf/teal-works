@@ -15,14 +15,17 @@ namespace Cerebro
 		GameObject ProgressBar;
 
 		string currentGameID;
-		public GameObject[] GroupTrophies;
-		public Text[] GroupNameTexts;
-		public Text[] GroupCellTexts;
-		public Text[] GroupCoinTexts;
+		public GameObject[] Groups;
+		public GameObject Leaderboard;
+		private Text[] GroupNameTexts;
+		private Text[] GroupCellTexts;
+		private Text[] GroupCoinTexts;
+		private Text[] GroupPointTexts;
+		private GameObject[] GroupTrophy;
 
-		public GameObject UICamera, CurrAvatar;
+		public GameObject UICamera, LeaderboardCamera, AvatarCamera, CurrAvatar;
 
-		private bool IsLerpStarted, IsScreenOpening, IsAvatarSelectionOpen;
+		private bool IsLerpStarted, IsLerpLeaderboardStarted, IsAvatarScreenOpening, IsLeaderboardOpening, IsAvatarSelectionOpen, IsLeaderboardOpen;
 		private float LerpStartTime, LerpValue;
 		private float LerpTotalTime = 0.5f;
 
@@ -42,6 +45,23 @@ namespace Cerebro
 				BackButton = CurrAvatar.transform.root.FindChild ("BackButton").gameObject;
 				AvatarSelectorButtons.SetActive (false);
 				BackButton.SetActive (false);
+			}
+
+			if (!IsLeaderboardOpen) {
+				GroupNameTexts = new Text[4];
+				GroupCellTexts = new Text[4];
+				GroupCoinTexts = new Text[4];
+				GroupPointTexts = new Text[4];
+				GroupTrophy = new GameObject[4];
+				for (int i = 0; i < 4; i++) {
+					GroupNameTexts[i] = Groups [i].transform.FindChild ("Name").GetComponent<Text> ();
+					GroupCellTexts[i] = Groups [i].transform.FindChild ("Land").GetComponent<Text> ();
+					GroupCoinTexts[i] = Groups [i].transform.FindChild ("Coins").GetComponent<Text> ();
+					GroupPointTexts[i] = Groups [i].transform.FindChild ("Points").GetComponent<Text> ();
+					GroupTrophy[i] = Groups [i].transform.FindChild ("BG").gameObject;
+				}
+				Leaderboard.SetActive (false);
+				LeaderboardCamera.SetActive (false);
 			}
 		}
 
@@ -107,18 +127,40 @@ namespace Cerebro
 				{
 					IsLerpStarted = false;
 					LerpValue = 1;
-					if (IsScreenOpening) {
+					if (IsAvatarScreenOpening) {
 						AvatarSelectorButtons.SetActive (true);
 						BackButton.SetActive (true);
 					} else {
-						Debug.Log ("disable");
 						UICamera.GetComponent<Blur> ().enabled = false;
 					}
 				}
-				if (IsScreenOpening) {
+				if (IsAvatarScreenOpening) {
 					OpenAvatarCustomization ();
 				} else {
 					CloseAvatarCustomization ();
+				}
+			}
+
+			if (IsLerpLeaderboardStarted) 
+			{
+				if (Time.time - LerpStartTime < LerpTotalTime) 
+				{
+					LerpValue = Mathf.Lerp (0f, 1f, (Time.time - LerpStartTime) / LerpTotalTime);
+				}
+				else 
+				{
+					IsLerpLeaderboardStarted = false;
+					LerpValue = 1;
+					if (!IsLeaderboardOpening) {
+						UICamera.GetComponent<Blur> ().enabled = false;
+						AvatarCamera.GetComponent<Blur> ().enabled = false;
+						LeaderboardCamera.SetActive (false);
+					}
+				}
+				if (IsLeaderboardOpening) {
+					OpenLeaderboard ();
+				} else {
+					CloseLeaderboard ();
 				}
 			}
 		}
@@ -135,38 +177,37 @@ namespace Cerebro
 			Text PrevGameCoinsSpent = PreviousGameData.transform.Find ("MostCoinsSpent").GetComponent<Text> ();
 			Text PrevGameTerritoriesCaptured = PreviousGameData.transform.Find ("MostTerritoriesCaptured").GetComponent<Text> ();
 
-//			if (LaunchList.instance.mGameStatus [0].GOTLeaderboard.Count > 0) {
-//				DisplayView.transform.FindChild("Panel").gameObject.SetActive (true);
-//				List<GOTLeaderboard> CurrGOTLeaderboard = LaunchList.instance.mGameStatus [0].GOTLeaderboard;
-//				CurrGOTLeaderboard = CurrGOTLeaderboard.OrderByDescending (l => l.GroupCell).ToList ();
-//				for (int i = 0; i < CurrGOTLeaderboard.Count - 1 && i < 4; i++) {
-//					for (int j = 0; j < CurrGOTLeaderboard.Count - 1 && j < 4; j++) {
-//						if (CurrGOTLeaderboard [j].GroupCell == CurrGOTLeaderboard [j + 1].GroupCell && CurrGOTLeaderboard [j].GroupCoin < CurrGOTLeaderboard [j + 1].GroupCoin) {
-//							GOTLeaderboard l = CurrGOTLeaderboard [j];
-//							CurrGOTLeaderboard [j] = CurrGOTLeaderboard [j + 1];
-//							CurrGOTLeaderboard [j + 1] = l;
-//						}
-//					}
-//				}
-//
-//				for (int i = 0; i < CurrGOTLeaderboard.Count && i < 4; i++) {
-//					Debug.Log (CurrGOTLeaderboard [i].GroupCoin.ToString ());
-//					GroupNameTexts [i].text = CurrGOTLeaderboard [i].GroupName;
-//					GroupCoinTexts [i].text = CurrGOTLeaderboard [i].GroupCoin.ToString ();
-//					GroupCellTexts [i].text = CurrGOTLeaderboard [i].GroupCell.ToString ();
-//					if (CurrGOTLeaderboard [i].GroupCell == CurrGOTLeaderboard [0].GroupCell) {
-//						if (CurrGOTLeaderboard [i].GroupCoin == CurrGOTLeaderboard [0].GroupCoin) {
-//							GroupTrophies [i].SetActive (true);
-//						} else {
-//							GroupTrophies [i].SetActive (false);
-//						}
-//					} else {
-//						GroupTrophies [i].SetActive (false);
-//					}
-//				}
-//			} else {
-//				DisplayView.transform.FindChild("Panel").gameObject.SetActive (false);
-//			}
+			if (LaunchList.instance.mGameStatus [0].GOTLeaderboard.Count > 0) {
+				List<GOTLeaderboard> CurrGOTLeaderboard = LaunchList.instance.mGameStatus [0].GOTLeaderboard;
+				CurrGOTLeaderboard = CurrGOTLeaderboard.OrderByDescending (l => l.GroupPoint).ToList ();
+				for (int i = 0; i < CurrGOTLeaderboard.Count - 1 && i < 4; i++) {
+					for (int j = 0; j < CurrGOTLeaderboard.Count - 1 && j < 4; j++) {
+						if (CurrGOTLeaderboard [j].GroupPoint == CurrGOTLeaderboard [j + 1].GroupPoint && CurrGOTLeaderboard [j].GroupCell < CurrGOTLeaderboard [j + 1].GroupCell) {
+							GOTLeaderboard l = CurrGOTLeaderboard [j];
+							CurrGOTLeaderboard [j] = CurrGOTLeaderboard [j + 1];
+							CurrGOTLeaderboard [j + 1] = l;
+						}
+					}
+				}
+
+				for (int i = 0; i < CurrGOTLeaderboard.Count && i < 4; i++) {
+					Debug.Log (CurrGOTLeaderboard [i].GroupCell.ToString ());
+
+					GroupNameTexts [i].text = CurrGOTLeaderboard [i].GroupName;
+					GroupCoinTexts [i].text = CurrGOTLeaderboard [i].GroupCoin.ToString ();
+					GroupCellTexts [i].text = CurrGOTLeaderboard [i].GroupCell.ToString ();
+					GroupPointTexts [i].text = CurrGOTLeaderboard [i].GroupPoint.ToString ();
+					if (CurrGOTLeaderboard [i].GroupPoint == CurrGOTLeaderboard [0].GroupPoint) {
+						if (CurrGOTLeaderboard [i].GroupCell == CurrGOTLeaderboard [0].GroupCell) {
+							GroupTrophy [i].SetActive (true);
+						} else {
+							GroupTrophy [i].SetActive (false);
+						}
+					} else {
+						GroupTrophy [i].SetActive (false);
+					}
+				}
+			}
 
 			if (status == 1) {
 				currentGameID = LaunchList.instance.mGameStatus [0].GameID;
@@ -231,13 +272,33 @@ namespace Cerebro
 			}
 		}
 
+		public void LeaderboardButtonClicked()
+		{
+			IsLerpLeaderboardStarted = true;
+			LerpValue = 0;
+			LerpStartTime = Time.time;
+			UICamera.GetComponent<Blur> ().enabled = true;
+			AvatarCamera.GetComponent<Blur> ().enabled = true;
+			LeaderboardCamera.SetActive (true);
+			IsLeaderboardOpening = true;
+			Leaderboard.SetActive (true);
+		}
+
+		public void CloseLeaderboardClicked()
+		{
+			IsLerpLeaderboardStarted = true;
+			LerpValue = 0;
+			LerpStartTime = Time.time;
+			IsLeaderboardOpening = false;
+		}
+
 		public void ChangeButtonClicked()
 		{
 			IsLerpStarted = true;
 			LerpValue = 0;
 			LerpStartTime = Time.time;
 			UICamera.GetComponent<Blur> ().enabled = true;
-			IsScreenOpening = true;
+			IsAvatarScreenOpening = true;
 			IsAvatarSelectionOpen = true;
 		}
 
@@ -246,11 +307,25 @@ namespace Cerebro
 			IsLerpStarted = true;
 			LerpValue = 0;
 			LerpStartTime = Time.time;
-			IsScreenOpening = false;
+			IsAvatarScreenOpening = false;
 			IsAvatarSelectionOpen = false;
 			AvatarSelectorButtons.SetActive (false);
 			BackButton.SetActive (false);
 			CurrAvatar.GetComponent<CustomizeAvatar> ().Start ();
+		}
+
+		public void OpenLeaderboard()
+		{
+			UICamera.GetComponent<Blur> ().iterations = (int)(Mathf.Lerp (0, 5, LerpValue));
+			AvatarCamera.GetComponent<Blur> ().iterations = (int)(Mathf.Lerp (0, 5, LerpValue));
+			Leaderboard.GetComponent<RectTransform> ().anchoredPosition = Vector2.Lerp (new Vector2(-1024f, 0f), Vector2.zero, LerpValue);
+		}
+
+		public void CloseLeaderboard()
+		{
+			UICamera.GetComponent<Blur> ().iterations = (int)(Mathf.Lerp (5, 0, LerpValue));
+			AvatarCamera.GetComponent<Blur> ().iterations = (int)(Mathf.Lerp (5, 0, LerpValue));
+			Leaderboard.GetComponent<RectTransform> ().anchoredPosition = Vector2.Lerp (Vector2.zero, new Vector2(-1024f, 0f), LerpValue);
 		}
 
 		public void OpenAvatarCustomization()

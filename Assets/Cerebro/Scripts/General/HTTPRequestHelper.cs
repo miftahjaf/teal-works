@@ -345,7 +345,6 @@ namespace Cerebro
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
 					CerebroHelper.DebugLog ("GAME LOADED------------------------------------------");
 					LaunchList.instance.mCurrentGame.GroupID = jsonResponse ["group_color"].Value;
-					PlayerPrefs.SetString(PlayerPrefKeys.GOTGameTeamID, LaunchList.instance.mCurrentGame.GroupID);
 					LaunchList.instance.mCurrentGame.GroupIDDB = jsonResponse ["group_id"].Value;
 					LaunchList.instance.mCurrentGame.StudentID = studentID;
 					callback (1);
@@ -367,35 +366,43 @@ namespace Cerebro
 
 					CerebroHelper.DebugLog ("GAME STATUS LOADED------------------------------------------");
 					LaunchList.instance.mGameStatus.Clear ();
-					//for (var i = 0; i < jsonResponse.Count; i++) {
-						GOTGameStatus status = new GOTGameStatus ();
-						status.ServerTime = jsonResponse ["current_server_time"].Value;
-						status.GameID = jsonResponse  ["current_game_id"].Value;
-						status.StartTime = jsonResponse ["current_start_time"].Value;
-						status.EndTime = jsonResponse  ["current_end_time"].Value;
-						status.Status = jsonResponse  ["current_game_state"].Value;
-						status.PreviousGameID = jsonResponse  ["prev_game_id"].Value;
-						status.PreviousGameData = new Dictionary<string,string> ();
+					GOTGameStatus status = new GOTGameStatus ();
+					status.ServerTime = jsonResponse ["current_server_time"].Value;
+					status.GameID = jsonResponse  ["current_game_id"].Value;
+					status.StartTime = jsonResponse ["current_start_time"].Value;
+					status.EndTime = jsonResponse  ["current_end_time"].Value;
+					status.Status = jsonResponse  ["current_game_state"].Value;
+					status.PreviousGameID = jsonResponse  ["prev_game_id"].Value;
+					status.PreviousGameData = new Dictionary<string,string> ();
 
-						status.PreviousGameData.Add ("Winner", jsonResponse  ["prev_game_data"] ["winner"].Value);
-						status.PreviousGameData.Add ("MostCoinsSpent", jsonResponse  ["prev_game_data"] ["most_coins_spent"].Value);
-						status.PreviousGameData.Add ("MostTerritoryWon", jsonResponse  ["prev_game_data"] ["most_territory_won"].Value);
-						
-						status.GOTLeaderboard = new List<GOTLeaderboard>();
-						if(jsonResponse ["prev_game_data"]["game_result"] != null && jsonResponse ["prev_game_data"]["game_result"] != "null")
-						{							
-							for(var i = 0; i < jsonResponse ["prev_game_data"]["game_result"].Count; i++)
+					status.PreviousGameData.Add ("Winner", jsonResponse  ["prev_game_data"] ["winner"].Value);
+					status.PreviousGameData.Add ("MostCoinsSpent", jsonResponse  ["prev_game_data"] ["most_coins_spent"].Value);
+					status.PreviousGameData.Add ("MostTerritoryWon", jsonResponse  ["prev_game_data"] ["most_territory_won"].Value);
+					
+					status.GOTLeaderboard = new List<GOTLeaderboard>();
+					if(jsonResponse ["prev_game_data"]["game_result"] != null && jsonResponse ["prev_game_data"]["game_result"] != "null")
+					{							
+						Debug.Log(jsonResponse ["prev_game_data"]["game_result"].Count);
+						for(var i = 0; i < jsonResponse ["prev_game_data"]["game_result"].Count; i++)
+						{
+							GOTLeaderboard l = new GOTLeaderboard();
+							Debug.Log(jsonResponse ["prev_game_data"]["game_result"][i]["coin_spent"].Value);
+							l.GroupCoin = jsonResponse ["prev_game_data"]["game_result"][i]["coin_spent"].AsInt;
+							l.GroupID = jsonResponse ["prev_game_data"]["game_result"][i]["group_color"].Value;
+							l.GroupName = jsonResponse ["prev_game_data"]["game_result"][i]["group_name"].Value;
+							l.GroupCell = jsonResponse ["prev_game_data"]["game_result"][i]["cells"].AsInt;
+							if(jsonResponse ["prev_game_data"]["game_result"][i]["points"] != null && jsonResponse ["prev_game_data"]["game_result"][i]["points"] != "null")
 							{
-								GOTLeaderboard l = new GOTLeaderboard();
-								l.GroupCoin = jsonResponse ["prev_game_data"]["game_result"][i]["coin_spent"].AsInt;
-								l.GroupID = jsonResponse ["prev_game_data"]["game_result"][i]["group_color"].Value;
-								l.GroupName = jsonResponse ["prev_game_data"]["game_result"][i]["group_name"].Value;
-								l.GroupCell = jsonResponse ["prev_game_data"]["game_result"][i]["cells"].AsInt;
-								status.GOTLeaderboard.Add(l);
+								l.GroupPoint = jsonResponse ["prev_game_data"]["game_result"][i]["points"].AsInt;
 							}
+							else
+							{
+								l.GroupPoint = 0;
+							}
+							status.GOTLeaderboard.Add(l);
 						}
-						LaunchList.instance.mGameStatus.Add(status);
-					//}
+					}
+					LaunchList.instance.mGameStatus.Add(status);
 					callback (1);
 				} else {
 					//GetGOTGameStatus (studentID, callback);
@@ -434,7 +441,10 @@ namespace Cerebro
 					BabaId += jsonResponse ["baba_data"] ["face"].Value;
 					BabaId += jsonResponse ["baba_data"] ["body"].Value;
 					PlayerPrefs.SetString(PlayerPrefKeys.BabaID, BabaId);
-
+					if(jsonResponse ["baba_data"] ["color"] != null)
+					{
+						PlayerPrefs.SetString(PlayerPrefKeys.GOTGameTeamID, jsonResponse ["baba_data"] ["color"].Value);
+					}
 
 
 					PlayerPrefs.SetInt (PlayerPrefKeys.Coins, LaunchList.instance.mCurrentStudent.Coins);
