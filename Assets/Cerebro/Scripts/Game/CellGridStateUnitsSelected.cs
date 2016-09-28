@@ -15,6 +15,7 @@ namespace Cerebro {
 
 		private Unit currUnit;
 		private Cell currCell;
+		private List<Cell> currMinPath;
 
 		public CellGridStateUnitsSelected(CellGrid cellGrid, List<Unit> units) : base(cellGrid)
 		{
@@ -30,10 +31,7 @@ namespace Cerebro {
 				return;
 			}
 			CerebroHelper.DebugLog ("Cell Clicked "+cell.transform.position.y);
-			float pos = cell.transform.position.y;
-			pos = Mathf.Abs(-0.3831128f - pos) + 0.3831128f;
-			Debug.Log ("setting "+pos);
-			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (Camera.main.transform.position.x, pos, Camera.main.transform.position.z), true).setEaseType (GoEaseType.BackOut));
+
 			foreach (var _unit in _units) {
 				if (_unit.isMoving) {
 					return;
@@ -60,6 +58,11 @@ namespace Cerebro {
 				CerebroHelper.DebugLog ("Will Cost " + cell.MovementCost + " Coins");
 
 				if (_cellGrid.GetCoins () >= cell.MovementCost && !cell.isInvincible) {
+					float pos = cell.transform.position.y;
+					pos = Mathf.Abs(-0.3831128f - pos) + 0.3831128f;
+					Debug.Log ("setting "+pos);
+					Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (0f, pos, -10f), false).setEaseType (GoEaseType.BackOut));
+
 					string BabaId = "";
 					if (cell.BabaHairId > 0) {
 						BabaId += cell.BabaHairId;
@@ -81,11 +84,9 @@ namespace Cerebro {
 
 		public void OnCaptureButtonPressed()
 		{
+			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (0f, 0f, -10f), false).setEaseType (GoEaseType.BackIn));
 			currUnit.Move(currCell, null);
 			_cellGrid.EndTurn();
-			Debug.Log ("before "+Camera.main.transform.position);
-			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (Camera.main.transform.position.x, 0f, Camera.main.transform.position.z), true).setEaseType (GoEaseType.BackOut));
-			Debug.Log ("after "+Camera.main.transform.position);
 		}
 
 		public override void OnUnitClicked(Unit unit)
@@ -117,6 +118,11 @@ namespace Cerebro {
 
 				CerebroHelper.DebugLog ("Will Cost " + unit.Cell.MovementCost + " Coins");
 				if (_cellGrid.GetCoins () >= unit.Cell.MovementCost && !unit.Cell.isInvincible) {
+					float pos = unit.Cell.transform.position.y;
+					pos = Mathf.Abs(-0.3831128f - pos) + 0.3831128f;
+					Debug.Log ("setting "+pos);
+					Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (0f, pos, -10f), false).setEaseType (GoEaseType.BackOut));
+
 					string BabaId = "";
 					if (unit.Cell.BabaHairId > 0) {
 						BabaId += unit.Cell.BabaHairId;
@@ -126,6 +132,7 @@ namespace Cerebro {
 					unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position);
 					currUnit = unit;
 					currCell = unit.Cell;
+					currMinPath = minPath;
                     CerebroHelper.DebugLog ("Coins Left " + _cellGrid.GetCoins());
 				} else {
 					if (unit.Cell.isInvincible) {
@@ -139,10 +146,10 @@ namespace Cerebro {
 
 		public void OnCaptureUnitButtonPressed()
 		{
-			currUnit.Move(currCell, null);
+			currUnit.Move(currCell, currMinPath);
 			_cellGrid.EndTurn();
 			_cellGrid.DeleteUnit(currUnit.gameObject);
-			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (Camera.main.transform.position.x, 0f, Camera.main.transform.position.z), true).setEaseType (GoEaseType.BackOut));
+			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (0f, 0f, -10f), false).setEaseType (GoEaseType.BackIn));
 		}
 
 		public override void OnCellDeselected(Cell cell)

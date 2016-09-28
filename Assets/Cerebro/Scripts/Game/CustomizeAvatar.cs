@@ -17,7 +17,7 @@ namespace Cerebro
 
 		private GameObject GenericPopup;
 
-		void Start()
+		public void Start()
 		{
 			string BabaId = PlayerPrefs.GetString (PlayerPrefKeys.BabaID, "111");
 			InitializeAvatar (BabaId);
@@ -34,8 +34,16 @@ namespace Cerebro
 				CurrBodyId -= 4;
 				CurrHairID -= 4;
 				CurrHeadId -= 4;
+				if (BoyButton && GirlButton) {
+					BoyButton.SetActive (true);
+					GirlButton.SetActive (false);
+				}
 			} else {
 				IsBoy = true;
+				if (BoyButton && GirlButton) {
+					BoyButton.SetActive (false);
+					GirlButton.SetActive (true);
+				}
 			}
 
 			DisableAllComponents ();
@@ -73,20 +81,16 @@ namespace Cerebro
 		{
 			string BabaId = "111";
 			InitializeAvatar (BabaId);
-//			BoyButton.transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1, 1, 1, 1);
-//			BoyButton.transform.FindChild ("Text").GetComponent<Image> ().color = new Color (1, 1, 1, 1);
-//			GirlButton.transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1, 1, 1, 0.5f);
-//			GirlButton.transform.FindChild ("Text").GetComponent<Image> ().color = new Color (1, 1, 1, 0.5f);
+			BoyButton.SetActive (false);
+			GirlButton.SetActive (true);
 		}
 
 		public void GirlButtonPressed()
 		{
 			string BabaId = "555";
 			InitializeAvatar (BabaId);
-//			BoyButton.transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1, 1, 1, 0.5f);
-//			BoyButton.transform.FindChild ("Text").GetComponent<Image> ().color = new Color (1, 1, 1, 0.5f);
-//			GirlButton.transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1, 1, 1, 1);
-//			GirlButton.transform.FindChild ("Text").GetComponent<Image> ().color = new Color (1, 1, 1, 1);
+			BoyButton.SetActive (true);
+			GirlButton.SetActive (false);
 		}
 
 		public void SaveButtonPressed()
@@ -132,9 +136,9 @@ namespace Cerebro
 			CurrBodyId++;
 			IsTransitionOn = true;
 			if (IsBoy) {
-				transform.FindChild ("boy_body").GetComponent<AvatarComponentList>().NextButtonPressed();
+				transform.FindChild ("boy_body").GetComponent<AvatarComponentList>().NextButtonPressed(CurrBodyId);
 			} else {
-				transform.FindChild ("girl_body").GetComponent<AvatarComponentList>().NextButtonPressed();
+				transform.FindChild ("girl_body").GetComponent<AvatarComponentList>().NextButtonPressed(CurrBodyId);
 			}
 		}
 
@@ -147,9 +151,9 @@ namespace Cerebro
 			CurrBodyId--;
 			IsTransitionOn = true;
 			if (IsBoy) {
-				transform.FindChild ("boy_body").GetComponent<AvatarComponentList>().PreviousButtonPressed();
+				transform.FindChild ("boy_body").GetComponent<AvatarComponentList>().PreviousButtonPressed(CurrBodyId);
 			} else {
-				transform.FindChild ("girl_body").GetComponent<AvatarComponentList>().PreviousButtonPressed();
+				transform.FindChild ("girl_body").GetComponent<AvatarComponentList>().PreviousButtonPressed(CurrBodyId);
 			}
 		}
 
@@ -162,9 +166,9 @@ namespace Cerebro
 			CurrHeadId++;
 			IsTransitionOn = true;
 			if (IsBoy) {
-				transform.FindChild ("boy_head").GetComponent<AvatarComponentList>().NextButtonPressed();
+				transform.FindChild ("boy_head").GetComponent<AvatarComponentList>().NextButtonPressed(CurrHeadId);
 			} else {
-				transform.FindChild ("girl_head").GetComponent<AvatarComponentList>().NextButtonPressed();
+				transform.FindChild ("girl_head").GetComponent<AvatarComponentList>().NextButtonPressed(CurrHeadId);
 			}
 		}
 
@@ -177,9 +181,9 @@ namespace Cerebro
 			CurrHeadId--;
 			IsTransitionOn = true;
 			if (IsBoy) {
-				transform.FindChild ("boy_head").GetComponent<AvatarComponentList>().PreviousButtonPressed();
+				transform.FindChild ("boy_head").GetComponent<AvatarComponentList>().PreviousButtonPressed(CurrHeadId);
 			} else {
-				transform.FindChild ("girl_head").GetComponent<AvatarComponentList>().PreviousButtonPressed();
+				transform.FindChild ("girl_head").GetComponent<AvatarComponentList>().PreviousButtonPressed(CurrHeadId);
 			}
 		}
 
@@ -192,10 +196,10 @@ namespace Cerebro
 			CurrHairID++;
 			IsTransitionOn = true;
 			if (IsBoy) {
-				transform.FindChild ("boy_hair").GetComponent<AvatarComponentList>().NextButtonPressed();
+				transform.FindChild ("boy_hair").GetComponent<AvatarComponentList>().NextButtonPressed(CurrHairID);
 			} else {
-				transform.FindChild ("girl_hair_back").GetComponent<AvatarComponentList>().NextButtonPressed();
-				transform.FindChild ("girl_hair_front").GetComponent<AvatarComponentList>().NextButtonPressed();
+				transform.FindChild ("girl_hair_back").GetComponent<AvatarComponentList>().NextButtonPressed(CurrHairID);
+				transform.FindChild ("girl_hair_front").GetComponent<AvatarComponentList>().NextButtonPressed(CurrHairID);
 			}
 		}
 
@@ -208,10 +212,10 @@ namespace Cerebro
 			CurrHairID--;
 			IsTransitionOn = true;
 			if (IsBoy) {
-				transform.FindChild ("boy_hair").GetComponent<AvatarComponentList>().PreviousButtonPressed();
+				transform.FindChild ("boy_hair").GetComponent<AvatarComponentList>().PreviousButtonPressed(CurrHairID);
 			} else {
-				transform.FindChild ("girl_hair_back").GetComponent<AvatarComponentList>().PreviousButtonPressed();
-				transform.FindChild ("girl_hair_front").GetComponent<AvatarComponentList>().PreviousButtonPressed();
+				transform.FindChild ("girl_hair_back").GetComponent<AvatarComponentList>().PreviousButtonPressed(CurrHairID);
+				transform.FindChild ("girl_hair_front").GetComponent<AvatarComponentList>().PreviousButtonPressed(CurrHairID);
 			}
 		}
 

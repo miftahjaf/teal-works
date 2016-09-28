@@ -274,7 +274,6 @@ namespace Cerebro
 							{
 								newRecord.BabaBodyId = jsonResponse["World"][i]["BabaData"]["body"].AsInt;
 							}
-							Debug.Log(newRecord.BabaBodyId+" "+newRecord.BabaHairId+" "+newRecord.BabaFaceId);
 						}
 
 						if (!worldExists) {

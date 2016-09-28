@@ -135,38 +135,38 @@ namespace Cerebro
 			Text PrevGameCoinsSpent = PreviousGameData.transform.Find ("MostCoinsSpent").GetComponent<Text> ();
 			Text PrevGameTerritoriesCaptured = PreviousGameData.transform.Find ("MostTerritoriesCaptured").GetComponent<Text> ();
 
-			if (LaunchList.instance.mGameStatus [0].GOTLeaderboard.Count > 0) {
-				DisplayView.transform.FindChild("Panel").gameObject.SetActive (true);
-				List<GOTLeaderboard> CurrGOTLeaderboard = LaunchList.instance.mGameStatus [0].GOTLeaderboard;
-				CurrGOTLeaderboard = CurrGOTLeaderboard.OrderByDescending (l => l.GroupCell).ToList ();
-				for (int i = 0; i < CurrGOTLeaderboard.Count - 1 && i < 4; i++) {
-					for (int j = 0; j < CurrGOTLeaderboard.Count - 1 && j < 4; j++) {
-						if (CurrGOTLeaderboard [j].GroupCell == CurrGOTLeaderboard [j + 1].GroupCell && CurrGOTLeaderboard [j].GroupCoin < CurrGOTLeaderboard [j + 1].GroupCoin) {
-							GOTLeaderboard l = CurrGOTLeaderboard [j];
-							CurrGOTLeaderboard [j] = CurrGOTLeaderboard [j + 1];
-							CurrGOTLeaderboard [j + 1] = l;
-						}
-					}
-				}
-
-				for (int i = 0; i < CurrGOTLeaderboard.Count && i < 4; i++) {
-					Debug.Log (CurrGOTLeaderboard [i].GroupCoin.ToString ());
-					GroupNameTexts [i].text = CurrGOTLeaderboard [i].GroupName;
-					GroupCoinTexts [i].text = CurrGOTLeaderboard [i].GroupCoin.ToString ();
-					GroupCellTexts [i].text = CurrGOTLeaderboard [i].GroupCell.ToString ();
-					if (CurrGOTLeaderboard [i].GroupCell == CurrGOTLeaderboard [0].GroupCell) {
-						if (CurrGOTLeaderboard [i].GroupCoin == CurrGOTLeaderboard [0].GroupCoin) {
-							GroupTrophies [i].SetActive (true);
-						} else {
-							GroupTrophies [i].SetActive (false);
-						}
-					} else {
-						GroupTrophies [i].SetActive (false);
-					}
-				}
-			} else {
-				DisplayView.transform.FindChild("Panel").gameObject.SetActive (false);
-			}
+//			if (LaunchList.instance.mGameStatus [0].GOTLeaderboard.Count > 0) {
+//				DisplayView.transform.FindChild("Panel").gameObject.SetActive (true);
+//				List<GOTLeaderboard> CurrGOTLeaderboard = LaunchList.instance.mGameStatus [0].GOTLeaderboard;
+//				CurrGOTLeaderboard = CurrGOTLeaderboard.OrderByDescending (l => l.GroupCell).ToList ();
+//				for (int i = 0; i < CurrGOTLeaderboard.Count - 1 && i < 4; i++) {
+//					for (int j = 0; j < CurrGOTLeaderboard.Count - 1 && j < 4; j++) {
+//						if (CurrGOTLeaderboard [j].GroupCell == CurrGOTLeaderboard [j + 1].GroupCell && CurrGOTLeaderboard [j].GroupCoin < CurrGOTLeaderboard [j + 1].GroupCoin) {
+//							GOTLeaderboard l = CurrGOTLeaderboard [j];
+//							CurrGOTLeaderboard [j] = CurrGOTLeaderboard [j + 1];
+//							CurrGOTLeaderboard [j + 1] = l;
+//						}
+//					}
+//				}
+//
+//				for (int i = 0; i < CurrGOTLeaderboard.Count && i < 4; i++) {
+//					Debug.Log (CurrGOTLeaderboard [i].GroupCoin.ToString ());
+//					GroupNameTexts [i].text = CurrGOTLeaderboard [i].GroupName;
+//					GroupCoinTexts [i].text = CurrGOTLeaderboard [i].GroupCoin.ToString ();
+//					GroupCellTexts [i].text = CurrGOTLeaderboard [i].GroupCell.ToString ();
+//					if (CurrGOTLeaderboard [i].GroupCell == CurrGOTLeaderboard [0].GroupCell) {
+//						if (CurrGOTLeaderboard [i].GroupCoin == CurrGOTLeaderboard [0].GroupCoin) {
+//							GroupTrophies [i].SetActive (true);
+//						} else {
+//							GroupTrophies [i].SetActive (false);
+//						}
+//					} else {
+//						GroupTrophies [i].SetActive (false);
+//					}
+//				}
+//			} else {
+//				DisplayView.transform.FindChild("Panel").gameObject.SetActive (false);
+//			}
 
 			if (status == 1) {
 				currentGameID = LaunchList.instance.mGameStatus [0].GameID;
@@ -200,8 +200,12 @@ namespace Cerebro
 				PreviousGameData.SetActive (false);
 				TimeStatus.text = "No active games!";
 			}
+
+			transform.Find("EditButton").gameObject.SetActive(true);
+			DisplayView.transform.Find("WinnerList").gameObject.SetActive(true);
 			ProgressBar.SetActive (false);
 			DisplayView.SetActive (true);
+			CurrAvatar.SetActive (true);
 		}
 			
 		public void StartButtonPressed() {
@@ -246,6 +250,7 @@ namespace Cerebro
 			IsAvatarSelectionOpen = false;
 			AvatarSelectorButtons.SetActive (false);
 			BackButton.SetActive (false);
+			CurrAvatar.GetComponent<CustomizeAvatar> ().Start ();
 		}
 
 		public void OpenAvatarCustomization()
