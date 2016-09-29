@@ -10,7 +10,6 @@ namespace Cerebro
 {
 	public class AssessmentItemScript  : MonoBehaviour, IPointerClickHandler, ISubmitHandler 
 	{
-		
 		public Text name;
 		public Text stats;
 		public Text mastryLevel;
@@ -20,8 +19,8 @@ namespace Cerebro
 		public GameObject KCprefab;
 		public GameObject KCParent;
 		public AccordionElement accordionElement;
-
-
+		public ProgressHelper progressHelper;
+		private bool isMastryLoaded =false;
 		private PracticeItems m_PracticeItems;
 		public PracticeItems practiceItems
 		{
@@ -61,7 +60,7 @@ namespace Cerebro
 			accordionElement.onAnimationStarted += OnAccordionAnimationStarted;
 			accordionElement.onAnimationCompleted += OnAccordioAnimationCompleted;
 
-		    
+			progressHelper.gameObject.SetActive (false);
 		}
 
 		private void RefreshStats()
@@ -114,6 +113,9 @@ namespace Cerebro
 
 		public void Refresh()
 		{
+			isMastryLoaded = false;
+			mastryLevel.gameObject.SetActive (false);
+			progressHelper.gameObject.SetActive (false);
 			this.RefreshStats ();
 			this.CoinBarAnimation ();
 			this.CoinTextAnimation ();
@@ -172,6 +174,7 @@ namespace Cerebro
 			
 			this.KCParent.transform.localScale = state ? Vector3.one:Vector3.zero;
 			bgModifier.Radius =state ? new Vector4(4f, 4f, 0f, 0f): new Vector4(4f, 4f, 4f, 4f);
+
 			if (m_OnScrollChanged != null) 
 			{
 				m_OnScrollChanged.Invoke ();
@@ -187,10 +190,49 @@ namespace Cerebro
 			}
 			foreach (KCItemScript kcItem in KCParent.GetComponentsInChildren<KCItemScript>()) 
 			{
-				kcItem.Refresh ();
+				kcItem.UpdateCoinText ();
 			}
+			if (isMastryLoaded)
+				return;
 
-
+			foreach (KCItemScript kcItem in KCParent.GetComponentsInChildren<KCItemScript>()) 
+			{
+				kcItem.ChangeMastryStatus (false);
+			}
+			progressHelper.gameObject.SetActive (true);
+			HTTPRequestHelper.instance.GetPracticeMastery (practiceItems.PracticeID,PracticeMasteryLoaded);
 		}
+
+		public void PracticeMasteryLoaded(int isDone)
+		{
+			progressHelper.gameObject.SetActive (false);
+			if (isDone == 0)
+				return;
+
+			isMastryLoaded = true;
+			int started = 0;
+			int inprogress = 0;
+			int mastered = 0;
+			foreach (KCItemScript kcItem in KCParent.GetComponentsInChildren<KCItemScript>()) 
+			{
+				kcItem.UpdateMastry ();
+				int level = kcItem.GetLevel ();
+				if (level == 1)
+					started++;
+				else if (level == 2)
+					inprogress++;
+				else if (level == 3)
+					mastered++;
+			}
+			mastryLevel.text = GetMasteryText (started,inprogress,mastered);
+			mastryLevel.gameObject.SetActive (true);
+		}
+
+		public string GetMasteryText(int started,int inprogress,int mastered)
+		{
+			return "<color=#9A9AA4>● </color><color=black>" + started.ToString ().PadRight (5, ' ') +"</color><color=#FDD000>● </color><color=black>"+inprogress.ToString ().PadRight (5, ' ') +"</color><color=#24C8A6>● </color><color=black>"+mastered.ToString ().PadRight (5, ' ') +"</color>";
+		}
+
+
 	}
 }

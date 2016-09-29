@@ -162,6 +162,7 @@ namespace Cerebro {
 
 		public string GetCurrentKCID()
 		{
+			
 			if(!string.IsNullOrEmpty(KCID))
 			{
 			   return KCID;
@@ -388,11 +389,12 @@ namespace Cerebro {
 				}
 				currentQuestionDifficulty = difficulty;
 			}
+			currenKCMapping = difficulty + "t" + type;
 			if (parentAssessmentScript != null) {
 				parentAssessmentScript.QuestionEnded (isCorrect, difficulty, _increment, currentQuestionAssessmentKey, randomSeed, type, UserAnswer);
 			}
 
-			currenKCMapping = difficulty + "t" + type;
+
 			isQuestionStarted = false;
 		
 		}
