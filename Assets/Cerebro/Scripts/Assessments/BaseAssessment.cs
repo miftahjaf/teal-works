@@ -463,7 +463,12 @@ namespace Cerebro {
 			}
 		}
 
-		protected void UpdateStreak(int correctRequired, int questionsRequired) {
+		protected void UpdateStreak(int correctRequired, int questionsRequired)
+		{
+			if (!string.IsNullOrEmpty (KCID))
+			{
+				return;
+			}
 			if (Queslevel <= scorestreaklvls.Length) {
 				scorestreaklvls [Queslevel - 1] = scorestreaklvls [Queslevel - 1] + 1;
 				if (scorestreaklvls [Queslevel - 1] >= correctRequired && questionsAttempted > questionsRequired) {
