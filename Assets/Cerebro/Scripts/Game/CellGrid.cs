@@ -111,7 +111,7 @@ namespace Cerebro
 			NumberOfPlayers = Players.Count;
 
 			PlayerCoins = LaunchList.instance.mCurrentStudent.Coins;
-			coinsText.text = "Coins: " + PlayerCoins;
+			coinsText.text = PlayerCoins.ToString();
 			timerText.text = "Time Left: calculating...";
 			currentScore = PlayerCoins;
 
@@ -587,14 +587,14 @@ namespace Cerebro
 					currentScore -= decrementBy;
 					decrementScore -= decrementBy;
 					if (currentScore > PlayerCoins) {
-						coinsText.text = "Coins: " + currentScore;
+						coinsText.text = currentScore.ToString();
 					} else {
 						currentScore = LaunchList.instance.mCurrentStudent.Coins;
-						coinsText.text = "Coins: " + currentScore;
+						coinsText.text = currentScore.ToString();
 					}
 				} else if (currentScore != PlayerCoins) {
 					currentScore = LaunchList.instance.mCurrentStudent.Coins;
-					coinsText.text = "Coins: " + currentScore;
+					coinsText.text = currentScore.ToString();
 				}
 			}
 
