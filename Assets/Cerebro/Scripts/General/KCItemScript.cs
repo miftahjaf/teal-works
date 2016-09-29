@@ -10,7 +10,9 @@ namespace Cerebro
 	{
 		public Text name;
 		public Text coins;
-
+		public Slider mastrySlider;
+		public Text mastryText;
+		public Image mastryImage;
 		private string m_PracticeId;
 		public string praticeId
 		{
@@ -37,8 +39,9 @@ namespace Cerebro
 			knowledgeComponent = _knowledgeComponent;
 			praticeId = _practiceId;
 			name.text = index+". "+ _knowledgeComponent.KCName;
-			this.CoinTextAnimation ();
+			this.UpdateCoinText ();
 			onClickAction = _OnClickAction;
+			ChangeMastryStatus (false);
 		}
 
 		public void OnPointerClick(PointerEventData eventData)
@@ -57,14 +60,53 @@ namespace Cerebro
 			}
 		}
 
-		public void CoinTextAnimation()
+		public void UpdateCoinText()
 		{
 			this.coins.text = (knowledgeComponent.TotalCoins - knowledgeComponent.CurrentCoins).ToString() +" coins left";
 		}
 
-		public void Refresh()
+
+
+		public void UpdateMastry()
 		{
-			CoinTextAnimation ();
+			int level = GetLevel ();
+			if (level == 1) 
+			{
+				mastryImage.color = CerebroHelper.HexToRGB ("9A9AA4");
+				mastryImage.GetComponent<FreeModifier> ().Radius = new Vector4 (5f, 0f, 0f, 5f);
+			} 
+			else if (level == 2) 
+			{
+				mastryImage.color = CerebroHelper.HexToRGB ("FDD000");
+				mastryImage.GetComponent<FreeModifier> ().Radius = new Vector4 (5f, 0f, 0f, 5f);
+			}
+			else
+			{
+				mastryImage.color = CerebroHelper.HexToRGB ("24C8A6");
+				mastryImage.GetComponent<FreeModifier> ().Radius = new Vector4 (5f,5f, 5f, 5f);
+			}
+
+			mastryText.text = knowledgeComponent.Mastery + "%";
+			mastrySlider.value =Mathf.Clamp( knowledgeComponent.Mastery / 100f,0f,1f);
+
+			ChangeMastryStatus (true);
+
+		}
+
+		public int GetLevel()
+		{
+			if (knowledgeComponent.Mastery == 0)
+				return 1;
+			if (knowledgeComponent.Mastery == 100)
+				return 3;
+
+			return 2;
+		}
+
+		public void ChangeMastryStatus(bool enable)
+		{
+			mastrySlider.gameObject.SetActive (enable);
+			mastryText.gameObject.SetActive (enable);
 		}
 
 	}

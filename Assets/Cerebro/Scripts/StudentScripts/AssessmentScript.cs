@@ -305,7 +305,7 @@ namespace Cerebro
 
 		public void UpdatePracticeItems(string practiceID,string KCID,int increment)
 		{
-			Debug.Log ("Practice ID " + practiceID + " KCID " + KCID);
+			
 			if(string.IsNullOrEmpty(practiceID) || string.IsNullOrEmpty (KCID))
 			{
 				return;

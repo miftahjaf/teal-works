@@ -2550,6 +2550,7 @@ namespace Cerebro
 		public List<string> Mappings { get; set; }
 		public int TotalCoins { get; set; }
 		public int CurrentCoins { get; set; }
+		public int Mastery{ get; set;}
 	}
 		
 	public class QuizData

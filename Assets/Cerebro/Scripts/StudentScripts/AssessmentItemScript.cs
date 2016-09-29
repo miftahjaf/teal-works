@@ -20,7 +20,9 @@ namespace Cerebro
 		public GameObject KCParent;
 		public AccordionElement accordionElement;
 		public ProgressHelper progressHelper;
+
 		private bool isMastryLoaded =false;
+
 		private PracticeItems m_PracticeItems;
 		public PracticeItems practiceItems
 		{
@@ -60,7 +62,7 @@ namespace Cerebro
 			accordionElement.onAnimationStarted += OnAccordionAnimationStarted;
 			accordionElement.onAnimationCompleted += OnAccordioAnimationCompleted;
 
-			progressHelper.gameObject.SetActive (false);
+			SetProgress (false);
 		}
 
 		private void RefreshStats()
@@ -115,7 +117,7 @@ namespace Cerebro
 		{
 			isMastryLoaded = false;
 			mastryLevel.gameObject.SetActive (false);
-			progressHelper.gameObject.SetActive (false);
+			SetProgress (false);
 			this.RefreshStats ();
 			this.CoinBarAnimation ();
 			this.CoinTextAnimation ();
@@ -199,13 +201,13 @@ namespace Cerebro
 			{
 				kcItem.ChangeMastryStatus (false);
 			}
-			progressHelper.gameObject.SetActive (true);
+			SetProgress (true);
 			HTTPRequestHelper.instance.GetPracticeMastery (practiceItems.PracticeID,PracticeMasteryLoaded);
 		}
 
 		public void PracticeMasteryLoaded(int isDone)
 		{
-			progressHelper.gameObject.SetActive (false);
+			SetProgress (false);
 			if (isDone == 0)
 				return;
 
@@ -226,6 +228,15 @@ namespace Cerebro
 			}
 			mastryLevel.text = GetMasteryText (started,inprogress,mastered);
 			mastryLevel.gameObject.SetActive (true);
+		}
+
+		private void SetProgress(bool enable)
+		{
+			if (progressHelper == null)
+			{
+				return;
+			}
+			progressHelper.gameObject.SetActive (enable);
 		}
 
 		public string GetMasteryText(int started,int inprogress,int mastered)

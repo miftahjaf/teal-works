@@ -788,6 +788,45 @@ namespace Cerebro
 			}
 		}
 
+		public void GetPracticeMastery(string praticeId,Action<int> callback)
+		{
+			try {
+				WWWForm form = new WWWForm ();
+				form.AddField("student_id", PlayerPrefs.GetString (PlayerPrefKeys.IDKey,""));
+				form.AddField("practice_item", praticeId);
+
+				CreatePostRequestSimpleJSON (SERVER_URL + "practice_item/kc/mastery",form, (jsonResponse) => {
+					if (jsonResponse != null && jsonResponse.ToString () != "") {
+						CerebroHelper.DebugLog ("MASTERY LOAD COMPLETE");
+						if(LaunchList.instance.mPracticeItems.ContainsKey(praticeId))
+						{
+							PracticeItems pItem = LaunchList.instance.mPracticeItems[praticeId];
+							foreach(var kc in pItem.KnowledgeComponents)
+							{
+								if(jsonResponse[kc.Value.ID]!=null)
+								{
+									kc.Value.Mastery =jsonResponse[kc.Value.ID].AsInt;
+								}
+							}
+							callback(1);
+						}
+						else
+						{
+							callback(0);
+						}
+
+					} else 
+					{
+						callback(0);
+						CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					}
+				});
+			} catch (Exception e) {
+				callback (0);
+				CerebroHelper.DebugLog ("Exception - GetPractice: " + e.Message);
+			}
+		}
+
 		public void GetFeatureForDate (string date, Func<Feature,int> callback, int grade)
 		{
 			string currGrade = grade.ToString ();
