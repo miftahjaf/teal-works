@@ -39,6 +39,7 @@ namespace Cerebro
 		public UnityEngine.UI.Text timerText;
 		public UnityEngine.UI.Text statusText;
 		public Text countDisplay;
+		public GameObject statusBG;
 
 		private int decrementScore = 0;
 		private int decrementBy = 0;
@@ -191,7 +192,11 @@ namespace Cerebro
 				AnimateTextCoroutine = null;
 			}
 			statusText.gameObject.transform.localPosition = new Vector3 (statusText.gameObject.transform.localPosition.x, statusText.gameObject.transform.localPosition.y - 200, statusText.gameObject.transform.localPosition.z);
+			statusBG.transform.localPosition = new Vector3 (statusText.gameObject.transform.localPosition.x, statusText.gameObject.transform.localPosition.y - 200, statusText.gameObject.transform.localPosition.z);
 			statusText.text = str;
+			if (str == "") {
+				return;
+			}
 			if (hideBool) {
 				AnimateTextCoroutine = StartCoroutine (AnimateText ());
 			}
@@ -201,9 +206,11 @@ namespace Cerebro
 		{
 			print ("AnimateText Start");
 			Go.to (statusText.gameObject.transform, 0.3f, new GoTweenConfig ().position (new Vector3 (0, 15, 0), false));
+			Go.to (statusBG.transform, 0.3f, new GoTweenConfig ().position (new Vector3 (0, 15, 0), false));
 			yield return new WaitForSeconds (2f);
 			print ("AnimateText End");
 			Go.to (statusText.gameObject.transform, 0.3f, new GoTweenConfig ().localPosition (new Vector3 (0, -200, 0), true));
+			Go.to (statusBG.gameObject.transform, 0.3f, new GoTweenConfig ().localPosition (new Vector3 (0, -200, 0), true));
 		}
 
 		private void SetWorld (bool firstTime = false)
