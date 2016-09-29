@@ -18,6 +18,7 @@ namespace Cerebro
 		public GameObject[] Groups;
 		public GameObject Leaderboard;
 		public Sprite[] GroupFlags;
+		public Shader BlurShader;
 
 		private Text[] GroupNameTexts;
 		private Text[] GroupCellTexts;
@@ -290,7 +291,15 @@ namespace Cerebro
 			IsLerpLeaderboardStarted = true;
 			LerpValue = 0;
 			LerpStartTime = Time.time;
+			if (!UICamera.GetComponent<Blur> ()) {
+				UICamera.AddComponent<Blur> ();
+				UICamera.GetComponent<Blur> ().blurShader = BlurShader;
+			}
 			UICamera.GetComponent<Blur> ().enabled = true;
+			if (!AvatarCamera.GetComponent<Blur> ()) {
+				AvatarCamera.AddComponent<Blur> ();
+				AvatarCamera.GetComponent<Blur> ().blurShader = BlurShader;
+			}
 			AvatarCamera.GetComponent<Blur> ().enabled = true;
 			LeaderboardCamera.SetActive (true);
 			IsLeaderboardOpening = true;
@@ -312,6 +321,10 @@ namespace Cerebro
 			IsLerpStarted = true;
 			LerpValue = 0;
 			LerpStartTime = Time.time;
+			if (!UICamera.GetComponent<Blur> ()) {
+				UICamera.AddComponent<Blur> ();
+				UICamera.GetComponent<Blur> ().blurShader = BlurShader;
+			}
 			UICamera.GetComponent<Blur> ().enabled = true;
 			IsAvatarScreenOpening = true;
 			IsAvatarSelectionOpen = true;
