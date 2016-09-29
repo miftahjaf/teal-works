@@ -619,7 +619,6 @@ namespace Cerebro
 
 			if (LaunchList.instance.mTimer.TotalSeconds <= 0) {
 				transform.parent.GetComponent<GOTGame> ().BackPressed ();
-				CapturePopup.transform.FindChild ("Parent").gameObject.SetActive (false);
 			}
 		}
 	}

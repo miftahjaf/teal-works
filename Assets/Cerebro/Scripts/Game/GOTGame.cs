@@ -32,6 +32,7 @@ namespace Cerebro
 
 		public void BackPressed (bool fromFocus = false)
 		{
+			transform.FindChild("CellGrid").GetComponent<CellGrid>().CapturePopup.transform.FindChild ("Parent").gameObject.SetActive (false);
 			LaunchList.instance.WorldChanged += null;
 			Destroy(gameObject);
 			parent.BackOnScreen (fromFocus);

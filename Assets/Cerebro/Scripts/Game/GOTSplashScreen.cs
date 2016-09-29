@@ -17,11 +17,14 @@ namespace Cerebro
 		string currentGameID;
 		public GameObject[] Groups;
 		public GameObject Leaderboard;
+		public Sprite[] GroupFlags;
+
 		private Text[] GroupNameTexts;
 		private Text[] GroupCellTexts;
 		private Text[] GroupCoinTexts;
 		private Text[] GroupPointTexts;
 		private GameObject[] GroupTrophy;
+		private GameObject[] GroupPointIcons;
 
 		public GameObject UICamera, LeaderboardCamera, AvatarCamera, CurrAvatar;
 
@@ -54,11 +57,13 @@ namespace Cerebro
 				GroupCoinTexts = new Text[4];
 				GroupPointTexts = new Text[4];
 				GroupTrophy = new GameObject[4];
+				GroupPointIcons = new GameObject[4];
 				for (int i = 0; i < 4; i++) {
 					GroupNameTexts[i] = Groups [i].transform.FindChild ("Name").GetComponent<Text> ();
 					GroupCellTexts[i] = Groups [i].transform.FindChild ("Land").GetComponent<Text> ();
 					GroupCoinTexts[i] = Groups [i].transform.FindChild ("Coins").GetComponent<Text> ();
 					GroupPointTexts[i] = Groups [i].transform.FindChild ("Points").GetComponent<Text> ();
+					GroupPointIcons [i] = Groups [i].transform.FindChild ("PointIcon").gameObject;
 					GroupTrophy[i] = Groups [i].transform.FindChild ("BG").gameObject;
 				}
 				Leaderboard.SetActive (false);
@@ -198,6 +203,14 @@ namespace Cerebro
 					GroupCoinTexts [i].text = CurrGOTLeaderboard [i].GroupCoin.ToString ();
 					GroupCellTexts [i].text = CurrGOTLeaderboard [i].GroupCell.ToString ();
 					GroupPointTexts [i].text = CurrGOTLeaderboard [i].GroupPoint.ToString ();
+					if (CurrGOTLeaderboard [i].GroupID == GroupMapping.Group1)
+						GroupPointIcons [i].GetComponent<Image> ().sprite = GroupFlags [0];
+					else if (CurrGOTLeaderboard [i].GroupID == GroupMapping.Group2)
+						GroupPointIcons [i].GetComponent<Image> ().sprite = GroupFlags [1];
+					else if (CurrGOTLeaderboard [i].GroupID == GroupMapping.Group3)
+						GroupPointIcons [i].GetComponent<Image> ().sprite = GroupFlags [2];
+					else if (CurrGOTLeaderboard [i].GroupID == GroupMapping.Group4)
+						GroupPointIcons [i].GetComponent<Image> ().sprite = GroupFlags [3];
 					if (CurrGOTLeaderboard [i].GroupPoint == CurrGOTLeaderboard [0].GroupPoint) {
 						if (CurrGOTLeaderboard [i].GroupCell == CurrGOTLeaderboard [0].GroupCell) {
 							GroupTrophy [i].SetActive (true);
@@ -333,13 +346,13 @@ namespace Cerebro
 		public void OpenAvatarCustomization()
 		{
 			UICamera.GetComponent<Blur> ().iterations = (int)(Mathf.Lerp (0, 5, LerpValue));
-			CurrAvatar.GetComponent<RectTransform> ().localScale = Vector2.Lerp (new Vector2(0.25f, 0.25f), new Vector2(0.6f, 0.6f), LerpValue);
+			CurrAvatar.GetComponent<RectTransform> ().localScale = Vector2.Lerp (new Vector2(0.4f, 0.4f), new Vector2(0.55f, 0.55f), LerpValue);
 		}
 
 		public void CloseAvatarCustomization()
 		{
 			UICamera.GetComponent<Blur> ().iterations = (int)(Mathf.Lerp (5, 0, LerpValue));
-			CurrAvatar.GetComponent<RectTransform> ().localScale = Vector2.Lerp (new Vector2(0.6f, 0.6f), new Vector2(0.25f, 0.25f), LerpValue);
+			CurrAvatar.GetComponent<RectTransform> ().localScale = Vector2.Lerp (new Vector2(0.55f, 0.55f), new Vector2(0.4f, 0.4f), LerpValue);
 		}
 
 		public void BackOnScreen(bool fromFocus) {

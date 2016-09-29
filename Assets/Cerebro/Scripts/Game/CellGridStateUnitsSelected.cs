@@ -13,7 +13,7 @@ namespace Cerebro {
 		private Cell _unitCell;
 		private GameObject CapturePopup;
 
-		private Unit currUnit;
+		private Unit currUnit, currUnitToDelete;
 		private Cell currCell;
 		private List<Cell> currMinPath;
 
@@ -129,7 +129,8 @@ namespace Cerebro {
 						BabaId += unit.Cell.BabaBodyId;
 					}
 					unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position);
-					currUnit = unit;
+					currUnitToDelete = unit;
+					currUnit = fromUnit;
 					currCell = unit.Cell;
 					currMinPath = minPath;
                     CerebroHelper.DebugLog ("Coins Left " + _cellGrid.GetCoins());
@@ -145,9 +146,9 @@ namespace Cerebro {
 
 		public void OnCaptureUnitButtonPressed()
 		{
+			_cellGrid.DeleteUnit(currUnitToDelete.gameObject);
 			currUnit.Move(currCell, currMinPath);
 			_cellGrid.EndTurn();
-			_cellGrid.DeleteUnit(currUnit.gameObject);
 		}
 
 		public override void OnCellDeselected(Cell cell)
