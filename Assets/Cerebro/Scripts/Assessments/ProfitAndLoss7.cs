@@ -306,8 +306,8 @@ namespace Cerebro {
 					SPQuestion.text = "Rs. " + SP.ToString ();
 					profit = SP - CP;
 					profitPer = (float)profit / (float)CP * 100f;
-					profitPer = Mathf.Abs (MathFunctions.GetRounded (profitPer, 2));
 					ProfitOrLoss = profitPer > 0 ? "profit" : "loss";
+					profitPer = Mathf.Abs (MathFunctions.GetRounded (profitPer, 2));
 					QuestionText.text = "Find the " + ProfitOrLoss + " percent (round off to 2 decimal places).";
 					Answer = profitPer.ToString () + "%";
 

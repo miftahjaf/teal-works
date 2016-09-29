@@ -183,17 +183,18 @@ namespace Cerebro
 
 				if (selector == 1) {
 					
-					int num1 = UnityEngine.Random.Range (1, 200);
-					int den1 = UnityEngine.Random.Range (2, 50);
+					int num1 = Random.Range (1, 200);
+					int den1 = Random.Range (1, 2) == 1 ? 2 : (Random.Range (1, 2) == 1 ? 5 : 10); // 2 or 5 or 10
+					while (num1 % den1 == 0)
+						num1 = Random.Range (1, 200);
 					int hcf = MathFunctions.GetHCF (num1, den1);
 					if (hcf > 1) {
 						num1 /= hcf;
 						den1 /= hcf;
 					}
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Convert the below fraction to decimal (round to 2 decimal places) :";
+					QuestionText.text = "Convert the below fraction to decimal :";
 					subQuestionText.text = num1.ToString () + " / " + den1.ToString ();
-					//Answer = Math.Round ((float)num1 / (float)den1 , 2);
 					float ans = (float)num1 / (float)den1;
 					ans = MathFunctions.GetRounded (ans, 2);
 					Answer = ans.ToString ();
@@ -215,7 +216,7 @@ namespace Cerebro
 
 				} else if (selector == 3) {
 					
-					string[] main = new string[] { "kg", "l", "years", "months", "weeks", "hours", "rupees" };
+					string[] main = new string[] { "kg", "L", "years", "months", "weeks", "hours", "rupees" };
 					string[] sub = new string[] { "g", "ml", "months", "days", "days", "minutes", "paise" };
 					int[] conversion = new int[] { 1000, 1000, 12, 30, 7, 60, 100 };
 
@@ -248,9 +249,9 @@ namespace Cerebro
 				} else if (selector == 4) {
 					
 					float num1 = Random.Range (1, 50) / 10f;
-					float den1 = Random.Range (2, 50) / 10f;
-					while (num1 == den1 || den1 % 1 == 0)
-						den1 = Random.Range (2, 50) / 10f;
+					float den1 = Random.Range (1, 2) == 1 ? 2 : (Random.Range (1, 2) == 1 ? 5 : 10); // 2 or 5 or 10
+					while (num1 % 1 == 0)
+						num1 = Random.Range (1, 50) / 10f;
 					float ans = num1 / den1;
 					ans = MathFunctions.GetRounded (ans, 2);
 					subQuestionText.gameObject.SetActive (true);
@@ -294,7 +295,7 @@ namespace Cerebro
 						num2 = (float)UnityEngine.Random.Range (1, 100) / (float)100;
 					float ans = (num2 - num1);
 					ans = MathFunctions.GetRounded (ans, 2);
-					QuestionText.text = "What should be added to " + num1.ToString () + " to get " + num2.ToString ();
+					QuestionText.text = "What should be added to " + num1.ToString () + " to get " + num2.ToString () + "?";
 					Answer = ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 4) {
@@ -304,7 +305,7 @@ namespace Cerebro
 						num2 = (float)UnityEngine.Random.Range (1, 100) / (float)100;
 					float ans = (num1 - num2);
 					ans = MathFunctions.GetRounded (ans, 2);
-					QuestionText.text = "What should be subtracted from " + num1.ToString () + " to get " + num2.ToString ();
+					QuestionText.text = "What should be subtracted from " + num1.ToString () + " to get " + num2.ToString () + "?";
 					Answer = ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 5) {
@@ -315,7 +316,7 @@ namespace Cerebro
 					float ans = num1 * num2;
 					ans = MathFunctions.GetRounded (ans, 2);
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Multiply the following decimals (Round to 2 decimal places) :";
+					QuestionText.text = "Multiply the following decimals :";
 					subQuestionText.text = num1.ToString () + " x " + num2.ToString ();
 					Answer = ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);
@@ -327,7 +328,7 @@ namespace Cerebro
 					float ans = num1 / num2;
 					ans = MathFunctions.GetRounded (ans, 2);
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Divide the following decimals (Round to 2 decimal places) :";
+					QuestionText.text = "Divide the following decimals :";
 					subQuestionText.text = num1.ToString () + " / " + num2.ToString ();
 					Answer = ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);

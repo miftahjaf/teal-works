@@ -330,8 +330,9 @@ namespace Cerebro {
 					num = num * 5;
 					num1 = Random.Range (5, 21);
 					num1 = num1 * 10;
-					num2 = Random.Range (2, 11);
-					num2 = num2 * 5;
+					num2 = 5 * Random.Range (2, 11);
+					while (num1 == num2)
+						num2 = 5 * Random.Range (2, 11);
 					while ((num1 * num2) % num != 0)
 						num = 5 * Random.Range (2, 11);
 					QuestionText.text = num.ToString () + "% of an amount is Rs. " + num1.ToString () + ". Calculate " + num2.ToString () + "% of the same amount (in Rs.).";
