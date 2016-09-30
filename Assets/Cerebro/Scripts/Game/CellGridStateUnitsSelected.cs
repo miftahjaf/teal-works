@@ -70,6 +70,7 @@ namespace Cerebro {
 						BabaId += cell.BabaBodyId;
 					}
 					cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", cell.MovementCost, BabaId, cell.groupID, OnCaptureButtonPressed, cell.transform.position);
+					cell.transform.parent.GetComponent<CellGrid> ().pointsTray.GetComponent<MaterialUI.EasyTween> ().Tween("BounceOut");
 					currUnit = fromUnit;
 					currCell = cell;
                 } else {
@@ -129,6 +130,8 @@ namespace Cerebro {
 						BabaId += unit.Cell.BabaBodyId;
 					}
 					unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position);
+					unit.Cell.transform.parent.GetComponent<CellGrid> ().pointsTray.GetComponent<MaterialUI.EasyTween> ().Tween("BounceOut");
+
 					currUnitToDelete = unit;
 					currUnit = fromUnit;
 					currCell = unit.Cell;
