@@ -223,8 +223,8 @@ namespace Cerebro
 						GroupTrophy [i].SetActive (false);
 					}
 				}
-
-				DateTime GameDate = System.DateTime.ParseExact (LaunchList.instance.mGameStatus [0].LeaderboardEndDate, "yyyy-MM-ddThh:mm:ss", null);
+					
+				DateTime GameDate = System.DateTime.ParseExact (LaunchList.instance.mGameStatus [0].LeaderboardEndDate, "yyyy-MM-ddTHH:mm:ss", null);
 				LeaderboardDate.text = "Game Ended on "+GameDate.ToString ("MMM dd, yyyy");
 			}
 
