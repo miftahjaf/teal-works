@@ -154,7 +154,9 @@ namespace Cerebro {
 
 		public void OnCaptureUnitButtonPressed()
 		{
-			_cellGrid.DeleteUnit(currUnitToDelete.gameObject);
+			if (currUnitToDelete) {
+				_cellGrid.DeleteUnit (currUnitToDelete.gameObject);
+			}
 			currUnit.Move(currCell, currMinPath);
 			_cellGrid.EndTurn();
 		}

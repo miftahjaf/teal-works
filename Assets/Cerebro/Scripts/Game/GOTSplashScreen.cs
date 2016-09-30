@@ -224,8 +224,8 @@ namespace Cerebro
 					}
 				}
 
-//				DateTime GameDate = System.DateTime.ParseExact (LaunchList.instance.mGameStatus [0].LeaderboardEndDate, "yyyyMMdd", null);
-//				LeaderboardDate.text = "Game Ended on "+GameDate.ToString ("MMM dd, yyyy");
+				DateTime GameDate = System.DateTime.ParseExact (LaunchList.instance.mGameStatus [0].LeaderboardEndDate, "yyyy-MM-ddThh:mm:ss", null);
+				LeaderboardDate.text = "Game Ended on "+GameDate.ToString ("MMM dd, yyyy");
 			}
 
 			if (status == 1) {

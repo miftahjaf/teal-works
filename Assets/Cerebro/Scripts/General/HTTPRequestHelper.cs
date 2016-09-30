@@ -431,7 +431,7 @@ namespace Cerebro
 							}
 							status.GOTLeaderboard.Add(l);
 						}
-//						status.LeaderboardEndDate = jsonResponse ["prev_game_data"]["end_date"].Value;
+						status.LeaderboardEndDate = jsonResponse ["prev_game_data"]["end_time"].Value;
 					}
 					LaunchList.instance.mGameStatus.Add(status);
 					callback (1);
