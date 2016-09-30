@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Cerebro
 {
@@ -12,6 +14,7 @@ namespace Cerebro
 		public Text coins;
 		public Slider mastrySlider;
 		public Text mastryText;
+		public Text indexText;
 		public Image mastryImage;
 		private string m_PracticeId;
 		public string praticeId
@@ -38,7 +41,8 @@ namespace Cerebro
 		{
 			knowledgeComponent = _knowledgeComponent;
 			praticeId = _practiceId;
-			name.text = index+". "+ _knowledgeComponent.KCName;
+			indexText.text = index+".";
+			name.text = _knowledgeComponent.KCName;
 			this.UpdateCoinText ();
 			onClickAction = _OnClickAction;
 			ChangeMastryStatus (false);
