@@ -2727,6 +2727,9 @@ namespace Cerebro
 		public string PreviousGameID{ get; set; }
 		public Dictionary<string,string> PreviousGameData{ get; set; }
 		public List<GOTLeaderboard> GOTLeaderboard{ get; set; }
+		public string[] GroupNames{ get; set; }
+		public int[] GroupCurrScores{ get; set; }
+		public int[] GroupTargetScores{ get; set; }
 	}
 
 	public class GOTLeaderboard

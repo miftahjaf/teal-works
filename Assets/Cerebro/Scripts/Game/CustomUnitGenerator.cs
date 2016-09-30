@@ -75,7 +75,7 @@ namespace Cerebro {
 			hairID = Mathf.Clamp (hairID, 1, 8);
 			faceID = Mathf.Clamp (faceID, 1, 8);
 			bodyID = Mathf.Clamp (bodyID, 1, 8);
-			Debug.Log ("HAIR " + hairID + " FACE  " + faceID + " BODY " + bodyID);
+//			Debug.Log ("HAIR " + hairID + " FACE  " + faceID + " BODY " + bodyID);
 			var hairString = "baba_hair_1";
 			var hairString2 = "";
 			var bodyString = "baba_body_1";

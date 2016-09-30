@@ -42,6 +42,8 @@ namespace Cerebro
 		public GameObject statusBG;
 		public GameObject pointsTray;
 
+		private GameObject[] GroupPointTexts, GroupNameTexts;
+		private float LastTimeScoreSync;
 		private int decrementScore = 0;
 		private int decrementBy = 0;
 		private int currentScore = 0;
@@ -116,6 +118,13 @@ namespace Cerebro
 			coinsText.text = PlayerCoins.ToString();
 			timerText.text = "Time Left: calculating...";
 			currentScore = PlayerCoins;
+
+			GroupPointTexts = new GameObject[4];
+			GroupNameTexts = new GameObject[4];
+			for (int i = 0; i < 4; i++) {
+				GroupPointTexts [i] = pointsTray.transform.FindChild ("GoTPoints"+(i+1)).FindChild("PtsText").gameObject;
+				GroupNameTexts [i] = pointsTray.transform.FindChild ("GoTPoints"+(i+1)).FindChild("FlagText").gameObject;
+			}
 
 			SetStatusText (GameStatuses.Wait, false);
 
@@ -374,6 +383,7 @@ namespace Cerebro
 				CerebroHelper.DebugLog ("IncrementWorld");
 				IncrementWorld ();
 			}
+			LastTimeScoreSync = Time.time;
 		}
 
 		void MoveValidated (object sender, EventArgs e)
@@ -576,6 +586,38 @@ namespace Cerebro
 			callOut.SetActive (false);
 		}
 
+		void UpdateScore()
+		{
+			if (LaunchList.instance.mGameStatus.Count > 0) {
+				GOTGameStatus currGameStatus = LaunchList.instance.mGameStatus [0];
+				if (currGameStatus.GroupTargetScores != null && currGameStatus.GroupTargetScores.Length > 0) {
+					float TimeToSync = 5f;
+					Debug.Log ("into here");
+					for (int i = 0; i < 4; i++) {
+						if (currGameStatus.GroupCurrScores [i] < currGameStatus.GroupTargetScores [i]) {
+							int diff = currGameStatus.GroupTargetScores [i] - currGameStatus.GroupCurrScores [i];
+							float timeDiff = (LastTimeScoreSync + TimeToSync) - Time.time;
+							if (timeDiff > 0) {
+								int incr = (int)(diff / (timeDiff * (1 / Time.deltaTime)));
+								currGameStatus.GroupCurrScores [i] += incr;
+								if (currGameStatus.GroupCurrScores [i] > currGameStatus.GroupTargetScores [i]) {
+									currGameStatus.GroupCurrScores [i] = currGameStatus.GroupTargetScores [i];
+								}
+								Debug.Log ("not sync for i "+i+" "+diff+" "+timeDiff+" "+incr+" "+currGameStatus.GroupCurrScores [i]+" "+currGameStatus.GroupTargetScores [i]);
+							} else {								
+								currGameStatus.GroupCurrScores [i] = currGameStatus.GroupTargetScores [i];
+								Debug.Log ("sync1 for i "+i+" "+currGameStatus.GroupCurrScores [i]+" "+currGameStatus.GroupTargetScores [i]);
+							}
+						} else {							
+							currGameStatus.GroupCurrScores [i] = currGameStatus.GroupTargetScores [i];
+							Debug.Log ("sync for i "+i+" "+currGameStatus.GroupCurrScores [i]+" "+currGameStatus.GroupTargetScores [i]);
+						}
+						GroupPointTexts [i].GetComponent<Text> ().text = currGameStatus.GroupCurrScores [i].ToString ();
+					}
+				}
+			}
+		}
+
 		void Update ()
 		{
 			if (waitingForGameData) {
@@ -591,6 +633,7 @@ namespace Cerebro
 					}
 				}
 			}
+			UpdateScore ();
 
 			updateCoinsCntr += Time.deltaTime;
 			if (updateCoinsCntr >= 0.1f) {

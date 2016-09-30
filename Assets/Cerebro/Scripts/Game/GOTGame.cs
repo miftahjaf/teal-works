@@ -13,6 +13,7 @@ namespace Cerebro
 		void Start ()
 		{
 			transform.position = new Vector3 (-1.245304f, -0.4655751f, -0.7086951f);
+			Camera.main.transform.position = new Vector3 (0f, 0f, -10f);
 		}
 
 		public void Initialise(GOTSplashScreen _parent, string GameID) {
@@ -32,10 +33,14 @@ namespace Cerebro
 
 		public void BackPressed (bool fromFocus = false)
 		{
-			transform.FindChild("CellGrid").GetComponent<CellGrid>().CapturePopup.transform.FindChild ("Parent").gameObject.SetActive (false);
-			LaunchList.instance.WorldChanged += null;
-			Destroy(gameObject);
-			parent.BackOnScreen (fromFocus);
+			CapturePopup popup = transform.FindChild ("CellGrid").GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ();
+			if (popup.IsPopupEnabled) {
+				transform.FindChild ("CellGrid").GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ().BackPressed ();
+			} else {
+				LaunchList.instance.WorldChanged += null;
+				Destroy (gameObject);
+				parent.BackOnScreen (fromFocus);
+			}
 		}
 	}
 }

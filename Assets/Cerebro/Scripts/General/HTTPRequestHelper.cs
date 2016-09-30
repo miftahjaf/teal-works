@@ -293,6 +293,34 @@ namespace Cerebro
 							}
 						}
 					}
+					if(LaunchList.instance.mGameStatus.Count <= 0)
+					{
+						GOTGameStatus gs = new GOTGameStatus();
+						LaunchList.instance.mGameStatus.Add(gs);
+					}
+					GOTGameStatus currGameStatus = LaunchList.instance.mGameStatus[0];
+					if(currGameStatus.GroupNames == null || currGameStatus.GroupNames.Length <= 0)
+					{
+						currGameStatus.GroupNames = new string[4];
+					}
+					if(currGameStatus.GroupCurrScores == null || currGameStatus.GroupCurrScores.Length <= 0)
+					{
+						currGameStatus.GroupCurrScores = new int[4];
+						for(int i = 0; i < 4; i++)
+						{
+							currGameStatus.GroupCurrScores[i] = jsonResponse["team_score"][i].AsInt;
+							Debug.Log("curr score i "+i+" "+currGameStatus.GroupCurrScores[i]);
+						}
+					}
+					if(currGameStatus.GroupTargetScores == null || currGameStatus.GroupTargetScores.Length <= 0)
+					{
+						currGameStatus.GroupTargetScores = new int[4];
+					}
+					for(int i = 0; i < 4; i++)
+					{
+						currGameStatus.GroupTargetScores[i] += UnityEngine.Random.Range(5, 500);
+						Debug.Log("target score i "+i+" "+currGameStatus.GroupTargetScores[i]);
+					}
 
 					LaunchList.instance.WorldLoaded (singleTime);
 				} else {

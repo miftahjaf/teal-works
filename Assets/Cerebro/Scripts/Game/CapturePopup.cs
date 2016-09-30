@@ -38,11 +38,10 @@ namespace Cerebro
 		{
 			yield return new WaitForSeconds (0.4f);
 			transform.FindChild("Parent").gameObject.SetActive (true);
-			cellPosition = new Vector3 (cellPosition.x, cellPosition.y + 0.01f, cellPosition.z);
+			cellPosition = new Vector3 (cellPosition.x, cellPosition.y, cellPosition.z);
 			Vector2 stPoint = Camera.main.WorldToScreenPoint (cellPosition);
-			Vector3 pos = Camera.main.WorldToViewportPoint (transform.FindChild("Parent").FindChild ("Pointer").transform.position);
-			Vector2 endPoint = new Vector2 (pos.x * Screen.width, pos.y * Screen.height);
-			Debug.Log ("pos "+transform.position+" height "+GetComponent<RectTransform>().rect.height);
+			stPoint = new Vector2 (stPoint.x * (1024f/Screen.width), stPoint.y * (1024f/Screen.width));
+			Vector2 endPoint = new Vector2 (512f, 384f);
 			Debug.Log ("stpoint "+stPoint);
 			Debug.Log ("endPoint "+endPoint);
 //			VectorLineGm.GetComponent<VectorObject2D> ().vectorLine = VectorLine.SetLine (Color.white, stPoint, endPoint);
