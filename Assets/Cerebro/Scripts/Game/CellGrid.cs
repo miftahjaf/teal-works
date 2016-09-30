@@ -40,6 +40,7 @@ namespace Cerebro
 		public UnityEngine.UI.Text statusText;
 		public Text countDisplay;
 		public GameObject statusBG;
+		public GameObject pointsTray;
 
 		private int decrementScore = 0;
 		private int decrementBy = 0;
@@ -205,12 +206,16 @@ namespace Cerebro
 		IEnumerator AnimateText ()
 		{
 			print ("AnimateText Start");
+			MaterialUI.EasyTween e = pointsTray.GetComponent<MaterialUI.EasyTween> ();
+			e.Tween ("BounceOut");
+
 			Go.to (statusText.gameObject.transform, 0.3f, new GoTweenConfig ().position (new Vector3 (0, 15, 0), false));
 			Go.to (statusBG.transform, 0.3f, new GoTweenConfig ().position (new Vector3 (0, 15, 0), false));
 			yield return new WaitForSeconds (2f);
 			print ("AnimateText End");
 			Go.to (statusText.gameObject.transform, 0.3f, new GoTweenConfig ().localPosition (new Vector3 (0, -200, 0), true));
 			Go.to (statusBG.gameObject.transform, 0.3f, new GoTweenConfig ().localPosition (new Vector3 (0, -200, 0), true));
+			e.Tween ("BounceIn");
 		}
 
 		private void SetWorld (bool firstTime = false)
