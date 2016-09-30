@@ -17,9 +17,13 @@ namespace Cerebro
 		public delegate void CaptureClicked();
 		public CaptureClicked OnCaptureClicked;
 
-		public void InitializePopup(string title, int coins, string BabaId, string groupId, CaptureClicked CaptureFunction, Vector3 cellPosition)
+		public delegate void CancelClicked();
+		public CancelClicked OnCancelClicked;
+
+		public void InitializePopup(string title, int coins, string BabaId, string groupId, CaptureClicked CaptureFunction, Vector3 cellPosition, CancelClicked CancelFunction)
 		{
 			OnCaptureClicked = CaptureFunction;
+			OnCancelClicked = CancelFunction;
 			IsPopupEnabled = true;
 			if (BabaId == "") {
 				DefaultAvatar.SetActive (true);
@@ -76,6 +80,9 @@ namespace Cerebro
 
 		public void BackPressed()
 		{
+			if (OnCancelClicked != null) {
+				OnCancelClicked ();
+			}
 			Go.to (Camera.main.transform, 0.4f, new GoTweenConfig ().position (new Vector3 (0f, 0f, -10f), false).setEaseType (GoEaseType.BackIn));
 			OnCaptureClicked = null;
 			IsPopupEnabled = false;

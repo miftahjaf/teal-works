@@ -41,9 +41,11 @@ namespace Cerebro
 		public Text countDisplay;
 		public GameObject statusBG;
 		public GameObject pointsTray;
+		public bool IsAnimatingText;
 
 		private GameObject[] GroupPointTexts, GroupNameTexts;
 		private float LastTimeScoreSync;
+		private int[] LastCurrScore;
 		private int decrementScore = 0;
 		private int decrementBy = 0;
 		private int currentScore = 0;
@@ -125,6 +127,7 @@ namespace Cerebro
 				GroupPointTexts [i] = pointsTray.transform.FindChild ("GoTPoints"+(i+1)).FindChild("PtsText").gameObject;
 				GroupNameTexts [i] = pointsTray.transform.FindChild ("GoTPoints"+(i+1)).FindChild("FlagText").gameObject;
 			}
+			LastCurrScore = new int[4];
 
 			SetStatusText (GameStatuses.Wait, false);
 
@@ -217,6 +220,7 @@ namespace Cerebro
 			print ("AnimateText Start");
 			MaterialUI.EasyTween e = pointsTray.GetComponent<MaterialUI.EasyTween> ();
 			e.Tween ("BounceOut");
+			IsAnimatingText = true;
 
 			Go.to (statusText.gameObject.transform, 0.3f, new GoTweenConfig ().position (new Vector3 (0, 15, 0), false));
 			Go.to (statusBG.transform, 0.3f, new GoTweenConfig ().position (new Vector3 (0, 15, 0), false));
@@ -225,6 +229,18 @@ namespace Cerebro
 			Go.to (statusText.gameObject.transform, 0.3f, new GoTweenConfig ().localPosition (new Vector3 (0, -200, 0), true));
 			Go.to (statusBG.gameObject.transform, 0.3f, new GoTweenConfig ().localPosition (new Vector3 (0, -200, 0), true));
 			e.Tween ("BounceIn");
+			IsAnimatingText = false;
+		}
+
+		public void GetBackPointsTray()
+		{
+			StartCoroutine (GetPointsTrayIn());
+		}
+
+		IEnumerator GetPointsTrayIn()
+		{
+			yield return new WaitForSeconds (0.6f);
+			pointsTray.GetComponent<MaterialUI.EasyTween> ().Tween ("BounceIn");
 		}
 
 		private void SetWorld (bool firstTime = false)
@@ -384,6 +400,17 @@ namespace Cerebro
 				IncrementWorld ();
 			}
 			LastTimeScoreSync = Time.time;
+			if (LaunchList.instance.mGameStatus.Count > 0) {
+				GOTGameStatus currGameStatus = LaunchList.instance.mGameStatus [0];
+				if (currGameStatus.GroupCurrScores != null && currGameStatus.GroupCurrScores.Length > 0) {
+					for (int i = 0; i < 4; i++) {
+						LastCurrScore [i] = currGameStatus.GroupCurrScores [i];
+					}
+				}
+			}
+			if (!IsAnimatingText && pointsTray && !CapturePopup.GetComponent<CapturePopup>().IsPopupEnabled) {
+				pointsTray.GetComponent<MaterialUI.EasyTween> ().Tween ("BounceIn");
+			}
 		}
 
 		void MoveValidated (object sender, EventArgs e)
@@ -592,25 +619,23 @@ namespace Cerebro
 				GOTGameStatus currGameStatus = LaunchList.instance.mGameStatus [0];
 				if (currGameStatus.GroupTargetScores != null && currGameStatus.GroupTargetScores.Length > 0) {
 					float TimeToSync = 5f;
-					Debug.Log ("into here");
 					for (int i = 0; i < 4; i++) {
 						if (currGameStatus.GroupCurrScores [i] < currGameStatus.GroupTargetScores [i]) {
 							int diff = currGameStatus.GroupTargetScores [i] - currGameStatus.GroupCurrScores [i];
 							float timeDiff = (LastTimeScoreSync + TimeToSync) - Time.time;
 							if (timeDiff > 0) {
-								int incr = (int)(diff / (timeDiff * (1 / Time.deltaTime)));
-								currGameStatus.GroupCurrScores [i] += incr;
+								float CurrLerp = Mathf.InverseLerp (LastTimeScoreSync, LastTimeScoreSync + TimeToSync, Time.time);
+								float IncrFloat = Mathf.Lerp (LastCurrScore[i], currGameStatus.GroupTargetScores [i], CurrLerp);
+								currGameStatus.GroupCurrScores [i] = (int)IncrFloat;
 								if (currGameStatus.GroupCurrScores [i] > currGameStatus.GroupTargetScores [i]) {
 									currGameStatus.GroupCurrScores [i] = currGameStatus.GroupTargetScores [i];
 								}
-								Debug.Log ("not sync for i "+i+" "+diff+" "+timeDiff+" "+incr+" "+currGameStatus.GroupCurrScores [i]+" "+currGameStatus.GroupTargetScores [i]);
+								Debug.Log ("for i "+i+" "+CurrLerp+" "+IncrFloat+" "+" "+" "+currGameStatus.GroupCurrScores [i]+" "+currGameStatus.GroupTargetScores [i]);
 							} else {								
 								currGameStatus.GroupCurrScores [i] = currGameStatus.GroupTargetScores [i];
-								Debug.Log ("sync1 for i "+i+" "+currGameStatus.GroupCurrScores [i]+" "+currGameStatus.GroupTargetScores [i]);
 							}
 						} else {							
 							currGameStatus.GroupCurrScores [i] = currGameStatus.GroupTargetScores [i];
-							Debug.Log ("sync for i "+i+" "+currGameStatus.GroupCurrScores [i]+" "+currGameStatus.GroupTargetScores [i]);
 						}
 						GroupPointTexts [i].GetComponent<Text> ().text = currGameStatus.GroupCurrScores [i].ToString ();
 					}

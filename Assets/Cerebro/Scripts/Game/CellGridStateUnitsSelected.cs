@@ -69,7 +69,7 @@ namespace Cerebro {
 						BabaId += cell.BabaFaceId;
 						BabaId += cell.BabaBodyId;
 					}
-					cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", cell.MovementCost, BabaId, cell.groupID, OnCaptureButtonPressed, cell.transform.position);
+					cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", cell.MovementCost, BabaId, cell.groupID, OnCaptureButtonPressed, cell.transform.position, OnCancelButtonPressed);
 					cell.transform.parent.GetComponent<CellGrid> ().pointsTray.GetComponent<MaterialUI.EasyTween> ().Tween("BounceOut");
 					currUnit = fromUnit;
 					currCell = cell;
@@ -87,6 +87,11 @@ namespace Cerebro {
 		{
 			currUnit.Move(currCell, null);
 			_cellGrid.EndTurn();
+		}
+
+		public void OnCancelButtonPressed()
+		{
+			currCell.transform.parent.GetComponent<CellGrid> ().GetBackPointsTray ();
 		}
 
 		public override void OnUnitClicked(Unit unit)
@@ -129,7 +134,7 @@ namespace Cerebro {
 						BabaId += unit.Cell.BabaFaceId;
 						BabaId += unit.Cell.BabaBodyId;
 					}
-					unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position);
+					unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position, OnCancelButtonPressed);
 					unit.Cell.transform.parent.GetComponent<CellGrid> ().pointsTray.GetComponent<MaterialUI.EasyTween> ().Tween("BounceOut");
 
 					currUnitToDelete = unit;
