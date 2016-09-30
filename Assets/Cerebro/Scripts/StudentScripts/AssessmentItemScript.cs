@@ -20,8 +20,12 @@ namespace Cerebro
 		public GameObject KCParent;
 		public AccordionElement accordionElement;
 		public ProgressHelper progressHelper;
+		public Sprite plus;
+		public Sprite minus;
+		public Image accordingIcon;
 
 		private bool isMastryLoaded =false;
+
 
 		private PracticeItems m_PracticeItems;
 		public PracticeItems practiceItems
@@ -162,9 +166,9 @@ namespace Cerebro
 				
 				this.KCParent.transform.localScale = Vector3.one;
 				bgModifier.Radius = new Vector4(4f, 4f, 0f, 0f);
-				Debug.Log (bgModifier.Radius);
 			}
 			RefreshKCList ();
+			accordingIcon.sprite = state ? minus : plus;
 			if (m_OnScrollChanged != null) 
 			{
 				m_OnScrollChanged.Invoke ();
@@ -181,6 +185,7 @@ namespace Cerebro
 			{
 				m_OnScrollChanged.Invoke ();
 			}
+
 			RefreshKCList ();
 		}
 
