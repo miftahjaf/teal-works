@@ -16,7 +16,10 @@ namespace Cerebro
 		public Text mastryText;
 		public Text indexText;
 		public Image mastryImage;
+	
+
 		private string m_PracticeId;
+
 		public string praticeId
 		{
 			get { return m_PracticeId; }
@@ -101,7 +104,7 @@ namespace Cerebro
 		{
 			if (knowledgeComponent.Mastery == 0)
 				return 1;
-			if (knowledgeComponent.Mastery == 100)
+			if (knowledgeComponent.Mastery >= 99f)
 				return 3;
 
 			return 2;
