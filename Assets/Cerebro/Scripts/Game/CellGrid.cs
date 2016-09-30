@@ -405,6 +405,7 @@ namespace Cerebro
 				if (currGameStatus.GroupCurrScores != null && currGameStatus.GroupCurrScores.Length > 0) {
 					for (int i = 0; i < 4; i++) {
 						LastCurrScore [i] = currGameStatus.GroupCurrScores [i];
+						GroupNameTexts [i].GetComponent<Text> ().text = currGameStatus.GroupNames [i];
 					}
 				}
 			}
