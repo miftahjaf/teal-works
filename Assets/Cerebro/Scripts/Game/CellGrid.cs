@@ -630,7 +630,6 @@ namespace Cerebro
 								if (currGameStatus.GroupCurrScores [i] > currGameStatus.GroupTargetScores [i]) {
 									currGameStatus.GroupCurrScores [i] = currGameStatus.GroupTargetScores [i];
 								}
-								Debug.Log ("for i "+i+" "+CurrLerp+" "+IncrFloat+" "+" "+" "+currGameStatus.GroupCurrScores [i]+" "+currGameStatus.GroupTargetScores [i]);
 							} else {								
 								currGameStatus.GroupCurrScores [i] = currGameStatus.GroupTargetScores [i];
 							}

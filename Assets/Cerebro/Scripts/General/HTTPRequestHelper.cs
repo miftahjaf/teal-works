@@ -302,14 +302,17 @@ namespace Cerebro
 					if(currGameStatus.GroupNames == null || currGameStatus.GroupNames.Length <= 0)
 					{
 						currGameStatus.GroupNames = new string[4];
+						for(int i = 0; i < 4; i++)
+						{
+							currGameStatus.GroupNames[i] = jsonResponse["team_score"][""+(i+1)]["name"].Value;
+						}
 					}
 					if(currGameStatus.GroupCurrScores == null || currGameStatus.GroupCurrScores.Length <= 0)
 					{
 						currGameStatus.GroupCurrScores = new int[4];
 						for(int i = 0; i < 4; i++)
 						{
-							currGameStatus.GroupCurrScores[i] = jsonResponse["team_score"][i].AsInt;
-							Debug.Log("curr score i "+i+" "+currGameStatus.GroupCurrScores[i]);
+							currGameStatus.GroupCurrScores[i] = jsonResponse["team_score"][""+(i+1)]["score"].AsInt;
 						}
 					}
 					if(currGameStatus.GroupTargetScores == null || currGameStatus.GroupTargetScores.Length <= 0)
@@ -318,8 +321,7 @@ namespace Cerebro
 					}
 					for(int i = 0; i < 4; i++)
 					{
-						currGameStatus.GroupTargetScores[i] += UnityEngine.Random.Range(5, 500);
-						Debug.Log("target score i "+i+" "+currGameStatus.GroupTargetScores[i]);
+						currGameStatus.GroupTargetScores[i] = jsonResponse["team_score"][""+(i+1)]["score"].AsInt;
 					}
 
 					LaunchList.instance.WorldLoaded (singleTime);
@@ -429,6 +431,7 @@ namespace Cerebro
 							}
 							status.GOTLeaderboard.Add(l);
 						}
+//						status.LeaderboardEndDate = jsonResponse ["prev_game_data"]["end_date"].Value;
 					}
 					LaunchList.instance.mGameStatus.Add(status);
 					callback (1);
