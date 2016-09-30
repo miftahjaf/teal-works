@@ -6,7 +6,7 @@ using UnityEngine.UI.Extensions;
 using UnityEngine.UI;
 using Cerebro;
 namespace Cerebro {	
-	
+
 
 	public class DiagramHelper : MonoBehaviour 
 	{
@@ -36,25 +36,59 @@ namespace Cerebro {
 		{
 			//Add pairs of point to generate disrete line
 			List <Vector2> lineValues = new List <Vector2> ();
-			foreach (LinePoint linePoint in linePoints)
-			{
-				//starting point
-				lineValues.Add (linePoint.origin);
-			
+			foreach (LinePoint linePoint in linePoints) {
 				//Calculate ending point using angle and given radius
-				Vector2 newPoint =MathFunctions.PointAtDirection(linePoint.origin,linePoint.angle,linePoint.radius);
+				Vector2 newPoint = MathFunctions.PointAtDirection (linePoint.origin, linePoint.angle, linePoint.radius);
 
-			
-				lineValues.Add(newPoint);
+				if (linePoint.lineType == LineShapeType.Normal) {
+					lineValues.Add (linePoint.origin);
+					lineValues.Add (newPoint);
+				} else {
+					int counter = 0;
+					Vector2 stPoint = linePoint.origin;
+					Vector2 lastPoint = newPoint;
+
+					if (newPoint.y < linePoint.origin.y) {
+						stPoint = newPoint;
+						lastPoint = linePoint.origin;
+					}
+
+					float dy = lastPoint.y - stPoint.y;
+
+					if (Mathf.Abs (dy) > 0.0001f) {
+						float dx = lastPoint.x - stPoint.x;
+						for (float i = stPoint.y; i < lastPoint.y; i += 4f) {
+							counter++;
+							float x = ((i - stPoint.y) * (dx / dy)) + stPoint.x;
+							lineValues.Add (new Vector2 (x, i));
+						}
+					} else { 
+						if (newPoint.x < linePoint.origin.x) {
+							stPoint = newPoint;
+							lastPoint = linePoint.origin;
+						}
+						for (float x = stPoint.x; x < lastPoint.x; x += 4f) {
+							counter++;
+							lineValues.Add (new Vector2 (x, stPoint.y));
+						}
+					}
+					if (counter % 2 != 0)
+						lineValues.Add (lastPoint);
+				}
 
 				//Instantiate point prefab to show point, point name and arrow
-			     GameObject endPoint = GameObject.Instantiate (pointPrefab);
-				 endPoint.transform.SetParent (this.transform, false);
+				GameObject endPoint = GameObject.Instantiate (pointPrefab);
+				endPoint.transform.SetParent (this.transform, false);
 
 				//set arrow, point and label poistion
 				endPoint.GetComponent<LinePointScript> ().SetPoint (linePoint);
 
+			}
+			int fjkajk = 0;
 
+			foreach (Vector2 victor in lineValues) {
+				fjkajk++;
+				Debug.Log ("point " + fjkajk + " = (" + victor.x + "," + victor.y + ")");
 			}
 
 			//Assign point to vectrosity line alogrithm to draw line between points
@@ -78,13 +112,13 @@ namespace Cerebro {
 
 				//UI polygon component to draw arc
 				UIPolygon UIpolygon = arc.GetComponent<UIPolygon> ();
-			
+
 				//Difference between given angle
 				float diff = arcAngle.endAngle - arcAngle.startAngle;
 
 				float tempRadius=(arcAngle.radius == 0 ? arcRadius : arcAngle.radius);
 				//set arc size according to radius
-			    UIpolygon.GetComponent<RectTransform> ().sizeDelta = Vector2.one * tempRadius;
+				UIpolygon.GetComponent<RectTransform> ().sizeDelta = Vector2.one * tempRadius;
 
 
 				//If difference is 90 then draw square instead of arc
@@ -96,7 +130,7 @@ namespace Cerebro {
 
 					Vector2 quadrants = GetQuadrants (arcAngle.startAngle);
 					//Set square in given position
-				UIpolygon.GetComponent<RectTransform> ().anchoredPosition = arcAngle.origin + new Vector2( (quadrants.x*tempRadius) / 3f,  (quadrants.y*tempRadius) / 3f) ;
+					UIpolygon.GetComponent<RectTransform> ().anchoredPosition = arcAngle.origin + new Vector2( (quadrants.x*tempRadius) / 3f,  (quadrants.y*tempRadius) / 3f) ;
 				} 
 				else 
 				{
@@ -105,10 +139,10 @@ namespace Cerebro {
 					UIpolygon.GetComponent<RectTransform> ().anchoredPosition = arcAngle.origin;
 
 				}
-				
-			  
+
+
 				//Get center position to diplay arc text
-			Vector2 centerPosition = (new Vector2 (arcAngle.origin.x + tempRadius* Mathf.Cos (Mathf.Deg2Rad * (arcAngle.startAngle + 90f)), arcAngle.origin.y + tempRadius* Mathf.Sin (Mathf.Deg2Rad * (arcAngle.startAngle + 90f))) - new Vector2 (arcAngle.origin.x + tempRadius * Mathf.Cos (Mathf.Deg2Rad * (arcAngle.endAngle + 90f)), arcAngle.origin.y + tempRadius * Mathf.Sin (Mathf.Deg2Rad * (arcAngle.endAngle + 90f)))).normalized * tempRadius;
+				Vector2 centerPosition = (new Vector2 (arcAngle.origin.x + tempRadius* Mathf.Cos (Mathf.Deg2Rad * (arcAngle.startAngle + 90f)), arcAngle.origin.y + tempRadius* Mathf.Sin (Mathf.Deg2Rad * (arcAngle.startAngle + 90f))) - new Vector2 (arcAngle.origin.x + tempRadius * Mathf.Cos (Mathf.Deg2Rad * (arcAngle.endAngle + 90f)), arcAngle.origin.y + tempRadius * Mathf.Sin (Mathf.Deg2Rad * (arcAngle.endAngle + 90f)))).normalized * tempRadius;
 
 				//Set text position in center of  arc
 				UIpolygon.GetComponentInChildren<Text> ().GetComponent<RectTransform> ().anchoredPosition = centerPosition;
@@ -116,7 +150,7 @@ namespace Cerebro {
 				//Set arc value text
 				UIpolygon.GetComponentInChildren<Text> ().text = arcAngle.value;
 
-			     //Update arc radius for next arc draw
+				//Update arc radius for next arc draw
 				arcRadius += 10f;
 
 				UIpolygon.ReDraw ();
@@ -186,3 +220,4 @@ namespace Cerebro {
 
 	}
 }
+

@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 
-namespace Cerebro {
-
+namespace Cerebro 
+{
+	public enum LineShapeType
+	{
+		Normal,
+		Dotted
+	}
 	public class LinePoint 
 	{
 		public string name;
@@ -11,6 +16,7 @@ namespace Cerebro {
 		public bool shouldShowArrow;
 		public int textDirection;
 		public Vector2 textOffset;
+		public LineShapeType lineType;
 		public LinePoint(string name,Vector2 origin,float angle,bool shouldShowArrow,float radius =100f,int textDirection=0)
 		{
 			this.name = name;
@@ -21,6 +27,8 @@ namespace Cerebro {
 			this.textDirection = textDirection;
 
 		}
+
+
 		public LinePoint(string name,Vector2 origin,float angle,bool shouldShowArrow,Vector2 textOffset,float radius =100f)
 		{
 			this.name = name;
@@ -29,6 +37,13 @@ namespace Cerebro {
 			this.radius = radius;
 			this.shouldShowArrow = shouldShowArrow;
 			this.textOffset = textOffset;
+		}
+
+
+		public LinePoint SetLineType(LineShapeType lineType)
+		{
+			this.lineType = lineType;
+			return this;
 		}
 	}
 }
