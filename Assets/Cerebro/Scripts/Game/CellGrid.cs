@@ -345,6 +345,10 @@ namespace Cerebro
 			}
 			return null;
 		}
+		private bool isBabaSame(Cell c, World cd)
+		{
+			return (c.BabaBodyId == cd.BabaBodyId && c.BabaFaceId == cd.BabaFaceId && c.BabaHairId == cd.BabaHairId);
+		}
 
 		private void IncrementWorld() {
 			if (this == null || this.gameObject == null) {
@@ -361,7 +365,8 @@ namespace Cerebro
 					foreach (var unit in units) {
 						if (index == unit.Cell.cellIndex) {
 							createCell = false;
-							if (unit.Cell.groupID != cellData.GroupID) {
+
+							if (unit.Cell.groupID != cellData.GroupID || !isBabaSame(unit.Cell, cellData)) {
 								DeleteUnit (unit.gameObject);
 								createCell = true;
 							} else if (unit.isWaiting) {
@@ -392,6 +397,10 @@ namespace Cerebro
 		private void GameWorldChanged (object sender, System.EventArgs e)
 		{
 			CerebroHelper.DebugLog ("GameWorldChanged");
+			if (this == null || this.gameObject == null) {
+				CerebroHelper.DebugLog ("Exiting GameWorldChanged, no GoT prefab");
+				return;
+			}
 			if (Cells == null || Cells.Count == 0) {
 				CerebroHelper.DebugLog ("SetWorld");
 				SetWorld ();
