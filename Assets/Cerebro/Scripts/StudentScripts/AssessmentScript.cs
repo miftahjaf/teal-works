@@ -141,11 +141,16 @@ namespace Cerebro
 				var bonus = increaseStreak ();
 				var increment = _increment + bonus;
 
-				if (LaunchList.instance.mPracticeItems.ContainsKey (mPracticeID)) {
+				/*if (LaunchList.instance.mPracticeItems.ContainsKey (mPracticeID)) {
 					if (LaunchList.instance.mPracticeItems[mPracticeID].RegenerationStarted != "") {
 						increment = 0;
 					}
-				}
+				}*/
+
+				if (CerebroProperties.instance.ShowCoins)
+					increment = UpdatePracticeItems (baseAssessment.GetPracticeItemID(), baseAssessment.GetCurrentKCID (), increment);
+				else
+					increment =0;
 
 				if (increment != 0) {
 					incrementScore = increment;
@@ -154,7 +159,6 @@ namespace Cerebro
 					if (CerebroProperties.instance.ShowCoins) {
 						StartCoroutine (animateScoreIncrement (_increment));
 						//UpdatePracticeItems (baseAssessment.GetPracticeItemID (), increment);
-						UpdatePracticeItems (baseAssessment.GetPracticeItemID(), baseAssessment.GetCurrentKCID (), increment);
 					}
 					LaunchList.instance.SetCoins ( increment);
 				}
@@ -303,12 +307,14 @@ namespace Cerebro
 			levelUp.gameObject.SetActive (false);
 		}
 
-		public void UpdatePracticeItems(string practiceID,string KCID,int increment)
+
+
+		public int UpdatePracticeItems(string practiceID,string KCID,int increment)
 		{
 			
 			if(string.IsNullOrEmpty(practiceID) || string.IsNullOrEmpty (KCID))
 			{
-				return;
+				return 0;
 			}
 			if (LaunchList.instance.mPracticeItems.ContainsKey (practiceID)) 
 			{
@@ -329,17 +335,17 @@ namespace Cerebro
 
 				}
 				else
-					return;
+					return increment;
 
 				LaunchList.instance.mPracticeItems [practiceID] = practiceItem;
 			}
 			else
-				return;
+				return increment;
 
 
 
 			if (increment <= 0)
-				return;
+				return increment;
 			
 
 			if (!LaunchList.instance.mKCCoins.ContainsKey (KCID))
@@ -352,6 +358,8 @@ namespace Cerebro
 			}
 
 			LaunchList.instance.UpdateKCCoinsData ();
+
+			return increment;
 
 		}
 
