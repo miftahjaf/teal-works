@@ -152,7 +152,7 @@ namespace Cerebro
 				else
 					increment =0;
 
-				if (increment != 0) {
+				if (increment >0) {
 					incrementScore = increment;
 					incrementBy = Mathf.FloorToInt (increment / 5);
 
