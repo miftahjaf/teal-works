@@ -9,6 +9,7 @@ namespace Cerebro
 	{
 		public GOTSplashScreen CurrSplashScreen;
 		public GameObject BoyButton, GirlButton, ProgressCircle;
+		public GameObject[] NextPrevButtons;
 
 		[HideInInspector]
 		public int CurrBodyId, CurrHairID, CurrHeadId;
@@ -64,6 +65,7 @@ namespace Cerebro
 				transform.FindChild ("girl_hair_front").gameObject.SetActive (true);
 				transform.FindChild ("girl_hair_front").GetComponent<AvatarComponentList>().Initialize(CurrHairID);
 			}
+			ProcessNextPrevButtons ();
 		}
 
 		void DisableAllComponents()
@@ -127,6 +129,39 @@ namespace Cerebro
 			CurrSplashScreen.CloseButtonClicked ();
 		}
 
+		public void ProcessNextPrevButtons()
+		{
+			NextPrevButtons [0].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 1f);
+			NextPrevButtons [1].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 1f);
+			if (CurrBodyId == 4) {
+				NextPrevButtons [0].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
+			}
+			if (CurrBodyId == 1) {
+				NextPrevButtons [1].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
+			}
+
+			NextPrevButtons [2].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 1f);
+			NextPrevButtons [3].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 1f);
+			if (CurrHeadId == 4) {
+				NextPrevButtons [2].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
+			}
+			if (CurrHeadId == 1) {
+				NextPrevButtons [3].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
+			}
+
+			NextPrevButtons [4].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 1f);
+			NextPrevButtons [5].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 1f);
+			if (IsBoy && CurrHairID == 3) {
+				NextPrevButtons [4].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
+			}
+			if (!IsBoy && CurrHairID == 4) {
+				NextPrevButtons [4].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
+			}
+			if (CurrHairID == 1) {
+				NextPrevButtons [5].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
+			}
+		}
+
 		public void BodyNextPressed()
 		{
 			if (CurrBodyId == 4 || IsTransitionOn) {
@@ -140,6 +175,8 @@ namespace Cerebro
 			} else {
 				transform.FindChild ("girl_body").GetComponent<AvatarComponentList>().NextButtonPressed(CurrBodyId);
 			}
+
+			ProcessNextPrevButtons ();
 		}
 
 		public void BodyPreviousPressed()
@@ -155,6 +192,8 @@ namespace Cerebro
 			} else {
 				transform.FindChild ("girl_body").GetComponent<AvatarComponentList>().PreviousButtonPressed(CurrBodyId);
 			}
+
+			ProcessNextPrevButtons ();
 		}
 
 		public void HeadNextPressed()
@@ -170,6 +209,8 @@ namespace Cerebro
 			} else {
 				transform.FindChild ("girl_head").GetComponent<AvatarComponentList>().NextButtonPressed(CurrHeadId);
 			}
+
+			ProcessNextPrevButtons ();
 		}
 
 		public void HeadPreviousPressed()
@@ -185,11 +226,16 @@ namespace Cerebro
 			} else {
 				transform.FindChild ("girl_head").GetComponent<AvatarComponentList>().PreviousButtonPressed(CurrHeadId);
 			}
+
+			ProcessNextPrevButtons ();
 		}
 
 		public void HairNextPressed()
 		{
-			if (CurrHairID == 4 || IsTransitionOn) {
+			if (IsBoy && (CurrHairID == 3 || IsTransitionOn)) {
+				return;
+			}
+			else if (CurrHairID == 4 || IsTransitionOn) {
 				return;
 			}
 
@@ -201,6 +247,8 @@ namespace Cerebro
 				transform.FindChild ("girl_hair_back").GetComponent<AvatarComponentList>().NextButtonPressed(CurrHairID);
 				transform.FindChild ("girl_hair_front").GetComponent<AvatarComponentList>().NextButtonPressed(CurrHairID);
 			}
+
+			ProcessNextPrevButtons ();
 		}
 
 		public void HairPreviousPressed()
@@ -217,6 +265,8 @@ namespace Cerebro
 				transform.FindChild ("girl_hair_back").GetComponent<AvatarComponentList>().PreviousButtonPressed(CurrHairID);
 				transform.FindChild ("girl_hair_front").GetComponent<AvatarComponentList>().PreviousButtonPressed(CurrHairID);
 			}
+
+			ProcessNextPrevButtons ();
 		}
 
 		public void ChooseUnit(string groupID, int hairID = 1, int headID = 1, int bodyID = 1)

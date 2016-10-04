@@ -9,12 +9,14 @@ namespace Cerebro
 	{
 		public string prefix;
 		public GameObject[] ChildComponents;
+		public int NoOfChildren = 4;
+		public Vector2[] InitialPosition;
 
 		private bool IsLerpStarted;
 		private float LerpStartTime, LerpValue;
 		private float LerpTotalTime = 0.2f, OffsetPosition = 2400f;
 
-		private Vector2[] StartPosition, EndPosition, InitialPosition;
+		private Vector2[] StartPosition, EndPosition;
 		private CustomizeAvatar parentAvatar;
 		private Color[] InitialTeamColor;
 
@@ -22,20 +24,24 @@ namespace Cerebro
 
 		void Awake () 
 		{
-			StartPosition = new Vector2[4];
-			EndPosition = new Vector2[4];
-			InitialPosition = new Vector2[4];
-			ChildComponents = new GameObject[4];
-			InitialTeamColor = new Color[4];
+			if (InitialTeamColor != null && InitialTeamColor.Length > 0) {
+				return;
+			}
+			StartPosition = new Vector2[NoOfChildren];
+			EndPosition = new Vector2[NoOfChildren];
+			InitialPosition = new Vector2[NoOfChildren];
+			ChildComponents = new GameObject[NoOfChildren];
+			InitialTeamColor = new Color[NoOfChildren];
 			parentAvatar = transform.parent.GetComponent<CustomizeAvatar> ();
 
 			int offset = transform.name.Contains("girl") ? 4 : 0;
-			for (int i = 0; i < 4; i++) 
+			for (int i = 0; i < NoOfChildren; i++) 
 			{
 				ChildComponents [i] = transform.FindChild (prefix+(i+1+offset)).gameObject;
 				InitialTeamColor [i] = ChildComponents [i].GetComponent<Image> ().color;
 				Vector2 currPos = ChildComponents [i].GetComponent<RectTransform> ().anchoredPosition;
 				InitialPosition [i] = currPos;
+				Debug.Log ("Init "+transform.name+" "+i+" "+currPos);
 			}
 		}
 
@@ -60,13 +66,13 @@ namespace Cerebro
 					teamColor = GroupMapping.Color4;
 				}
 
-				for (int i = 0; i < 4; i++) {
+				for (int i = 0; i < NoOfChildren; i++) {
 					ChildComponents [i].GetComponent<Image> ().color = InitialTeamColor[i] * teamColor;
 				}
 			}
-
+				
 			CurrID = id;
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < NoOfChildren; i++) {
 				Vector2 currPos = InitialPosition[i];
 				currPos = new Vector2 (currPos.x + i * OffsetPosition, currPos.y);
 				StartPosition[i] = new Vector2 (currPos.x - (id - 1) * OffsetPosition, currPos.y);
@@ -89,7 +95,7 @@ namespace Cerebro
 					IsLerpStarted = false;
 					LerpValue = 1;
 					parentAvatar.IsTransitionOn = false;
-					for (int i = 0; i < 4; i++) 
+					for (int i = 0; i < NoOfChildren; i++) 
 					{
 						ChildComponents [i].SetActive (false);
 					}
@@ -106,7 +112,7 @@ namespace Cerebro
 			IsLerpStarted = true;
 			LerpValue = 0;
 			LerpStartTime = Time.time;
-			for (int i = 0; i < 4; i++) 
+			for (int i = 0; i < NoOfChildren; i++) 
 			{
 				EndPosition[i] = new Vector2 (StartPosition[i].x - OffsetPosition, StartPosition[i].y);
 				ChildComponents [i].SetActive (true);
@@ -119,7 +125,7 @@ namespace Cerebro
 			IsLerpStarted = true;
 			LerpValue = 0;
 			LerpStartTime = Time.time;
-			for (int i = 0; i < 4; i++) 
+			for (int i = 0; i < NoOfChildren; i++) 
 			{
 				EndPosition[i] = new Vector2 (StartPosition[i].x + OffsetPosition, StartPosition[i].y);
 				ChildComponents [i].SetActive (true);
@@ -130,7 +136,7 @@ namespace Cerebro
 		{
 			if (LerpValue == 1) 
 			{
-				for (int i = 0; i < 4; i++) 
+				for (int i = 0; i < NoOfChildren; i++) 
 				{
 					ChildComponents [i].GetComponent<RectTransform> ().anchoredPosition = EndPosition [i];
 					StartPosition [i] = EndPosition [i];
@@ -138,7 +144,7 @@ namespace Cerebro
 			} 
 			else 
 			{
-				for (int i = 0; i < 4; i++) 
+				for (int i = 0; i < NoOfChildren; i++) 
 				{
 					ChildComponents [i].GetComponent<RectTransform> ().anchoredPosition = Vector2.Lerp (StartPosition [i], EndPosition [i], LerpValue);
 				}
