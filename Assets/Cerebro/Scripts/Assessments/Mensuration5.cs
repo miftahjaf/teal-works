@@ -139,6 +139,7 @@ namespace Cerebro {
 			numPad.SetActive (true);
 			diagramHelper.Reset ();
 
+
 			#region level1
 			if (level == 1) 
 			{
@@ -190,8 +191,70 @@ namespace Cerebro {
 				else if (selector == 5) 
 				{
 					subQuestionTEX.gameObject.SetActive (false);
+					int randSelector = Random.Range(1,4);
+					float offset =17;
+					diagramHelper.DrawGrid(10,10,offset);
 
+					if(randSelector == 1)
+					{
+						int x1 = Random.Range(1,4);
+						int x2 = Random.Range(x1+2,10);
+						int y1 = Random.Range(1,4);
+						int y2 = Random.Range(y1+3,10);
+						length = x2-x1;
+						breadth =y2-y1;
+						area = length * breadth;
 					
+						diagramHelper.DrawLineOnGrid(new Vector2(x1,y1),new Vector2(x2,y1),offset);
+						diagramHelper.DrawLineOnGrid(new Vector2(x2,y1),new Vector2(x2,y2),offset);
+						diagramHelper.DrawLineOnGrid(new Vector2(x2,y2),new Vector2(x1,y2),offset);
+						diagramHelper.DrawLineOnGrid(new Vector2(x1,y2),new Vector2(x1,y1),offset);
+
+					}
+					else if(randSelector == 2)
+					{
+
+						int x1 = Random.Range(1,4);
+						int x2 = Random.Range(x1+3,10);
+						int x3 = Random.Range(x1+2,x2);
+						int y1 = Random.Range(1,4);
+						int y3 = Random.Range(y1+3,10);
+						int y2 = Random.Range(y1+2,y3);
+
+						area = (x2 - x1) * (y2 - y1) + (y3 - y2) * (x3 - x1);
+
+						diagramHelper.DrawLineOnGrid(new Vector2(x1,y1),new Vector2(x2,y1),offset);
+						diagramHelper.DrawLineOnGrid(new Vector2(x2,y1),new Vector2(x2,y2),offset);
+						diagramHelper.DrawLineOnGrid(new Vector2(x2,y2),new Vector2(x3,y2),offset);
+						diagramHelper.DrawLineOnGrid(new Vector2(x3,y2),new Vector2(x3,y3),offset);
+						diagramHelper.DrawLineOnGrid(new Vector2(x3,y3),new Vector2(x1,y3),offset);
+						diagramHelper.DrawLineOnGrid(new Vector2(x1,y3),new Vector2(x1,y1),offset);
+					}
+					else if(randSelector ==3)
+					{
+
+						int x1 = Random.Range(1,3);
+						int x2 = Random.Range(x1+3,10);
+						int y1 = Random.Range(1,3);
+						int y2 = y1 +  x2 - x1;
+
+						area = ((x2 - x1) * (x2 - x1 + 1))/2;
+
+						for(int i = 0; i < (x2 -x1); i++)
+						{
+							diagramHelper.DrawLineOnGrid(new Vector2(x1+i,y1+i),new Vector2(x1+i,y1+i+1),offset);
+							diagramHelper.DrawLineOnGrid(new Vector2(x1+i,y1+i+1),new Vector2(x1+i+1,y1+i+1),offset);
+						}
+
+						diagramHelper.DrawLineOnGrid(new Vector2(x1,y1),new Vector2(x2,y1),offset);
+						diagramHelper.DrawLineOnGrid(new Vector2(x2,y1),new Vector2(x2,y2),offset);
+					}
+
+					diagramHelper.ShiftPosition(-new Vector2(100f,100f));
+
+					QuestionText.text = "Find the area (in sq. units).";
+				
+					Answer = area;
 				}
 			}
 			#endregion
@@ -248,8 +311,8 @@ namespace Cerebro {
 					float breadthForDiagram = 50f;
 
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- lengthForDiagram, - breadthForDiagram), 0, false, 2 * lengthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, - breadthForDiagram), 90, false, 2 * breadthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, breadthForDiagram), 180, false, 2 * lengthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, - breadthForDiagram), 90, false, 2 * breadthForDiagram).SetLineText(breadth+" cm").SetLineTextDirection(TextDir.Right));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, breadthForDiagram), 180, false, 2 * lengthForDiagram).SetLineText(length+" cm").SetLineTextDirection(TextDir.Up));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- lengthForDiagram, breadthForDiagram), 270, false, 2 * breadthForDiagram));
 					diagramHelper.Draw ();
 					diagramHelper.ShiftPosition (new Vector2 (0, 20));
@@ -266,7 +329,7 @@ namespace Cerebro {
 					float sideForDiagram = 50f;
 
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- sideForDiagram, - sideForDiagram), 0, false, 2 * sideForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (sideForDiagram, - sideForDiagram), 90, false, 2 * sideForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (sideForDiagram, - sideForDiagram), 90, false, 2 * sideForDiagram).SetLineText(side+" cm").SetLineTextDirection(TextDir.Right));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (sideForDiagram, sideForDiagram), 180, false, 2 * sideForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- sideForDiagram, sideForDiagram), 270, false, 2 * sideForDiagram));
 					diagramHelper.Draw ();
@@ -293,8 +356,8 @@ namespace Cerebro {
 					float breadthForDiagram = 50f;
 
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- lengthForDiagram, - breadthForDiagram), 0, false, 2 * lengthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, - breadthForDiagram), 90, false, 2 * breadthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, breadthForDiagram), 180, false, 2 * lengthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, - breadthForDiagram), 90, false, 2 * breadthForDiagram).SetLineText(breadth+" cm").SetLineTextDirection(TextDir.Right));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, breadthForDiagram), 180, false, 2 * lengthForDiagram).SetLineText(length+" cm").SetLineTextDirection(TextDir.Up));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- lengthForDiagram, breadthForDiagram), 270, false, 2 * breadthForDiagram));
 					diagramHelper.Draw ();
 					diagramHelper.ShiftPosition (new Vector2 (0, 20));
@@ -311,7 +374,7 @@ namespace Cerebro {
 					float sideForDiagram = 50f;
 
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- sideForDiagram, - sideForDiagram), 0, false, 2 * sideForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (sideForDiagram, - sideForDiagram), 90, false, 2 * sideForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (sideForDiagram, - sideForDiagram), 90, false, 2 * sideForDiagram).SetLineText(side+" cm").SetLineTextDirection(TextDir.Right));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (sideForDiagram, sideForDiagram), 180, false, 2 * sideForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- sideForDiagram, sideForDiagram), 270, false, 2 * sideForDiagram));
 					diagramHelper.Draw ();
@@ -393,17 +456,17 @@ namespace Cerebro {
 
 					Vector2 Origin = new Vector2 ((lengthForDiagram + length1ForDiagram) / 2, breadth1ForDiagram / 2);
 
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, 0), 0, false, length1ForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram + length1ForDiagram, 0), 90, false, breadth1ForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, 0), 0, false, length1ForDiagram).SetLineText(length1+" m").SetLineTextDirection(TextDir.Down));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram + length1ForDiagram, 0), 90, false, breadth1ForDiagram).SetLineText(breadth1+" m").SetLineTextDirection(TextDir.Right));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram + length1ForDiagram, breadth1ForDiagram), 180, false, length1ForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, breadth1ForDiagram), 270, false, breadth1ForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, breadth1ForDiagram), 180, false, lengthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, breadth1ForDiagram), 270, false, breadthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, breadth1ForDiagram), 180, false, lengthForDiagram).SetLineText(length+" m").SetLineTextDirection(TextDir.Up));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, breadth1ForDiagram), 270, false, breadthForDiagram).SetLineText(breadth+" m").SetLineTextDirection(TextDir.Left));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, breadth1ForDiagram - breadthForDiagram), 0, false, lengthForDiagram));
 					diagramHelper.Draw ();
 					diagramHelper.ShiftPosition (- Origin);
 
-					QuestionText.text = "Find the area of the given figure (in sq. cm).";
+					QuestionText.text = "Find the area of the given figure (in sq. m).";
 
 					Answer = area;
 				}
@@ -426,21 +489,22 @@ namespace Cerebro {
 
 					Vector2 Origin = new Vector2 (lengthForDiagram / 2, (breadthForDiagram + breadth2ForDiagram) / 2);
 
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, breadthForDiagram + breadth2ForDiagram), 0, false, lengthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, breadthForDiagram + breadth2ForDiagram), 270, false, breadthForDiagram + breadth2ForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, breadthForDiagram + breadth2ForDiagram), 0, false, lengthForDiagram).SetLineText(length+" m").SetLineTextDirection(TextDir.Up));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, breadthForDiagram + breadth2ForDiagram), 270, false, breadthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram,   breadth2ForDiagram), 270, false, breadth2ForDiagram).SetLineText(breadth2+" m").SetLineTextDirection(TextDir.Right));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, breadth2ForDiagram), 180, false, lengthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, breadth2ForDiagram), 90, false, breadthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, breadth2ForDiagram), 90, false, breadthForDiagram).SetLineText(breadth+" m").SetLineTextDirection(TextDir.Left));
 
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, 0), 180, false, length2ForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, 0), 180, false, length2ForDiagram).SetLineText(length2+" m").SetLineTextDirection(TextDir.Down));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram - length2ForDiagram, 0), 90, false, breadth2ForDiagram));
 
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram - length2ForDiagram, breadth2ForDiagram - breadth1ForDiagram), 180, false, length1ForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram - length2ForDiagram - length1ForDiagram, breadth2ForDiagram - breadth1ForDiagram), 90, false, breadth1ForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram - length2ForDiagram, breadth2ForDiagram - breadth1ForDiagram), 180, false, length1ForDiagram).SetLineText(length1+" m").SetLineTextDirection(TextDir.Down));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram - length2ForDiagram - length1ForDiagram, breadth2ForDiagram - breadth1ForDiagram), 90, false, breadth1ForDiagram).SetLineText(breadth1+" m").SetLineTextDirection(TextDir.Left));
 
 					diagramHelper.Draw ();
 					diagramHelper.ShiftPosition (- Origin);
 
-					QuestionText.text = "Find the area of the given figure (in sq. cm).";
+					QuestionText.text = "Find the area of the given figure (in sq. m).";
 
 					Answer = area;
 				}
@@ -460,8 +524,8 @@ namespace Cerebro {
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram + breadthForDiagram, lengthForDiagram), 0, false, lengthForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (2 * lengthForDiagram + breadthForDiagram, lengthForDiagram), 90, false, breadthForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (2 * lengthForDiagram + breadthForDiagram, lengthForDiagram + breadthForDiagram), 180, false, lengthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram + breadthForDiagram, lengthForDiagram + breadthForDiagram), 90, false, lengthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram + breadthForDiagram, 2 * lengthForDiagram + breadthForDiagram), 180, false, breadthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram + breadthForDiagram, lengthForDiagram + breadthForDiagram), 90, false, lengthForDiagram).SetLineText(length+" cm").SetLineTextDirection(TextDir.Right));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram + breadthForDiagram, 2 * lengthForDiagram + breadthForDiagram), 180, false, breadthForDiagram).SetLineText(breadth+" cm").SetLineTextDirection(TextDir.Up));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, 2 * lengthForDiagram + breadthForDiagram), 270, false, lengthForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, lengthForDiagram + breadthForDiagram), 180, false, lengthForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, lengthForDiagram + breadthForDiagram), 270, false, breadthForDiagram));
@@ -489,30 +553,30 @@ namespace Cerebro {
 
 				if (selector == 1) 
 				{
-					int length1 = Random.Range (2, 6);
-					length = Random.Range (length1 + 2, 10);
+					int length1 = Random.Range (4, 10);
+					length = Random.Range (length1 + 2, 12);
 					int breadth1 = Random.Range (length1 + 1, length1 + 5);
-					breadth = 2 * breadth1 + Random.Range (2, breadth1);
+					breadth = 2 * breadth1 + Random.Range (4, breadth1);
 					area = 2 * length1 * breadth + length * (breadth - 2 * breadth1);
 
-					float lengthForDiagram = 120f * length / breadth;
-					float breadthForDiagram = 120f;
-					float length1ForDiagram = 120f * length1 / breadth;
-					float breadth1ForDiagram = 120f * breadth1 / breadth;
+					float lengthForDiagram = 150f * length / breadth;
+					float breadthForDiagram = 150f;
+					float length1ForDiagram = 150f * length1 / breadth;
+					float breadth1ForDiagram = 150f * breadth1 / breadth;
 
 					Vector2 Origin = new Vector2 ((2 * length1ForDiagram + lengthForDiagram) / 2, breadthForDiagram / 2);
 
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, 0), 0, false, length1ForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram, 0), 90, false, breadth1ForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram, breadth1ForDiagram), 0, false, lengthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram, 0), 90, false, breadth1ForDiagram).SetLineText(breadth1+" cm").SetLineTextDirection(TextDir.Right));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram, breadth1ForDiagram), 0, false, lengthForDiagram).SetLineText(length+" cm").SetLineTextDirection(TextDir.Up));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram + lengthForDiagram, breadth1ForDiagram), 270, false, breadth1ForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram + lengthForDiagram, 0), 0, false, length1ForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (2 * length1ForDiagram + lengthForDiagram, 0), 90, false, breadthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (2 * length1ForDiagram + lengthForDiagram, 0), 90, false, breadthForDiagram).SetLineText(breadth+" cm").SetLineTextDirection(TextDir.Right));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (2 * length1ForDiagram + lengthForDiagram, breadthForDiagram), 180, false, length1ForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram + lengthForDiagram, breadthForDiagram), 270, false, breadth1ForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram + lengthForDiagram, breadthForDiagram - breadth1ForDiagram), 180, false, lengthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram, breadthForDiagram - breadth1ForDiagram), 90, false, breadth1ForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram, breadthForDiagram), 180, false, length1ForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram, breadthForDiagram - breadth1ForDiagram), 90, false, breadth1ForDiagram).SetLineText(breadth1+" cm").SetLineTextDirection(TextDir.Right));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram, breadthForDiagram), 180, false, length1ForDiagram).SetLineText(length1+" cm").SetLineTextDirection(TextDir.Up));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, breadthForDiagram), 270, false, breadthForDiagram));
 
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (length1ForDiagram, breadth1ForDiagram), 90, false, (breadthForDiagram - 2 * breadth1ForDiagram)).SetLineType(LineShapeType.Dotted));
@@ -536,21 +600,22 @@ namespace Cerebro {
 
 					area = (triBase * triHeight) / 2;
 
-					float triBaseForDiagram = 120f * triBase / triHeight;
-					float triHeightForDiagram = 120f;
+					float triBaseForDiagram = 150f * triBase / triHeight;
+					float triHeightForDiagram = 150f;
 
 					Vector2 Origin = new Vector2 (triBaseForDiagram / 2, triHeightForDiagram / 2);
 
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, 0), 0, false, triBaseForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, 0), 0, false, triBaseForDiagram).SetLineText(triBase+" m").SetLineTextDirection(TextDir.Down));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (triBaseForDiagram, 0), 180f - Mathf.Rad2Deg * Mathf.Atan ((2f * triHeight) / triBase), false,  Mathf.Sqrt (triHeightForDiagram * triHeightForDiagram + triBaseForDiagram * triBaseForDiagram / 4f)));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (triBaseForDiagram / 2f, triHeightForDiagram), 180f + Mathf.Rad2Deg * Mathf.Atan ((2f * triHeight) / triBase), false,  Mathf.Sqrt (triHeightForDiagram * triHeightForDiagram + triBaseForDiagram * triBaseForDiagram / 4f)));
 
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (triBaseForDiagram / 2f, 0), 90, false, triHeightForDiagram).SetLineType(LineShapeType.Dotted));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (triBaseForDiagram / 2f, 0), 90, false, triHeightForDiagram).SetLineType(LineShapeType.Dotted).SetLineText(triHeight+" m").SetLineTextDirection(TextDir.Right));
+					diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (triBaseForDiagram / 2f, 0), 0, 90));
 
 					diagramHelper.Draw ();
 					diagramHelper.ShiftPosition (- Origin);
 
-					QuestionText.text = "Find the area of the given figure (in sq. cm).";
+					QuestionText.text = "Find the area of the given figure (in sq. m).";
 
 					Answer = area;
 				}
@@ -569,9 +634,9 @@ namespace Cerebro {
 
 					Vector2 Origin = new Vector2 (triBaseForDiagram / 2, triHeightForDiagram / 2);
 
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, 0), 0, false, triBaseForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, 0), 0, false, triBaseForDiagram).SetLineText(triBase+" cm").SetLineTextDirection(TextDir.Down));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (triBaseForDiagram, 0), 180f - Mathf.Rad2Deg * Mathf.Atan (triHeightForDiagram / triBaseForDiagram), false,  Mathf.Sqrt (triHeightForDiagram * triHeightForDiagram + triBaseForDiagram * triBaseForDiagram)));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, triHeightForDiagram), 270, false, triHeightForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, triHeightForDiagram), 270, false, triHeightForDiagram).SetLineText(triHeight+" m").SetLineTextDirection(TextDir.Left));
 
 					diagramHelper.Draw ();
 					diagramHelper.ShiftPosition (- Origin);
@@ -591,14 +656,14 @@ namespace Cerebro {
 
 					Vector2 Origin = new Vector2 (lengthForDiagram / 2, lengthForDiagram / 2);
 
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, 0), 0, false, lengthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, 0), 90, false, lengthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, lengthForDiagram), 180, false, breadthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, 0), 0, false, lengthForDiagram).SetLineText(length+" cm").SetLineTextDirection(TextDir.Down));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, 0), 90, false, lengthForDiagram).SetLineText(length+" cm").SetLineTextDirection(TextDir.Right));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, lengthForDiagram), 180, false, breadthForDiagram).SetLineText(breadth+" cm").SetLineTextDirection(TextDir.Up));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram - breadthForDiagram, lengthForDiagram), 270, false, breadthForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram - breadthForDiagram, lengthForDiagram - breadthForDiagram), 180, false, breadthForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram, lengthForDiagram - breadthForDiagram), 270, false, breadthForDiagram));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram, breadthForDiagram), 180, false, breadthForDiagram));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, breadthForDiagram), 270, false, breadthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, breadthForDiagram), 270, false, breadthForDiagram).SetLineText(breadth+" cm").SetLineTextDirection(TextDir.Left));
 
 					diagramHelper.Draw ();
 					diagramHelper.ShiftPosition (- Origin);

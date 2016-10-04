@@ -15,6 +15,7 @@ namespace Cerebro {
 		private VectorLine vectorLine;
 		public GameObject pointPrefab;
 		public GameObject arcPrefab;
+		public GameObject lineTextPrefab;
 
 		public void Awake()
 		{
@@ -43,6 +44,7 @@ namespace Cerebro {
 				if (linePoint.lineType == LineShapeType.Normal) {
 					lineValues.Add (linePoint.origin);
 					lineValues.Add (newPoint);
+
 				} else {
 					int counter = 0;
 					Vector2 stPoint = linePoint.origin;
@@ -76,6 +78,9 @@ namespace Cerebro {
 						lineValues.Add (lastPoint);
 				}
 
+
+
+
 				//Instantiate point prefab to show point, point name and arrow
 				GameObject endPoint = GameObject.Instantiate (pointPrefab);
 				endPoint.transform.SetParent (this.transform, false);
@@ -83,13 +88,14 @@ namespace Cerebro {
 				//set arrow, point and label poistion
 				endPoint.GetComponent<LinePointScript> ().SetPoint (linePoint);
 
-			}
-			int fjkajk = 0;
+				//add line text
+				if (!string.IsNullOrEmpty (linePoint.lineText)) 
+				{
+					AddTextInLine (linePoint.lineText, linePoint.origin, newPoint,linePoint.lineTextDirection);
+				}
 
-			foreach (Vector2 victor in lineValues) {
-				fjkajk++;
-				Debug.Log ("point " + fjkajk + " = (" + victor.x + "," + victor.y + ")");
 			}
+		
 
 			//Assign point to vectrosity line alogrithm to draw line between points
 			this.vectorLine.points2 = lineValues;
@@ -162,6 +168,45 @@ namespace Cerebro {
 
 		}
 
+		private void AddTextInLine(string lineText,Vector2 point1,Vector2 point2,TextDir textDirection)
+		{
+			if (lineTextPrefab == null)
+				return;
+			
+			Vector2 midPoint = new Vector2 ((point1.x + point2.x) / 2f, (point1.y + point2.y) / 2f);
+			if (textDirection == TextDir.Up)
+				midPoint.y += 15f;
+			else if(textDirection == TextDir.Down)
+				midPoint.y -= 15f;
+			else if(textDirection == TextDir.Left)
+				midPoint.x -= 60f;
+			else if(textDirection == TextDir.Right)
+				midPoint.x += 60f;
+			
+			GameObject lineTextObj = GameObject.Instantiate (lineTextPrefab);
+			lineTextObj.transform.SetParent (this.transform, false);
+			lineTextObj.GetComponent<RectTransform> ().anchoredPosition = midPoint;
+			Text  lineTextComponent =lineTextObj.GetComponent<Text> ();
+			lineTextComponent.text = lineText;
+
+			float distance = Vector2.Distance (point1, point2);
+			if (textDirection == TextDir.Left) 
+			{
+				lineTextComponent.alignment = TextAnchor.MiddleRight;
+				lineTextObj.GetComponent<RectTransform> ().sizeDelta = new Vector2 (100f, distance <30 ?30f:distance );
+			} 
+			else if (textDirection == TextDir.Right) 
+			{
+				lineTextComponent.alignment = TextAnchor.MiddleLeft;
+				lineTextObj.GetComponent<RectTransform> ().sizeDelta = new Vector2 (100f, distance <30 ?30f:distance );
+			} 
+			else {
+				lineTextComponent.alignment = TextAnchor.MiddleCenter;
+				lineTextObj.GetComponent<RectTransform> ().sizeDelta = new Vector2 (distance>100?distance:100f,40f);
+			}
+				
+		}
+
 
 
 		private Vector2 GetQuadrants(float angle)
@@ -201,6 +246,8 @@ namespace Cerebro {
 			this.angleArcs.Clear ();
 			this.vectorLine.Draw ();
 			this.ShiftPosition (Vector2.zero);
+			this.vectorLine.SetColor (Color.black);
+			this.vectorLine.lineWidth = 2f;
 
 		}
 
@@ -217,6 +264,50 @@ namespace Cerebro {
 		{
 			this.GetComponent<RectTransform> ().localEulerAngles = new Vector3 (0, 0, angle);
 		}
+
+	
+		public void DrawGrid(int x,int y,float offset)
+		{
+			List <Vector2> lineValues = new List <Vector2> ();
+			for (int i = 0; i <= x; i++) 
+			{
+				lineValues.Add (new Vector2(i * offset, 0));
+				lineValues.Add (new Vector2(i * offset, y * offset));
+			}
+
+			for (int i = 0; i <= y; i++) 
+			{
+				lineValues.Add (new Vector2(0, i * offset));
+				lineValues.Add (new Vector2(x * offset,i * offset ));
+			}
+
+			//Assign point to vectrosity line alogrithm to draw line between points
+			this.vectorLine.points2 = lineValues;
+
+			//Line type discrete (Draw line between each 2 points)
+			this.vectorLine.lineType = LineType.Discrete;
+
+			this.vectorLine.SetColor (new Color(0.39f,0.39f,0.39f,1f),0,Mathf.RoundToInt(this.vectorLine.points2.Count/2f));
+			this.vectorLine.SetWidth (0.5f, 0, Mathf.RoundToInt (this.vectorLine.points2.Count / 2f));
+
+			this.vectorLine.Draw ();
+		}
+
+		public void DrawLineOnGrid(Vector2 point1,Vector2 point2 ,float offset)
+		{
+
+			this.vectorLine.points2.Add (point1 *offset);
+			this.vectorLine.points2.Add (point2 *offset);
+
+			//Line type discrete (Draw line between each 2 points)
+			this.vectorLine.lineType = LineType.Discrete;
+
+			this.vectorLine.SetColor (Color.black,Mathf.RoundToInt(this.vectorLine.points2.Count/2f)-1,Mathf.RoundToInt(this.vectorLine.points2.Count/2f));
+			this.vectorLine.SetWidth (2f,Mathf.RoundToInt(this.vectorLine.points2.Count/2f)-1,Mathf.RoundToInt(this.vectorLine.points2.Count/2f));
+
+			this.vectorLine.Draw ();
+		}
+
 
 	}
 }
