@@ -439,17 +439,16 @@ namespace Cerebro
 					coeff2 = Random.Range (2, 10);
 					while (coeff1 == coeff2)
 						coeff2 = Random.Range (2, 10);
-					coeff2 *=  - 1;
-					float No1 = coeff1 / 10f;
-					float No2 = coeff2 / 10f;
+					float No1 = -coeff1 / 10f;
+					float No2 = -coeff2 / 10f;
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = "(xy + " + No1 + ")(xy" + No2 + ")";
+					subQuestionTEX.text = "(xy" + No1 + ")(xy" + No2 + ")";
 					float[] Ans = SolveEquation(1f, No1, 1f, No2);
 
-					options.Add ("x^{2}y^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "xy" + Ans[2]);
-					options.Add ("x^{2}y^{2}" + Ans[2] + "xy" + (Ans[1] < 0 ? "" : " + ") + Ans[1]);
-					options.Add ("x^{2}y^{2}" + Ans[2]);
-					options.Add ("x^{2}y^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "xy" + (2 * Ans[2]));
+					options.Add ("x^{2}y^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "xy+" + Ans[2]);
+					options.Add ("x^{2}y^{2}+" + Ans[2] + "xy" + (Ans[1] < 0 ? "" : " + ") + Ans[1]);
+					options.Add ("x^{2}y^{2}+" + Ans[2]);
+					options.Add ("x^{2}y^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "xy+" + (2 * Ans[2]));
 
 				}
 				else if (selector == 4)
