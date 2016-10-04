@@ -60,6 +60,16 @@ namespace Cerebro {
 			}
 		}
 
+		public void DisableAllComponents(Unit unit)
+		{
+			SpriteRenderer[] childs = unit.transform.GetComponentsInChildren<SpriteRenderer> ();
+			for (int i = 0; childs != null && i < childs.Length; i++) {
+				childs [i].gameObject.SetActive (false);
+			}
+			unit.gameObject.SetActive (true);
+			unit.transform.FindChild ("Marker").gameObject.SetActive (true);
+		}
+
 		public void ChooseUnit(string groupID, Unit unit, int hairID = 1, int faceID = 1, int bodyID = 1)
 		{
 			/*int borg = UnityEngine.Random.Range (1, 4);
@@ -72,6 +82,9 @@ namespace Cerebro {
 				faceID = UnityEngine.Random.Range (5, 8);
 				bodyID = UnityEngine.Random.Range (5, 8);
 			}*/
+
+			DisableAllComponents (unit);
+
 			hairID = Mathf.Clamp (hairID, 1, 8);
 			faceID = Mathf.Clamp (faceID, 1, 8);
 			bodyID = Mathf.Clamp (bodyID, 1, 8);
