@@ -1591,12 +1591,14 @@ namespace Cerebro
 
 		public void LoadPracticeItems ()
 		{
+			
 			string fileName = Application.persistentDataPath + "/PracticeItemCoins.txt";
 			if (File.Exists (fileName)) 
 			{
 				mKCCoins.Clear ();
 				var sr = File.OpenText (fileName);
 				string json = sr.ReadToEnd ();
+				Debug.Log ("JSON " + json);
 				JSONNode jsonNode = JSONNode.Parse (json);
 				if (jsonNode != null) 
 				{
@@ -1678,8 +1680,12 @@ namespace Cerebro
 							KC.ID = KCdata[j] ["id"].Value;
 							KC.KCName = KCdata[j] ["name"].Value;
 							KC.TotalCoins = KCdata[j] ["coins"].AsInt;
+							KC.CurrentCoins = 0;
 							if (mKCCoins.ContainsKey (KC.ID)) 
 							{
+								if (mKCCoins [KC.ID] > KC.TotalCoins)
+									mKCCoins [KC.ID] = KC.TotalCoins;
+								
 								KC.CurrentCoins = mKCCoins [KC.ID];
 							}
 							pItem.TotalCoins += KC.TotalCoins;
