@@ -57,7 +57,7 @@ namespace Cerebro {
 				}
 				CerebroHelper.DebugLog ("Will Cost " + cell.MovementCost + " Coins");
 
-				if (_cellGrid.GetCoins () >= cell.MovementCost && !cell.isInvincible) {
+				if (!cell.isInvincible) {
 					float pos = cell.transform.position.y;
 					pos = Mathf.Abs(-0.3831128f - pos) + 0.3831128f;
 					Debug.Log ("setting "+pos);
@@ -69,16 +69,17 @@ namespace Cerebro {
 						BabaId += cell.BabaFaceId;
 						BabaId += cell.BabaBodyId;
 					}
-					cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", cell.MovementCost, BabaId, cell.groupID, OnCaptureButtonPressed, cell.transform.position, OnCancelButtonPressed);
+					Debug.Log ("baba id "+BabaId);
+					if (_cellGrid.GetCoins () >= cell.MovementCost) {
+						cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ().InitializePopup ("Capture", cell.MovementCost, BabaId, cell.groupID, OnCaptureButtonPressed, cell.transform.position, OnCancelButtonPressed);
+					} else {
+						cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ().InitializePopup ("Capture", cell.MovementCost, BabaId, cell.groupID, OnCaptureButtonPressed, cell.transform.position, OnCancelButtonPressed, false);
+					}
 					cell.transform.parent.GetComponent<CellGrid> ().pointsTray.GetComponent<MaterialUI.EasyTween> ().Tween("BounceOut");
 					currUnit = fromUnit;
 					currCell = cell;
                 } else {
-					if (cell.isInvincible) {
-						_cellGrid.SetStatusText (Cerebro.GameStatuses.isInvincible);
-					} else {
-						_cellGrid.SetStatusText (Cerebro.GameStatuses.noCoins);
-					}
+					_cellGrid.SetStatusText (Cerebro.GameStatuses.isInvincible);
 				}
 			}
 		}
@@ -122,7 +123,7 @@ namespace Cerebro {
 				}
 
 				CerebroHelper.DebugLog ("Will Cost " + unit.Cell.MovementCost + " Coins");
-				if (_cellGrid.GetCoins () >= unit.Cell.MovementCost && !unit.Cell.isInvincible) {
+				if (!unit.Cell.isInvincible) {
 					float pos = unit.Cell.transform.position.y;
 					pos = Mathf.Abs(-0.3831128f - pos) + 0.3831128f;
 					Debug.Log ("setting "+pos);
@@ -134,7 +135,12 @@ namespace Cerebro {
 						BabaId += unit.Cell.BabaFaceId;
 						BabaId += unit.Cell.BabaBodyId;
 					}
-					unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position, OnCancelButtonPressed);
+					Debug.Log ("Unit baba id "+BabaId);
+					if (_cellGrid.GetCoins () >= unit.Cell.MovementCost) {
+						unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position, OnCancelButtonPressed);
+					} else {
+						unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position, OnCancelButtonPressed, false);
+					}
 					unit.Cell.transform.parent.GetComponent<CellGrid> ().pointsTray.GetComponent<MaterialUI.EasyTween> ().Tween("BounceOut");
 
 					currUnitToDelete = unit;
@@ -143,11 +149,7 @@ namespace Cerebro {
 					currMinPath = minPath;
                     CerebroHelper.DebugLog ("Coins Left " + _cellGrid.GetCoins());
 				} else {
-					if (unit.Cell.isInvincible) {
-						_cellGrid.SetStatusText (Cerebro.GameStatuses.isInvincible);
-					} else {
-						_cellGrid.SetStatusText (Cerebro.GameStatuses.noCoins);
-					}
+					_cellGrid.SetStatusText (Cerebro.GameStatuses.isInvincible);
 				}
 			}
 		}

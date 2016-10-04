@@ -311,6 +311,7 @@ void _StartPreview(const char* message)
             
             [r presentViewController:alert animated:YES completion:nil];
             IsPermissionGranted = false;
+            UnitySendMessage("Verbalize", "BackPressedOkButton", "");
             return;
         }
     }];
@@ -337,6 +338,7 @@ void _StartPreview(const char* message)
         
         [r presentViewController:alert animated:YES completion:nil];
         IsPermissionGranted = false;
+        UnitySendMessage("Verbalize", "BackPressedOkButton", "");
         return;
     }
 

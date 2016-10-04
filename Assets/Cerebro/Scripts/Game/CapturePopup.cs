@@ -20,7 +20,7 @@ namespace Cerebro
 		public delegate void CancelClicked();
 		public CancelClicked OnCancelClicked;
 
-		public void InitializePopup(string title, int coins, string BabaId, string groupId, CaptureClicked CaptureFunction, Vector3 cellPosition, CancelClicked CancelFunction)
+		public void InitializePopup(string title, int coins, string BabaId, string groupId, CaptureClicked CaptureFunction, Vector3 cellPosition, CancelClicked CancelFunction, bool IsEnoughCoins = true)
 		{
 			OnCaptureClicked = CaptureFunction;
 			OnCancelClicked = CancelFunction;
@@ -35,6 +35,13 @@ namespace Cerebro
 			}
 			transform.FindChild("Parent").FindChild ("Title").GetComponent<Text> ().text = title;
 			transform.FindChild("Parent").FindChild ("CoinsValue").GetComponent<Text> ().text = coins.ToString();
+			if (!IsEnoughCoins) {
+				transform.FindChild ("Parent").FindChild ("BuyButton").FindChild ("BG").GetComponent<Image> ().color = new Color (0.5f, 0.5f, 0.5f, 1f);
+				transform.FindChild ("Parent").FindChild ("BuyButton").GetComponent<Button> ().enabled = false;
+			} else {
+				transform.FindChild ("Parent").FindChild ("BuyButton").FindChild ("BG").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 1f);
+				transform.FindChild ("Parent").FindChild ("BuyButton").GetComponent<Button> ().enabled = true;
+			}
 			StartCoroutine (makeAnimation(cellPosition));
 		}
 
@@ -104,8 +111,10 @@ namespace Cerebro
 				IsBoy = true;
 			}
 
+			Debug.Log ("pop up "+BabaId+" "+IsBoy+" "+CurrHairID+" "+CurrHeadId+" "+CurrBodyId);
 			DisableAllComponents ();
 			if (IsBoy) {
+				Debug.Log ("opening boy");
 				AvatartGameobject.transform.FindChild ("boy_body").gameObject.SetActive (true);
 				AvatartGameobject.transform.FindChild ("boy_body").GetComponent<AvatarComponentList>().Initialize(CurrBodyId, groupID);
 				AvatartGameobject.transform.FindChild ("boy_head").gameObject.SetActive (true);
@@ -113,6 +122,7 @@ namespace Cerebro
 				AvatartGameobject.transform.FindChild ("boy_hair").gameObject.SetActive (true);
 				AvatartGameobject.transform.FindChild ("boy_hair").GetComponent<AvatarComponentList>().Initialize(CurrHairID, groupID);
 			} else {
+				Debug.Log ("opening girl");
 				AvatartGameobject.transform.FindChild ("girl_body").gameObject.SetActive (true);
 				AvatartGameobject.transform.FindChild ("girl_body").GetComponent<AvatarComponentList>().Initialize(CurrBodyId, groupID);
 				AvatartGameobject.transform.FindChild ("girl_head").gameObject.SetActive (true);
