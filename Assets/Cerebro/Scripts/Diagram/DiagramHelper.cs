@@ -128,7 +128,7 @@ namespace Cerebro {
 
 
 				//If difference is 90 then draw square instead of arc
-				if (Mathf.Abs(diff) == 90) 
+				if (Mathf.Abs(diff) == 90 && arcAngle.squareArcFor90) 
 				{
 					UIpolygon.sides = 4;   //for square
 					UIpolygon.rotation = 45f;  
@@ -148,7 +148,7 @@ namespace Cerebro {
 
 
 				//Get center position to diplay arc text
-				Vector2 centerPosition = (new Vector2 (arcAngle.origin.x + tempRadius* Mathf.Cos (Mathf.Deg2Rad * (arcAngle.startAngle + 90f)), arcAngle.origin.y + tempRadius* Mathf.Sin (Mathf.Deg2Rad * (arcAngle.startAngle + 90f))) - new Vector2 (arcAngle.origin.x + tempRadius * Mathf.Cos (Mathf.Deg2Rad * (arcAngle.endAngle + 90f)), arcAngle.origin.y + tempRadius * Mathf.Sin (Mathf.Deg2Rad * (arcAngle.endAngle + 90f)))).normalized * tempRadius;
+				Vector2 centerPosition = (new Vector2 (arcAngle.origin.x + tempRadius* Mathf.Cos (Mathf.Deg2Rad * (arcAngle.startAngle + 90f)), arcAngle.origin.y + tempRadius* Mathf.Sin (Mathf.Deg2Rad * (arcAngle.startAngle + 90f))) - new Vector2 (arcAngle.origin.x + tempRadius * Mathf.Cos (Mathf.Deg2Rad * (arcAngle.endAngle + 90f)), arcAngle.origin.y + tempRadius * Mathf.Sin (Mathf.Deg2Rad * (arcAngle.endAngle + 90f)))).normalized *(arcAngle.textInsideArc?tempRadius / 3f: tempRadius);
 
 				//Set text position in center of  arc
 				UIpolygon.GetComponentInChildren<Text> ().GetComponent<RectTransform> ().anchoredPosition = centerPosition;
