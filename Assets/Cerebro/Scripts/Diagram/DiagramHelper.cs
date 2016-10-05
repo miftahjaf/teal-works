@@ -287,7 +287,7 @@ namespace Cerebro {
 			//Line type discrete (Draw line between each 2 points)
 			this.vectorLine.lineType = LineType.Discrete;
 
-			this.vectorLine.SetColor (new Color(0.39f,0.39f,0.39f,1f),0,Mathf.RoundToInt(this.vectorLine.points2.Count/2f));
+			this.vectorLine.SetColor (new Color(0.58f,0.58f,0.58f,1f),0,Mathf.RoundToInt(this.vectorLine.points2.Count/2f));
 			this.vectorLine.SetWidth (0.5f, 0, Mathf.RoundToInt (this.vectorLine.points2.Count / 2f));
 
 			this.vectorLine.Draw ();

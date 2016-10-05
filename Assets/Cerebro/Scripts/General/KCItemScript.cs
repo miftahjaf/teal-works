@@ -69,7 +69,12 @@ namespace Cerebro
 
 		public void UpdateCoinText()
 		{
-			this.coins.text = (knowledgeComponent.TotalCoins - knowledgeComponent.CurrentCoins).ToString() +" coins left";
+			int diffCoins = knowledgeComponent.TotalCoins - knowledgeComponent.CurrentCoins;
+
+			if (diffCoins < 0)
+				diffCoins = 0;
+			
+			this.coins.text = diffCoins.ToString() +" coins left";
 		}
 
 

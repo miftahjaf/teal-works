@@ -132,6 +132,10 @@ namespace Cerebro
 		public void CoinTextAnimation()
 		{
 			int remainingCoins = practiceItems.TotalCoins - practiceItems.CurrentCoins;
+			if (remainingCoins < 0) 
+			{
+				remainingCoins = 0;
+			}
 			iTween.ValueTo(this.gameObject, iTween.Hash(
 				"from", practiceItems.TotalCoins,
 				"to", remainingCoins,
