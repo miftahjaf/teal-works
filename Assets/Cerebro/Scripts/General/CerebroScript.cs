@@ -13,6 +13,7 @@ namespace Cerebro {
 		public const string StudentList = "StudentList";
 		public const string PasswordDialog = "PasswordDialog";
 		public const string SettingsDialog = "SettingsDialog";
+		public const string VersionDialog = "VersionDialog";
 		public const string StudentView = "StudentView";
 		public const string WelcomeScreen = "WelcomeScreen";
 		public const string Missions = "Missions/Missions";
@@ -40,6 +41,7 @@ namespace Cerebro {
 		public const string Verbalize = "Verbalize";
 		public const string RatingPopup = "RatingPopup";
 		public const string GenericPopup = "GenericPopup";
+		public const string Daily = "Daily";
 
 		public const string WordTower = "WordTower/WordTower";
 		public const string WordTowerMovableComponent = "WordTower/Movable";
@@ -338,6 +340,13 @@ namespace Cerebro {
 				passwordsDialog.Initialize (this);
 				DialogScreen.transform.SetAsLastSibling ();
 			}
+		}
+
+		public void showVersionDialog() {
+			GameObject versionUpdate = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.VersionDialog, DialogScreen.gameObject.transform);
+			versionUpdate.GetComponent<RectTransform> ().sizeDelta = new Vector2 (1024f, 768f);
+			versionUpdate.GetComponent<RectTransform> ().position = new Vector3 (0f, 0f);
+			DialogScreen.transform.SetAsLastSibling ();
 		}
 
 		public void HidePasswordDialog() {

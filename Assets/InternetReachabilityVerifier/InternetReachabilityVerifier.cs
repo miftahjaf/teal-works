@@ -521,7 +521,7 @@ public class InternetReachabilityVerifier : MonoBehaviour
         }
     }
 
-    void Start()
+	public void Start()
     {
         verifyCaptivePortalDetectionMethod();
 

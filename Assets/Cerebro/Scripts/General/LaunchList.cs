@@ -59,6 +59,8 @@ namespace Cerebro
 		public List<StartableGame> mStartableGames = new List<StartableGame> ();
 		public Dictionary<string,int> mKCCoins =new Dictionary<string, int>();
 		public Dictionary<string,string> mRegenerationData =new Dictionary<string, string>();
+		public bool IsVersionUptoDate, CheckingForVersion;
+		public Daily CurrDaily;
 
 		public bool mUpdateTimer = false;
 		public System.TimeSpan mTimer;
@@ -194,7 +196,8 @@ namespace Cerebro
 				CerebroHelper.DebugLog (irv.lastError);
 			}
 			if (firstTimeNetCheck) {
-				if (newStatus == InternetReachabilityVerifier.Status.NetVerified) {
+				Debug.Log ("first "+firstTimeNetCheck);
+				if (newStatus == InternetReachabilityVerifier.Status.NetVerified && IsVersionUptoDate) {
 					mhasInternet = true;
 					ScanTables ();
 					setWifiIcon ();
@@ -209,7 +212,7 @@ namespace Cerebro
 					firstTimeNetCheck = false;
 				}
 			} else {
-				if (newStatus == InternetReachabilityVerifier.Status.NetVerified) {
+				if (newStatus == InternetReachabilityVerifier.Status.NetVerified && IsVersionUptoDate) {
 					if (mhasInternet == false) {
 						mhasInternet = true;
 						setWifiIcon ();
@@ -220,6 +223,9 @@ namespace Cerebro
 					setWifiIcon ();
 					mhasInternet = false;
 				}
+			}
+			if (!IsVersionUptoDate && !CheckingForVersion) {
+				CheckVersionNumber ();
 			}
 		}
 
@@ -246,6 +252,24 @@ namespace Cerebro
 //			QueryAnalyticsTable (null);
 //			BackupTable (null, "Moves", Application.persistentDataPath + "/MovesCSV.csv");
 //			BackupTable (null, "Analytics", Application.persistentDataPath + "/Analytics.csv");
+		}
+
+		public void CheckVersionNumber()
+		{
+			CheckingForVersion = true;
+			HTTPRequestHelper.instance.CheckVersionNumber (VersionVerified);
+		}
+
+		public void VersionVerified(bool dummy)
+		{
+			Debug.Log ("version "+LaunchList.instance.IsVersionUptoDate);
+			if (LaunchList.instance.IsVersionUptoDate) {
+				CerebroHelper.DebugLog ("Version upto date");
+				irv.Start ();
+			} else {
+				CerebroHelper.DebugLog ("Old Version");
+				GetComponent<CerebroScript> ().showVersionDialog ();
+			}
 		}
 
 		public void setWifiIcon ()

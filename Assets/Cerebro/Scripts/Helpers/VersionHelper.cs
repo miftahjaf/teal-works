@@ -10,7 +10,7 @@ namespace Cerebro
 
 		private static string VersionNumber;
 
-		void Start() {
+		void Awake() {
 			VersionNumber = mVersionNumber;
 		}
 

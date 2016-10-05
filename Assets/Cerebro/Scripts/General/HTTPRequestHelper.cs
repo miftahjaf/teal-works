@@ -62,6 +62,31 @@ namespace Cerebro
 			}
 		}
 
+		public void CheckVersionNumber (Action<bool> callback)
+		{
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			N ["myData"] ["student_id"] = studentID;
+			string CurrVersion = VersionHelper.GetVersionNumber();
+			if (CurrVersion [0] == 'v') {
+				CurrVersion = CurrVersion.Substring (1);
+			}
+			N ["myData"] ["version"] = CurrVersion;
+
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArraySimpleJSON (SERVER_URL + "student/version/validate", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString () != "") {
+					LaunchList.instance.IsVersionUptoDate = jsonResponse ["is_version_valid"].AsBool;
+					Debug.Log(LaunchList.instance.IsVersionUptoDate);
+					callback(true);
+				} else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+				}
+				LaunchList.instance.CheckingForVersion = false;
+			});
+		}
+
 		public void ValidateMove (string cellID, string cost, string studentID, string groupID, string gameID)
 		{
 			LaunchList.instance.mWaitingforMovesandWorldServer = true;
@@ -943,15 +968,12 @@ namespace Cerebro
 			string fileName = Application.persistentDataPath + "/Properties.txt";
 			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 
-			StreamWriter sr = null;
-
-			sr = File.CreateText (fileName);
-
 			try {
 				WWWForm form = new WWWForm ();
 				form.AddField ("student_id", studentID);
 				CreatePostRequestSimpleJSON (SERVER_URL + "properties/get_properties", form, (jsonResponse) => {
 					if (jsonResponse != null && jsonResponse.ToString () != "") {
+						StreamWriter sr = File.CreateText (fileName);
 						for (int i = 0; i < jsonResponse.Count; i++) {
 							Properties p = new Properties ();
 							p.PropertyName = jsonResponse [i] ["property_name"].Value;
@@ -1051,14 +1073,11 @@ namespace Cerebro
 		{
 			string fileName = Application.persistentDataPath + "/Explanations.txt";
 
-			StreamWriter sr = null;
-
-			sr = File.CreateText (fileName);
-
 			try {
 				WWWForm form = new WWWForm ();
 				CreatePostRequestSimpleJSON (SERVER_URL + "practice_item/get_practice_item_explanation", form, (jsonResponse) => {
 					if (jsonResponse != null && jsonResponse.ToString () != "") {
+						StreamWriter sr = File.CreateText (fileName);
 						for (int i = 0; i < jsonResponse.Count; i++) {
 							Explanation explanation = new Explanation ();
 							explanation.PracticeItemID = jsonResponse [i] ["practice_item_id"].Value;
