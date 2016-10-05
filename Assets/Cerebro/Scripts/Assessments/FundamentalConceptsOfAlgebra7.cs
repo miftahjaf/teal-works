@@ -1013,14 +1013,15 @@ namespace Cerebro
                    
                     answer[0] = coeff1-coeff2 + "x=" + coeff3;
                     answer[1] = coeff1 + "x=" + coeff2 + "x+" + coeff3;
-                    answer[2] = coeff1 + "x=" + coeff3 + coeff2 + "x";
-                    Answerarray = answer;
+                    answer[2] = coeff1 + "x=" + coeff3 + coeff2 + "x";                    
 					if (coeff1 - coeff2 ==1)
 						Answer = "x=" + coeff3;
 					else if( coeff1 - coeff2 == -1)
 						Answer = "-x=" + coeff3;
 					else
-                    	Answer = coeff1 - coeff2 + "x=" + coeff3;
+						Answer = (coeff1 - coeff2) + "x=" + coeff3;
+					answer[3] = Answer;
+					Answerarray = answer;
                 }
             }
             #endregion L3
