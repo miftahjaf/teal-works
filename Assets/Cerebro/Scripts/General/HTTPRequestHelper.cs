@@ -1167,7 +1167,7 @@ namespace Cerebro
 			N ["myData"] ["baba_data"]["head"] = BabaId[0].ToString();
 			N ["myData"] ["baba_data"]["face"] = BabaId[1].ToString();
 			N ["myData"] ["baba_data"]["body"] = BabaId[2].ToString();
-
+			N ["myData"] ["baba_data"]["color"] = PlayerPrefs.GetString(PlayerPrefKeys.GOTGameTeamID, "1");
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
 			CreatePostRequestByteArray (SERVER_URL + "student/baba/set", formData, (jsonResponse) => {

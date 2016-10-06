@@ -67,6 +67,7 @@ namespace Cerebro {
 		public const string VerbalizeSpeed = "VerbalizeSpeed";
 		public const string BabaID = "BabaID";
 		public const string GOTGameTeamID = "GOTGameTeamID";
+		public const string IsVersionUpdated = "IsVersionUpdated";
 	}
 
 	public static class PrefabManager
@@ -342,8 +343,18 @@ namespace Cerebro {
 			}
 		}
 
+		public void RemoveVersionDialog()
+		{
+			GameObject gTemp = GameObject.Find ("VersionDialog");
+			if (gTemp) {
+				Destroy (gTemp);
+			}
+			DialogScreen.transform.SetAsFirstSibling ();
+		}
+
 		public void showVersionDialog() {
 			GameObject versionUpdate = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.VersionDialog, DialogScreen.gameObject.transform);
+			versionUpdate.name = "VersionDialog";
 			versionUpdate.GetComponent<RectTransform> ().sizeDelta = new Vector2 (1024f, 768f);
 			versionUpdate.GetComponent<RectTransform> ().position = new Vector3 (0f, 0f);
 			DialogScreen.transform.SetAsLastSibling ();

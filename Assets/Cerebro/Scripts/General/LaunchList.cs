@@ -202,13 +202,18 @@ namespace Cerebro
 					setWifiIcon ();
 					firstTimeNetCheck = false;
 				} else if (newStatus == InternetReachabilityVerifier.Status.Offline || newStatus == InternetReachabilityVerifier.Status.Error) {
-					mhasInternet = false;
-					setWifiIcon ();
-					mCurrentStudent.Coins = PlayerPrefs.GetInt (PlayerPrefKeys.Coins) + PlayerPrefs.GetInt (PlayerPrefKeys.DeltaCoins);
-					GotProperties ();
-					GotPracticeItems ();
-					AllTablesLoaded ();
-					firstTimeNetCheck = false;
+					bool ver = true;
+					if (PlayerPrefs.GetString (PlayerPrefKeys.IsVersionUpdated, "false") == ver.ToString ()) {
+						mhasInternet = false;
+						setWifiIcon ();
+						mCurrentStudent.Coins = PlayerPrefs.GetInt (PlayerPrefKeys.Coins) + PlayerPrefs.GetInt (PlayerPrefKeys.DeltaCoins);
+						GotProperties ();
+						GotPracticeItems ();
+						AllTablesLoaded ();
+						firstTimeNetCheck = false;
+					} else {
+						GetComponent<CerebroScript> ().showVersionDialog ();
+					}
 				}
 			} else {
 				if (newStatus == InternetReachabilityVerifier.Status.NetVerified && IsVersionUptoDate) {
@@ -219,8 +224,13 @@ namespace Cerebro
 					}
 					mhasInternet = true;
 				} else if (newStatus == InternetReachabilityVerifier.Status.Offline || newStatus == InternetReachabilityVerifier.Status.Error) {
-					setWifiIcon ();
-					mhasInternet = false;
+					bool ver = true;
+					if (PlayerPrefs.GetString (PlayerPrefKeys.IsVersionUpdated, "false") == ver.ToString ()) {
+						setWifiIcon ();
+						mhasInternet = false;
+					} else {
+						GetComponent<CerebroScript> ().showVersionDialog ();
+					}
 				}
 			}
 			if (!IsVersionUptoDate && !CheckingForVersion) {
@@ -262,8 +272,10 @@ namespace Cerebro
 		public void VersionVerified(bool dummy)
 		{
 			Debug.Log ("version "+LaunchList.instance.IsVersionUptoDate);
+			PlayerPrefs.SetString (PlayerPrefKeys.IsVersionUpdated, LaunchList.instance.IsVersionUptoDate.ToString ());
 			if (LaunchList.instance.IsVersionUptoDate) {
 				CerebroHelper.DebugLog ("Version upto date");
+				GetComponent<CerebroScript> ().RemoveVersionDialog ();
 				irv.Start ();
 			} else {
 				CerebroHelper.DebugLog ("Old Version");
