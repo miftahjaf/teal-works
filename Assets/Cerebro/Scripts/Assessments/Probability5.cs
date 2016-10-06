@@ -34,7 +34,7 @@ namespace Cerebro {
 			StartCoroutine(StartAnimation ());
 
 
-			scorestreaklvls = new int[5];
+			scorestreaklvls = new int[4];
 			for (var i = 0; i < scorestreaklvls.Length; i++) {
 				scorestreaklvls [i] = 0;
 			}
@@ -68,7 +68,7 @@ namespace Cerebro {
 				if (AnswerArray [1] == "1" && UserAns [1] == "")
 					UserAns [1] = "1";
 
-				if (checkArrayValuesInOrder (UserAns, AnswerArray)) {
+				if (MathFunctions.checkFractions (UserAns, AnswerArray)) {
 					correct = true;
 				} else {
 					correct = false;
@@ -137,32 +137,6 @@ namespace Cerebro {
 
 			base.QuestionEnded (correct, level, increment, selector);
 
-		}
-
-		bool checkArrayValuesInOrder(string[] A, string[] B)
-		{
-			if (A.Length != B.Length)
-			{
-				CerebroHelper.DebugLog(A.Length);
-				CerebroHelper.DebugLog(B.Length);
-				CerebroHelper.DebugLog("Length not equal");
-				return false;
-			}
-			for (var i = 0; i < A.Length; i++)
-			{
-				var found = false;
-				if (A[i] == B[i])
-				{
-					CerebroHelper.DebugLog(A[i] + "found");
-					found = true;
-				}
-				if (!found)
-				{
-					CerebroHelper.DebugLog(A[i] + " not found");
-					return false;
-				}
-			}
-			return true;
 		}
 
 		public void ThreeChoiceOptionClicked(int value)
@@ -636,7 +610,7 @@ namespace Cerebro {
 					QuestionText.text = "A number cube has 6 sides. The sides have the numbers ";
 					for (int i = 0; i < numbers.Length - 1; i++)
 						QuestionText.text += numbers[i] + ", ";
-					QuestionText.text += "and " + numbers[numbers.Length - 1] + ". If the cube is thrown once, what is the probability of rolling an " + OddOrEven + " number";
+					QuestionText.text += "and " + numbers[numbers.Length - 1] + ". If the cube is thrown once, what is the probability of rolling an " + OddOrEven + " number.";
 
 				}
 				else if (selector == 4) 
