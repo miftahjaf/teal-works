@@ -60,7 +60,6 @@ namespace Cerebro
 		public Dictionary<string,int> mKCCoins =new Dictionary<string, int>();
 		public Dictionary<string,string> mRegenerationData =new Dictionary<string, string>();
 		public bool IsVersionUptoDate, CheckingForVersion;
-		public Daily CurrDaily;
 
 		public bool mUpdateTimer = false;
 		public System.TimeSpan mTimer;
