@@ -77,11 +77,7 @@ namespace Cerebro {
 					if (counter % 2 != 0)
 						lineValues.Add (lastPoint);
 				}
-
-				foreach (Vector2 vec in lineValues)
-					Debug.Log ("points : (" + vec.x + "," + vec.y + ")");
-
-
+					
 				//Instantiate point prefab to show point, point name and arrow
 				GameObject endPoint = GameObject.Instantiate (pointPrefab);
 				endPoint.transform.SetParent (this.transform, false);
@@ -161,12 +157,7 @@ namespace Cerebro {
 				arcRadius += 10f;
 
 				UIpolygon.ReDraw ();
-
-
 			}
-
-
-
 		}
 
 		private void AddTextInLine(string lineText,Vector2 point1,Vector2 point2,TextDir textDirection)
@@ -205,11 +196,8 @@ namespace Cerebro {
 				lineTextComponent.alignment = TextAnchor.MiddleCenter;
 				lineTextObj.GetComponent<RectTransform> ().sizeDelta = new Vector2 (distance>100?distance:100f,40f);
 			}
-				
 		}
-
-
-
+			
 		private Vector2 GetQuadrants(float angle)
 		{
 			int xSign = 1,ySign =1;
