@@ -50,15 +50,14 @@ namespace Cerebro {
 					Vector2 stPoint = linePoint.origin;
 					Vector2 lastPoint = newPoint;
 
-					if (newPoint.y < linePoint.origin.y) {
-						stPoint = newPoint;
-						lastPoint = linePoint.origin;
-					}
-
 					float dy = lastPoint.y - stPoint.y;
+					float dx = lastPoint.x - stPoint.x;
 
-					if (Mathf.Abs (dy) > 0.0001f) {
-						float dx = lastPoint.x - stPoint.x;
+					if (Mathf.Abs(dx) < Mathf.Abs(dy)) {
+						if (newPoint.y < linePoint.origin.y) {
+							stPoint = newPoint;
+							lastPoint = linePoint.origin;
+						}
 						for (float i = stPoint.y; i < lastPoint.y; i += 4f) {
 							counter++;
 							float x = ((i - stPoint.y) * (dx / dy)) + stPoint.x;
@@ -69,16 +68,18 @@ namespace Cerebro {
 							stPoint = newPoint;
 							lastPoint = linePoint.origin;
 						}
-						for (float x = stPoint.x; x < lastPoint.x; x += 4f) {
+						for (float i = stPoint.x; i < lastPoint.x; i += 4f) {
 							counter++;
-							lineValues.Add (new Vector2 (x, stPoint.y));
+							float y = ((i - stPoint.x) * (dy / dx)) + stPoint.y;
+							lineValues.Add (new Vector2 (i, y));
 						}
 					}
 					if (counter % 2 != 0)
 						lineValues.Add (lastPoint);
 				}
 
-
+				foreach (Vector2 vec in lineValues)
+					Debug.Log ("points : (" + vec.x + "," + vec.y + ")");
 
 
 				//Instantiate point prefab to show point, point name and arrow
