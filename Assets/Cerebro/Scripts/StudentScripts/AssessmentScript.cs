@@ -474,13 +474,17 @@ namespace Cerebro
 //		public static string currChapter = "";
 		IEnumerator startChapters()
 		{
-			CerebroHelper.DebugLog ("coming");
 			yield return new WaitForSeconds (1f);
 			baseAssessment.testMode = true;
 			TestingButtonPressed ();
 			yield return new WaitForSeconds (0.5f);
 			if (WelcomeScript.instance.takingScreenshots) {
-				string path = Application.persistentDataPath + "/Screenshots/" + baseAssessment.assessmentName + "/" + baseAssessment.testQuestionLevel + "t" + (baseAssessment.testSelector + 1) + ".png";
+				
+				string dirPath = Application.persistentDataPath + "/Screenshots/" + baseAssessment.assessmentName;
+				string path = dirPath + "/" + baseAssessment.testQuestionLevel + "t" + (baseAssessment.testSelector + 1) + ".png";
+				if (!Directory.Exists (dirPath)) {
+					Directory.CreateDirectory (dirPath);
+				}
 				Application.CaptureScreenshot (path);
 				CerebroHelper.DebugLog ("taking "+path);
 			}
