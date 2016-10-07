@@ -17,7 +17,7 @@ namespace Cerebro {
 		private float diaAngle;
 		private string[] expressions;
 		private string[] AnswerArray;
-		private string[] alternateAnswerArray;
+		private string[] alphabets;
 		private int randSelector;
 		private string[] Lunits = new string[] {" cm", " m", " ft", " inch"};
 		private string Lunit;
@@ -341,37 +341,38 @@ namespace Cerebro {
 				if (selector == 1) 
 				{
 					expressions = new string[] {"diameter", "chord", "secant", "tangent"};
-					AnswerArray = new string[] {"AB", "CD", "EF", "GH"}; 
-					alternateAnswerArray = new string[] {"BA", "DC", "FE", "HG"}; 
+					alphabets = new string[] {"A","B","C","D","E","F","G","H"};
+					alphabets.Shuffle ();  
+					AnswerArray = new string[] {alphabets[0] + alphabets[1], alphabets[2] + alphabets[3], alphabets[4] + alphabets[5], alphabets[6] + alphabets[7]}; 
 					randSelector = Random.Range (0, expressions.Length);
 
-					radiusForFigure = 90f;
-					diaAngle = Random.Range (0, 90);
-					float chordAngle = diaAngle + Random.Range (70, 130);
+					radiusForFigure = 80f;
+					diaAngle = 360 + Random.Range (-45, 45);
+					float chordAngle = diaAngle + Random.Range (70, 110);
 					float chordDistFromCenter = radiusForFigure - Random.Range (15, 35);
 
 					//center
 					diagramHelper.AddLinePoint (new LinePoint ("O", Vector2.zero, 0, false, 0f));
 
 					//diameter
-					diagramHelper.AddLinePoint (new LinePoint ("A", Vector2.zero, diaAngle, false, radiusForFigure, 1));
-					diagramHelper.AddLinePoint (new LinePoint ("B", Vector2.zero, diaAngle + 180, false, radiusForFigure, 1));
+					diagramHelper.AddLinePoint (new LinePoint (alphabets[0], Vector2.zero, diaAngle, false, radiusForFigure, -1));
+					diagramHelper.AddLinePoint (new LinePoint (alphabets[1], Vector2.zero, diaAngle + 180, false, radiusForFigure, 1));
 
 					//chord
-					diagramHelper.AddLinePoint (new LinePoint ("C", MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 270 + chordAngle, false, Mathf.Sqrt (radiusForFigure * radiusForFigure - chordDistFromCenter * chordDistFromCenter), 1));
-					diagramHelper.AddLinePoint (new LinePoint ("D", MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 90 + chordAngle, false, Mathf.Sqrt (radiusForFigure * radiusForFigure - chordDistFromCenter * chordDistFromCenter), 1));
+					diagramHelper.AddLinePoint (new LinePoint (alphabets[2], MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 270 + chordAngle, false, Mathf.Sqrt (radiusForFigure * radiusForFigure - chordDistFromCenter * chordDistFromCenter), -1));
+					diagramHelper.AddLinePoint (new LinePoint (alphabets[3], MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 90 + chordAngle, false, Mathf.Sqrt (radiusForFigure * radiusForFigure - chordDistFromCenter * chordDistFromCenter), 1));
 
 					//secant
 					chordDistFromCenter = radiusForFigure - Random.Range (15, 35);
-					chordAngle += Random.Range (150, 210);
-					diagramHelper.AddLinePoint (new LinePoint ("E", MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 270 + chordAngle, true, Mathf.Sqrt (radiusForFigure * radiusForFigure - chordDistFromCenter * chordDistFromCenter) + radiusForFigure / 4f, 1));
-					diagramHelper.AddLinePoint (new LinePoint ("F", MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 90 + chordAngle, true, Mathf.Sqrt (radiusForFigure * radiusForFigure - chordDistFromCenter * chordDistFromCenter) + radiusForFigure / 4f, 1));
+					chordAngle += Random.Range (160, 200);
+					diagramHelper.AddLinePoint (new LinePoint (alphabets[4], MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 270 + chordAngle, true, Mathf.Sqrt (radiusForFigure * radiusForFigure - chordDistFromCenter * chordDistFromCenter) + radiusForFigure / 4f, 1));
+					diagramHelper.AddLinePoint (new LinePoint (alphabets[5], MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 90 + chordAngle, true, Mathf.Sqrt (radiusForFigure * radiusForFigure - chordDistFromCenter * chordDistFromCenter) + radiusForFigure / 4f, -1));
 
 					//tangent
 					chordDistFromCenter = radiusForFigure;
-					chordAngle = diaAngle + Random.Range (0, 50);
-					diagramHelper.AddLinePoint (new LinePoint ("G", MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 270 + chordAngle, true, 2f * radiusForFigure / 3f, 1));
-					diagramHelper.AddLinePoint (new LinePoint ("H", MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 90 + chordAngle, true, 2f * radiusForFigure / 3f, 1));
+					chordAngle += Random.Range (100, 150);
+					diagramHelper.AddLinePoint (new LinePoint (alphabets[6], MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 270 + chordAngle, true, 2f * radiusForFigure / 3f, 1));
+					diagramHelper.AddLinePoint (new LinePoint (alphabets[7], MathFunctions.PointAtDirection (Vector2.zero, chordAngle, chordDistFromCenter), 90 + chordAngle, true, 2f * radiusForFigure / 3f, -1));
 
 					diagramHelper.AddAngleArc (new AngleArc ("", Vector2.zero, 0, 360, 2 * radiusForFigure));
 					diagramHelper.Draw ();
@@ -379,7 +380,7 @@ namespace Cerebro {
 
 					QuestionText.text = "Name the " + expressions [randSelector] + " of the given circle.";
 					Answer = AnswerArray [randSelector];
-					alternateAnswer = alternateAnswerArray [randSelector];
+					alternateAnswer = "" + AnswerArray [randSelector][1] + AnswerArray [randSelector][0];
 				}
 				else if (selector >= 2) 
 				{
@@ -389,7 +390,7 @@ namespace Cerebro {
 					area = MathFunctions.GetRounded (PIvalue * radius * radius, 2);
 					circumference = MathFunctions.GetRounded (PIvalue * diameter, 2);
 					radiusForFigure = 90f;
-					diaAngle = Random.Range (0, 360);
+					diaAngle = Random.Range (45, 135);
 
 					if (selector == 2 || selector == 4)
 						diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, diaAngle, false, radiusForFigure, 0).SetLineType(LineShapeType.Dotted).SetLineText("" + radius + Lunit).SetLineTextDirection (TextDir.Right));
