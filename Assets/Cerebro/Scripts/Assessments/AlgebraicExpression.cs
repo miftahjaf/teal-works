@@ -1266,7 +1266,7 @@ namespace Cerebro
 					coeff [i] = Random.Range (1, 10);
 
 				for (int i = 0; i < 6; i++) {
-					key [i] = Random.Range (0, 5);
+					key [i] = Random.Range (0, 4);
 					power [i] = Random.Range (1, 5);
 				}
 
