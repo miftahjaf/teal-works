@@ -17,7 +17,8 @@ namespace Cerebro
 
 		private int num,num1,num2,num3,num4,num5,num6;
 		private float frac;
-		int x, y, lcm = 0,a,b,ans;
+		int x, y, lcm = 0,a,b,ans, hcf;
+		bool InsertFraction;
 
 		void Start ()
 		{
@@ -84,17 +85,24 @@ namespace Cerebro
 						Answer = correctAnswer;
 						correct = false;
 					}
-				} else if (Answer.Contains ("/") && level == 1 && selector == 4) {
+				} else if (InsertFraction) {
 				
 					if (!userAnswerText.text.Contains ("/")) {
 						correct = false;
 					} else {
 						var correctAnswers = Answer.Split (new string[] { "/" }, System.StringSplitOptions.None);
 						var userAnswers = userAnswerText.text.Split (new string[] { "/" }, System.StringSplitOptions.None);
-						if ((float.Parse (userAnswers [0]) / float.Parse (userAnswers [1])) > ((float)num / (float)num1) && ((float.Parse (userAnswers [0]) / float.Parse (userAnswers [1])) < ((float)num2 / (float)num3)))
-							correct = true;
-						else
-							correct = false;
+						if ((float)num / (float)num1 < (float)num2 / (float)num3) {
+							if (((float.Parse (userAnswers [0]) / float.Parse (userAnswers [1])) > ((float)num / (float)num1)) && ((float.Parse (userAnswers [0]) / float.Parse (userAnswers [1])) < ((float)num2 / (float)num3)))
+								correct = true;
+							else
+								correct = false;
+						} else {
+							if (((float.Parse (userAnswers [0]) / float.Parse (userAnswers [1])) < ((float)num / (float)num1)) && ((float.Parse (userAnswers [0]) / float.Parse (userAnswers [1])) > ((float)num2 / (float)num3)))
+								correct = true;
+							else
+								correct = false;
+						}
 					}
 
 				}else if (Answer.Contains ("/")) {
@@ -253,7 +261,7 @@ namespace Cerebro
 			MCQ.gameObject.SetActive (false);
 			GeneralButton.gameObject.SetActive (true);
 			numPad.SetActive (true);
-
+			InsertFraction = false;
 			answerButton = GeneralButton;
 
 
@@ -282,96 +290,92 @@ namespace Cerebro
 					
 					MCQ.SetActive (true);
 					numPad.SetActive (false);
-					int num = Random.Range (1, 10);
-					int num1 = Random.Range (1, 6);
-					int num2 = Random.Range (num1 + 1, 10);
-					while (MathFunctions.GetHCF (num2, num1) != 1)
-						num1 = Random.Range (1, 6);
-					int ansNum = ((num * num2) + num1);
-					string option1 = num.ToString () + " \\frac{" + num1.ToString () + "}{" + num2.ToString () + "}";
-					string option2 = "";
-					if (Random.Range (1, 3) == 1) {
-						int rndNum = Random.Range (1, 10);
-						while ((rndNum == num1) || (rndNum==num)) {
-							rndNum = Random.Range (1, 10);
-						}
-						option2 = rndNum.ToString () + " \\frac{" + num1.ToString () + "}{" + num2.ToString () + "}";
-					} else {
-						int rndNum = Random.Range (1, 5);
-						while ((rndNum == num2) || (rndNum==num1)) {
-							rndNum = Random.Range (1, 5);
-						}
-						option2 = num.ToString () + " \\frac{" + rndNum.ToString () + "}{" + num2.ToString () + "}";
-					}
 					subQuestionText.gameObject.SetActive (true);
 					GeneralButton.gameObject.SetActive (false);
+
+					num = Random.Range (1, 6);
+					num1 = Random.Range (1, 6);
+					num2 = Random.Range (num1 + 2, 10);
+
+					while (MathFunctions.GetHCF (num2, num1) > 1)
+						num1 = Random.Range (1, 6);
+					
+					string option1 = num + " \\frac{" + num1 + "}{" + num2 + "}";
+					string option2 = "";
+
+					if (Random.Range (1, 3) == 1) 
+					{
+						if (num == 1)
+							num3 = 2;
+						else if (Random.Range (1, 3) == 1)
+							num3 = num + 1;
+						else
+							num3 = num - 1;
+
+						option2 = num3 + " \\frac{" + num1 + "}{" + num2 + "}";
+					} 
+					else 
+					{
+						num3 = Random.Range (1, num2);
+
+						while (MathFunctions.GetHCF (num2, num3) > 1 || num3 == num1)
+							num3 = Random.Range (1, num2);
+						
+						option2 = num + " \\frac{" + num3 + "}{" + num2 + "}";
+					}
+
 					QuestionText.text = "Convert the given improper fraction to mixed fraction : ";
-					subQuestionText.text = "\\frac{" + ansNum.ToString () + "}{" + num2.ToString () + "}";
+					subQuestionText.text = "\\frac{" + (num * num2 + num1) + "}{" + num2.ToString () + "}";
 					Answer = option1;
+
 					if (Random.Range (1, 3) == 1) {
 						string tmp = option1;
 						option1 = option2;
 						option2 = tmp;
 					}
+
 					MCQ.transform.Find ("Option1").Find ("Text").GetComponent<TEXDraw> ().text = option1;
 					MCQ.transform.Find ("Option2").Find ("Text").GetComponent<TEXDraw> ().text = option2;
+
 				} else if (selector == 3) {
 				
 					num = 3 * Random.Range (2, 8);
 					num1 = Random.Range (2, 6);
 					QuestionText.text = "What fraction is " + num.ToString () + " apples of " + num1.ToString () + " dozen apples?";
 					num2 = num1 * 12;
-					int hcf = MathFunctions.GetHCF (num, num2);
+					hcf = MathFunctions.GetHCF (num, num2);
 					num = num / hcf;
 					num2 = num2 / hcf;
 					if (num2 == 1)
 						Answer = num.ToString ();
 					else
 					Answer = num.ToString () + "/" + num2.ToString ();
+					
 				} else if (selector == 4) {
-				//check logic
-					num = Random.Range (1, 20);
-					num1 = num + Random.Range (1, 6);
-					num /= MathFunctions.GetHCF (num, num1);
-					num1 /= MathFunctions.GetHCF (num, num1);
-					num2 = num + Random.Range (1, 6);
-					num3 = num + Random.Range (6, 9);
-					while (num * 1f / num1 > num2 * 1f / num3) {
-						num2 = num + Random.Range (1, 9);	
-						print ("going in");
-					}
-					num2 /= MathFunctions.GetHCF (num2, num3);
-					num3 /= MathFunctions.GetHCF (num2, num3);
+
+					InsertFraction = true;
+
+					num = Random.Range (1, 6);
+					num1 = Random.Range (num + 1, num + 10);
+					num2 = Random.Range (6, 11);
+					num3 = Random.Range (num2 + 1, num2 + 10);
+
+					while (num1 == num3)
+						num3 = Random.Range (num2 + 1, num2 + 10);
+
+					while (MathFunctions.GetHCF (num, num1) > 1)
+						num = Random.Range (1, 6);
+
+					while (MathFunctions.GetHCF (num2, num3) > 1)
+						num2 = Random.Range (6, 11);
 
 					QuestionText.text = "Insert a fraction between " + num.ToString() + "/" + num1.ToString () + " and " + num2.ToString () + "/" + num3.ToString() + ".";
 
-
-//					lcm = MathFunctions.GetLCM (num1, num3);
-//					num1 = lcm / num1;
-//					num3 = lcm / num3;
-//
-//					num4 = num * num1;
-//					num5 = num2 * num3;
-//					if (num5 - num4 == 1) {
-//					
-//						num4 = num4 * 2;
-//						num5 = num5 * 2;
-//						lcm = lcm * 2;
-//					}
-//					num6 = Random.Range(num4, num5);
-//					int hcf = MathFunctions.GetHCF (num6+1, lcm);
-//					num6 = num6 / hcf;
-//					lcm = lcm / hcf;
-//					if (lcm == 1)
-//						Answer = num6.ToString ();
-//					else
-//						Answer = num6.ToString() + "/" + lcm.ToString ();
-
 					num4 = num + num2;
 					num5 = num1 + num3;
-					num6 = MathFunctions.GetHCF (num4, num5);
-					num4 /= num6;
-					num5 /= num6;
+					hcf = MathFunctions.GetHCF (num4, num5);
+					num4 /= hcf;
+					num5 /= hcf;
 					Answer = num4.ToString () + "/" + num5.ToString ();
 				}
 
@@ -386,7 +390,7 @@ namespace Cerebro
 						num1 = Random.Range (num + 1, 11);
 					QuestionText.text = "Emma, Avan and Jamie buy " + num.ToString () + "/" + num1.ToString () + " kg of fudge which is to be divided equally among them. How much fudge (in kg) will each one of them get?";
 					num2 = 3 * num1;
-					int hcf = MathFunctions.GetHCF (num, num2);
+					hcf = MathFunctions.GetHCF (num, num2);
 					num = num / hcf;
 					num2 = num2 / hcf;
 					if (num2 == 1)
@@ -403,7 +407,7 @@ namespace Cerebro
 						num1 = Random.Range (2, 7);
 					QuestionText.text = "A burger was marked at Rs. " + num.ToString () + ", but sold at " + num1.ToString () + "/" + num2.ToString () + " of its marked price. Find the sale price (in Rs.).";
 					num3 = num * num1;
-					int hcf = MathFunctions.GetHCF (num3, num2);
+					hcf = MathFunctions.GetHCF (num3, num2);
 					num3 = num3 / hcf;
 					num2 = num2 / hcf;
 					if (num2 == 1)
@@ -422,7 +426,7 @@ namespace Cerebro
 					QuestionText.text = "Narendra spent " + num.ToString () + "/" + num1.ToString () + "th of his money and still had Rs. " + num2.ToString () + " left. What was the initial amount he had?";
 					num3 = num2 * num1;
 					num4 = num1 - num;
-					int hcf = MathFunctions.GetHCF (num3, num4);
+					hcf = MathFunctions.GetHCF (num3, num4);
 					num3 = num3 / hcf;
 					num4 = num4 / hcf;
 					if (num4 == 1)
@@ -432,34 +436,24 @@ namespace Cerebro
 				} 
 				else if (selector == 4) {
 
-					num = Random.Range (2, 6);
-					num1 = Random.Range (6, 11);
-					while(MathFunctions.GetHCF (num, num1) > 1)
-						num = Random.Range (2, 6);
-					num2 = Random.Range (2, 8) *2;
-					num3 = Random.Range (2, 8) *2;
-					while (num * 1f / num1 + 1f / num2 + 1f / num3 - 1 > -0.0001 || num2 == num3) {
-						num3 = Random.Range (2, 8) * 2;
-						num2 = Random.Range (2, 8) * 2;
-					}
-					num4 = 50 * Random.Range(20,51);
-					QuestionText.text = "Mohit spent " + num.ToString () + "/" + num1.ToString () + "th of his salary on food, 1/" + num2.ToString () + "th on transportation and 1/" + num3.ToString () + "th on rent. If he is still left with Rs. " + num4.ToString () + ", find his monthly salary.";
-					num5 = MathFunctions.GetLCM (num1, num2);
-					lcm = MathFunctions.GetLCM (num5, num3);
-					num1 = lcm / num1;
-					num2 = lcm / num2;
-					num3 = lcm / num3;
-					num5 = (num * num1 + num2 + num3);
-					num6 = lcm - num5;
-					ans = (num4 * lcm);
-					int hcf = MathFunctions.GetHCF (ans, num6);
-					ans = ans / hcf;
-					num6 = num6 / hcf;
-					if (num6 == 1)
-						Answer = ans.ToString ();
-					else
-						Answer = ans.ToString()+"/"+ num6.ToString();
+					num2 = Random.Range (3, 11);
+					num3 = Random.Range (3, 11);
 
+					while (num2 == num3)
+						num3 = Random.Range (3, 11);
+					
+					num = Random.Range (2, 5);
+					num1 = Random.Range (12, 20);
+
+					hcf = MathFunctions.GetHCF (num, num1);
+					num /= hcf;
+					num1 /= hcf;
+
+					ans = num1 * num2 * num3 * Random.Range (50, 101);
+					num4 = ans - (ans * num) / num1 - ans / num2 - ans / num3;
+
+					QuestionText.text = "Mohit spent " + num.ToString () + "/" + num1.ToString () + "th of his salary on food, 1/" + num2.ToString () + "th on transportation and 1/" + num3.ToString () + "th on rent. If he is still left with Rs. " + num4.ToString () + ", find his monthly salary.";
+					Answer = ans.ToString ();
 				}
 
 			} else if (level == 3) {
@@ -493,7 +487,7 @@ namespace Cerebro
 					num5 = lcm / num5;
 					ans = (num6 * lcm) - (num * num1 + num2 * num3 + num4 * num5);
 					int ans1 = (lcm * num6);
-					int hcf = MathFunctions.GetHCF (ans1, ans);
+					hcf = MathFunctions.GetHCF (ans1, ans);
 					ans1 = ans1 / hcf;
 					ans = ans / hcf;
 					if (ans1 == 1)
@@ -504,24 +498,17 @@ namespace Cerebro
 				}
 				else if(selector==2){
 				
-					num = Random.Range(1,6);
-					num1 = Random.Range (3, 8) + num;
-					while(MathFunctions.GetHCF (num, num1) > 1)
-						num = Random.Range(1,6);
-					num2 = Random.Range(2,11);
-					num2 = num2 * 5000;
-					QuestionText.text="Bill wants to distribute his savings amongst Tanya, Mike and Rishabh. "+num.ToString()+"/"+num1.ToString()+"th of his savings is in the name of Tanya. Rest is equally divided among Mike and Rishabh. If Rishabh receives Rs."+num2.ToString()+", calculate Bill's total savings.";
+					num = Random.Range (2, 10);
+					num1 = Random.Range (num + 1, 3 * num);
 
-					num3 = num1 - num;
-					num4 = 2 * num1;
-					num5 = (num4 * num2);
-					int hcf = MathFunctions.GetHCF (num5, num3);
-					num5 = num5 / hcf;
-					num3 = num3 / hcf;
-					if (num3 == 1)
-						Answer = num5.ToString ();
-					else
-					Answer=num5.ToString()+"/"+num3.ToString();
+					while (MathFunctions.GetHCF (num, num1) > 1)
+						num1 = Random.Range (num + 1, 3 * num);
+
+					ans = 100 * num1 * Random.Range (50, 101);
+					num2 = (ans - (ans * num) / num1) / 2;
+
+					QuestionText.text="Bill wants to distribute his savings amongst Tanya, Mike and Rishabh. " + num + "/" + num1 + "th of his savings is in the name of Tanya. Rest is equally divided among Mike and Rishabh. If Rishabh receives Rs. " + num2 + ", calculate Bill's total savings.";
+					Answer = ans.ToString ();
 
 				}else if(selector==3){
 				
@@ -541,7 +528,7 @@ namespace Cerebro
 					num4 = lcm / num4;
 					num5 = (num * num1) - (num3 * num4);
 					num6 = num2 * lcm;
-					int hcf = MathFunctions.GetHCF (num6, num5);
+					hcf = MathFunctions.GetHCF (num6, num5);
 					num6 = num6 / hcf;
 					num5 = num5 / hcf;
 					if (num5 == 1)
@@ -567,7 +554,7 @@ namespace Cerebro
 					num4 = lcm / num4;
 					num5 = (num * num1) - (num3 * num4);
 					num6 = num2 * lcm;
-					int hcf = MathFunctions.GetHCF (num6, num5);
+					hcf = MathFunctions.GetHCF (num6, num5);
 					num6 = num6 / hcf;
 					num5 = num5 / hcf;
 					if (num5 == 1)
@@ -587,7 +574,7 @@ namespace Cerebro
 					num2 = 1 + num3;
 					num5 = (num * num4 * num3);
 					num6 = (num1 * num2);
-					int hcf = MathFunctions.GetHCF (num5, num6);
+					hcf = MathFunctions.GetHCF (num5, num6);
 					num5 = num5 / hcf;
 					num6 = num6 / hcf;
 					if (num6 == 1)

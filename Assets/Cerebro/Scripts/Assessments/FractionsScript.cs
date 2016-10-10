@@ -322,41 +322,56 @@ namespace Cerebro
 					Answer = ((num1 * num3) + num2).ToString () + "/" + num3.ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 2) {
+
 					MCQ.SetActive (true);
 					numPad.SetActive (false);
-					int num1 = Random.Range (1, 10);
-					int num2 = Random.Range (1, 5);
-					int num3 = Random.Range (num2 + 1, 10);
-					while (MathFunctions.GetHCF (num3, num2) != 1)
-						num3 = Random.Range (num2 + 1, 10);
-					int ansNum = ((num1 * num3) + num2);
-						
-					string option1 = num1.ToString () + " \\frac{" + num2.ToString () + "}{" + num3.ToString () + "}";
-					string option2 = "";
-					if (Random.Range (1, 3) == 1) {
-						int rndNum = Random.Range (1, 10);
-						while (rndNum == num1) {
-							rndNum = Random.Range (1, 10);
-						}
-						option2 = rndNum.ToString () + " \\frac{" + num2.ToString () + "}{" + num3.ToString () + "}";
-					} else {
-						int rndNum = Random.Range (1, 5);
-						while (rndNum == num2) {
-							rndNum = Random.Range (1, 5);
-						}
-						option2 = num1.ToString () + " \\frac{" + rndNum.ToString () + "}{" + num3.ToString () + "}";
-					}
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Convert the given improper fraction to mixed fraction :";
-					subQuestionText.text = "\\frac{" + ansNum.ToString () + "}{" + num3.ToString () + "}";
+
+					int num = Random.Range (1, 6);
+					int num1 = Random.Range (1, 6);
+					int num2 = Random.Range (num1 + 2, 10);
+					int num3;
+
+					while (MathFunctions.GetHCF (num2, num1) > 1)
+						num1 = Random.Range (1, 6);
+
+					string option1 = num + " \\frac{" + num1 + "}{" + num2 + "}";
+					string option2 = "";
+
+					if (Random.Range (1, 3) == 1) 
+					{
+						if (num == 1)
+							num3 = 2;
+						else if (Random.Range (1, 3) == 1)
+							num3 = num + 1;
+						else
+							num3 = num - 1;
+
+						option2 = num3 + " \\frac{" + num1 + "}{" + num2 + "}";
+					} 
+					else 
+					{
+						num3 = Random.Range (1, num2);
+
+						while (MathFunctions.GetHCF (num2, num3) > 1 || num3 == num1)
+							num3 = Random.Range (1, num2);
+
+						option2 = num + " \\frac{" + num3 + "}{" + num2 + "}";
+					}
+
+					QuestionText.text = "Convert the given improper fraction to mixed fraction : ";
+					subQuestionText.text = "\\frac{" + (num * num2 + num1) + "}{" + num2.ToString () + "}";
 					Answer = option1;
+
 					if (Random.Range (1, 3) == 1) {
 						string tmp = option1;
 						option1 = option2;
 						option2 = tmp;
 					}
+
 					MCQ.transform.Find ("Option1").Find ("Text").GetComponent<TEXDraw> ().text = option1;
 					MCQ.transform.Find ("Option2").Find ("Text").GetComponent<TEXDraw> ().text = option2;
+
 				} else if (selector == 3) {
 					int[] subselectorarr = new int[] { 12, 20 };
 					string[] subselectordesc = new string[] { "years", "scores", "months", "bananas" };
