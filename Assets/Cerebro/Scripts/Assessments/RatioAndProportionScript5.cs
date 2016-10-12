@@ -12,7 +12,8 @@ namespace Cerebro {
 		public GameObject pictureParent;
 		public Sprite[] fruitSprites;
 		private string Answer;
-		private int isProportion = 0;
+		private bool isProportion;
+		private bool inSimplestForm;
 
 		void Start () {
 
@@ -58,7 +59,7 @@ namespace Cerebro {
 				}
 				
 			}
-			else if (isProportion == 1)
+			else if (isProportion)
 			{
 				if (Answer == userAnswerText.text)
 					correct = true;
@@ -67,63 +68,40 @@ namespace Cerebro {
 			}
 			else if (Answer.Contains ("/")){
 				var answerSplits = Answer.Split (new string[] { "/" }, System.StringSplitOptions.None);
-				var userAnswerSplits = userAnswerText.text.Split (new string[] { "/" }, System.StringSplitOptions.None);
-
-				if (answerSplits.Length == userAnswerSplits.Length) {
-					for (var i = 0; i < answerSplits.Length; i++) {
-						float answer = 0;
-						float userAnswer = 0;
-
-						if (float.TryParse (answerSplits [i], out answer)) {
-							answer = float.Parse (answerSplits [i]);
-						} else {
-							correct = false;
-							break;
-						}
-						if (float.TryParse (userAnswerSplits [i], out userAnswer)) {
-							userAnswer = float.Parse (userAnswerSplits [i]);
-						} else {
-							correct = false;
-							break;
-						}
-						if (answer != userAnswer) {
-							correct = false;
-							break;
-						}
+				if (userAnswerText.text.Contains ("/")) {
+					var userAnswerSplits = userAnswerText.text.Split (new string[] { "/" }, System.StringSplitOptions.None);
+					if (MathFunctions.checkFractions (answerSplits, userAnswerSplits)) {
+						correct = true;
+					} else {
+						correct = false;
 					}
-				} else {
+				} else
 					correct = false;
-				}
 			}
-			else{
+			else if (Answer.Contains (":") && inSimplestForm)
+			{
 				var answerSplits = Answer.Split (new string[] { ":" }, System.StringSplitOptions.None);
-				var userAnswerSplits = userAnswerText.text.Split (new string[] { ":" }, System.StringSplitOptions.None);
-
-				if (answerSplits.Length == userAnswerSplits.Length) {
-					for (var i = 0; i < answerSplits.Length; i++) {
-						float answer = 0;
-						float userAnswer = 0;
-
-						if (float.TryParse (answerSplits [i], out answer)) {
-							answer = float.Parse (answerSplits [i]);
-						} else {
-							correct = false;
-							break;
-						}
-						if (float.TryParse (userAnswerSplits [i], out userAnswer)) {
-							userAnswer = float.Parse (userAnswerSplits [i]);
-						} else {
-							correct = false;
-							break;
-						}
-						if (answer != userAnswer) {
-							correct = false;
-							break;
-						}
+				if (userAnswerText.text.Contains (":")) {
+					var userAnswerSplits = userAnswerText.text.Split (new string[] { ":" }, System.StringSplitOptions.None);
+					if (MathFunctions.checkFractionsSimplestForm (answerSplits, userAnswerSplits)) {
+						correct = true;
+					} else {
+						correct = false;
 					}
-				} else {
+				} else
 					correct = false;
-				}
+			}
+			else if (Answer.Contains (":") && !inSimplestForm){
+				var answerSplits = Answer.Split (new string[] { ":" }, System.StringSplitOptions.None);
+				if (userAnswerText.text.Contains (":")) {
+					var userAnswerSplits = userAnswerText.text.Split (new string[] { ":" }, System.StringSplitOptions.None);
+					if (MathFunctions.checkFractions (answerSplits, userAnswerSplits)) {
+						correct = true;
+					} else {
+						correct = false;
+					}
+				} else
+					correct = false;
 			}
 			if (correct == true) {
 				if (Queslevel == 1) {
@@ -236,6 +214,8 @@ namespace Cerebro {
 			MCQ.SetActive (false);
 			numPad.SetActive (true);
 			ResetPicture ();
+			isProportion = false;
+			inSimplestForm = false;
 
 			for (int i = 1; i < 5; i++) {
 				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().color = MaterialColor.textDark;
@@ -292,7 +272,8 @@ namespace Cerebro {
 					Answer = num4.ToString ();
 
 				} else if (selector == 3) {											//simplest form of ratio
-					
+
+					inSimplestForm = true;
 					int commonRatio = Random.Range (2, 10);
 					int num1 = commonRatio * Random.Range (2, 10);
 					int num2 = commonRatio * Random.Range (2, 10);
@@ -306,7 +287,8 @@ namespace Cerebro {
 					Answer = num1 + ":" + num2;
 
 				} else if (selector == 4) {											//simplest form with units
-					
+
+					inSimplestForm = true;
 					string[] selectQuantity1 = new string[] {"m","years","weeks","hours","l","kg","Rs."};
 					string[] selectQuantity2 = new string[] {"cm","months","days","minutes","ml","g","p"};
 					int[] conversionFactor = new int[]{100, 12, 7, 60, 1000, 1000, 100 };
@@ -353,7 +335,7 @@ namespace Cerebro {
 
 				if (selector == 1) {    										// express as proportion
 
-					isProportion = 1;
+					isProportion = true;
 					int num1 = Random.Range (2, 6);
 					int num2 = Random.Range (num1 + 1, 10);
 					int commonRatio = Random.Range (2, 10);
@@ -411,7 +393,7 @@ namespace Cerebro {
 				} else if (selector == 3) {    										// express as proportion
 					
 					subQuestionText.gameObject.SetActive (false);
-					isProportion = 1;
+					isProportion = true;
 					int num1 = Random.Range (2, 6);
 					int num2 = Random.Range (num1 + 1, 10);
 					int commonRatio = Random.Range (2, 10);

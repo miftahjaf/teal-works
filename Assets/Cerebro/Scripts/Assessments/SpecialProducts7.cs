@@ -956,11 +956,11 @@ namespace Cerebro
 						coeff2 = Random.Range (2, 10);
 
 					QuestionText.text = "What must be added to the middle term of the given equation to make it a perfect square expression?";
-					subQuestionTEX.text = (coeff1 * coeff1) + "x^{2} + " + coeff3 + "xy + " + (coeff2 * coeff2) + "y^{2}";
+					subQuestionTEX.text = (coeff1 * coeff1) + "x^{2} + " + (coeff3 == 1? "" : coeff3.ToString ()) + "xy + " + (coeff2 * coeff2) + "y^{2}";
 
 					options.Add ((coeff1 * coeff2 * 2 - coeff3) + "xy");
-					options.Add (" - " + coeff3 + "xy");
-					options.Add ((coeff3 * coeff3 - coeff3) + "xy");
+					options.Add (" - " + (coeff3 == 1? "" : coeff3.ToString ()) + "xy");
+					options.Add (coeff3 == 1 ? "0" : ((coeff3 * coeff3 - coeff3) + "xy"));
 					options.Add (" - " + (3 * coeff3) + "xy");
 
                 }
@@ -977,8 +977,8 @@ namespace Cerebro
 					QuestionText.text = "What must be subtracted from the middle term of the given equation to make it a perfect square expression?";
 					subQuestionTEX.text = (coeff1 * coeff1) + "x^{2} + " + coeff3 + "\\frac{x}{y} + \\frac{1}{" + (coeff1 * coeff1) + "y^{2}}";
 
-					options.Add ((coeff3 - 2) + "\\frac{x}{y}");
-					options.Add ((2 - coeff3) + "\\frac{x}{y}");
+					options.Add ((coeff3 == 3 ? "" : (coeff3 - 2).ToString ()) + "\\frac{x}{y}");
+					options.Add ((coeff3 == 3 ? "-" : (2 - coeff3).ToString ()) + "\\frac{x}{y}");
 					options.Add ("-" + coeff3 + "\\frac{x}{y}");
 					options.Add (coeff3 + "\\frac{x}{y}");
 
