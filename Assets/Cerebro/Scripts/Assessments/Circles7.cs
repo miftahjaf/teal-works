@@ -23,7 +23,6 @@ namespace Cerebro {
 		private string Lunit;
 		private const float PIvalue = 3.14f;
 		private const char PIchar = 'π';
-		private bool hasMultipleAnswers;
 
 		public TEXDraw subQuestionTEX;
 		public Text subQuestionText;
