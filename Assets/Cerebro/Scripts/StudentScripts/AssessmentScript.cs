@@ -48,6 +48,8 @@ namespace Cerebro
 
 
 		public Text testingText;
+		public Button regenButton;
+		public bool shouldRegenQuestion;
 		// Use this for initialization
 		void Start ()
 		{
@@ -98,8 +100,10 @@ namespace Cerebro
 
 			if (testMode) {
 				testingText.gameObject.SetActive (true);
+				regenButton.gameObject.SetActive (!WelcomeScript.instance.testingAllScreens);
 			} else {
 				testingText.gameObject.SetActive (false);
+				regenButton.gameObject.SetActive (false);
 			}
 			if (WelcomeScript.instance && WelcomeScript.instance.testingAllScreens) {
 				StartCoroutine (startChapters ());
@@ -465,10 +469,18 @@ namespace Cerebro
 		}
 
 		public void TestingButtonPressed() {
-			if (baseAssessment != null) {
+			if (baseAssessment != null && !shouldRegenQuestion) {
 				baseAssessment.TestNextQuestion ();
 			}
 		}
+
+		public void RegenButtonPressed() {
+			if (baseAssessment != null) {
+				shouldRegenQuestion = true;
+				baseAssessment.TestNextQuestion ();
+			}
+		}
+
 
 //		public static bool NeedNewChapter = true;
 //		public static string currChapter = "";

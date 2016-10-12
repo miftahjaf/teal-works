@@ -331,18 +331,37 @@ namespace Cerebro {
 			}
 			else if (testMode && testQuestionLevel <= scorestreaklvls.Length)
 			{
-				if (testSelector+lowerLimit < upperLimit) {
-					testSelector++;
+				//if (testSelector+lowerLimit < upperLimit)
+				//{
+					
+					if (parentAssessmentScript != null && !parentAssessmentScript.shouldRegenQuestion)
+					{
+						if (testSelector + lowerLimit >= upperLimit) {
+							testSelector = 1;
+							testQuestionLevel++;
+							if (!WelcomeScript.instance.testingAllScreens) 
+							{
+								if (testQuestionLevel > scorestreaklvls.Length) 
+								{
+									testQuestionLevel = 1;
+								}
+							}
+						} else {
+							testSelector++;
+						}
+						
+					} 
+
+				
 					int returnSelector = (testSelector + lowerLimit) - 1;
 					if (parentAssessmentScript != null) {
+					parentAssessmentScript.shouldRegenQuestion = false;
 						parentAssessmentScript.testingText.text = testQuestionLevel.ToString () + "t" + testSelector.ToString ();
 					}
-					if(testSelector+lowerLimit == upperLimit) {
-						testSelector = 0;
-						testQuestionLevel++;
-					}
+					
+
 					randomSelector = returnSelector;
-				}
+				//}
 			}
 
 			if (isRevisitedQuestion) {
