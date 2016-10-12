@@ -75,7 +75,7 @@ namespace Cerebro {
 		public string KCID = "";
 		private List<string> KCMappings;
 
-		private int currentMappingIndex;
+		private int currentMappingIndex ;
 		private string currenKCMapping;
 
 		private bool isQuestionStarted;
@@ -113,7 +113,7 @@ namespace Cerebro {
 
 		private void LoadKnowledgeComponentMappings()
 		{
-			currentMappingIndex = 0;
+			currentMappingIndex = -1;
 			KCMappings = new List<string> ();
 
 			if (!string.IsNullOrEmpty(practiceID) && !string.IsNullOrEmpty(KCID)) 
@@ -133,22 +133,32 @@ namespace Cerebro {
 
 		private string GetKCMapping()
 		{ 
-			foreach (string s in KCMappings) 
-			{
-				Debug.Log ("Mapping " + s);
-			}
-
 			if (this.KCMappings.Count > 0 )
 			{
 				int index = 0;
 				if (testMode)
 				{
-					index = currentMappingIndex;
-					currentMappingIndex++;
-					if (currentMappingIndex >= this.KCMappings.Count) 
+					
+					if (parentAssessmentScript != null)
 					{
-						currentMappingIndex = 0;
+						if (!parentAssessmentScript.shouldRegenQuestion)
+						{
+							if (currentMappingIndex >= this.KCMappings.Count - 1) 
+							{
+								currentMappingIndex = 0;
+							}
+							else 
+							{
+								currentMappingIndex++;
+							}
+						}
+						else
+						{
+							parentAssessmentScript.shouldRegenQuestion = false;
+						}
 					}
+					index = currentMappingIndex;
+
 				}
 				else 
 				{
