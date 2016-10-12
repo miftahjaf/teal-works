@@ -8,7 +8,7 @@ namespace Cerebro {
 	public class Circles7 : BaseAssessment {
 
 		private string Answer;
-		private string alternateAnswer;
+		private List<string> alternateAnswers;
 		private float radius;
 		private float radiusForFigure;
 		private float diameter;
@@ -16,13 +16,14 @@ namespace Cerebro {
 		private float area;
 		private float diaAngle;
 		private string[] expressions;
-		private string[] AnswerArray;
+		private string[] preDefinedAnswersArray;
 		private string[] alphabets;
 		private int randSelector;
 		private string[] Lunits = new string[] {" cm", " m", " ft", " inch"};
 		private string Lunit;
 		private const float PIvalue = 3.14f;
 		private const char PIchar = 'π';
+		private bool hasMultipleAnswers;
 
 		public TEXDraw subQuestionTEX;
 		public Text subQuestionText;
@@ -80,14 +81,7 @@ namespace Cerebro {
 				{
 					directCheck = true;
 				}
-				if (float.TryParse(alternateAnswer, out answer))
-				{
-					answer = float.Parse(alternateAnswer);
-				}
-				else
-				{
-					directCheck = true;
-				}
+
 				if (float.TryParse(userAnswerText.text, out userAnswer))
 				{
 					userAnswer = float.Parse(userAnswerText.text);
@@ -95,15 +89,15 @@ namespace Cerebro {
 				else
 				{
 					directCheck = true;
-					//correct = false;
 				}
+
 				if (answer != userAnswer)
 				{
 					correct = false;
 				}
 				if (directCheck)
 				{
-					if (userAnswerText.text == Answer || userAnswerText.text == alternateAnswer)
+					if (userAnswerText.text == Answer || alternateAnswers.Contains (userAnswerText.text))
 					{
 						correct = true;
 					}
@@ -238,6 +232,7 @@ namespace Cerebro {
 			subQuestionText.gameObject.SetActive (false);
 			diagramHelper.Reset ();
 			SetNumpadMode ();
+			alternateAnswers = new List<string> ();
 
 			for (int i = 1; i < 5; i++) {
 				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().color = MaterialColor.textDark;
@@ -258,7 +253,7 @@ namespace Cerebro {
 												"Diameter is the longest chord.",
 												"A circle has infinite diameters."};
 					
-					AnswerArray = new string[] {"False", "True", "True", "True"};
+					preDefinedAnswersArray = new string[] {"False", "True", "True", "True"};
 
 					randSelector = Random.Range (0, expressions.Length);
 
@@ -268,7 +263,7 @@ namespace Cerebro {
 					MCQ.transform.Find("Option1").Find("Text").GetComponent<Text>().text = "True";
 					MCQ.transform.Find("Option2").Find("Text").GetComponent<Text>().text = "False";
 
-					Answer = AnswerArray [randSelector];
+					Answer = preDefinedAnswersArray [randSelector];
 				}
 				else if (selector == 2) 
 				{
@@ -281,7 +276,7 @@ namespace Cerebro {
 												"A sector is a region bounded by two chords.",
 												"A quadrant is one-fourth of a circle."};
 
-					AnswerArray = new string[] {"False", "True", "True", "False", "True"};
+					preDefinedAnswersArray = new string[] {"False", "True", "True", "False", "True"};
 
 					randSelector = Random.Range (0, expressions.Length);
 
@@ -291,7 +286,7 @@ namespace Cerebro {
 					MCQ.transform.Find("Option1").Find("Text").GetComponent<Text>().text = "True";
 					MCQ.transform.Find("Option2").Find("Text").GetComponent<Text>().text = "False";
 
-					Answer = AnswerArray [randSelector];
+					Answer = preDefinedAnswersArray [randSelector];
 				}
 				else if (selector >= 3) 
 				{
@@ -340,13 +335,13 @@ namespace Cerebro {
 
 				if (selector == 1) 
 				{
-					expressions = new string[] {"diameter", "chord", "secant", "tangent"};
+					expressions = new string[] {"diameter", "chord", "secant", "tangent"}; // always put diameter at [0]
 					alphabets = new string[] {"A","B","C","D","E","F","G","H"};
 					alphabets.Shuffle ();  
-					AnswerArray = new string[] {alphabets[0] + alphabets[1], alphabets[2] + alphabets[3], alphabets[4] + alphabets[5], alphabets[6] + alphabets[7]}; 
+					preDefinedAnswersArray = new string[] {alphabets[0] + alphabets[1], alphabets[2] + alphabets[3], alphabets[4] + alphabets[5], alphabets[6] + alphabets[7]}; 
 					randSelector = Random.Range (0, expressions.Length);
 
-					radiusForFigure = 80f;
+					radiusForFigure = 70f;
 					diaAngle = 360 + Random.Range (-45, 45);
 					float chordAngle = diaAngle + Random.Range (70, 110);
 					float chordDistFromCenter = radiusForFigure - Random.Range (15, 35);
@@ -379,8 +374,16 @@ namespace Cerebro {
 					diagramHelper.ShiftPosition (new Vector2 (0, 20));
 
 					QuestionText.text = "Name the " + expressions [randSelector] + " of the given circle.";
-					Answer = AnswerArray [randSelector];
-					alternateAnswer = "" + AnswerArray [randSelector][1] + AnswerArray [randSelector][0];
+					Answer = preDefinedAnswersArray [randSelector];
+					alternateAnswers.Add ("" + preDefinedAnswersArray [randSelector][1] + preDefinedAnswersArray [randSelector][0]);
+
+					if (expressions [randSelector] == "chord")
+					{
+						QuestionText.text = "Name a " + expressions [randSelector] + " of the given circle.";
+
+						alternateAnswers.Add (alphabets[0] + alphabets[1]);
+						alternateAnswers.Add (alphabets[1] + alphabets[0]);
+					}
 				}
 				else if (selector >= 2) 
 				{
@@ -389,7 +392,7 @@ namespace Cerebro {
 					diameter = 2f * radius;
 					area = MathFunctions.GetRounded (PIvalue * radius * radius, 2);
 					circumference = MathFunctions.GetRounded (PIvalue * diameter, 2);
-					radiusForFigure = 90f;
+					radiusForFigure = 80f;
 					diaAngle = Random.Range (45, 135);
 
 					if (selector == 2 || selector == 4)
@@ -426,7 +429,7 @@ namespace Cerebro {
 					diameter = 2f * radius;
 					area = MathFunctions.GetRounded (PIvalue * radius * radius, 2);
 					circumference = MathFunctions.GetRounded (PIvalue * diameter, 2);
-					radiusForFigure = 90f;
+					radiusForFigure = 80f;
 					diaAngle = Random.Range (0, 360);
 
 					diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, diaAngle, false, radiusForFigure, 0).SetLineType(LineShapeType.Dotted));
@@ -436,12 +439,12 @@ namespace Cerebro {
 
 					if (selector == 1)
 					{
-						QuestionText.text = "Given area = " + area + " sq." + Lunit + ". Find the circumference (in" + Lunit + ").";
+						QuestionText.text = "Given area = " + area + " sq." + Lunit + ". Find the circumference (in" + Lunit + ", use " + PIchar + " = " + PIvalue + ").";
 						Answer = circumference.ToString ();
 					}
 					else
 					{
-						QuestionText.text = "Given circumference = " + circumference + Lunit + ". Find the area (in sq." + Lunit + ").";
+						QuestionText.text = "Given circumference = " + circumference + Lunit + ". Find the area (in sq." + Lunit + ", use " + PIchar + " = " + PIvalue + ").";
 						Answer = area.ToString ();
 					}	
 				}
@@ -454,14 +457,14 @@ namespace Cerebro {
 
 					if (selector == 3)
 					{
-						QuestionText.text = "The circumference of a paddy fied is " + circumference + Lunit + ". What is the area (in sq." + Lunit + ") of the paddy field?";
+						QuestionText.text = "The circumference of a paddy fied is " + circumference + Lunit + ". What is the area (in sq." + Lunit + ") of the paddy field (use " + PIchar + " = " + PIvalue + ")?";
 						Answer = area.ToString ();
 					}
 					else
 					{
 						randSelector = Random.Range (2, 10);
 
-						QuestionText.text = "If Nancy runs " + randSelector + " times around the corner of a circular park and covers a distance of " + (randSelector * circumference) + Lunit + ", what is the area (in sq." + Lunit + ") of the park?";
+						QuestionText.text = "If Nancy runs " + randSelector + " times along the boundary of a circular park and covers a distance of " + (randSelector * circumference) + Lunit + ", what is the area (in sq." + Lunit + ") of the park (use " + PIchar + " = " + PIvalue + ")?";
 						Answer = area.ToString ();
 					}
 				}
