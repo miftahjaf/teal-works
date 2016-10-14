@@ -400,6 +400,8 @@ namespace Cerebro {
 				Destroy (mainView);
 			}
 			LaunchList.instance.ScanTables ();
+			LaunchList.instance.mhasInternet = true;
+			LaunchList.instance.setWifiIcon ();
 
 			SplashScreen.SetActive (true);
 			GameObject splashText = SplashScreen.transform.Find ("Text").gameObject;
