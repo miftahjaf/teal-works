@@ -50,6 +50,9 @@ namespace Cerebro
 		public Text testingText;
 		public Button regenButton;
 		public bool shouldRegenQuestion;
+
+		private string currentQuestionMapping ="1t1";
+
 		// Use this for initialization
 		void Start ()
 		{
@@ -493,7 +496,8 @@ namespace Cerebro
 			if (WelcomeScript.instance.takingScreenshots) {
 				
 				string dirPath = Application.persistentDataPath + "/Screenshots/" + baseAssessment.assessmentName;
-				string path = dirPath + "/" + baseAssessment.testQuestionLevel + "t" + (baseAssessment.testSelector + 1) + ".png";
+				//string path = dirPath + "/" + baseAssessment.testQuestionLevel + "t" + (baseAssessment.testSelector + 1) + ".png";
+				string path = dirPath + "/" + baseAssessment.currentQuestionMapping + ".png";
 				if (!Directory.Exists (dirPath)) {
 					Directory.CreateDirectory (dirPath);
 				}

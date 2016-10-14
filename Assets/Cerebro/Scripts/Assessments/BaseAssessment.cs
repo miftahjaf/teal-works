@@ -79,7 +79,7 @@ namespace Cerebro {
 		private string currenKCMapping;
 
 		private bool isQuestionStarted;
-
+		private string currentQuestionMapping;
 
 		protected void Initialise(string subjectID, string topicID, string subTopicID, string assessmentID) {
 			parentAssessmentScript = gameObject.transform.parent.GetComponent<AssessmentScript> ();
@@ -263,18 +263,24 @@ namespace Cerebro {
 				}
 				if ((WelcomeScript.instance.autoTestMissionMix || WelcomeScript.instance.autoTestMissionCorrect) && CerebroHelper.isTestUser ())
 					StartCoroutine (autoCorrectMission ());
-			} 
-			else if (KCMappings.Count > 0)
-			{
+			} else if (KCMappings.Count > 0) {
 				string randomMapping = GetKCMapping ();
 				Debug.Log (randomMapping);
 				string[] spiltRandomMapping = randomMapping.Split (new char[]{ 't' }, System.StringSplitOptions.RemoveEmptyEntries);
-				Queslevel = int.Parse (spiltRandomMapping[0]);
-				forceSelector = int.Parse (spiltRandomMapping[1]);
+				Queslevel = int.Parse (spiltRandomMapping [0]);
+				forceSelector = int.Parse (spiltRandomMapping [1]);
 
 
 			}
+			else if (parentAssessmentScript != null && parentAssessmentScript.shouldRegenQuestion && !string.IsNullOrEmpty(currentQuestionMapping))
+			{
+				parentAssessmentScript.shouldRegenQuestion = false;
+				string[] spiltMapping = currentQuestionMapping.Split (new char[]{ 't' }, System.StringSplitOptions.RemoveEmptyEntries);
+				Queslevel = int.Parse (spiltMapping [0]);
+				forceSelector = int.Parse (spiltMapping [1]);
+			}
 			else if (testMode && scorestreaklvls != null) {
+				
 				Queslevel = testQuestionLevel;
 				if (Queslevel > scorestreaklvls.Length) {
 					if (WelcomeScript.instance.testingAllScreens) {
@@ -339,40 +345,33 @@ namespace Cerebro {
 					}
 				}
 			}
+		
 			else if (testMode && testQuestionLevel <= scorestreaklvls.Length)
 			{
-				//if (testSelector+lowerLimit < upperLimit)
-				//{
-					
-					if (parentAssessmentScript != null && !parentAssessmentScript.shouldRegenQuestion)
-					{
-						if (testSelector + lowerLimit >= upperLimit) {
-							testSelector = 1;
-							testQuestionLevel++;
-							if (!WelcomeScript.instance.testingAllScreens) 
-							{
-								if (testQuestionLevel > scorestreaklvls.Length) 
-								{
-									testQuestionLevel = 1;
-								}
-							}
-						} else {
-							testSelector++;
-						}
-						
-					} 
-
-				
+				if (testSelector+lowerLimit < upperLimit) 
+				{
+					testSelector++;
 					int returnSelector = (testSelector + lowerLimit) - 1;
 					if (parentAssessmentScript != null) {
-					parentAssessmentScript.shouldRegenQuestion = false;
-						parentAssessmentScript.testingText.text = testQuestionLevel.ToString () + "t" + testSelector.ToString ();
+						currentQuestionMapping = testQuestionLevel.ToString () + "t" + testSelector.ToString ();
+						parentAssessmentScript.testingText.text = currentQuestionMapping;
 					}
-					
+					if(testSelector+lowerLimit == upperLimit) {
+						testSelector = 0;
+						testQuestionLevel++;
 
+						if (!WelcomeScript.instance.testingAllScreens) 
+						{
+							if (testQuestionLevel > scorestreaklvls.Length) 
+							{
+								testQuestionLevel = 1;
+							}
+						}
+					}
 					randomSelector = returnSelector;
-				//}
+				}
 			}
+
 
 			if (isRevisitedQuestion) {
 				randomSeed = int.Parse (revisitedQuestionData ["seed"]);
@@ -387,7 +386,7 @@ namespace Cerebro {
 
 			}
 			Random.seed = randomSeed;
-
+			Debug.Log ("Random Selector " +randomSelector +"QuestionLevel "+Queslevel);
 			if (randomSelector == -1) {
 				randomSelector = Random.Range (lowerLimit, upperLimit);
 			}
