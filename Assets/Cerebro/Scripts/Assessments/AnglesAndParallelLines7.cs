@@ -312,14 +312,18 @@ namespace Cerebro
 				selector = GetRandomSelector(1, 6);
 				if (selector == 1)
 				{
-					coeff1 = Random.Range(2, 7) * Random.Range(2, 7);
+					coeff1 = Random.Range (2, 37);
+
+					while (720 % coeff1 != 0)
+						coeff1 = Random.Range (2, 37);
+						
 					QuestionLatext.text = "Calculate the measure of 1/" + coeff1 + " of a right angle.";
 					float ans = 90f/(float)coeff1;
 					this.SetAnswerValue(new float[]{ans});
 				}
 				else if (selector == 2)
 				{
-					coeff1 = 10 * Random.Range(2,36);
+					coeff1 = 10 * Random.Range(2, 36);
 					if (coeff1 == 180 || coeff1 >= 270)
 						coeff1 = 90;
 					QuestionLatext.text = "If \\angle{A} = " + coeff1 + MathFunctions.deg + ", what type of angle is \\angle{A}?";
