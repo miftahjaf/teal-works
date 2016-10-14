@@ -90,9 +90,9 @@ namespace Cerebro {
 					directCheck = true;
 				}
 
-				if (answer != userAnswer)
+				if (answer == userAnswer)
 				{
-					correct = false;
+					correct = true;
 				}
 				if (directCheck)
 				{
