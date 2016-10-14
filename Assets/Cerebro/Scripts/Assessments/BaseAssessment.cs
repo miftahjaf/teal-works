@@ -79,7 +79,7 @@ namespace Cerebro {
 		private string currenKCMapping;
 
 		private bool isQuestionStarted;
-		private string currentQuestionMapping;
+		public string currentQuestionMapping;
 
 		protected void Initialise(string subjectID, string topicID, string subTopicID, string assessmentID) {
 			parentAssessmentScript = gameObject.transform.parent.GetComponent<AssessmentScript> ();
