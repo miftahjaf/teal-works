@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using SimpleJSON;
 
 namespace Cerebro
 {
@@ -11,6 +12,7 @@ namespace Cerebro
 	{
 		private GameObject childrenView;
 		private GameObject profileScreenView;
+//		private GameObject DailyView;
 
 		[SerializeField]
 		private GameObject FeatureSection;
@@ -72,7 +74,18 @@ namespace Cerebro
 			this.gameObject.name = "WelcomeScreen";
 
 			m_Instance = this;
+
+//			StartCoroutine (ShowDailyView());
 		}
+
+//		IEnumerator ShowDailyView()
+//		{
+//			yield return new WaitForSeconds (0.1f);
+//			DailyView = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Daily, MainView.transform);
+//			DailyView.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (300f, 110f);
+//			DailyView.transform.SetAsLastSibling ();
+//			DailyView.GetComponent<DailyView> ().Initialize ();
+//		}
 
 		public void ProfileImagePressed ()
 		{
@@ -214,7 +227,11 @@ namespace Cerebro
 			string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
 			FetchFeatureData (forDate);
 
-			PracticeData.PopulateFromFile ();
+			if (LaunchList.instance.mUseJSON) {
+				PracticeData.PopulateFromFileJSON ();
+			} else {
+				PracticeData.PopulateFromFile ();
+			}
 
 			ShowScreen (false, null, true);
 		}
@@ -273,26 +290,31 @@ namespace Cerebro
 			} else {
 				qotdData.text = (24 - hr).ToString () + " hours left";
 			}
-			int revisitQuestionCount = LaunchList.instance.GetFlaggedQuestions ().Count;
+			int revisitQuestionCount = 0;
+			if(LaunchList.instance.mUseJSON) {
+				revisitQuestionCount = LaunchList.instance.GetFlaggedQuestionsJSON ().Count;
+			} else {
+				revisitQuestionCount = LaunchList.instance.GetFlaggedQuestions ().Count;
+			}
 			revisitData.text = revisitQuestionCount.ToString () + " flagged questions";
 
 			List<string> allVideos = LaunchList.instance.GetWatchList ();
-			List<string> watchedVideos = GetWatchedVideos ();
+			List<string> watchedVideos = GetWatchedVideosJSON ();
 			foreach (var id in watchedVideos) {
 				allVideos.Remove (id);
 			}
 			watchData.text = allVideos.Count.ToString () + " unwatched videos";
 
-			Dictionary<string,string> imageIDDict = LaunchList.instance.GetNextImageID ();
+			Dictionary<string,string> imageIDDict = LaunchList.instance.GetNextImageIDJSON ();
 			string imageID = imageIDDict ["imageID"];
 			bool fetchBool = imageIDDict ["fetchBool"] == "true" ? true : false;
-			if (LaunchList.instance.CheckForSubmittedImageResponses (imageID) && !fetchBool) {
+			if (LaunchList.instance.CheckForSubmittedImageResponsesJSON (imageID) && !fetchBool) {
 				wcData.text = "Submitted";
 			} else {
 				wcData.text = "Pending";
 			}
 
-//			Dictionary<string,string> VerbalizeIDDict = LaunchList.instance.GetNextVerbalizeID ();
+//			Dictionary<string,string> VerbalizeIDDict = LaunchList.instance.GetNextVerbalizeIDJSON ();
 //			string VerbalizeID = VerbalizeIDDict ["VerbalizeID"];
 //			bool fetchBoolVerb = VerbalizeIDDict ["fetchBoolVerb"] == "true" ? true : false;
 //			if (LaunchList.instance.CheckForSubmittedVerbalize (VerbalizeID) > -1 && !fetchBoolVerb) {
@@ -303,7 +325,11 @@ namespace Cerebro
 			verbData.text = "Read out aloud";
 
 			string today = System.DateTime.Now.ToString ("yyyyMMdd");
-			practiceData.text = GetPracticeCount (today)["attempts"].ToString () + " questions solved";
+			if (LaunchList.instance.mUseJSON) {
+				practiceData.text = GetPracticeCountJSON (today) ["attempts"].ToString () + " questions solved";
+			} else {
+				practiceData.text = GetPracticeCount (today) ["attempts"].ToString () + " questions solved";
+			}
 		}
 
 		public Dictionary<string,int> GetPracticeCount (string date)
@@ -325,6 +351,38 @@ namespace Cerebro
 				sr.Close ();
 			}
 			Dictionary<string,int> dict = new Dictionary<string,int> ();
+			dict.Add ("attempts", totalAttempts);
+			dict.Add ("correct", totalCorrect);
+			return dict;
+		}
+
+		public Dictionary<string,int> GetPracticeCountJSON (string date)
+		{
+			Dictionary<string,int> dict = new Dictionary<string,int> ();
+			if (!LaunchList.instance.mUseJSON) {
+				dict = GetPracticeCount (date);
+				return dict;
+			}
+
+			string fileName = Application.persistentDataPath + "/PracticeCountJSON.txt";
+			if (!File.Exists (fileName))
+				return null;
+			
+			int totalAttempts = 0;
+			int totalCorrect = 0;
+			if (File.Exists (fileName)) {
+				string data = File.ReadAllText (fileName);
+				if (!LaunchList.instance.IsJsonValidDirtyCheck (data)) {
+					return null;
+				}
+				JSONNode N = JSONClass.Parse (data);
+				for (int i = 0; i < N ["Data"].Count; i++) {
+					if (N ["Data"] [i] ["date"].Value == date) {
+						totalAttempts = N ["Data"] [i] ["attempts"].AsInt;
+						totalCorrect = N ["Data"] [i] ["correct"].AsInt;
+					}
+				}
+			}
 			dict.Add ("attempts", totalAttempts);
 			dict.Add ("correct", totalCorrect);
 			return dict;
@@ -355,6 +413,36 @@ namespace Cerebro
 
 		}
 
+		public Dictionary<string,int> GetPracticeQuestionsDataJSON ()
+		{
+			Dictionary<string,int> dict = new Dictionary<string,int> ();
+			if (!LaunchList.instance.mUseJSON) {
+				dict = GetPracticeQuestionsData ();
+				return dict;
+			}
+
+			string fileName = Application.persistentDataPath + "/PracticeDataJSON.txt";
+			if (!File.Exists (fileName))
+				return null;
+			
+			int totalAttempts = 0;
+			int totalCorrect = 0;
+			if (File.Exists (fileName)) {
+				string data = File.ReadAllText (fileName);
+				if (!LaunchList.instance.IsJsonValidDirtyCheck (data)) {
+					return null;
+				}
+				JSONNode N = JSONClass.Parse (data);
+				for (int i = 0; i < N ["Data"].Count; i++) {
+					totalAttempts += N ["Data"] [i] ["attempts"].AsInt;
+					totalCorrect += N ["Data"] [i] ["correct"].AsInt;
+				}
+			}
+			dict.Add ("attempts", totalAttempts);
+			dict.Add ("correct", totalCorrect);
+			return dict;
+		}
+
 		public List<string> GetWatchedVideos ()
 		{
 			List<string> watchedVideos = new List<string> ();
@@ -374,6 +462,28 @@ namespace Cerebro
 				sr.Close ();
 			} else {
 				CerebroHelper.DebugLog ("Could not Open the file: " + fileName + " for reading.");
+			}
+			return watchedVideos;
+		}
+
+		public List<string> GetWatchedVideosJSON ()
+		{
+			List<string> watchedVideos = new List<string> ();
+			if (!LaunchList.instance.mUseJSON) {
+				watchedVideos = GetWatchedVideos ();
+				return watchedVideos;
+			}
+				
+			string fileName = Application.persistentDataPath + "/WatchedVideosJSON.txt";
+			if (!File.Exists (fileName))
+				return watchedVideos;
+
+			string data = File.ReadAllText (fileName);
+			if (LaunchList.instance.IsJsonValidDirtyCheck (data)) {
+				JSONNode N = JSONClass.Parse (data);
+				for (int i = 0; i < N ["Data"].Count; i++) {
+					watchedVideos.Add (N ["Data"] [i].Value);
+				}
 			}
 			return watchedVideos;
 		}

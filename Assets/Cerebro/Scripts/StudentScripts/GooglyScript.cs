@@ -173,9 +173,9 @@ namespace Cerebro
 				foreach (var str in missionQuestionIds) {
 					missionString = missionString + "@" + str;
 				}
-				Cerebro.LaunchList.instance.WriteAnalyticsToFile (assessKey, int.Parse(currentQuestion.QuestionLevel), correct, day, TimeStarted, Mathf.FloorToInt (diff), "0", -1, missionString);  
+				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, int.Parse(currentQuestion.QuestionLevel), correct, day, TimeStarted, Mathf.FloorToInt (diff), "0", -1, missionString);  
 			} else {
-				Cerebro.LaunchList.instance.WriteAnalyticsToFile (assessKey, int.Parse(currentQuestion.QuestionLevel), correct, day, TimeStarted, Mathf.FloorToInt (diff), "0", -1, " ");  
+				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, int.Parse(currentQuestion.QuestionLevel), correct, day, TimeStarted, Mathf.FloorToInt (diff), "0", -1, " ");  
 			}
 		}
 
@@ -186,7 +186,7 @@ namespace Cerebro
 				foreach (var item in LaunchList.instance.mMission.Questions) {
 					if (currentQuestion.QuestionID == item.Value.QuestionID) {
 						missionQuestionIDs.Add (item.Value.QuestionID);
-						LaunchList.instance.UpdateLocalMissionFile (item.Value, item.Value.QuestionID, isCorrect);
+						LaunchList.instance.UpdateLocalMissionFileJSON (item.Value, item.Value.QuestionID, isCorrect);
 					}
 				}
 			}

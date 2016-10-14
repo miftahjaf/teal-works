@@ -5,6 +5,7 @@ using System.Linq;
 using MaterialUI;
 using UnityEngine.UI;
 using System.IO;
+using SimpleJSON;
 
 namespace Cerebro {
 
@@ -253,27 +254,19 @@ namespace Cerebro {
 		}
 
 		Dictionary<string,string> GetPropertiesFromFile() {
-			string fileName = Application.persistentDataPath + "/Properties.txt";
+			string fileName = Application.persistentDataPath + "/PropertiesJSON.txt";
 
 			Dictionary<string,string> properties = new Dictionary<string,string> ();
 
 			if(File.Exists(fileName)){
-				var sr = File.OpenText(fileName);
-				var line = sr.ReadLine();
-				string[] splitArr;
-				if (line != null) {
-					splitArr = line.Split ("," [0]);
-					properties.Add (splitArr [0], splitArr [1]);
+				string data = File.ReadAllText (fileName);
+				if (!LaunchList.instance.IsJsonValidDirtyCheck (data)) {
+					return null;
 				}
-
-				while(line != null){
-					line = sr.ReadLine();
-					if (line != null) {
-						splitArr = line.Split ("," [0]);
-						properties.Add (splitArr [0], splitArr [1]);
-					}
-				}  
-				sr.Close ();
+				JSONNode N = JSONClass.Parse (data);
+				for (int i = 0; i < N ["Data"].Count; i++) {
+					properties.Add (N["Data"][i]["property_name"].Value, N["Data"][i]["property_value"].Value);
+				}
 			}
 			return properties;	
 		}
@@ -504,7 +497,7 @@ namespace Cerebro {
 		public void SendUsageAnalytics() {
 			if (PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
 				string studentid = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
-				List<Telemetry> listToSend = CerebroAnalytics.instance.GetNextLogsToSend ();
+				List<Telemetry> listToSend = CerebroAnalytics.instance.GetNextLogsToSendJSON ();
 				if(listToSend != null && listToSend.Count != 0) {
 					HTTPRequestHelper.instance.SendTelemetry (studentid, listToSend);
 				}

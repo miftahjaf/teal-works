@@ -216,10 +216,10 @@ namespace Cerebro
 			CreatePostRequestByteArray (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
 					CerebroHelper.DebugLog ("Added new row");
-					LaunchList.instance.WriteSentAnalytics (assessmentID);
+					LaunchList.instance.WriteSentAnalyticsJSON (assessmentID);
 				} else {
 					CerebroHelper.DebugLog ("Error in request");
-					LaunchList.instance.WriteAnalyticsToFile (assessmentID, int.Parse (difficulty), correct, day, timeStarted, int.Parse (timeTaken), playTime, int.Parse (seed), missionField, UserAnswer, true);
+					LaunchList.instance.WriteAnalyticsToFileJSON (assessmentID, int.Parse (difficulty), correct, day, timeStarted, int.Parse (timeTaken), playTime, int.Parse (seed), missionField, UserAnswer, true);
 				}
 			});
 		}
@@ -965,7 +965,7 @@ namespace Cerebro
 
 		public void GetProperties ()
 		{
-			string fileName = Application.persistentDataPath + "/Properties.txt";
+			string fileName = Application.persistentDataPath + "/PropertiesJSON.txt";
 			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 
 			try {
@@ -973,15 +973,19 @@ namespace Cerebro
 				form.AddField ("student_id", studentID);
 				CreatePostRequestSimpleJSON (SERVER_URL + "properties/get_properties", form, (jsonResponse) => {
 					if (jsonResponse != null && jsonResponse.ToString () != "") {
-						StreamWriter sr = File.CreateText (fileName);
-						for (int i = 0; i < jsonResponse.Count; i++) {
-							Properties p = new Properties ();
-							p.PropertyName = jsonResponse [i] ["property_name"].Value;
-							p.PropertyValue = jsonResponse [i] ["property_value"].Value;
-
-							sr.WriteLine (p.PropertyName + "," + p.PropertyValue);
-						}
-						sr.Close ();
+//						StreamWriter sr = File.CreateText (fileName);
+//						for (int i = 0; i < jsonResponse.Count; i++) {
+//							Properties p = new Properties ();
+//							p.PropertyName = jsonResponse [i] ["property_name"].Value;
+//							p.PropertyValue = jsonResponse [i] ["property_value"].Value;
+//
+//							sr.WriteLine (p.PropertyName + "," + p.PropertyValue);
+//						}
+						JSONNode N = JSONClass.Parse ("{\"Data\"}");
+						N["Data"] = jsonResponse;
+						N["VersionNumber"] = LaunchList.instance.VersionData;
+						File.WriteAllText (fileName, N.ToString());
+//						sr.Close ();
 						LaunchList.instance.GotProperties ();
 					} else {
 						CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
@@ -1036,12 +1040,12 @@ namespace Cerebro
 
 		public void GetEnglishImage ()
 		{
-			Dictionary<string,string> imageIDDict = LaunchList.instance.GetNextImageID ();
+			Dictionary<string,string> imageIDDict = LaunchList.instance.GetNextImageIDJSON ();
 			string imageID = imageIDDict ["imageID"];
 			bool fetchBool = imageIDDict ["fetchBool"] == "true" ? true : false;
 
 			CerebroHelper.DebugLog ("getting image " + imageID);
-			if (LaunchList.instance.CheckForSubmittedImageResponses (imageID) && !fetchBool) {
+			if (LaunchList.instance.CheckForSubmittedImageResponsesJSON (imageID) && !fetchBool) {
 				LaunchList.instance.GotEnglishImage ();
 				return;
 			}
@@ -1071,13 +1075,13 @@ namespace Cerebro
 
 		public void GetExplanation ()
 		{
-			string fileName = Application.persistentDataPath + "/Explanations.txt";
+			string fileName = Application.persistentDataPath + "/ExplanationsJSON.txt";
 
 			try {
 				WWWForm form = new WWWForm ();
 				CreatePostRequestSimpleJSON (SERVER_URL + "practice_item/get_practice_item_explanation", form, (jsonResponse) => {
 					if (jsonResponse != null && jsonResponse.ToString () != "") {
-						StreamWriter sr = File.CreateText (fileName);
+//						StreamWriter sr = File.CreateText (fileName);
 						for (int i = 0; i < jsonResponse.Count; i++) {
 							Explanation explanation = new Explanation ();
 							explanation.PracticeItemID = jsonResponse [i] ["practice_item_id"].Value;
@@ -1086,14 +1090,18 @@ namespace Cerebro
 							explanation.URL = jsonResponse [i] ["explanation_url"].Value;
 							explanation.ContentId = jsonResponse [i] ["content_id"].Value;
 							string key = explanation.PracticeItemID + "L" + explanation.Level + explanation.SubLevel;
-							sr.WriteLine (explanation.PracticeItemID + "," + explanation.Level + "," + explanation.SubLevel + "," + explanation.URL);
+//							sr.WriteLine (explanation.PracticeItemID + "," + explanation.Level + "," + explanation.SubLevel + "," + explanation.URL);
 							if (LaunchList.instance.mExplanation.ContainsKey (key)) {
 								LaunchList.instance.mExplanation [key] = explanation;
 							} else {
 								LaunchList.instance.mExplanation.Add (key, explanation);
 							}	
 						}
-						sr.Close ();
+//						sr.Close ();
+						JSONNode N = JSONClass.Parse ("{\"Data\"}");
+						N["Data"] = jsonResponse;
+						N["VersionNumber"] = LaunchList.instance.VersionData;
+						File.WriteAllText (fileName, N.ToString());
 					} else {
 						CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
 					}
@@ -1262,8 +1270,8 @@ namespace Cerebro
 					if (DescribeImageResponseSubmitted != null) {
 						DescribeImageResponseSubmitted.Invoke (this, null);
 					}
-					LaunchList.instance.SetLastImageID (LaunchList.instance.mDescribeImage.ImageID, System.DateTime.Now.ToString ("yyyyMMdd"));
-					LaunchList.instance.WriteImageResponseToFile (userResponse);
+					LaunchList.instance.SetLastImageIDJSON (LaunchList.instance.mDescribeImage.ImageID, System.DateTime.Now.ToString ("yyyyMMdd"));
+					LaunchList.instance.WriteImageResponseToFileJSON (userResponse);
 				} else {
 					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
 					SubmitDescribeImageResponse (studentID, ImageID, userResponse);
@@ -1293,7 +1301,7 @@ namespace Cerebro
 			CreatePostRequestByteArray (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
 					CerebroHelper.DebugLog ("Added new row");
-					LaunchList.instance.SetLastVerbalizeID (verb.VerbalizeID, System.DateTime.Now.ToString ("yyyyMMdd"));
+					LaunchList.instance.SetLastVerbalizeIDJSON (verb.VerbalizeID, System.DateTime.Now.ToString ("yyyyMMdd"));
 					verb.UploadedToServer = true;
 					Debug.Log (verb.VerbalizeDate + " " + verb.UserSubmitted + " " + verb.UserResponseURL + " " + verb.UploadedToServer);
 //					LaunchList.instance.WriteVerbalizeResponseToFile (verb);
@@ -1335,7 +1343,7 @@ namespace Cerebro
 			CreatePostRequestByteArray (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
 					CerebroHelper.DebugLog ("Added new row");
-					LaunchList.instance.SentQuizAnalytics (studentAndQuestionID, date);
+					LaunchList.instance.SentQuizAnalyticsJSON (studentAndQuestionID, date);
 				} else {
 					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
 				}
@@ -1419,10 +1427,10 @@ namespace Cerebro
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
 					string nextMissionId = jsonResponse ["return_data"] ["next_mission_id"].Value;
 					PlayerPrefs.SetString (PlayerPrefKeys.MissionID, nextMissionId);
-					LaunchList.instance.UpdateLocalMissionFileForCompletion (accuracy, true);
+					LaunchList.instance.UpdateLocalMissionFileForCompletionJSON (accuracy, true);
 				} else {
 					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
-					LaunchList.instance.UpdateLocalMissionFileForCompletion (accuracy, false);
+					LaunchList.instance.UpdateLocalMissionFileForCompletionJSON (accuracy, false);
 				}
 			});
 		}
@@ -1556,7 +1564,7 @@ namespace Cerebro
 			CreatePostRequestByteArray (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
 					CerebroHelper.DebugLog ("Telemetry sent succesfully!");
-					CerebroAnalytics.instance.CleanLocalLogFile (list);
+					CerebroAnalytics.instance.CleanLocalLogFileJSON (list);
 					CerebroScript.instance.SendUsageAnalytics ();
 				} else {
 					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");

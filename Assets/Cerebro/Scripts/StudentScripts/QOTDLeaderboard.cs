@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
 using System.IO;
+using SimpleJSON;
 
 namespace Cerebro {
 	public class QOTDLeaderboard : MonoBehaviour {
@@ -47,22 +48,38 @@ namespace Cerebro {
 			}
 
 			if (!foundIDBool) {
-				string fileName = Application.persistentDataPath + "/QuizSubmitted.txt";
-
-				if (File.Exists (fileName)) {
-					var sr = File.OpenText (fileName);
-					var line = sr.ReadLine ();
-					string[] splitArr;
-					string date = curQuizDate;
-					while (line != null) {
-						splitArr = line.Split ("," [0]);
-						if (date == splitArr [0]) {
-							MyScore.text = splitArr [3];
-							CerebroHelper.DebugLog ("here "+MyScore.text);
+				if (LaunchList.instance.mUseJSON) {
+					string fileName = Application.persistentDataPath + "/QuizSubmittedJSON.txt";
+					if (File.Exists (fileName)) {
+						string data = File.ReadAllText (fileName);
+						if (!LaunchList.instance.IsJsonValidDirtyCheck (data)) {
+							return;
 						}
-						line = sr.ReadLine ();
-					}  
-					sr.Close ();
+						JSONNode N = JSONClass.Parse (data);
+						for (int j = 0; j < N ["Data"].Count; j++) {
+							if (N ["Data"] [j] ["quizDate"].Value == curQuizDate) {
+								MyScore.text = N ["Data"] [j] ["score"].Value;
+							}
+						}
+					}
+				} else {
+					string fileName = Application.persistentDataPath + "/QuizSubmitted.txt";
+
+					if (File.Exists (fileName)) {
+						var sr = File.OpenText (fileName);
+						var line = sr.ReadLine ();
+						string[] splitArr;
+						string date = curQuizDate;
+						while (line != null) {
+							splitArr = line.Split ("," [0]);
+							if (date == splitArr [0]) {
+								MyScore.text = splitArr [3];
+								CerebroHelper.DebugLog ("here " + MyScore.text);
+							}
+							line = sr.ReadLine ();
+						}  
+						sr.Close ();
+					}
 				}
 			}
 

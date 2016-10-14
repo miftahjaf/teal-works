@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using SimpleJSON;
 
 namespace Cerebro
 {
@@ -57,11 +58,11 @@ namespace Cerebro
 			if (name != null && mCurrentScreen != name) {
 				ScreenClosed ();
 			} else if (name != null && mCurrentScreen == name) {
-				LogFileEntry ("Screen", mCurrentScreen, System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), screenTime.ToString ());
+				LogFileEntryJSON ("Screen", mCurrentScreen, System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), screenTime.ToString ());
 				screenTime = 0f;
 				mCurrentScreen = "";
 			} else if (mCurrentScreen != "") {
-				LogFileEntry ("Screen", mCurrentScreen, System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), screenTime.ToString ());
+				LogFileEntryJSON ("Screen", mCurrentScreen, System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), screenTime.ToString ());
 				screenTime = 0f;
 				mCurrentScreen = "";
 			}
@@ -70,13 +71,13 @@ namespace Cerebro
 		public void SessionStarted ()
 		{
 			sessionStart = System.DateTime.Now.ToUniversalTime ();
-			LogFileEntry ("Session", "Start", sessionStart.ToString ("yyyy-MM-ddTHH:mm:ss"));
+			LogFileEntryJSON ("Session", "Start", sessionStart.ToString ("yyyy-MM-ddTHH:mm:ss"));
 		}
 
 		public void SessionEnded ()
 		{
 			if (mCurrentScreen != "") {
-				LogFileEntry ("Screen", mCurrentScreen, System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), screenTime.ToString ());
+				LogFileEntryJSON ("Screen", mCurrentScreen, System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), screenTime.ToString ());
 				screenTime = 0f;
 				mCurrentScreen = "";
 			}
@@ -84,7 +85,7 @@ namespace Cerebro
 			System.TimeSpan differenceTime = sessionEnd.Subtract (sessionStart);
 			float diff = (float)differenceTime.TotalSeconds;
 			diff = Mathf.Floor (diff * 10.0f) / 10.0f;
-			LogFileEntry ("Session", "End", sessionEnd.ToString ("yyyy-MM-ddTHH:mm:ss"), diff.ToString ());
+			LogFileEntryJSON ("Session", "End", sessionEnd.ToString ("yyyy-MM-ddTHH:mm:ss"), diff.ToString ());
 		}
 
 		void LogFileEntry (string type, string description, string timestamp, string timeSpent = "0")
@@ -101,6 +102,33 @@ namespace Cerebro
 
 			sr.WriteLine ("{0},{1},{2},{3}", type, description, timestamp, timeSpent);
 			sr.Close ();
+		}
+
+		void LogFileEntryJSON (string type, string description, string timestamp, string timeSpent = "0")
+		{
+			if (!LaunchList.instance.mUseJSON) {
+				LogFileEntry (type, description, timestamp, timeSpent);
+				return;
+			}
+
+			string fileName = Application.persistentDataPath + "/UsageAnalyticsJSON.txt";
+			if (!File.Exists (fileName))
+				return;
+			
+			int cnt = 0;
+			JSONNode N = JSONClass.Parse ("{\"Data\"}");
+			if (File.Exists (fileName)) {				
+				string data = File.ReadAllText (fileName);
+				N = JSONClass.Parse (data);
+				cnt = N ["Data"].Count;
+				File.WriteAllText (fileName, string.Empty);
+			}
+			N ["Data"] [cnt] ["type"] = type;
+			N ["Data"] [cnt] ["description"] = description;
+			N ["Data"] [cnt] ["timestamp"] = timestamp;
+			N ["Data"] [cnt] ["timeSpent"] = timeSpent;
+			N ["VersionNumber"] = LaunchList.instance.VersionData;
+			File.WriteAllText (fileName, N.ToString());
 		}
 
 		public void CleanLocalLogFile (List<Telemetry> list)
@@ -132,6 +160,43 @@ namespace Cerebro
 			sr.Close ();
 		}
 
+		public void CleanLocalLogFileJSON (List<Telemetry> list)
+		{
+			if (!LaunchList.instance.mUseJSON) {
+				CleanLocalLogFile (list);
+				return;
+			}
+
+			string fileName = Application.persistentDataPath + "/UsageAnalyticsJSON.txt";
+			if (!File.Exists (fileName))
+				return;
+			
+			string data = File.ReadAllText (fileName);
+			if (!LaunchList.instance.IsJsonValidDirtyCheck (data)) {
+				return;
+			}
+			JSONNode CurrLocal = JSONClass.Parse (data);
+			JSONNode NextLocal = JSONClass.Parse ("{\"Data\"}");
+
+			List<string> timestamps = new List<string> ();
+			foreach (var item in list) {
+				timestamps.Add (item.Timestamp);
+			}
+
+			int cnt = 0;
+			for (int i = 0; i < CurrLocal ["Data"].Count; i++) {
+				if (timestamps.Contains(CurrLocal ["Data"] [cnt] ["timestamp"].Value)) {
+					NextLocal ["Data"] [cnt] ["type"] = CurrLocal ["Data"] [cnt] ["type"].Value;
+					NextLocal ["Data"] [cnt] ["description"] = CurrLocal ["Data"] [cnt] ["description"].Value;
+					NextLocal ["Data"] [cnt] ["timestamp"] = CurrLocal ["Data"] [cnt] ["timestamp"].Value;
+					NextLocal ["Data"] [cnt] ["timeSpent"] = CurrLocal ["Data"] [cnt] ["timeSpent"].Value;
+					cnt++;
+				}
+			}
+			NextLocal ["VersionNumber"] = CurrLocal ["VersionNumber"].Value;
+			File.WriteAllText (fileName, NextLocal.ToString());
+		}
+
 		public List<Telemetry> GetNextLogsToSend ()
 		{
 			string fileName = Application.persistentDataPath + "/UsageAnalytics.txt";
@@ -151,6 +216,35 @@ namespace Cerebro
 					line = sreader.ReadLine ();
 				}
 				sreader.Close ();
+			}
+			return list;
+		}
+
+		public List<Telemetry> GetNextLogsToSendJSON ()
+		{
+			List<Telemetry> list = new List<Telemetry> ();
+
+			if (!LaunchList.instance.mUseJSON) {
+				list = GetNextLogsToSend ();
+				return list;
+			}
+
+			string fileName = Application.persistentDataPath + "/UsageAnalyticsJSON.txt";
+			if (!File.Exists (fileName))
+				return null;
+			
+			string data = File.ReadAllText (fileName);
+			if (!LaunchList.instance.IsJsonValidDirtyCheck (data)) {
+				return null;
+			}
+			JSONNode N = JSONClass.Parse (data);
+			for (int i = 0; i < N ["Data"].Count; i++) {
+				Telemetry row = new Telemetry ();
+				row.Type = N ["Data"] [i] ["type"].Value;
+				row.Description = N ["Data"] [i] ["description"].Value;
+				row.Timestamp = N ["Data"] [i] ["timestamp"].Value;
+				row.TimeSpent = N ["Data"] [i] ["timeSpent"].Value;
+				list.Add (row);
 			}
 			return list;
 		}

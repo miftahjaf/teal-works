@@ -46,20 +46,34 @@ namespace Cerebro {
 				topicIDs.Add (items.Value.PracticeID);
 			}
 
-			List<string> rawQuestions = LaunchList.instance.GetFlaggedQuestions();
-			rawQuestions.Reverse ();
-			flaggedQuestions = new List<FlaggedQuestion> ();
-			for (var i = 0; i < rawQuestions.Count; i++) {
-				var question = new FlaggedQuestion ();
-				var splitArray = rawQuestions [i].Split ("," [0]);
-				question.AssessmentItemID = splitArray[0];
-				question.Difficulty = splitArray[1];
-				question.SubLevel = splitArray[2];
-				question.RandomSeed = splitArray[3];
-				for (var j = 0; j < topicIDs.Count; j++) {
-					if (question.AssessmentItemID.Contains (topicIDs [j])) {
-						flaggedQuestions.Add (question);
-						break;
+			if (LaunchList.instance.mUseJSON) {
+				List<FlaggedQuestion> rawQuestions = LaunchList.instance.GetFlaggedQuestionsJSON ();
+				rawQuestions.Reverse ();
+				flaggedQuestions = new List<FlaggedQuestion> ();
+				for (var i = 0; i < rawQuestions.Count; i++) {
+					for (var j = 0; j < topicIDs.Count; j++) {
+						if (rawQuestions [i].AssessmentItemID.Contains (topicIDs [j])) {
+							flaggedQuestions.Add (rawQuestions [i]);
+							break;
+						}
+					}
+				}
+			} else {
+				List<string> rawQuestions = LaunchList.instance.GetFlaggedQuestions ();
+				rawQuestions.Reverse ();
+				flaggedQuestions = new List<FlaggedQuestion> ();
+				for (var i = 0; i < rawQuestions.Count; i++) {
+					var question = new FlaggedQuestion ();
+					var splitArray = rawQuestions [i].Split ("," [0]);
+					question.AssessmentItemID = splitArray [0];
+					question.Difficulty = splitArray [1];
+					question.SubLevel = splitArray [2];
+					question.RandomSeed = splitArray [3];
+					for (var j = 0; j < topicIDs.Count; j++) {
+						if (question.AssessmentItemID.Contains (topicIDs [j])) {
+							flaggedQuestions.Add (question);
+							break;
+						}
 					}
 				}
 			}
@@ -219,11 +233,11 @@ namespace Cerebro {
 		public void FlagButtonPressed() {
 			var buttonText = FlagButton.transform.Find ("Text").gameObject.GetComponent<Text> ();
 			if (buttonText.text == "Flag") {
-				LaunchList.instance.WriteFlaggedQuestionToFile (flaggedQuestions [currentQuestion].AssessmentItemID, int.Parse(flaggedQuestions [currentQuestion].Difficulty), int.Parse(flaggedQuestions [currentQuestion].SubLevel),int.Parse(flaggedQuestions [currentQuestion].RandomSeed));
+				LaunchList.instance.WriteFlaggedQuestionToFileJSON (flaggedQuestions [currentQuestion].AssessmentItemID, int.Parse(flaggedQuestions [currentQuestion].Difficulty), int.Parse(flaggedQuestions [currentQuestion].SubLevel),int.Parse(flaggedQuestions [currentQuestion].RandomSeed));
 				buttonText.text = "Unflag";
 			} else {
 				buttonText.text = "Flag";
-				LaunchList.instance.RemoveFlaggedQuestionFromFile (flaggedQuestions [currentQuestion].AssessmentItemID);
+				LaunchList.instance.RemoveFlaggedQuestionFromFileJSON (flaggedQuestions [currentQuestion].AssessmentItemID);
 			}
 		}
 		public void BackPressed() {

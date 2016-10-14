@@ -37,7 +37,7 @@ namespace Cerebro
 			int maxValue = 0;
 			for (var i = 0; i < 7; i++) {
 				System.DateTime date = todayDate.AddDays (-1 * i);
-				Dictionary<string,int> data = WelcomeScript.instance.GetPracticeCount (date.ToString ("yyyyMMdd"));
+				Dictionary<string,int> data = WelcomeScript.instance.GetPracticeCountJSON (date.ToString ("yyyyMMdd"));
 				dates.Add (date.ToString ("yyyyMMdd"));
 				Correct.Add (data ["correct"]);
 				Attempts.Add (data ["attempts"]);

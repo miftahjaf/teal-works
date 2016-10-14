@@ -121,14 +121,18 @@ namespace Cerebro
 
 		public void QuestionEnded (bool isCorrect, int difficulty, int _increment, string assessKey, int randomSeed, int sublevel, string UserAnswer = "")
 		{
-			AddToPracticeCount (isCorrect);
+			AddToPracticeCountJSON (isCorrect);
 			timeend = Time.realtimeSinceStartup;
 			timetaken = timeend - timeini;
 			string day = System.DateTime.Now.ToUniversalTime().ToString ("yyyyMMdd");
 
 			string practiceID = mPracticeID;
 
-			PracticeData.UpdateLocalFile (practiceID, isCorrect);
+			if (LaunchList.instance.mUseJSON) {
+				PracticeData.UpdateLocalFileJSON (practiceID, isCorrect);
+			} else {
+				PracticeData.UpdateLocalFile (practiceID, isCorrect);
+			}
 			List<string> missionQuestionIds = CheckMissions (isCorrect, difficulty, sublevel, practiceID);
 
 			if (missionQuestionIds.Count != 0) {
@@ -136,9 +140,9 @@ namespace Cerebro
 				foreach (var str in missionQuestionIds) {
 					missionString = missionString + "@" + str;
 				}
-				Cerebro.LaunchList.instance.WriteAnalyticsToFile (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, missionString, UserAnswer);  
+				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, missionString, UserAnswer);  
 			} else {
-				Cerebro.LaunchList.instance.WriteAnalyticsToFile (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, " ", UserAnswer);  
+				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, " ", UserAnswer);  
 			}
 
 			if (isCorrect) {
@@ -218,7 +222,7 @@ namespace Cerebro
 
 						if (foundInMission) {
 							missionQuestionIDs.Add (item.Value.QuestionID);
-							LaunchList.instance.UpdateLocalMissionFile (item.Value, item.Value.QuestionID, isCorrect);
+							LaunchList.instance.UpdateLocalMissionFileJSON (item.Value, item.Value.QuestionID, isCorrect);
 						}
 					}
 				}
@@ -469,6 +473,62 @@ namespace Cerebro
 				writesr.WriteLine (str);
 			}
 			writesr.Close();
+		}
+
+		void AddToPracticeCountJSON(bool isCorrect) {
+			if (!LaunchList.instance.mUseJSON) {
+				AddToPracticeCount (isCorrect);
+				return;
+			}
+
+			string fileName = Application.persistentDataPath + "/PracticeCountJSON.txt";
+			if (!File.Exists (fileName))
+				return;
+
+			string today = System.DateTime.Now.ToString ("yyyyMMdd");
+			JSONNode N = JSONClass.Parse ("{\"Data\"}");
+			JSONNode N1 = JSONClass.Parse ("{\"Data\"}");
+			if (File.Exists (fileName)) {				
+				string data = File.ReadAllText (fileName);
+				N = JSONClass.Parse (data);
+				File.WriteAllText (fileName, string.Empty);
+			}
+			bool found = false;
+			int myCnt = 0;
+			for (int i = 0; i < N ["Data"].Count; i++) {
+				if (N ["Data"] [i] ["date"].Value == today) {
+					N1 ["Data"] [myCnt] ["date"] = N ["Data"] [i] ["date"].Value;
+					N1 ["Data"] [myCnt] ["attempts"] = (N ["Data"] [i] ["attempts"].AsInt + 1).ToString ();
+					if (isCorrect) {
+						N1 ["Data"] [myCnt] ["correct"] = (N ["Data"] [i] ["correct"].AsInt + 1).ToString ();
+					} else {
+						N1 ["Data"] [myCnt] ["correct"] = N ["Data"] [i] ["correct"].Value;
+					}
+					myCnt++;
+					found = true;
+				} else {
+					System.DateTime todayDate = System.DateTime.ParseExact (today, "yyyyMMdd",null);
+					System.DateTime compareDate = System.DateTime.ParseExact (N ["Data"] [i] ["date"].Value, "yyyyMMdd",null);
+					System.TimeSpan diff = todayDate - compareDate;  
+					if (diff.Days < 7) {
+						N1 ["Data"] [myCnt] ["date"] = N ["Data"] [i] ["date"].Value;
+						N1 ["Data"] [myCnt] ["attempts"] = N ["Data"] [i] ["attempts"].Value;
+						N1 ["Data"] [myCnt] ["correct"] = N ["Data"] [i] ["correct"].Value;
+						myCnt++;
+					}
+				}
+			}
+			if (!found) {
+				N1 ["Data"] [myCnt] ["date"] = today;
+				N1 ["Data"] [myCnt] ["attempts"] = "1";
+				if (isCorrect) {
+					N1 ["Data"] [myCnt] ["correct"] = "1";
+				} else {
+					N1 ["Data"] [myCnt] ["correct"] = "0";
+				}
+			}
+			N1 ["VersionNumber"] = N ["VersionNumber"].Value;
+			File.WriteAllText (fileName, N1.ToString());
 		}
 
 		public void TestingButtonPressed() {

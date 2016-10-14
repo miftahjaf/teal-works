@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using SimpleJSON;
 
 namespace Cerebro
 {
@@ -190,7 +191,7 @@ namespace Cerebro
 					cardIcon.GetComponent<Image> ().color = CerebroHelper.HexToRGB ("FF5541");
 					return;
 				} else {
-					quizGivenData = CheckForQuizSubmitted (questions [0].QuizDate);
+					quizGivenData = CheckForQuizSubmittedJSON (questions [0].QuizDate);
 					message.text = "Press the Start button to start your quiz of the day!";
 					cardTitle.text = "Start Quiz";
 					cardIcon.SetActive (true);
@@ -217,7 +218,7 @@ namespace Cerebro
 
 				for (var i = 0; i < allQuestions.Count; i++) {
 					QuizData curQuestion = allQuestions [i];
-					var answer = GetUserAnswerFromLocalFile (curQuestion.QuizDate, studentID + "Q" + curQuestion.QuestionID);
+					var answer = GetUserAnswerFromLocalFileJSON (curQuestion.QuizDate, studentID + "Q" + curQuestion.QuestionID);
 					if (answer != null) {
 						curQuestion.userAnswer = answer;
 					}
@@ -261,7 +262,7 @@ namespace Cerebro
 		public void BackOnScreen ()
 		{
 			landingPage.SetActive (true);
-			quizGivenData = CheckForQuizSubmitted (allQuestions [0].QuizDate);
+			quizGivenData = CheckForQuizSubmittedJSON (allQuestions [0].QuizDate);
 			if (quizGivenData != null) {
 				ScoreCard.SetActive (true);
 				Card.SetActive (false);
@@ -298,7 +299,7 @@ namespace Cerebro
 
 			for (var i = 0; i < allQuestions.Count; i++) {
 				QuizData curQuestion = allQuestions [i];
-				var answer = script.GetUserAnswerFromHistoryFile (curQuestion.QuizDate, studentID + "Q" + curQuestion.QuestionID);
+				var answer = script.GetUserAnswerFromHistoryFileJSON (curQuestion.QuizDate, studentID + "Q" + curQuestion.QuestionID);
 				if (answer != null) {
 					curQuestion.userAnswer = answer;
 				}
@@ -355,6 +356,30 @@ namespace Cerebro
 			return null;
 		}
 
+		public string GetUserAnswerFromLocalFileJSON (string quizDate, string StudentAndQuestionID)
+		{
+			if (!LaunchList.instance.mUseJSON) {
+				return GetUserAnswerFromLocalFile (quizDate, StudentAndQuestionID);
+			}
+			
+			string fileName = Application.persistentDataPath + "/QuizAnalyticsJSON.txt";
+			if (!File.Exists (fileName))
+				return "";
+			
+			string data = File.ReadAllText (fileName);
+			if (!LaunchList.instance.IsJsonValidDirtyCheck (data)) {
+				return null;
+			}
+			JSONNode N = JSONClass.Parse (data);
+
+			for (int i = 0; i < N ["Data"] ["Quiz"].Count; i++) {
+				if (N ["Data"] ["Quiz"] [i] ["quizDate"].Value == quizDate && N ["Data"] ["Quiz"] [i] ["StudentAndQuestionID"].Value == StudentAndQuestionID) {
+					return N ["Data"] ["Quiz"] [i] ["Answer"].Value;
+				}
+			}
+			return null;
+		}
+
 		public SubmittedQuizData CheckForQuizSubmitted (string quizDate)
 		{
 			string fileName = Application.persistentDataPath + "/QuizSubmitted.txt";
@@ -379,6 +404,33 @@ namespace Cerebro
 					line = sr.ReadLine ();
 				}  
 				sr.Close ();
+			}
+			return null;
+		}
+
+		public SubmittedQuizData CheckForQuizSubmittedJSON (string quizDate)
+		{
+			if (!LaunchList.instance.mUseJSON) {
+				SubmittedQuizData currSQ = CheckForQuizSubmitted (quizDate);
+				return currSQ;
+			}
+			string fileName = Application.persistentDataPath + "/QuizSubmittedJSON.txt";
+			if (!File.Exists (fileName))
+				return null;
+			string data = File.ReadAllText (fileName);
+			if (!LaunchList.instance.IsJsonValidDirtyCheck (data)) {
+				return null;
+			}
+			JSONNode N = JSONClass.Parse (data);
+			for (int i = 0; i < N ["Data"].Count; i++) {
+				if (N ["Data"] [i] ["quizDate"].Value == quizDate) {
+					SubmittedQuizData sq = new SubmittedQuizData ();
+					sq.quizDate = N ["Data"] [i] ["quizDate"].Value;
+					sq.totalAttempts = N ["Data"] [i] ["totalAttempts"].AsInt;
+					sq.totalCorrect = N ["Data"] [i] ["correct"].AsInt;
+					sq.score = N ["Data"] [i] ["score"].AsInt;
+					return sq;
+				}
 			}
 			return null;
 		}

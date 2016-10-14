@@ -585,12 +585,12 @@ namespace Cerebro {
 		public virtual void FlagButtonPressed() {
 			var buttonText = FlagButton.transform.Find ("Text").gameObject.GetComponent<Text> ();
 			if (buttonText.text == "Flag") {
-				LaunchList.instance.WriteFlaggedQuestionToFile (currentQuestionAssessmentKey, currentQuestionDifficulty, selector, randomSeed);
+				LaunchList.instance.WriteFlaggedQuestionToFileJSON (currentQuestionAssessmentKey, currentQuestionDifficulty, selector, randomSeed);
 				buttonText.text = "Unflag";
 			} else {
 				buttonText.text = "Flag";
 				CerebroHelper.DebugLog ("removing" + currentQuestionAssessmentKey);
-				LaunchList.instance.RemoveFlaggedQuestionFromFile (currentQuestionAssessmentKey);
+				LaunchList.instance.RemoveFlaggedQuestionFromFileJSON (currentQuestionAssessmentKey);
 			}
 		}
 
@@ -621,7 +621,7 @@ namespace Cerebro {
 
 			WelcomeScript.instance.ShowRatingPopup ("SOLUTION", eventArgs.timeSpent, currentExplanation.ContentId, "How many stars would you give to this video?");
 
-			Cerebro.LaunchList.instance.WriteAnalyticsToFile (contentKey, currentQuestionDifficulty, videoWatched, day, eventArgs.timeStarted, Mathf.FloorToInt (totalimeTaken), Mathf.FloorToInt (eventArgs.timeSpent).ToString(), 0, " " );  
+			Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (contentKey, currentQuestionDifficulty, videoWatched, day, eventArgs.timeStarted, Mathf.FloorToInt (totalimeTaken), Mathf.FloorToInt (eventArgs.timeSpent).ToString(), 0, " " );  
 
 			VideoHelper.instance.VideoEnded -= CloseWebView;
 		}

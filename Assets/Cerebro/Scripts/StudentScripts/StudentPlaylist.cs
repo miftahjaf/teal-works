@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using System.Collections;
 using MaterialUI;
 using System.IO;
+using SimpleJSON;
 
 namespace Cerebro
 {
@@ -63,7 +64,7 @@ namespace Cerebro
 			m_OptionDataList = optionDataList;
 			m_SelectionItems = new List<StudentPlaylistOption>();
 
-			watchedVideos = WelcomeScript.instance.GetWatchedVideos ();
+			watchedVideos = WelcomeScript.instance.GetWatchedVideosJSON ();
 
 
 			for (int i = 0; i < m_OptionDataList.options.Count; i++)
@@ -224,21 +225,38 @@ namespace Cerebro
 				foreach (var str in missionQuestionIds) {
 					missionString = missionString + "@" + str;
 				}
-				Cerebro.LaunchList.instance.WriteAnalyticsToFile (contentKey, 0, videoWatched, day, eventArgs.timeStarted, Mathf.FloorToInt (totalimeTaken), Mathf.FloorToInt (eventArgs.timeSpent).ToString(), 0, missionString );  
+				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (contentKey, 0, videoWatched, day, eventArgs.timeStarted, Mathf.FloorToInt (totalimeTaken), Mathf.FloorToInt (eventArgs.timeSpent).ToString(), 0, missionString );  
 			} else {
-				Cerebro.LaunchList.instance.WriteAnalyticsToFile (contentKey, 0, videoWatched, day, eventArgs.timeStarted, Mathf.FloorToInt (totalimeTaken), Mathf.FloorToInt (eventArgs.timeSpent).ToString(), 0, " " );  
+				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (contentKey, 0, videoWatched, day, eventArgs.timeStarted, Mathf.FloorToInt (totalimeTaken), Mathf.FloorToInt (eventArgs.timeSpent).ToString(), 0, " " );  
 			}
 
 			if (videoWatched) {
-				string fileName = Application.persistentDataPath + "/WatchedVideos.txt";
-				StreamWriter sr = null;
-				if (File.Exists (fileName)) {
-					sr = File.AppendText (fileName);
+				if (LaunchList.instance.mUseJSON) {
+					string fileName = Application.persistentDataPath + "/WatchedVideosJSON.txt";
+					if (File.Exists (fileName)) {
+						string data = File.ReadAllText (fileName);
+						JSONNode N = JSONClass.Parse ("{\"Data\"}");
+						int cnt = 0;
+						if (LaunchList.instance.IsJsonValidDirtyCheck (data)) {
+							N = JSONClass.Parse (data);
+							cnt = N ["Data"].Count;
+						}
+						N ["Data"] [cnt] ["VideoContentID"] = currentContentID;
+						N ["VersionNumber"] = LaunchList.instance.VersionData;
+						File.WriteAllText (fileName, string.Empty);
+						File.WriteAllText (fileName, N.ToString());
+					}
 				} else {
-					sr = File.CreateText (fileName);
+					string fileName = Application.persistentDataPath + "/WatchedVideos.txt";
+					StreamWriter sr = null;
+					if (File.Exists (fileName)) {
+						sr = File.AppendText (fileName);
+					} else {
+						sr = File.CreateText (fileName);
+					}
+					sr.WriteLine (currentContentID);
+					sr.Close ();
 				}
-				sr.WriteLine (currentContentID);
-				sr.Close ();
 			}
 
 			VideoHelper.instance.VideoEnded -= CloseWebView;
@@ -252,7 +270,7 @@ namespace Cerebro
 				foreach (var item in LaunchList.instance.mMission.Questions) {
 					if (currentContentID == item.Value.PracticeItemID) {
 						missionQuestionIDs.Add (item.Value.QuestionID);
-						LaunchList.instance.UpdateLocalMissionFile (item.Value, item.Value.QuestionID, isCorrect);
+						LaunchList.instance.UpdateLocalMissionFileJSON (item.Value, item.Value.QuestionID, isCorrect);
 					}
 				}
 			}

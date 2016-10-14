@@ -45,7 +45,7 @@ namespace Cerebro
 			NativeToolkit.OnImagePicked += ImagePicked;
 			NativeToolkit.OnCameraShotComplete += CameraShotComplete;
 
-			List<string> watchedVideos = WelcomeScript.instance.GetWatchedVideos ();
+			List<string> watchedVideos = WelcomeScript.instance.GetWatchedVideosJSON ();
 			VideosWatched.GetComponent<Text> ().text = watchedVideos.Count.ToString ();
 
 			int totalAttempts = 0;

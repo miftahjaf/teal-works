@@ -235,7 +235,7 @@ namespace Cerebro
 		{
 			landingPage.SetActive (true);
 			if (mQuestion != null) {
-				LaunchList.instance.CheckForSubmittedImageResponses (mQuestion.ImageID);
+				LaunchList.instance.CheckForSubmittedImageResponsesJSON (mQuestion.ImageID);
 			}
 			DescribeImageLoaded (null, null);
 		}
