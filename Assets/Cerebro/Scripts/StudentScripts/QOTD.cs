@@ -1014,6 +1014,7 @@ namespace Cerebro
 					N1 ["Data"] ["Quiz"] [cnt] ["TimeStarted"] = N ["Data"] ["Quiz"] [i] ["TimeStarted"].Value;
 					N1 ["Data"] ["Quiz"] [cnt] ["TimeTaken"] = N ["Data"] ["Quiz"] [i] ["TimeTaken"].Value;
 					N1 ["Data"] ["Quiz"] [cnt] ["quizDate"] = N ["Data"] ["Quiz"] [i] ["quizDate"].Value;
+					cnt++;
 				}
 			}
 

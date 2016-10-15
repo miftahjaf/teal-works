@@ -280,7 +280,7 @@ namespace Cerebro
 			return N.ToString ();
 		}
 
-		void CheckIfFileJSON()
+		public void CheckIfFileJSON()
 		{
 			if (!mUseJSON)
 				return;
@@ -293,7 +293,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/DescribeImageSubmittedJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/Missions.txt";
@@ -304,7 +306,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/MissionsJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/FlaggedQuestions.txt";
@@ -315,7 +319,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/FlaggedQuestionsJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/LocalAnalytics.txt";
@@ -326,7 +332,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/LocalAnalyticsJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/QuizSubmitted.txt";
@@ -337,7 +345,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/QuizSubmittedJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/QuizAnalytics.txt";
@@ -348,7 +358,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/QuizAnalyticsJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/QuizHistory.txt";
@@ -359,7 +371,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/QuizHistoryJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/SentAnalytics.txt";
@@ -370,7 +384,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/SentAnalyticsJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/UsageAnalytics.txt";
@@ -381,7 +397,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/UsageAnalyticsJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/PracticeData.txt";
@@ -392,7 +410,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/PracticeDataJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/PracticeCount.txt";
@@ -403,7 +423,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/PracticeCountJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/WatchedVideos.txt";
@@ -414,7 +436,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/WatchedVideosJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/LastImageID.txt";
@@ -425,7 +449,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/LastImageIDJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 
 			fileName = Application.persistentDataPath + "/LastVerbalizeID.txt";
@@ -436,7 +462,9 @@ namespace Cerebro
 				}
 			} else {
 				fileName = Application.persistentDataPath + "/LastVerbalizeIDJSON.txt";
-				File.WriteAllText (fileName, GetEmptyFileWithVersion());
+				if (!File.Exists (fileName)) {
+					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+				}
 			}
 		}
 

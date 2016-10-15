@@ -382,6 +382,7 @@ namespace Cerebro {
 		int GotProfile(StudentProfile studentProfile) {
 			if (studentProfile != null) {
 				LaunchList.instance.LogoutUser ();
+				LaunchList.instance.CheckIfFileJSON ();
 
 				CerebroHelper.DebugLog ("id "+studentProfile.StudentID);
 				PlayerPrefs.SetString (PlayerPrefKeys.nameKey, studentProfile.FirstName + " " + studentProfile.LastName);
