@@ -371,6 +371,9 @@ namespace Cerebro {
 					randomSelector = returnSelector;
 				}
 			}
+			if (randomSelector == -1) {
+				randomSelector = Random.Range (lowerLimit, upperLimit);
+			}
 
 
 			if (isRevisitedQuestion) {
@@ -387,9 +390,6 @@ namespace Cerebro {
 			}
 			Random.seed = randomSeed;
 			Debug.Log ("Random Selector " +randomSelector +"QuestionLevel "+Queslevel);
-			if (randomSelector == -1) {
-				randomSelector = Random.Range (lowerLimit, upperLimit);
-			}
 
 			return randomSelector;
 		}
