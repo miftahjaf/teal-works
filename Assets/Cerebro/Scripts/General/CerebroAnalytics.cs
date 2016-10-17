@@ -185,7 +185,7 @@ namespace Cerebro
 
 			int cnt = 0;
 			for (int i = 0; i < CurrLocal ["Data"].Count; i++) {
-				if (timestamps.Contains(CurrLocal ["Data"] [cnt] ["timestamp"].Value)) {
+				if (!timestamps.Contains(CurrLocal ["Data"] [cnt] ["timestamp"].Value)) {
 					NextLocal ["Data"] [cnt] ["type"] = CurrLocal ["Data"] [cnt] ["type"].Value;
 					NextLocal ["Data"] [cnt] ["description"] = CurrLocal ["Data"] [cnt] ["description"].Value;
 					NextLocal ["Data"] [cnt] ["timestamp"] = CurrLocal ["Data"] [cnt] ["timestamp"].Value;

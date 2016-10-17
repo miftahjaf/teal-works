@@ -152,7 +152,6 @@ namespace Cerebro
 
 			DontDestroyOnLoad (transform.gameObject);
 
-			Debug.Log("Asking for temp path");
 			#if UNITY_IOS && !UNITY_EDITOR
 			_GetTempDirectory("Temp Path");
 			#endif
@@ -758,7 +757,6 @@ namespace Cerebro
 
 		public void VersionVerified(bool dummy)
 		{
-			Debug.Log ("version "+LaunchList.instance.IsVersionUptoDate);
 			PlayerPrefs.SetString (PlayerPrefKeys.IsVersionUpdated, LaunchList.instance.IsVersionUptoDate.ToString ());
 			if (LaunchList.instance.IsVersionUptoDate) {
 				CerebroHelper.DebugLog ("Version upto date");
@@ -2407,9 +2405,9 @@ namespace Cerebro
 				for (int i = 0; i < N ["Data"].Count; i++) {
 					FlaggedQuestion f = new FlaggedQuestion ();
 					f.AssessmentItemID = N ["Data"] [i] ["assessmentID"].Value;
-					f.Difficulty = N ["Data"] [i] ["difficulty"];
-					f.SubLevel = N ["Data"] [i] ["sublevel"];
-					f.RandomSeed = N ["Data"] [i] ["seed"];
+					f.Difficulty = N ["Data"] [i] ["difficulty"].Value;
+					f.SubLevel = N ["Data"] [i] ["sublevel"].Value;
+					f.RandomSeed = N ["Data"] [i] ["seed"].Value;
 					AllFlaggedQuestions.Add (f);
 				}
 			}
@@ -2620,14 +2618,12 @@ namespace Cerebro
 		void InternetBack ()
 		{
 			CheckLocalMissionCompleteJSON ();
-			Debug.Log ("from here");
 			ScanTables ();
 		}
 
 		// Update is called once per frame
 		void Update ()
 		{
-			Debug.Log ("first "+firstTimeNetCheck);
 			if (!mDoingCoinsUpdate && mCoinsValueChanged) {
 				UpdateCoinsToDatabase ();
 			}
@@ -2905,7 +2901,6 @@ namespace Cerebro
 				mKCCoins.Clear ();
 				var sr = File.OpenText (fileName);
 				string json = sr.ReadToEnd ();
-				Debug.Log ("JSON " + json);
 				JSONNode jsonNode = JSONNode.Parse (json);
 				if (jsonNode != null) 
 				{
@@ -2954,7 +2949,6 @@ namespace Cerebro
 				var sr = File.OpenText (fileName);
 				string json = sr.ReadToEnd ();
 				JSONNode jsonNode = JSONNode.Parse (json);
-				Debug.Log (json);
 				if (jsonNode != null) 
 				{
 					int length = jsonNode.Count;
@@ -3761,7 +3755,6 @@ namespace Cerebro
 
 		public void DeleteVerbalize(string VerbID)
 		{
-			Debug.Log ("deleting");
 			string fileName = Application.persistentDataPath + "/VerbalizeSubmitted.txt";
 			int cnt = 0;
 			JSONNode N = JSONClass.Parse ("{\"Data\"}");
@@ -3771,16 +3764,13 @@ namespace Cerebro
 				N = JSONClass.Parse (data);
 				cnt = N ["Data"].Count;
 				int currId = CheckForSubmittedVerbalize (VerbID);
-				Debug.Log ("found "+currId+" "+cnt);
 				if (currId > -1) {
 					File.WriteAllText (fileName, string.Empty);
 					int myCnt = 0;
 					for (int i = 0; i < cnt; i++) {
-						Debug.Log ("curr "+currId+" "+i);
 						if (i == currId) {
 							continue;
 						}
-						Debug.Log ("cpoying "+i+" "+myCnt);
 						N1 ["Data"] [myCnt] = N ["Data"] [i];
 //						N1 ["Data"][myCnt]["VerbalizeID"] = N ["Data"][i]["VerbalizeID"].Value;
 //						N1 ["Data"][myCnt]["VerbalizeDate"] = N ["Data"][i]["VerbalizeDate"].Value;
@@ -3859,7 +3849,6 @@ namespace Cerebro
 
 		public void CheckForVerbalizeToUpload ()
 		{
-			Debug.Log ("checking for verbalize upload in launchlist");
 			string fileName = Application.persistentDataPath + "/VerbalizeSubmitted.txt";
 			if (File.Exists (fileName)) {
 				string data = File.ReadAllText (fileName);
@@ -3867,7 +3856,6 @@ namespace Cerebro
 				for (int i = 0; i < N ["Data"].Count; i++) {
 					if (N ["Data"][i]["UserSubmitted"].AsBool && !N ["Data"][i]["UploadedToServer"].AsBool) {
 						Verbalize Verb = CheckForSubmittedVerbalizeViaDate (N ["Data"][i]["VerbalizeDate"].Value);
-						Debug.Log ("found one for verbalize upload "+Verb.VerbTitle);
 						#if UNITY_EDITOR
 						HTTPRequestHelper.instance.SubmitVerbalizeResponse(Verb);
 						#endif

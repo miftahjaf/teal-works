@@ -42,10 +42,8 @@ namespace Cerebro {
 			GetComponent<RectTransform> ().sizeDelta = Vector2.zero;
 
 			if (Screen.orientation == ScreenOrientation.LandscapeRight) {
-				Debug.Log ("Calling right from start "+IsLandscapeLeft);
 				ChangeToLandscapeRight ();
 			} else {
-				Debug.Log ("Calling left from start "+IsLandscapeLeft);
 				ChangeToLandscapeLeft ();
 			}
 
@@ -95,15 +93,10 @@ namespace Cerebro {
 			float height = 0;
 			TranscriptView.transform.FindChild ("Content").FindChild ("Title").GetComponent<RectTransform> ().anchoredPosition = new Vector2 (TranscriptView.transform.FindChild ("Content").FindChild ("Title").GetComponent<RectTransform> ().anchoredPosition.x, -height);
 			height += Mathf.Abs(TranscriptView.transform.FindChild ("Content").FindChild ("Title").GetComponent<RectTransform> ().rect.height);
-			Debug.Log (height);
 			TranscriptView.transform.FindChild ("Content").FindChild ("PromptText").GetComponent<RectTransform> ().anchoredPosition = new Vector2 (TranscriptView.transform.FindChild ("Content").FindChild ("PromptText").GetComponent<RectTransform> ().anchoredPosition.x, -height);
 			height += Mathf.Abs(TranscriptView.transform.FindChild ("Content").FindChild ("PromptText").GetComponent<RectTransform> ().rect.height);
-			Debug.Log (height);
 			TranscriptView.transform.FindChild ("Content").FindChild ("End").GetComponent<RectTransform> ().anchoredPosition = new Vector2 (TranscriptView.transform.FindChild ("Content").FindChild ("End").GetComponent<RectTransform> ().anchoredPosition.x, -height);
 			height += Mathf.Abs(TranscriptView.transform.FindChild ("Content").FindChild ("End").GetComponent<RectTransform> ().rect.height);
-			Debug.Log (height);
-			Debug.Log (TranscriptView.transform.FindChild ("Content").FindChild ("End").GetComponent<RectTransform> ().anchoredPosition);
-			Debug.Log (TranscriptView.transform.FindChild ("Content").FindChild ("End").GetComponent<RectTransform> ().rect);
 			TranscriptView.transform.FindChild ("Content").GetComponent<RectTransform> ().sizeDelta = new Vector2 (TranscriptView.transform.FindChild ("Content").GetComponent<RectTransform> ().sizeDelta.x, height);
 		}
 
@@ -132,13 +125,11 @@ namespace Cerebro {
 			}
 
 			if (IsLandscapeLeft && Screen.orientation == ScreenOrientation.LandscapeRight) {
-				Debug.Log ("calling right from update "+IsLandscapeLeft);
 				ChangeToLandscapeRight ();
 				#if UNITY_IOS && !UNITY_EDITOR
 				_RotationChanged ("false");
 				#endif
 			} else if(!IsLandscapeLeft && Screen.orientation == ScreenOrientation.LandscapeLeft) {
-				Debug.Log ("calling left from update "+IsLandscapeLeft);
 				ChangeToLandscapeLeft ();
 				#if UNITY_IOS && !UNITY_EDITOR
 				_RotationChanged ("true");
@@ -165,17 +156,13 @@ namespace Cerebro {
 
 		public void ChangeToLandscapeLeft()
 		{
-			Debug.Log ("into left "+IsLandscapeLeft);
 			GetComponent<RectTransform> ().eulerAngles = new Vector3 (0, 0, 90f);
-			Debug.Log ("into left curr "+transform.parent.GetComponent<RectTransform> ().eulerAngles);
 			IsLandscapeLeft = true;
 		}
 
 		public void ChangeToLandscapeRight()
 		{
-			Debug.Log ("into right "+IsLandscapeLeft);
 			GetComponent<RectTransform> ().eulerAngles = new Vector3 (0, 0, -90f);
-			Debug.Log ("into right curr "+transform.parent.GetComponent<RectTransform> ().eulerAngles);
 			IsLandscapeLeft = false;
 		}
 
@@ -214,7 +201,6 @@ namespace Cerebro {
 			EnableRecordingButton ();
 			videoText.transform.FindChild ("End").GetComponent<RectTransform> ().anchoredPosition = new Vector2 (videoText.transform.FindChild("End").GetComponent<RectTransform>().anchoredPosition.x, -videoText.GetComponent<RectTransform>().rect.height);
 			TotalHeight = videoText.GetComponent<RectTransform> ().rect.height + videoText.transform.FindChild ("End").GetComponent<RectTransform> ().rect.height;
-			Debug.Log ("Height "+TotalHeight+" "+videoText.GetComponent<RectTransform> ().rect.height);
 			TimeStarted = System.DateTime.Now.ToString ("yyyy-MM-ddTHH:mm:ss");
 			IsStartedOnce = true;
 			string CurrOrientationLeft = "true";
@@ -279,7 +265,6 @@ namespace Cerebro {
 			DateTime stTime = DateTime.ParseExact (LaunchList.instance.mVerbalize.VerbStartTime, "yyyy-MM-ddTHH:mm:ss", null);
 			DateTime endTime = DateTime.ParseExact (LaunchList.instance.mVerbalize.VerbEndTime, "yyyy-MM-ddTHH:mm:ss", null);
 			float TimeSpent = (float)(endTime.Subtract(stTime).TotalSeconds);
-			Debug.Log ("Total Time "+TimeSpent);
 			WelcomeScript.instance.ShowRatingPopup ("VERBALIZE", TimeSpent,LaunchList.instance.mVerbalize.VerbalizeID, "How would you rate your speech?", PopupContinuePressed);
 			GameObject Rating = GameObject.Find ("RatingPopup(Clone)");
 			if (Rating != null) {
