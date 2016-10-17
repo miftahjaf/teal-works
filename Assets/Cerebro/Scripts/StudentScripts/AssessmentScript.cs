@@ -135,22 +135,13 @@ namespace Cerebro
 			}
 			List<string> missionQuestionIds = CheckMissions (isCorrect, difficulty, sublevel, practiceID);
 
-			if (missionQuestionIds.Count != 0) {
-				string missionString = LaunchList.instance.mMission.MissionID;
-				foreach (var str in missionQuestionIds) {
-					missionString = missionString + "@" + str;
-				}
-				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, missionString, UserAnswer);  
-			} else {
-				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, " ", UserAnswer);  
-			}
-
+			int increment = 0;
 			if (isCorrect) {
 				if (rightSound != null) {
 					audioSource.PlayOneShot (rightSound);
 				}
 				var bonus = increaseStreak ();
-				var increment = _increment + bonus;
+				increment = _increment + bonus;
 
 				/*if (LaunchList.instance.mPracticeItems.ContainsKey (mPracticeID)) {
 					if (LaunchList.instance.mPracticeItems[mPracticeID].RegenerationStarted != "") {
@@ -187,6 +178,16 @@ namespace Cerebro
 //				incrementScore = increment;
 //				incrementBy = Mathf.FloorToInt(increment / 5);
 //				LaunchList.instance.SetCoins (groupID, studentID, increment);
+			}
+
+			if (missionQuestionIds.Count != 0) {
+				string missionString = LaunchList.instance.mMission.MissionID;
+				foreach (var str in missionQuestionIds) {
+					missionString = missionString + "@" + str;
+				}
+				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, missionString, UserAnswer, increment);  
+			} else {
+				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, " ", UserAnswer, increment);  
 			}
 		}
 

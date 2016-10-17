@@ -125,7 +125,7 @@ namespace Cerebro
 			});
 		}
 
-		public void SendAnalytics (string assessmentID, string difficulty, bool correct, string day, string timeStarted, string timeTaken, string playTime, string seed, string missionField, string UserAnswer = "")
+		public void SendAnalytics (string assessmentID, string difficulty, bool correct, string day, string timeStarted, string timeTaken, string playTime, string seed, string missionField, string UserAnswer = "", int CoinsEarned = 0)
 		{
 			var studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 
@@ -210,6 +210,7 @@ namespace Cerebro
 			N ["myData"] ["component_data"] ["item_type"] = itemType;
 			N ["myData"] ["component_data"] ["level_up"] = isLevelUp.ToString ();
 			N ["myData"] ["component_data"] ["answer"] = UserAnswer;
+			N ["myData"] ["component_data"] ["coins"] = CoinsEarned.ToString ();;
 			N ["myData"] ["component_name"] = "analytics";
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
@@ -219,7 +220,7 @@ namespace Cerebro
 					LaunchList.instance.WriteSentAnalyticsJSON (assessmentID);
 				} else {
 					CerebroHelper.DebugLog ("Error in request");
-					LaunchList.instance.WriteAnalyticsToFileJSON (assessmentID, int.Parse (difficulty), correct, day, timeStarted, int.Parse (timeTaken), playTime, int.Parse (seed), missionField, UserAnswer, true);
+					LaunchList.instance.WriteAnalyticsToFileJSON (assessmentID, int.Parse (difficulty), correct, day, timeStarted, int.Parse (timeTaken), playTime, int.Parse (seed), missionField, UserAnswer, CoinsEarned, true);
 				}
 			});
 		}
@@ -1189,7 +1190,7 @@ namespace Cerebro
 			});
 		}
 
-		public void SendFlaggedData (string practiceItemId, string seed, int level, int selector)
+		public void SendFlaggedData (string practiceItemId, string seed, int level, int selector, bool isFlagged)
 		{
 			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
@@ -1198,6 +1199,7 @@ namespace Cerebro
 			N ["myData"] ["component_data"] ["seed"] = seed;
 			N ["myData"] ["component_data"] ["difficulty"] = level.ToString();
 			N ["myData"] ["component_data"] ["sub_level"] = selector.ToString();
+			N ["myData"] ["component_data"] ["sub_level"] = isFlagged.ToString();
 
 			N ["myData"] ["component_name"] = "flagged_question";
 			CerebroHelper.DebugLog (N ["myData"].ToString ());

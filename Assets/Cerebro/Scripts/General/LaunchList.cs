@@ -2475,6 +2475,7 @@ namespace Cerebro
 					N ["Data"]["Analytics"][cnt]["playTime"] = lineArr [7];
 					N ["Data"]["Analytics"][cnt]["seed"] = lineArr [8];
 					N ["Data"]["Analytics"][cnt]["missionField"] = lineArr [9];
+					N ["Data"]["Analytics"][cnt]["CoinsEarned"] = "0";
 					cnt++;
 
 					line = sr.ReadLine ();
@@ -2485,7 +2486,7 @@ namespace Cerebro
 			}
 		}
 
-		public void WriteAnalyticsToFileJSON (string assessmentID, int difficulty, bool correct, string day, string timeStarted, int timeTaken, string playTime, int seed, string missionField, string UserAnswer = "", bool ignoreInternet = false)
+		public void WriteAnalyticsToFileJSON (string assessmentID, int difficulty, bool correct, string day, string timeStarted, int timeTaken, string playTime, int seed, string missionField, string UserAnswer = "", int CoinsEarned = 0, bool ignoreInternet = false)
 		{
 			if (!mUseJSON) {
 				WriteAnalyticsToFile (assessmentID, difficulty, correct, day, timeStarted, timeTaken, playTime, seed, missionField, UserAnswer, ignoreInternet);
@@ -2493,7 +2494,7 @@ namespace Cerebro
 			}
 
 			if (mhasInternet && !ignoreInternet) {
-				SendAnalytics (assessmentID, difficulty.ToString (), correct, day, timeStarted, timeTaken.ToString (), playTime, seed.ToString (), missionField, UserAnswer);
+				SendAnalytics (assessmentID, difficulty.ToString (), correct, day, timeStarted, timeTaken.ToString (), playTime, seed.ToString (), missionField, UserAnswer, CoinsEarned);
 			} else {
 				if (!PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
 					CerebroHelper.DebugLog ("WriteAnalyticsToFile - no ID set");
@@ -2523,6 +2524,7 @@ namespace Cerebro
 				N ["Data"]["Analytics"][cnt]["playTime"] = playTime;
 				N ["Data"]["Analytics"][cnt]["seed"] = seed.ToString();
 				N ["Data"]["Analytics"][cnt]["missionField"] = missionField;
+				N ["Data"] ["Analytics"] [cnt] ["CoinsEarned"] = CoinsEarned.ToString ();
 
 				File.WriteAllText (fileName, string.Empty);
 				File.WriteAllText (fileName, N.ToString());
@@ -2532,7 +2534,7 @@ namespace Cerebro
 	
 		// if we are offline this function needs to save this data away
 		// and then upload it when we come online
-		public void SendAnalytics (string assessmentID, string difficulty, bool correct, string day, string timeStarted, string timeTaken, string playTime, string seed, string missionField, string UserAnswer = "")
+		public void SendAnalytics (string assessmentID, string difficulty, bool correct, string day, string timeStarted, string timeTaken, string playTime, string seed, string missionField, string UserAnswer = "", int CoinsEarned = 0)
 		{
 			if (!PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
 				CerebroHelper.DebugLog ("SendAnalytics - no ID set");
@@ -2540,7 +2542,7 @@ namespace Cerebro
 			}
 				
 			if (mHitServer) {
-				HTTPRequestHelper.instance.SendAnalytics (assessmentID, difficulty, correct, day, timeStarted, timeTaken, playTime, seed, missionField, UserAnswer);
+				HTTPRequestHelper.instance.SendAnalytics (assessmentID, difficulty, correct, day, timeStarted, timeTaken, playTime, seed, missionField, UserAnswer, CoinsEarned);
 			}
 
 		}
