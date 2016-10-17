@@ -99,6 +99,9 @@ namespace Cerebro
 		public bool mhasInternet;
 		private bool mcheckingInternet;
 
+		private float mMSPF = 0.0f;
+		private GUIStyle counterStyle;
+
 		public GameObject wifiOff;
 
 		public InternetReachabilityVerifier irv;
@@ -127,10 +130,19 @@ namespace Cerebro
 				return m_Instance;
 			}
 		}
-			
+
+		void OnGUI() {
+			if (CerebroHelper.isTestUser () && mMSPF >= 17.0) {
+				GUI.Label (new Rect (100, 10, 100, 20), mMSPF.ToString (), counterStyle);
+			}
+		}
 
 		void Awake ()
 		{
+			counterStyle = new GUIStyle ();
+			counterStyle.fontSize = 42;
+			counterStyle.normal.textColor = Color.green;
+
 			if (m_Instance != null && m_Instance != this) {
 				CerebroHelper.DebugLog ("Destroying this shit");
 				m_Instance.wifiOff = GameObject.Find ("WifiOff");
@@ -2655,6 +2667,9 @@ namespace Cerebro
 
 			}
 
+			if (CerebroHelper.isTestUser ()) {
+				mMSPF = Time.deltaTime * 1000.0f;
+			}
 
 		}
 
