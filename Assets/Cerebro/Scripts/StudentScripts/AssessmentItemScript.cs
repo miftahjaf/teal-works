@@ -216,6 +216,8 @@ namespace Cerebro
 
 		public void PracticeMasteryLoaded(int isDone)
 		{
+			if (KCParent == null)
+				return;
 			SetProgress (false);
 			if (isDone == 0)
 				return;
