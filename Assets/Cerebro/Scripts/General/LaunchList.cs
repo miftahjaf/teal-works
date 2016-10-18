@@ -3942,13 +3942,13 @@ namespace Cerebro
 			if (mUpdatingServerFlagged)
 				return;
 
-			mUpdatingServerFlagged = true;
 			string fileName = Application.persistentDataPath + "/FlaggedQuestionsJSON.txt";
 			if (File.Exists (fileName)) {
 				string data = File.ReadAllText (fileName);
 				JSONNode N = JSONClass.Parse (data);
 				for (int i = 0; i < N ["Data"].Count; i++) {
 					if (!N ["Data"][i]["updatedOnServer"].AsBool) {
+						mUpdatingServerFlagged = true;
 						JSONNode n = N ["Data"] [i];
 						HTTPRequestHelper.instance.SendFlaggedData (n ["assessmentID"].Value, n ["seed"].Value, n ["difficulty"].AsInt, n ["sublevel"].AsInt, n ["isFlagged"].AsBool, n ["FlaggedVersion"].Value, OnFlaggedSentResponse);
 						break;

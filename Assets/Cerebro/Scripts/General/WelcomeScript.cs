@@ -482,7 +482,7 @@ namespace Cerebro
 			if (LaunchList.instance.IsJsonValidDirtyCheck (data)) {
 				JSONNode N = JSONClass.Parse (data);
 				for (int i = 0; i < N ["Data"].Count; i++) {
-					watchedVideos.Add (N ["Data"] [i].Value);
+					watchedVideos.Add (N ["Data"] [i] ["VideoContentID"].Value);
 				}
 			}
 			return watchedVideos;
