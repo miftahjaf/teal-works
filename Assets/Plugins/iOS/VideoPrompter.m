@@ -322,6 +322,19 @@ void _StartPreview(const char* message)
         NSLog(@"camera authorized");
     } else {
         NSLog(@"disabled camera");
+        
+        if ([AVCaptureDevice respondsToSelector:@selector(requestAccessForMediaType: completionHandler:)]) {
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+                NSLog(@"DENIED");
+                if (granted) {
+                    NSLog(@"granted");
+                } else {
+                    // Permission has been denied.
+                    NSLog(@"permission denied");
+                }
+            }];
+        }
+        
         UIAlertController * alert=   [UIAlertController
                                       alertControllerWithTitle:@"Camera Access Denied"
                                       message:@"You must allow camera access in Settings > Privacy > Camera"
