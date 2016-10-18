@@ -237,7 +237,7 @@ namespace Cerebro {
 				buttonText.text = "Unflag";
 			} else {
 				buttonText.text = "Flag";
-				LaunchList.instance.RemoveFlaggedQuestionFromFileJSON (flaggedQuestions [currentQuestion].AssessmentItemID);
+				LaunchList.instance.MarkUnflagged (flaggedQuestions [currentQuestion].AssessmentItemID);
 			}
 		}
 		public void BackPressed() {

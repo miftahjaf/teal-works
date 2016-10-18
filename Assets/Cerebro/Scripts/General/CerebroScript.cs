@@ -403,6 +403,7 @@ namespace Cerebro {
 			LaunchList.instance.ScanTables ();
 			LaunchList.instance.mhasInternet = true;
 			LaunchList.instance.setWifiIcon ();
+			LaunchList.instance.CheckVersionNumber ();
 
 			SplashScreen.SetActive (true);
 			GameObject splashText = SplashScreen.transform.Find ("Text").gameObject;
@@ -494,6 +495,7 @@ namespace Cerebro {
 		{
 			yield return new WaitForSeconds (15);
 			LaunchList.instance.CheckForVerbalizeToUpload ();
+			LaunchList.instance.CheckForFlaggedQuestionToSend ();
 		}
 
 		public void SendUsageAnalytics() {

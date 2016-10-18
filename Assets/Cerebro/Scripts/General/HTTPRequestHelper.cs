@@ -1190,7 +1190,7 @@ namespace Cerebro
 			});
 		}
 
-		public void SendFlaggedData (string practiceItemId, string seed, int level, int selector, bool isFlagged)
+		public void SendFlaggedData (string practiceItemId, string seed, int level, int selector, bool isFlagged, Action<string> callback)
 		{
 			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
@@ -1198,8 +1198,7 @@ namespace Cerebro
 			N ["myData"] ["component_data"] ["practice_item_id"] = practiceItemId;
 			N ["myData"] ["component_data"] ["seed"] = seed;
 			N ["myData"] ["component_data"] ["difficulty"] = level.ToString();
-			N ["myData"] ["component_data"] ["sub_level"] = selector.ToString();
-			N ["myData"] ["component_data"] ["sub_level"] = isFlagged.ToString();
+			N ["myData"] ["component_data"] ["is_flagged"] = isFlagged.ToString ();
 
 			N ["myData"] ["component_name"] = "flagged_question";
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
@@ -1207,8 +1206,10 @@ namespace Cerebro
 			CreatePostRequestByteArray (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
 					CerebroHelper.DebugLog ("Added new row");
+					callback(practiceItemId);
 				} else {
 					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					callback("");
 				}
 			});
 		}

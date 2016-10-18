@@ -114,6 +114,7 @@ namespace Cerebro
 
 		private bool mHitDynamoDB = false;
 		private bool mHitServer = true;
+		private bool mUpdatingServerFlagged = false;
 
 		public bool mUseJSON = false;
 		public string VersionData = "v0.1.0.0";
@@ -223,6 +224,7 @@ namespace Cerebro
 					firstTimeNetCheck = false;
 				} else if (newStatus == InternetReachabilityVerifier.Status.Offline || newStatus == InternetReachabilityVerifier.Status.Error) {
 					bool ver = true;
+					Debug.Log (PlayerPrefs.GetString (PlayerPrefKeys.IsVersionUpdated));
 					if (PlayerPrefs.GetString (PlayerPrefKeys.IsVersionUpdated, "false") == ver.ToString ()) {
 						mhasInternet = false;
 						setWifiIcon ();
@@ -245,6 +247,7 @@ namespace Cerebro
 					mhasInternet = true;
 				} else if (newStatus == InternetReachabilityVerifier.Status.Offline || newStatus == InternetReachabilityVerifier.Status.Error) {
 					bool ver = true;
+					Debug.Log (PlayerPrefs.GetString (PlayerPrefKeys.IsVersionUpdated));
 					if (PlayerPrefs.GetString (PlayerPrefKeys.IsVersionUpdated, "false") == ver.ToString ()) {
 						setWifiIcon ();
 						mhasInternet = false;
@@ -2276,6 +2279,8 @@ namespace Cerebro
 					N ["Data"] [cnt] ["difficulty"] = lineArr [1];
 					N ["Data"] [cnt] ["sublevel"] = lineArr [2];
 					N ["Data"] [cnt] ["seed"] = lineArr [3];
+					N ["Data"] [cnt] ["isFlagged"] = "true";
+					N ["Data"] [cnt] ["updatedOnServer"] = "false";
 					cnt++;
 
 					line = sr.ReadLine ();
@@ -2298,18 +2303,34 @@ namespace Cerebro
 				return;
 			
 			int cnt = 0;
+			bool isFound = false;
 			JSONNode N = JSONClass.Parse ("{\"Data\"}");
 			if (File.Exists (fileName)) {				
 				string data = File.ReadAllText (fileName);
 				N = JSONClass.Parse (data);
 				cnt = N ["Data"].Count;
 				File.WriteAllText (fileName, string.Empty);
+				for (int i = 0; i < cnt; i++) {
+					if (N ["Data"] [i] ["assessmentID"].Value == assessmentID && N ["Data"] [i] ["difficulty"].AsInt == difficulty &&
+						N ["Data"] [i] ["sublevel"].AsInt == sublevel && N ["Data"] [i] ["seed"].AsInt == seed)
+					{
+						N ["Data"] [i] ["isFlagged"] = "true";
+						N ["Data"] [i] ["updatedOnServer"] = "false";
+						isFound = true;
+						break;
+					}
+				}
 			}
-			N ["Data"] [cnt] ["assessmentID"] = assessmentID;
-			N ["Data"] [cnt] ["difficulty"] = difficulty.ToString();
-			N ["Data"] [cnt] ["sublevel"] = sublevel.ToString();
-			N ["Data"] [cnt] ["seed"] = seed.ToString();
+			if (!isFound) {
+				N ["Data"] [cnt] ["assessmentID"] = assessmentID;
+				N ["Data"] [cnt] ["difficulty"] = difficulty.ToString ();
+				N ["Data"] [cnt] ["sublevel"] = sublevel.ToString ();
+				N ["Data"] [cnt] ["seed"] = seed.ToString ();
+				N ["Data"] [cnt] ["isFlagged"] = "true";
+				N ["Data"] [cnt] ["updatedOnServer"] = "false";
+			}
 			File.WriteAllText (fileName, N.ToString());
+			CheckForFlaggedQuestionToSend ();
 		}
 
 		public void RemoveFlaggedQuestionFromFile (string assessmentID)
@@ -2348,13 +2369,34 @@ namespace Cerebro
 			writesr.Close ();
 		}
 
-		public void RemoveFlaggedQuestionFromFileJSON (string assessmentID)
+		public void MarkUnflagged (string assessmentID)
 		{
 			if (!mUseJSON) {
 				RemoveFlaggedQuestionFromFile (assessmentID);
 				return;
 			}
 
+			string fileName = Application.persistentDataPath + "/FlaggedQuestionsJSON.txt";
+			if (!File.Exists (fileName))
+				return;
+
+			JSONNode N = JSONClass.Parse ("{\"Data\"}");
+			string data = File.ReadAllText (fileName);
+			N = JSONClass.Parse (data);
+			File.WriteAllText (fileName, string.Empty);
+			for (int i = 0; i < N["Data"].Count; i++) {
+				if (N ["Data"] [i] ["assessmentID"].Value == assessmentID) {
+					N ["Data"] [i] ["isFlagged"] = "false";
+					N ["Data"] [i] ["updatedOnServer"] = "false";
+					break;
+				}
+			}
+			File.WriteAllText (fileName, N.ToString());
+			CheckForFlaggedQuestionToSend ();
+		}
+
+		public void MarkAsSentOnServer (string assessmentID)
+		{
 			string fileName = Application.persistentDataPath + "/FlaggedQuestionsJSON.txt";
 			if (!File.Exists (fileName))
 				return;
@@ -2370,10 +2412,15 @@ namespace Cerebro
 				int myCnt = 0;
 				for (int i = 0; i < cnt; i++) {
 					if (N ["Data"] [i] ["assessmentID"].Value == assessmentID) {
-						continue;
+						if (N ["Data"] [i] ["isFlagged"].AsBool) {
+							N1 ["Data"] [myCnt] = N ["Data"] [i];
+							N1 ["Data"] [myCnt] ["updatedOnServer"] = "true";
+							myCnt++;
+						}
+					} else {
+						N1 ["Data"] [myCnt] = N ["Data"] [i];
+						myCnt++;
 					}
-					N1 ["Data"] [myCnt] ["assessmentID"] = N ["Data"] [i] ["assessmentID"].Value;
-					myCnt++;
 				}
 				N1 ["VersionNumber"] = N ["VersionNumber"].Value;
 				File.WriteAllText (fileName, N1.ToString());
@@ -2415,12 +2462,14 @@ namespace Cerebro
 				}
 				JSONNode N = JSONClass.Parse (data);
 				for (int i = 0; i < N ["Data"].Count; i++) {
-					FlaggedQuestion f = new FlaggedQuestion ();
-					f.AssessmentItemID = N ["Data"] [i] ["assessmentID"].Value;
-					f.Difficulty = N ["Data"] [i] ["difficulty"].Value;
-					f.SubLevel = N ["Data"] [i] ["sublevel"].Value;
-					f.RandomSeed = N ["Data"] [i] ["seed"].Value;
-					AllFlaggedQuestions.Add (f);
+					if (N ["Data"] [i] ["isFlagged"].AsBool) {
+						FlaggedQuestion f = new FlaggedQuestion ();
+						f.AssessmentItemID = N ["Data"] [i] ["assessmentID"].Value;
+						f.Difficulty = N ["Data"] [i] ["difficulty"].Value;
+						f.SubLevel = N ["Data"] [i] ["sublevel"].Value;
+						f.RandomSeed = N ["Data"] [i] ["seed"].Value;
+						AllFlaggedQuestions.Add (f);
+					}
 				}
 			}
 			return AllFlaggedQuestions;
@@ -3883,6 +3932,35 @@ namespace Cerebro
 					}
 				}
 			}
+		}
+
+		public void CheckForFlaggedQuestionToSend ()
+		{
+			if (mUpdatingServerFlagged)
+				return;
+
+			mUpdatingServerFlagged = true;
+			string fileName = Application.persistentDataPath + "/FlaggedQuestionsJSON.txt";
+			if (File.Exists (fileName)) {
+				string data = File.ReadAllText (fileName);
+				JSONNode N = JSONClass.Parse (data);
+				for (int i = 0; i < N ["Data"].Count; i++) {
+					if (!N ["Data"][i]["updatedOnServer"].AsBool) {
+						JSONNode n = N ["Data"] [i];
+						HTTPRequestHelper.instance.SendFlaggedData (n ["assessmentID"].Value, n ["seed"].Value, n ["difficulty"].AsInt, n ["sublevel"].AsInt, n ["isFlagged"].AsBool, OnFlaggedSentResponse);
+						break;
+					}
+				}
+			}
+		}
+
+		public void OnFlaggedSentResponse(string assessmentID)
+		{
+			mUpdatingServerFlagged = false;
+			if (assessmentID != "") {
+				MarkAsSentOnServer (assessmentID);
+			}
+			CheckForFlaggedQuestionToSend ();
 		}
 
 		public void GotTempDirectory(string tempPath)
