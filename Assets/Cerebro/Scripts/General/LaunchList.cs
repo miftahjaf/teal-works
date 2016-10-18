@@ -118,6 +118,7 @@ namespace Cerebro
 
 		public bool mUseJSON = false;
 		public string VersionData = "v0.1.0.0";
+		private string VersionFlagged = "v0.1.0.0";
 
 		private string[] AllLocalFiles;
 
@@ -2281,6 +2282,7 @@ namespace Cerebro
 					N ["Data"] [cnt] ["seed"] = lineArr [3];
 					N ["Data"] [cnt] ["isFlagged"] = "true";
 					N ["Data"] [cnt] ["updatedOnServer"] = "false";
+					N ["Data"] [cnt] ["FlaggedVersion"] = VersionFlagged;
 					cnt++;
 
 					line = sr.ReadLine ();
@@ -2328,6 +2330,7 @@ namespace Cerebro
 				N ["Data"] [cnt] ["seed"] = seed.ToString ();
 				N ["Data"] [cnt] ["isFlagged"] = "true";
 				N ["Data"] [cnt] ["updatedOnServer"] = "false";
+				N ["Data"] [cnt] ["FlaggedVersion"] = VersionFlagged;
 			}
 			File.WriteAllText (fileName, N.ToString());
 			CheckForFlaggedQuestionToSend ();
@@ -3947,7 +3950,7 @@ namespace Cerebro
 				for (int i = 0; i < N ["Data"].Count; i++) {
 					if (!N ["Data"][i]["updatedOnServer"].AsBool) {
 						JSONNode n = N ["Data"] [i];
-						HTTPRequestHelper.instance.SendFlaggedData (n ["assessmentID"].Value, n ["seed"].Value, n ["difficulty"].AsInt, n ["sublevel"].AsInt, n ["isFlagged"].AsBool, OnFlaggedSentResponse);
+						HTTPRequestHelper.instance.SendFlaggedData (n ["assessmentID"].Value, n ["seed"].Value, n ["difficulty"].AsInt, n ["sublevel"].AsInt, n ["isFlagged"].AsBool, n ["FlaggedVersion"].Value, OnFlaggedSentResponse);
 						break;
 					}
 				}

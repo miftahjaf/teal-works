@@ -225,7 +225,7 @@ namespace Cerebro {
 
 			if (isRevisitedQuestion) {
 				Queslevel = int.Parse (revisitedQuestionData ["difficulty"]);
-//				forceSelector = int.Parse (revisitedQuestionData ["sublevel"]);
+				forceSelector = int.Parse (revisitedQuestionData ["sublevel"]);
 				randomSeed = int.Parse (revisitedQuestionData ["seed"]);
 				Random.seed = randomSeed;
 			} else if (missionItemData != null) {
@@ -390,7 +390,7 @@ namespace Cerebro {
 			if (randomSelector == -1) {
 				randomSelector = Random.Range (lowerLimit, upperLimit);
 			}
-//			Random.seed = randomSeed;
+			Random.seed = randomSeed;
 
 			return randomSelector;
 		}
