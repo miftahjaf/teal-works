@@ -68,6 +68,7 @@ namespace Cerebro
 		public GameObject fsImage;
 
 		private bool isRevisiting = false;
+		private bool IsLoadingImage = false;
 		private bool viewingAnswersMode = false;
 
 		private Vector3 questionTextOriginalPosition;
@@ -130,6 +131,7 @@ namespace Cerebro
 			questionNumberText.gameObject.SetActive (true);
 			questionRemainingText.gameObject.SetActive (true);
 			QuestionLine.SetActive (true);
+			IsLoadingImage = false;
 
 			for (var i = 0; i < optionsTextObject.Count; i++) {
 				var GO = optionsTextObject [i].transform.parent.transform.gameObject;
@@ -313,6 +315,7 @@ namespace Cerebro
 			Graphic graphic = go.GetChildByName<Graphic> ("Icon");
 			go.transform.Find ("ProgressCircle").gameObject.SetActive (true);
 			Texture2D tex = null;
+			IsLoadingImage = true;
 
 			if (CerebroHelper.remoteQuizTextures.ContainsKey (imgurl)) {
 				tex = CerebroHelper.remoteQuizTextures [imgurl];
@@ -330,6 +333,7 @@ namespace Cerebro
 				var newsprite = Sprite.Create (tex, new Rect (0f, 0f, tex.width, tex.height), new Vector2 (0.5f, 0.5f));
 				graphic.GetComponent<Image> ().color = new Color (1, 1, 1, 1);
 				graphic.GetComponent<Image> ().sprite = newsprite;
+				IsLoadingImage = false;
 			} else {
 				go.transform.Find ("ProgressCircle").gameObject.SetActive (false);
 				StartCoroutine (LoadImage (imgurl, go));
@@ -487,7 +491,7 @@ namespace Cerebro
 				isImageFullScreen = false;
 			} else {
 				var sprite = inputPanel.transform.Find ("MediaImage").gameObject.GetChildByName<Graphic> ("Icon").GetComponent<Image> ().sprite;
-				if (sprite != null) {
+				if (sprite != null && !IsLoadingImage) {
 					fsImage.SetActive (true);
 					fsImage.transform.SetAsLastSibling ();
 					isImageFullScreen = true;
@@ -828,6 +832,9 @@ namespace Cerebro
 			string fileName = Application.persistentDataPath + "/QuizAnalyticsJSON.txt";
 			if (!File.Exists (fileName))
 				return;
+
+			if (Answer == null || Answer == "")
+				return;
 			
 			if (!PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
 				CerebroHelper.DebugLog ("NO STUDENT SET.");
@@ -843,11 +850,11 @@ namespace Cerebro
 
 			bool found = false;
 			for (int i = 0; i < N ["Data"] ["Quiz"].Count; i++) {
-				if (N ["Data"] ["Quiz"] [i] ["StudentAndQuestionID"] == StudentAndQuestionID && N ["Data"] ["Quiz"] [i] ["quizDate"] == quizDate) {
+				if (N ["Data"] ["Quiz"] [i] ["StudentAndQuestionID"].Value == StudentAndQuestionID && N ["Data"] ["Quiz"] [i] ["quizDate"].Value == quizDate) {
 					N ["Data"] ["Quiz"] [i] ["Answer"] = Answer;
 					N ["Data"] ["Quiz"] [i] ["IsCorrect"] = correct.ToString ();
 					N ["Data"] ["Quiz"] [i] ["TimeStarted"] = TimeStarted;
-					N ["Data"] ["Quiz"] [i] ["TimeTaken"] = TimeTaken.ToString();
+					N ["Data"] ["Quiz"] [i] ["TimeTaken"] = (N ["Data"] ["Quiz"] [i] ["TimeTaken"].AsFloat + TimeTaken).ToString();
 					found = true;
 				}
 			}
