@@ -41,7 +41,7 @@ public class VolumeAndSurfaceArea7 : BaseAssessment
 		//var correct = false;
 		ignoreTouches = true;
 		//Checking if the response was correct and computing question level
-		var correct = false;
+		var correct = true;
 
 		questionsAttempted++;
 		updateQuestionsAttempted ();
