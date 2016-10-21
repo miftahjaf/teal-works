@@ -59,5 +59,10 @@ namespace Cerebro {
 			}
 			return count;
 		}
+
+		public static string Algebra(this string symbol)
+		{
+			return symbol;
+		}
 	}
 }
