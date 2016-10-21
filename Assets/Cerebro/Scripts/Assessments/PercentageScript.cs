@@ -350,12 +350,12 @@ namespace Cerebro {
 					num1 = 5 * Random.Range (1, 10);
 					num2 = 5 * Random.Range (1, 10);
 					num3 = 5 * Random.Range (1, 10);
-					num4 = 500 * Random.Range (10, 65);
-					while ((((100 - num1) * (100 - num2) * num3 * num4)) % 1000000 != 0)
-						num4 = 500 * Random.Range (10, 65);
-					num = ((100 - num1) * (100 - num2) * num3 * num4) / 1000000;
+					num4 = 5 * Random.Range (10, 81);
+					while ((((100 - num1) * (100 - num2) * num3 * num4)) % 10000 != 0)
+						num4 = 5 * Random.Range (10, 81);
+					num = ((100 - num1) * (100 - num2) * num3 * num4) / 10000;
 					QuestionText.text = "Harvey spends " + num1.ToString () + "% of his income in household expenses, " + num2.ToString () + "% of the remainder in personal necessities and " + num3.ToString () + "% of the amount left in his savings. Find his income (in Rs.) if the amount he saves per month is Rs. " + num.ToString ()+".";
-					Answer = num4.ToString ();
+					Answer = (num4 * 100).ToString ();
 
 				} else if (selector == 2) {
 				
