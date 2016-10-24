@@ -27,6 +27,7 @@ namespace Cerebro
 		public LineShapeType lineType;
 		public string lineText;
 		public TextDir lineTextDirection;
+		public Vector2 pointTextOffset;
 
 		public LinePoint()
 		{
@@ -126,6 +127,12 @@ namespace Cerebro
 		public LinePoint SetLineTextDirection(TextDir lineTextDirection)
 		{
 			this.lineTextDirection = lineTextDirection;
+			return this;
+		}
+
+		public LinePoint SetPointTextOffset(Vector2 pointTextOffset)
+		{
+			this.pointTextOffset = pointTextOffset;
 			return this;
 		}
 	}

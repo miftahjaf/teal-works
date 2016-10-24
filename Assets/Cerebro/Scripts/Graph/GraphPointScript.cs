@@ -55,7 +55,7 @@ namespace Cerebro
 				position = new Vector2 (linePoint.origin.x + linePoint.radius * 0.75f * Mathf.Cos (Mathf.Deg2Rad * newAngle), linePoint.origin.y + linePoint.radius * 0.75f * Mathf.Sin (Mathf.Deg2Rad * newAngle));
 			} else 
 			{
-				position = position + new Vector2 (linePoint.textDirection == 0? 0f:15f *linePoint.textDirection, linePoint.textDirection == 0?-20f:0);
+				position = position - new Vector2 (linePoint.pointTextOffset.x,linePoint.pointTextOffset.y);
 			}
 
 			this.pointName.GetComponent<RectTransform> ().anchoredPosition = parentPosition - position ;

@@ -31,7 +31,7 @@ namespace Cerebro
 				GameObject.Destroy(child.gameObject);
 			}
 			graphLines = new List<GraphLine> ();
-			axisOffset = new Vector2 (10, 10);
+			axisOffset = new Vector2 (1, 1);
 			fontMultiPlier = 1f;
 		}
 
@@ -99,8 +99,11 @@ namespace Cerebro
 
 		public void DrawAxis()
 		{
+			GameObject axisParent = new GameObject ();
+			axisParent.transform.SetParent (this.transform, false);
+			axisParent.name = "axisparent";
 			GameObject axis = GameObject.Instantiate (vectorObjectPrefab);
-			axis.transform.SetParent (this.transform,false);
+			axis.transform.SetParent (axisParent.transform,false);
 			axis.name = "axis";
 			axis.transform.GetComponent<RectTransform> ().anchoredPosition = gridPosition;
 
@@ -113,7 +116,7 @@ namespace Cerebro
 
 			VectorLine vectorLine = axis.GetComponent<VectorObject2D> ().vectorLine;
 			vectorLine.points2 = points;
-			vectorLine.SetWidth (2f);
+			vectorLine.SetWidth (1f);
 			vectorLine.SetColor (Color.black);
 			vectorLine.lineType = LineType.Discrete;
 			vectorLine.Draw ();
@@ -127,7 +130,7 @@ namespace Cerebro
 					cnt++;
 					continue;
 				}
-				GenerateLinePoint (new LinePoint("",point + gridPosition, angles[cnt], true,0));
+				GenerateLinePoint (new LinePoint("",point + gridPosition, angles[cnt], true,0),axisParent);
 				cnt++;
 			}
 
@@ -136,7 +139,7 @@ namespace Cerebro
 			graphMaxValue.x = pointInPosXAxis * axisOffset.x;
 			for (int i = 1; i < pointInPosXAxis; i++) 
 			{
-				GenerateLinePoint (new LinePoint ((i * axisOffset.x).ToString(), GraphPosToUIPos (new Vector2 (i * axisOffset.x, 0)), 0f, false, 0));
+				GenerateLinePoint (new LinePoint ((i * axisOffset.x).ToString(), GraphPosToUIPos (new Vector2 (i * axisOffset.x, 0)), 0f, false,0).SetPointTextOffset(new Vector2(0,-10)),axisParent);
 			}
 
 			//Neg X
@@ -144,7 +147,7 @@ namespace Cerebro
 			graphMinValue.x = -pointInNegXAxis * axisOffset.x;
 			for (int i = 1; i < pointInNegXAxis; i++) 
 			{
-				GenerateLinePoint (new LinePoint ("-"+(i * axisOffset.x).ToString(), GraphPosToUIPos (new Vector2 (-i * axisOffset.x, 0)), 0f, false, 0));
+				GenerateLinePoint (new LinePoint ("-"+(i * axisOffset.x).ToString(), GraphPosToUIPos (new Vector2 (-i * axisOffset.x, 0)), 0f, false,0).SetPointTextOffset(new Vector2(0,-10)),axisParent);
 			}
 
 			//Pos Y
@@ -152,16 +155,26 @@ namespace Cerebro
 			graphMaxValue.y = pointInPosYAxis * axisOffset.y;
 			for (int i = 1; i < pointInPosYAxis; i++) 
 			{
-				GenerateLinePoint (new LinePoint ((i * axisOffset.y).ToString(), GraphPosToUIPos (new Vector2 (0, i * axisOffset.y)), 0f, false, 0,-1));
+				GenerateLinePoint (new LinePoint ((i * axisOffset.y).ToString(), GraphPosToUIPos (new Vector2 (0, i * axisOffset.y)), 0f, false, 0).SetPointTextOffset(new Vector2(-10,0)),axisParent);
 			}
 
 			//Neg Y
 			int pointInPNegYAxis =   Mathf.Abs((Mathf.RoundToInt(gridCoordinateRange.y/2f - graphCenterOffset.y)));
 			graphMinValue.y = -pointInPNegYAxis * axisOffset.y;
-			for (int i = 1; i < pointInPNegYAxis; i++) 
+			for (int i = 2; i < pointInPNegYAxis; i++) 
 			{
-				GenerateLinePoint (new LinePoint ("-"+(i * axisOffset.y).ToString(), GraphPosToUIPos (new Vector2 (0, -i * axisOffset.y)), 0f, false, 0,-1));
+				GenerateLinePoint (new LinePoint ("-"+(i * axisOffset.y).ToString(), GraphPosToUIPos (new Vector2 (0, -i * axisOffset.y)), 0f, false, 0).SetPointTextOffset(new Vector2(-10,0)),axisParent);
 			}
+		}
+
+		public void GenerateLinePoint(LinePoint linePoint,GameObject parent)
+		{
+			GameObject linePointObj = GameObject.Instantiate (linePointPrefab);
+			linePointObj.transform.SetParent (parent.transform, false);
+			GraphPointScript graphPointScript = linePointObj.GetComponent<GraphPointScript> ();
+			graphPointScript.SetPoint(linePoint);
+			graphPointScript.SetTextFontMultiplier (fontMultiPlier);
+
 		}
 
 		public GraphPointScript GenerateLinePoint(LinePoint linePoint)
@@ -178,7 +191,7 @@ namespace Cerebro
 		public GraphPointScript PlotPoint(Vector2 point,string displayText="",bool canDrag =true)
 		{
 			if (IsContainInGraph (point)) {
-				GraphPointScript graphPointScript = GenerateLinePoint (new LinePoint (string.IsNullOrEmpty(displayText) ?"": displayText+" (" + point.x + "," + point.y + ")", GraphPosToUIPos (point), 0f, false, 0));
+				GraphPointScript graphPointScript = GenerateLinePoint (new LinePoint (string.IsNullOrEmpty(displayText) ?"": displayText+" (" + point.x + "," + point.y + ")", GraphPosToUIPos (point), 0f, false,0).SetPointTextOffset(new Vector2(0,-10)));
 				graphPointScript.SetPointColor (Color.blue);
 				if (canDrag) 
 				{
@@ -291,14 +304,14 @@ namespace Cerebro
 		}
 
 
-		public void DrawRanomLine()
+		public GraphLine DrawRandomLine()
 		{
-			Vector2 point1 = GetRanomPointInGraph();
+			Vector2 point1 = GetRandomPointInGraph();
 			GraphPointScript graphPointScript1 = PlotPoint (point1,"");
-			Vector2 point2 = GetRanomPointInGraph();
+			Vector2 point2 = GetRandomPointInGraph();
 			while (Vector2.Distance (UIPosToGraphPos(point1), UIPosToGraphPos(point2)) <15f) 
 			{
-				point2 = GetRanomPointInGraph();
+				point2 = GetRandomPointInGraph();
 			}
 			GraphPointScript graphPointScript2 = PlotPoint (point2,"");
 
@@ -314,9 +327,11 @@ namespace Cerebro
 			graphPointScript2.SetLineObject (graphLine);
 
 			graphLines.Add(graphLine);
+
+			return graphLine;
 		}
 
-		public Vector2 GetRanomPointInGraph()
+		public Vector2 GetRandomPointInGraph()
 		{
 			return SnapPoint(new Vector2 (Random.Range (graphMinValue.x, graphMaxValue.x), Random.Range (graphMinValue.y, graphMaxValue.y)));
 		}

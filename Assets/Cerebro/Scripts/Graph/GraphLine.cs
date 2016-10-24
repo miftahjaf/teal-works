@@ -6,9 +6,9 @@ namespace Cerebro
 {
 	public class GraphLine 
 	{
-		VectorLine vectorLine;
-		GraphPointScript point1;
-		GraphPointScript point2;
+		public VectorLine vectorLine;
+		public GraphPointScript point1;
+		public GraphPointScript point2;
 
 		public GraphLine(VectorLine vectorLine,GraphPointScript point1,GraphPointScript point2)
 		{

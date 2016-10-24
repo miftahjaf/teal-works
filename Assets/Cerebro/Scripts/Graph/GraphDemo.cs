@@ -4,7 +4,7 @@ using Cerebro;
 public class GraphDemo : MonoBehaviour {
 
 	public GraphHelper graphHelper;
-
+	GraphLine graphLine ;
 	void Start () 
 	{
 
@@ -21,9 +21,16 @@ public class GraphDemo : MonoBehaviour {
 		//graphHelper.PlotPoint (new Vector2 (30, 70));
 		//graphHelper.PlotPoint (new Vector2 (30, 120));
 		//graphHelper.PlotPoint (new Vector2 (1000, 120));
-		graphHelper.DrawRanomLine();
+		graphLine = graphHelper.DrawRandomLine();
+
 		//graphHelper.DrawRanomLine();
 		//graphHelper.DrawRanomLine();
+	}
+
+	void Update()
+	{
+		Debug.Log (graphHelper.UIPosToGraphPos(graphLine.point1.linePoint.origin));
+		Debug.Log (graphHelper.UIPosToGraphPos(graphLine.point2.linePoint.origin));
 	}
 	
 
