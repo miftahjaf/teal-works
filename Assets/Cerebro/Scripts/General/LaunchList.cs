@@ -271,6 +271,12 @@ namespace Cerebro
 			if (!PlayerPrefs.HasKey (PlayerPrefKeys.DeltaCoins)) {
 				PlayerPrefs.SetInt (PlayerPrefKeys.DeltaCoins, 0);
 			}
+			string lastVersion = PlayerPrefs.GetString (PlayerPrefKeys.CerebroLastVersion, "0");
+			string ConvertedToJSON = PlayerPrefs.GetString (PlayerPrefKeys.IsConvertedToJSON, "check");
+			if (lastVersion != VersionHelper.GetVersionNumber() && ConvertedToJSON == "false") {
+				PlayerPrefs.SetString (PlayerPrefKeys.IsConvertedToJSON, "check");
+			}
+			PlayerPrefs.SetString (PlayerPrefKeys.CerebroLastVersion, VersionHelper.GetVersionNumber());
 
 			LoadPracticeItems ();
 			CheckIfFileJSON ();
@@ -296,190 +302,214 @@ namespace Cerebro
 		}
 
 		public void CheckIfFileJSON()
-		{
+		{			
 			if (!mUseJSON)
 				return;
-			
-			string fileName = Application.persistentDataPath + "/DescribeImageSubmitted.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck (data)) {
-					ConvertDescribeImageSubmittedToJSON ();
-				}
-			} else {
-				fileName = Application.persistentDataPath + "/DescribeImageSubmittedJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
+
+			string ConvertedToJSON = PlayerPrefs.GetString (PlayerPrefKeys.IsConvertedToJSON, "check");
+			Debug.Log ("checking "+ConvertedToJSON);
+			if (ConvertedToJSON == "false") {
+				mUseJSON = false;
+				return;
+			} else if (ConvertedToJSON == "true") {
+				return;
 			}
 
-			fileName = Application.persistentDataPath + "/Missions.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertMissionFileToJSON ();
+			try {
+				string fileName = Application.persistentDataPath + "/DescribeImageSubmitted.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck (data)) {
+						ConvertDescribeImageSubmittedToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/DescribeImageSubmittedJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/MissionsJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/FlaggedQuestions.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertFlaggedQuestionsToJSON ();
+				fileName = Application.persistentDataPath + "/Missions.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertMissionFileToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/MissionsJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/FlaggedQuestionsJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/LocalAnalytics.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertLocalAnalyticsToJSON ();
+				fileName = Application.persistentDataPath + "/FlaggedQuestions.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertFlaggedQuestionsToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/FlaggedQuestionsJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/LocalAnalyticsJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/QuizSubmitted.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertQuizSubmittedToJSON ();
+				fileName = Application.persistentDataPath + "/LocalAnalytics.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertLocalAnalyticsToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/LocalAnalyticsJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/QuizSubmittedJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/QuizAnalytics.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertQuizAnalyticsToJSON ();
+				fileName = Application.persistentDataPath + "/QuizSubmitted.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertQuizSubmittedToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/QuizSubmittedJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/QuizAnalyticsJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/QuizHistory.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertQuizHistoryToJSON ();
+				fileName = Application.persistentDataPath + "/QuizAnalytics.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertQuizAnalyticsToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/QuizAnalyticsJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/QuizHistoryJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/SentAnalytics.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertSentAnalyticsToJSON ();
+				fileName = Application.persistentDataPath + "/QuizHistory.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertQuizHistoryToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/QuizHistoryJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/SentAnalyticsJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/UsageAnalytics.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertUsageAnalyticsToJSON ();
+				fileName = Application.persistentDataPath + "/SentAnalytics.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertSentAnalyticsToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/SentAnalyticsJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/UsageAnalyticsJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/PracticeData.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertPracticeDataToJSON ();
+				fileName = Application.persistentDataPath + "/UsageAnalytics.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertUsageAnalyticsToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/UsageAnalyticsJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/PracticeDataJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/PracticeCount.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertPracticeCountToJSON ();
+				fileName = Application.persistentDataPath + "/PracticeData.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertPracticeDataToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/PracticeDataJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/PracticeCountJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/WatchedVideos.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertWatchedVideosToJSON ();
+				fileName = Application.persistentDataPath + "/PracticeCount.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertPracticeCountToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/PracticeCountJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/WatchedVideosJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/LastImageID.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertLastImageIDToJSON ();
+				fileName = Application.persistentDataPath + "/WatchedVideos.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertWatchedVideosToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/WatchedVideosJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/LastImageIDJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
-				}
-			}
 
-			fileName = Application.persistentDataPath + "/LastVerbalizeID.txt";
-			if (File.Exists (fileName)) {
-				string data = File.ReadAllText (fileName);
-				if (!IsJsonValidDirtyCheck(data)) {
-					ConvertLastVerbalizeIDToJSON ();
+				fileName = Application.persistentDataPath + "/LastImageID.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertLastImageIDToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/LastImageIDJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
-			} else {
-				fileName = Application.persistentDataPath + "/LastVerbalizeIDJSON.txt";
-				if (!File.Exists (fileName)) {
-					File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+
+				fileName = Application.persistentDataPath + "/LastVerbalizeID.txt";
+				if (File.Exists (fileName)) {
+					string data = File.ReadAllText (fileName);
+					if (!IsJsonValidDirtyCheck(data)) {
+						ConvertLastVerbalizeIDToJSON ();
+					}
+				} else {
+					fileName = Application.persistentDataPath + "/LastVerbalizeIDJSON.txt";
+					if (!File.Exists (fileName)) {
+						File.WriteAllText (fileName, GetEmptyFileWithVersion ());
+					}
 				}
+
+				PlayerPrefs.SetString (PlayerPrefKeys.IsConvertedToJSON, "true");
+			} catch(Exception e) {
+				mUseJSON = false;
+				CerebroHelper.DebugLog ("conversion to JSON didn't work. going back to csv");
+				HTTPRequestHelper.instance.SendFeedback (PlayerPrefs.GetString(PlayerPrefKeys.IDKey, "0"), "ErrorLog "+ e.ToString(), ExceptionSentToServer);
+			}
+		}
+
+		void ExceptionSentToServer(int result)
+		{
+			if (result == 1) {
+				PlayerPrefs.SetString (PlayerPrefKeys.IsConvertedToJSON, "false");
 			}
 		}
 
@@ -500,8 +530,10 @@ namespace Cerebro
 				if (line != null) {
 					var lineArr = line.Split ("," [0]);
 
-					N ["Data"] ["ImageID"] = lineArr[0];
-					N ["Data"] ["Date"] = lineArr[1];
+					if (lineArr.Length > 1) {
+						N ["Data"] ["ImageID"] = lineArr [0];
+						N ["Data"] ["Date"] = lineArr [1];
+					}
 				}
 				sr.Close ();
 				N ["VersionNumber"] = VersionData;
@@ -526,8 +558,10 @@ namespace Cerebro
 				if (line != null) {
 					var lineArr = line.Split ("," [0]);
 
-					N ["Data"] ["VerbalizeID"] = lineArr[0];
-					N ["Data"] ["Date"] = lineArr[1];
+					if (lineArr.Length > 1) {
+						N ["Data"] ["VerbalizeID"] = lineArr [0];
+						N ["Data"] ["Date"] = lineArr [1];
+					}
 				}
 				sr.Close ();
 				N ["VersionNumber"] = VersionData;
@@ -553,8 +587,10 @@ namespace Cerebro
 				while (line != null) {
 					var lineArr = line.Split ("," [0]);
 
-					N ["Data"] [cnt] ["VideoContentID"] = lineArr[0];
-					cnt++;
+					if (lineArr.Length > 0) {
+						N ["Data"] [cnt] ["VideoContentID"] = lineArr [0];
+						cnt++;
+					}
 
 					line = sr.ReadLine ();
 				}
@@ -582,11 +618,13 @@ namespace Cerebro
 				while (line != null) {
 					var lineArr = line.Split ("," [0]);
 
-					N ["Data"] [cnt] ["quizDate"] = lineArr[0];
-					N ["Data"] [cnt] ["totalAttempts"] = lineArr[1];
-					N ["Data"] [cnt] ["correct"] = lineArr[2];
-					N ["Data"] [cnt] ["score"] = lineArr[3];
-					cnt++;
+					if (lineArr.Length > 3) {
+						N ["Data"] [cnt] ["quizDate"] = lineArr [0];
+						N ["Data"] [cnt] ["totalAttempts"] = lineArr [1];
+						N ["Data"] [cnt] ["correct"] = lineArr [2];
+						N ["Data"] [cnt] ["score"] = lineArr [3];
+						cnt++;
+					}
 
 					line = sr.ReadLine ();
 				}
@@ -614,14 +652,16 @@ namespace Cerebro
 				while (line != null) {
 					var lineArr = line.Split ("," [0]);
 
-					N ["Data"] ["Quiz"] [cnt] ["studentID"] = lineArr [0];
-					N ["Data"] ["Quiz"] [cnt] ["StudentAndQuestionID"] = lineArr [1];
-					N ["Data"] ["Quiz"] [cnt] ["Answer"] = lineArr [2];
-					N ["Data"] ["Quiz"] [cnt] ["IsCorrect"] = lineArr [3];
-					N ["Data"] ["Quiz"] [cnt] ["TimeStarted"] = lineArr [4];
-					N ["Data"] ["Quiz"] [cnt] ["TimeTaken"] = lineArr [5];
-					N ["Data"] ["Quiz"] [cnt] ["quizDate"] = lineArr [6];
-					cnt++;
+					if (lineArr.Length > 6) {
+						N ["Data"] ["Quiz"] [cnt] ["studentID"] = lineArr [0];
+						N ["Data"] ["Quiz"] [cnt] ["StudentAndQuestionID"] = lineArr [1];
+						N ["Data"] ["Quiz"] [cnt] ["Answer"] = lineArr [2];
+						N ["Data"] ["Quiz"] [cnt] ["IsCorrect"] = lineArr [3];
+						N ["Data"] ["Quiz"] [cnt] ["TimeStarted"] = lineArr [4];
+						N ["Data"] ["Quiz"] [cnt] ["TimeTaken"] = lineArr [5];
+						N ["Data"] ["Quiz"] [cnt] ["quizDate"] = lineArr [6];
+						cnt++;
+					}
 
 					line = sr.ReadLine ();
 				}
@@ -649,14 +689,16 @@ namespace Cerebro
 				while (line != null) {
 					var lineArr = line.Split ("," [0]);
 
-					N ["Data"] ["Quiz"] [cnt] ["studentID"] = lineArr [0];
-					N ["Data"] ["Quiz"] [cnt] ["StudentAndQuestionID"] = lineArr [1];
-					N ["Data"] ["Quiz"] [cnt] ["Answer"] = lineArr [2];
-					N ["Data"] ["Quiz"] [cnt] ["IsCorrect"] = lineArr [3];
-					N ["Data"] ["Quiz"] [cnt] ["TimeStarted"] = lineArr [4];
-					N ["Data"] ["Quiz"] [cnt] ["TimeTaken"] = lineArr [5];
-					N ["Data"] ["Quiz"] [cnt] ["quizDate"] = lineArr [6];
-					cnt++;
+					if (lineArr.Length > 6) {
+						N ["Data"] ["Quiz"] [cnt] ["studentID"] = lineArr [0];
+						N ["Data"] ["Quiz"] [cnt] ["StudentAndQuestionID"] = lineArr [1];
+						N ["Data"] ["Quiz"] [cnt] ["Answer"] = lineArr [2];
+						N ["Data"] ["Quiz"] [cnt] ["IsCorrect"] = lineArr [3];
+						N ["Data"] ["Quiz"] [cnt] ["TimeStarted"] = lineArr [4];
+						N ["Data"] ["Quiz"] [cnt] ["TimeTaken"] = lineArr [5];
+						N ["Data"] ["Quiz"] [cnt] ["quizDate"] = lineArr [6];
+						cnt++;
+					}
 
 					line = sr.ReadLine ();
 				}
@@ -683,11 +725,14 @@ namespace Cerebro
 				JSONNode N = JSONClass.Parse ("{\"Data\"}");
 				while (line != null) {
 					var lineArr = line.Split ("," [0]);
-					N ["Data"] [cnt] ["type"] = lineArr[0];
-					N ["Data"] [cnt] ["description"] = lineArr[1];
-					N ["Data"] [cnt] ["timestamp"] = lineArr[2];
-					N ["Data"] [cnt] ["timeSpent"] = lineArr[3];
-					cnt++;
+
+					if (lineArr.Length > 3) {
+						N ["Data"] [cnt] ["type"] = lineArr [0];
+						N ["Data"] [cnt] ["description"] = lineArr [1];
+						N ["Data"] [cnt] ["timestamp"] = lineArr [2];
+						N ["Data"] [cnt] ["timeSpent"] = lineArr [3];
+						cnt++;
+					}
 
 					line = sr.ReadLine ();
 				}
@@ -714,10 +759,13 @@ namespace Cerebro
 				JSONNode N = JSONClass.Parse ("{\"Data\"}");
 				while (line != null) {
 					var lineArr = line.Split ("," [0]);
-					N ["Data"] [cnt] ["practiceId"] = lineArr[0];
-					N ["Data"] [cnt] ["attempts"] = lineArr[1];
-					N ["Data"] [cnt] ["correct"] = lineArr[2];
-					cnt++;
+
+					if (lineArr.Length > 2) {
+						N ["Data"] [cnt] ["practiceId"] = lineArr [0];
+						N ["Data"] [cnt] ["attempts"] = lineArr [1];
+						N ["Data"] [cnt] ["correct"] = lineArr [2];
+						cnt++;
+					}
 
 					line = sr.ReadLine ();
 				}
@@ -744,10 +792,13 @@ namespace Cerebro
 				JSONNode N = JSONClass.Parse ("{\"Data\"}");
 				while (line != null) {
 					var lineArr = line.Split ("," [0]);
-					N ["Data"] [cnt] ["date"] = lineArr[0];
-					N ["Data"] [cnt] ["attempts"] = lineArr[1];
-					N ["Data"] [cnt] ["correct"] = lineArr[2];
-					cnt++;
+
+					if (lineArr.Length > 2) {
+						N ["Data"] [cnt] ["date"] = lineArr [0];
+						N ["Data"] [cnt] ["attempts"] = lineArr [1];
+						N ["Data"] [cnt] ["correct"] = lineArr [2];
+						cnt++;
+					}
 
 					line = sr.ReadLine ();
 				}
@@ -1228,38 +1279,40 @@ namespace Cerebro
 					var lineArr = line.Split (new string[] { "," }, System.StringSplitOptions.None);
 					MissionItemData itemData = new MissionItemData ();
 
-					N ["Data"] ["MissionItemData"] [cnt] ["QuestionID"] = lineArr [0];
-					N ["Data"] ["MissionItemData"] [cnt] ["PracticeItemID"] = lineArr [1];
-					N ["Data"] ["MissionItemData"] [cnt] ["QuestionTitle"] = lineArr [2];
-					N ["Data"] ["MissionItemData"] [cnt] ["QuestionLevel"] = lineArr [3];
-					N ["Data"] ["MissionItemData"] [cnt] ["SubLevel"] = lineArr [4];
-					N ["Data"] ["MissionItemData"] [cnt] ["CompletionCondition"] ["key"] = lineArr [5];
-					N ["Data"] ["MissionItemData"] [cnt] ["CompletionCondition"] ["value"] = lineArr [6];
-					N ["Data"] ["MissionItemData"] [cnt] ["ConditionCurrentValue"] = lineArr [7];
-					N ["Data"] ["MissionItemData"] [cnt] ["TotalAttempts"] = lineArr [8];
-					N ["Data"] ["MissionItemData"] [cnt] ["CorrectAttempts"] = lineArr [9];
-					N ["Data"] ["MissionItemData"] [cnt] ["CompleteBool"] = lineArr [10];
-					N ["Data"] ["MissionItemData"] [cnt] ["Type"] = lineArr [11];
-					if (lineArr.Length > 12 && lineArr [12] != "null")
-						N ["Data"] ["MissionItemData"] [cnt] ["QuestionText"] = lineArr [12];
-					else
-						N ["Data"] ["MissionItemData"] [cnt] ["QuestionText"] = "";
-					if (lineArr.Length > 13 && lineArr [13] != "null")
-						N ["Data"] ["MissionItemData"] [cnt] ["AnswerOptions"] = lineArr [13];
-					else
-						N ["Data"] ["MissionItemData"] [cnt] ["AnswerOptions"] = "";
-					if (lineArr.Length > 14 && lineArr [14] != "null")
-						N ["Data"] ["MissionItemData"] [cnt] ["Answer"] = lineArr [14];
-					else
-						N ["Data"] ["MissionItemData"] [cnt] ["Answer"] = "";
-					if (lineArr.Length > 15 && lineArr [15] != "null")
-						N ["Data"] ["MissionItemData"] [cnt] ["QuestionMediaType"] = lineArr [15];
-					else
-						N ["Data"] ["MissionItemData"] [cnt] ["QuestionMediaType"] = "";
-					if (lineArr.Length > 16 && lineArr [16] != "null")
-						N ["Data"] ["MissionItemData"] [cnt] ["QuestionMediaURL"] = lineArr [16];
-					else
-						N ["Data"] ["MissionItemData"] [cnt] ["QuestionMediaURL"] = "";
+					if (lineArr.Length > 11) {
+						N ["Data"] ["MissionItemData"] [cnt] ["QuestionID"] = lineArr [0];
+						N ["Data"] ["MissionItemData"] [cnt] ["PracticeItemID"] = lineArr [1];
+						N ["Data"] ["MissionItemData"] [cnt] ["QuestionTitle"] = lineArr [2];
+						N ["Data"] ["MissionItemData"] [cnt] ["QuestionLevel"] = lineArr [3];
+						N ["Data"] ["MissionItemData"] [cnt] ["SubLevel"] = lineArr [4];
+						N ["Data"] ["MissionItemData"] [cnt] ["CompletionCondition"] ["key"] = lineArr [5];
+						N ["Data"] ["MissionItemData"] [cnt] ["CompletionCondition"] ["value"] = lineArr [6];
+						N ["Data"] ["MissionItemData"] [cnt] ["ConditionCurrentValue"] = lineArr [7];
+						N ["Data"] ["MissionItemData"] [cnt] ["TotalAttempts"] = lineArr [8];
+						N ["Data"] ["MissionItemData"] [cnt] ["CorrectAttempts"] = lineArr [9];
+						N ["Data"] ["MissionItemData"] [cnt] ["CompleteBool"] = lineArr [10];
+						N ["Data"] ["MissionItemData"] [cnt] ["Type"] = lineArr [11];
+						if (lineArr.Length > 12 && lineArr [12] != "null")
+							N ["Data"] ["MissionItemData"] [cnt] ["QuestionText"] = lineArr [12];
+						else
+							N ["Data"] ["MissionItemData"] [cnt] ["QuestionText"] = "";
+						if (lineArr.Length > 13 && lineArr [13] != "null")
+							N ["Data"] ["MissionItemData"] [cnt] ["AnswerOptions"] = lineArr [13];
+						else
+							N ["Data"] ["MissionItemData"] [cnt] ["AnswerOptions"] = "";
+						if (lineArr.Length > 14 && lineArr [14] != "null")
+							N ["Data"] ["MissionItemData"] [cnt] ["Answer"] = lineArr [14];
+						else
+							N ["Data"] ["MissionItemData"] [cnt] ["Answer"] = "";
+						if (lineArr.Length > 15 && lineArr [15] != "null")
+							N ["Data"] ["MissionItemData"] [cnt] ["QuestionMediaType"] = lineArr [15];
+						else
+							N ["Data"] ["MissionItemData"] [cnt] ["QuestionMediaType"] = "";
+						if (lineArr.Length > 16 && lineArr [16] != "null")
+							N ["Data"] ["MissionItemData"] [cnt] ["QuestionMediaURL"] = lineArr [16];
+						else
+							N ["Data"] ["MissionItemData"] [cnt] ["QuestionMediaURL"] = "";
+					}
 					line = sr.ReadLine ();
 				}
 				sr.Close ();
@@ -1930,8 +1983,10 @@ namespace Cerebro
 				while (line != null) {
 					var lineArr = line.Split ("," [0]);
 
-					N ["Data"] ["AnalyticsID"] [cnt] = lineArr [0];
-					cnt++;
+					if (lineArr.Length > 0) {
+						N ["Data"] ["AnalyticsID"] [cnt] = lineArr [0];
+						cnt++;
+					}
 
 					line = sr.ReadLine ();
 				}
@@ -2276,14 +2331,16 @@ namespace Cerebro
 				while (line != null) {
 					var lineArr = line.Split ("," [0]);
 
-					N ["Data"] [cnt] ["assessmentID"] = lineArr [0];
-					N ["Data"] [cnt] ["difficulty"] = lineArr [1];
-					N ["Data"] [cnt] ["sublevel"] = lineArr [2];
-					N ["Data"] [cnt] ["seed"] = lineArr [3];
-					N ["Data"] [cnt] ["isFlagged"] = "true";
-					N ["Data"] [cnt] ["updatedOnServer"] = "false";
-					N ["Data"] [cnt] ["FlaggedVersion"] = VersionFlagged;
-					cnt++;
+					if (lineArr.Length > 3) {
+						N ["Data"] [cnt] ["assessmentID"] = lineArr [0];
+						N ["Data"] [cnt] ["difficulty"] = lineArr [1];
+						N ["Data"] [cnt] ["sublevel"] = lineArr [2];
+						N ["Data"] [cnt] ["seed"] = lineArr [3];
+						N ["Data"] [cnt] ["isFlagged"] = "true";
+						N ["Data"] [cnt] ["updatedOnServer"] = "false";
+						N ["Data"] [cnt] ["FlaggedVersion"] = VersionFlagged;
+						cnt++;
+					}
 
 					line = sr.ReadLine ();
 				}
@@ -2529,18 +2586,20 @@ namespace Cerebro
 				while (line != null) {
 					var lineArr = line.Split ("," [0]);
 
-					N ["Data"]["Analytics"][cnt]["studentID"] = lineArr [0];
-					N ["Data"]["Analytics"][cnt]["assessmentID"] = lineArr [1];
-					N ["Data"]["Analytics"][cnt]["difficulty"] = lineArr [2];
-					N ["Data"]["Analytics"][cnt]["isCorrect"] = lineArr [3];
-					N ["Data"]["Analytics"][cnt]["day"] = lineArr [4];
-					N ["Data"]["Analytics"][cnt]["timeStarted"] = lineArr [5];
-					N ["Data"]["Analytics"][cnt]["timeTaken"] = lineArr [6];
-					N ["Data"]["Analytics"][cnt]["playTime"] = lineArr [7];
-					N ["Data"]["Analytics"][cnt]["seed"] = lineArr [8];
-					N ["Data"]["Analytics"][cnt]["missionField"] = lineArr [9];
-					N ["Data"]["Analytics"][cnt]["CoinsEarned"] = "0";
-					cnt++;
+					if (lineArr.Length > 9) {
+						N ["Data"] ["Analytics"] [cnt] ["studentID"] = lineArr [0];
+						N ["Data"] ["Analytics"] [cnt] ["assessmentID"] = lineArr [1];
+						N ["Data"] ["Analytics"] [cnt] ["difficulty"] = lineArr [2];
+						N ["Data"] ["Analytics"] [cnt] ["isCorrect"] = lineArr [3];
+						N ["Data"] ["Analytics"] [cnt] ["day"] = lineArr [4];
+						N ["Data"] ["Analytics"] [cnt] ["timeStarted"] = lineArr [5];
+						N ["Data"] ["Analytics"] [cnt] ["timeTaken"] = lineArr [6];
+						N ["Data"] ["Analytics"] [cnt] ["playTime"] = lineArr [7];
+						N ["Data"] ["Analytics"] [cnt] ["seed"] = lineArr [8];
+						N ["Data"] ["Analytics"] [cnt] ["missionField"] = lineArr [9];
+						N ["Data"] ["Analytics"] [cnt] ["CoinsEarned"] = "0";
+						cnt++;
+					}
 
 					line = sr.ReadLine ();
 				}
@@ -3650,25 +3709,41 @@ namespace Cerebro
 				var line = sr.ReadLine ();
 				int cnt = 0;
 				JSONNode N = JSONClass.Parse ("{\"Data\"}");
+				string imageID = "";
+				string mediaType = "";
+				string mediaURL = "";
+				string promptText = "";
+				string subPromptText = "";
+				string response = "";
 				while (line != null) {
 					var lineArr = line.Split ("," [0]);
-					string response = lineArr [5];
-					if (lineArr.Length > 6) {
-						for (var i = 6; i < lineArr.Length; i++) {
-							response += "," + lineArr [i];
+					if (lineArr.Length > 5) {
+						if (imageID.Length > 0) {
+							N ["Data"] [cnt] ["ImageID"] = imageID;
+							N ["Data"] [cnt] ["MediaType"] = mediaType;
+							N ["Data"] [cnt] ["MediaURL"] = mediaURL;
+							N ["Data"] [cnt] ["PromptText"] = promptText;
+							N ["Data"] [cnt] ["SubPromptText"] = subPromptText;
+							N ["Data"] [cnt] ["UserResponse"] = response;
+							N ["Data"] [cnt] ["UserSubmitted"] = "true";
+							cnt++;	
 						}
+
+						imageID = lineArr [0];
+						mediaType = lineArr [1];
+						mediaURL = lineArr [2];
+						promptText = lineArr [3];
+						subPromptText = lineArr [4];
+						response = lineArr [5];
+						if (lineArr.Length > 6) {
+							for (var i = 6; i < lineArr.Length; i++) {
+								response += "," + lineArr [i];
+							}
+						}
+					} else {
+						response += "/n"+line;
 					}
-
-					N ["Data"] [cnt] ["ImageID"] = lineArr [0];
-					N ["Data"] [cnt] ["MediaType"] = lineArr [1];
-					N ["Data"] [cnt] ["MediaURL"] = lineArr [2];
-					N ["Data"] [cnt] ["PromptText"] = lineArr [3];
-					N ["Data"] [cnt] ["SubPromptText"] = lineArr [4];
-					N ["Data"] [cnt] ["UserResponse"] = response;
-					N ["Data"] [cnt] ["UserSubmitted"] = "true";
-					cnt++;
-
-					line = sr.ReadLine ();
+					line = sr.ReadLine ();									
 				}
 				sr.Close ();
 				N ["VersionNumber"] = VersionData;
@@ -3803,7 +3878,7 @@ namespace Cerebro
 		public void SetLastVerbalizeIDJSON (string verbalizeID, string date)
 		{
 			if (!mUseJSON) {
-				SetLastVerbalizeIDJSON (verbalizeID, date);
+				SetLastVerbalizeID (verbalizeID, date);
 				return;
 			}
 
@@ -3925,6 +4000,9 @@ namespace Cerebro
 				for (int i = 0; i < N ["Data"].Count; i++) {
 					if (N ["Data"][i]["UserSubmitted"].AsBool && !N ["Data"][i]["UploadedToServer"].AsBool) {
 						Verbalize Verb = CheckForSubmittedVerbalizeViaDate (N ["Data"][i]["VerbalizeDate"].Value);
+						if (UploadingVerbalize == null)
+							UploadingVerbalize = new List<Verbalize> ();
+						UploadingVerbalize.Add (Verb);
 						#if UNITY_EDITOR
 						HTTPRequestHelper.instance.SubmitVerbalizeResponse(Verb);
 						#endif

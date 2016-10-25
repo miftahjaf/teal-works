@@ -1332,7 +1332,6 @@ namespace Cerebro
 					}
 				} else {
 					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
-					SubmitVerbalizeResponse(verb);
 				}
 			});
 		}
