@@ -371,5 +371,21 @@ namespace Cerebro {
 		{
 			return new System.DateTime(2015, monthName, 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("en"));
 		}
+
+		public static Vector3 GetLineParamters ( Vector2 point1, Vector2 point2)
+		{
+			//(y1 – y2)x + (x2 – x1)y + (x1y2 – x2y1) = 0
+			return new Vector3 (point1.y - point2.y  ,point2.x - point1.x, point1.x * point2.y - point2.x * point1.y );
+		}
+
+		public static bool IsValidLinePoint( Vector3 lineParameters ,Vector2 point)
+		{
+			return lineParameters.x * point.x + lineParameters.y * point.y + lineParameters.z == 0;
+		}
+
+		public static Vector2 GetValidLinePoint( Vector3 lineParameters ,Vector2 point)
+		{
+			return new Vector2(point.x,lineParameters.y ==0 ? 0: (- lineParameters.z - lineParameters.x * point.x) /lineParameters.y);
+		}
 	}
 }

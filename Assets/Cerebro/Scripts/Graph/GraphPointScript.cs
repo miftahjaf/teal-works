@@ -105,6 +105,11 @@ namespace Cerebro
 		{
 			this.dot.color = color;	
 		}
+
+		public void SetDotSize(float multiplier)
+		{
+			this.dot.transform.localScale = Vector3.one * multiplier;
+		}
 	}
 
 }
