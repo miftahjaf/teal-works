@@ -326,7 +326,10 @@ namespace Cerebro
 
 			string today = System.DateTime.Now.ToString ("yyyyMMdd");
 			if (LaunchList.instance.mUseJSON) {
-				practiceData.text = GetPracticeCountJSON (today) ["attempts"].ToString () + " questions solved";
+				Dictionary<string, int> practiceCount = GetPracticeCountJSON (today);
+				if (practiceCount != null && practiceCount ["attempts"] != null) {
+					practiceData.text = practiceCount ["attempts"].ToString () + " questions solved";
+				}
 			} else {
 				practiceData.text = GetPracticeCount (today) ["attempts"].ToString () + " questions solved";
 			}

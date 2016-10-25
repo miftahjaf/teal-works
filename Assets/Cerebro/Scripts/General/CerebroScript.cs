@@ -69,6 +69,8 @@ namespace Cerebro {
 		public const string BabaID = "BabaID";
 		public const string GOTGameTeamID = "GOTGameTeamID";
 		public const string IsVersionUpdated = "IsVersionUpdated";
+		public const string IsConvertedToJSON = "IsConvertedToJSON";
+		public const string CerebroLastVersion = "CerebroLastVersion";
 	}
 
 	public static class PrefabManager
