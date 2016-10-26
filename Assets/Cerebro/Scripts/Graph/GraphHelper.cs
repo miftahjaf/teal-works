@@ -454,26 +454,39 @@ namespace Cerebro
 				touchObj.transform.SetParent (this.transform, false);
 				touchObj.AddComponent<RectTransform> ();
 			}
-			if (graphQuesType == GraphQuesType.HighlightQuadrant)
-			{
+			if (graphQuesType == GraphQuesType.HighlightQuadrant) {
 				touchObj.transform.position = eventData.position;
 				currentSelectedQuadrant = GetQuadrant (UIPosToGraphPos (touchObj.GetComponent<RectTransform> ().anchoredPosition));
 				if (highLightedQuadrant == null) {
 					highLightedQuadrant = GenerateQuadrantObject ();
 				}
 				SetQudrantPosition (highLightedQuadrant, currentSelectedQuadrant);
-			}
-			else if (graphQuesType == GraphQuesType.HighlightAxis) 
-			{
+			} else if (graphQuesType == GraphQuesType.HighlightAxis) {
 				touchObj.transform.position = eventData.position;
 				Vector2 selectedPoint = UIPosToGraphPos (touchObj.GetComponent<RectTransform> ().anchoredPosition);
-				if (Mathf.Abs (selectedPoint.x / axisOffset.x) <= 2 || Mathf.Abs (selectedPoint.y / axisOffset.y) <= 2)
-				{
-					currentSelectedAxis = (Mathf.Abs(selectedPoint.x / axisOffset.x) > Mathf.Abs(selectedPoint.y / axisOffset.y)) ? 0 : 1;
+				if (Mathf.Abs (selectedPoint.x / axisOffset.x) <= 2 || Mathf.Abs (selectedPoint.y / axisOffset.y) <= 2) {
+					currentSelectedAxis = (Mathf.Abs (selectedPoint.x / axisOffset.x) > Mathf.Abs (selectedPoint.y / axisOffset.y)) ? 0 : 1;
 					axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (Color.blue, currentSelectedAxis);
 					axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (Color.black, 1 - currentSelectedAxis);
 				}
 			
+			} else if (graphQuesType == GraphQuesType.PlotPoint)
+			{
+				if (currentPlottedPoint == null) {
+					return;
+				}
+				
+				RectTransform pointRectTransform = currentPlottedPoint.GetComponent<RectTransform> ();
+				Vector2 oldPos = pointRectTransform.anchoredPosition;
+				currentPlottedPoint.transform.position = eventData.position;
+				pointRectTransform.anchoredPosition = SetSnapPosition(pointRectTransform.anchoredPosition);
+				Vector2 pos =pointRectTransform.anchoredPosition;
+				Vector2 graphPoint = UIPosToGraphPos (pos);
+				if(!IsContainInGraph(graphPoint))
+				{
+					pointRectTransform.anchoredPosition = oldPos;
+					return;	
+				}
 			}
 		}
 
@@ -657,6 +670,7 @@ namespace Cerebro
 			}
 		}
 
+	
 		//Remove drag event to stop dragging
 		public void RemoveDragEventInGraphPoint(GraphPointScript graphPoint)
 		{
