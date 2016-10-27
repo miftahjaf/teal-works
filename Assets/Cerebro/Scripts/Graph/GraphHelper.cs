@@ -487,6 +487,7 @@ namespace Cerebro
 					pointRectTransform.anchoredPosition = oldPos;
 					return;	
 				}
+				currentPlottedPoint.linePoint.origin = GraphPosToUIPos (graphPoint);
 			}
 		}
 
