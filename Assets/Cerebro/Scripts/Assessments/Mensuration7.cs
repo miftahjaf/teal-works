@@ -179,7 +179,7 @@ namespace Cerebro {
 					int side1 = Random.Range (5, 15);
 					int side2 = Random.Range (5, 15);
 					int side3 = Random.Range (5, 15);
-					QuestionText.text = "Find the perimeter of a triangle with sides " + side1.ToString() + "cm, " + side2.ToString() + "cm and "+ side3.ToString() + "cm.";
+					QuestionText.text = "Find the perimeter of a triangle with sides " + side1.ToString() + " cm, " + side2.ToString() + " cm and "+ side3.ToString() + " cm.";
 //					Triangle.transform.Find ("Side1").gameObject.GetComponent<Text> ().text = side1.ToString () + " cm";
 //					Triangle.transform.Find ("Side2").gameObject.GetComponent<Text> ().text = side2.ToString () + " cm";
 //					Triangle.transform.Find ("Side3").gameObject.GetComponent<Text> ().text = side3.ToString () + " cm";
@@ -190,7 +190,7 @@ namespace Cerebro {
 //					Rectangle.SetActive (true);
 					int side1 = Random.Range (5, 11);
 					int side2 = Random.Range (11, 15);
-					QuestionText.text = "Find the perimeter of a rectangle with length " + side2.ToString() + "cm and breadth " + side1.ToString() + "cm.";
+					QuestionText.text = "Find the perimeter of a rectangle with length " + side2.ToString() + " cm and breadth " + side1.ToString() + " cm.";
 //					Rectangle.transform.Find ("Side1").gameObject.GetComponent<Text> ().text = side1.ToString () + " cm";
 //					Rectangle.transform.Find ("Side2").gameObject.GetComponent<Text> ().text = side2.ToString () + " cm";
 					answerButton = GeneralButton;
@@ -199,7 +199,7 @@ namespace Cerebro {
 					GeneralButton.gameObject.SetActive (true);
 //					Square.SetActive (true);
 					int side = Random.Range (5, 15);
-					QuestionText.text = "Find the perimeter of a square with side " + side.ToString() + "cm.";
+					QuestionText.text = "Find the perimeter of a square with side " + side.ToString() + " cm.";
 //					Square.transform.Find ("Side").gameObject.GetComponent<Text> ().text = side.ToString () + " cm";
 					answerButton = GeneralButton;
 					Answer = side * 4f;
@@ -209,7 +209,7 @@ namespace Cerebro {
 					int side2 = Random.Range (2, 11);
 					int side3 = Random.Range (2, 11);
 					int side4 = Random.Range (2, 11);
-					QuestionText.text = "Find the perimeter of a quadrilateral with sides " + side1.ToString() + "cm, " + side2.ToString() + "cm, " + side3.ToString() + "cm and " + side4.ToString() + "cm.";
+					QuestionText.text = "Find the perimeter of a quadrilateral with sides " + side1.ToString() + " cm, " + side2.ToString() + " cm, " + side3.ToString() + " cm and " + side4.ToString() + " cm.";
 //					Polygon.SetActive (true);
 //					Polygon.transform.Find ("Side1").gameObject.GetComponent<Text> ().text = side1.ToString () + " cm";
 //					Polygon.transform.Find ("Side2").gameObject.GetComponent<Text> ().text = side2.ToString () + " cm";
@@ -220,7 +220,7 @@ namespace Cerebro {
 				} else if (selector == 5) {   // perimeter of polygon
 					GeneralButton.gameObject.SetActive (true);
 					int diameter = Random.Range (2, 7) * 7;
-					QuestionText.text = "Find the perimeter of a circle with diameter " + diameter.ToString() + "cm.";
+					QuestionText.text = "Find the perimeter of a circle with diameter " + diameter.ToString() + " cm.";
 //					Circle.SetActive (true);
 //					Circle.transform.Find ("Diameter").gameObject.GetComponent<Text> ().text = diameter.ToString () + " cm";
 					answerButton = GeneralButton;
@@ -243,7 +243,7 @@ namespace Cerebro {
 					int baseLength = baseLengths [currSelector];
 					int height = heights [currSelector];
 					int side3 = otherSide [currSelector];
-					QuestionText.text = "Find the area of a triangle whose sides are " + baseLength.ToString () + "cm, " + height.ToString () + "cm and " + side3.ToString () + "cm.";
+					QuestionText.text = "Find the area of a triangle whose sides are " + baseLength.ToString () + " cm, " + height.ToString () + " cm and " + side3.ToString () + " cm.";
 					Answer = baseLength * height * 0.5f;
 					Answer = (float)System.Math.Round ((((float)Answer) * 100), System.MidpointRounding.AwayFromZero) / (float)100;
 					GeneralButton.gameObject.SetActive (true);
@@ -251,7 +251,7 @@ namespace Cerebro {
 				} else if (selector == 3) {    // Perimeter of Square given, side = ?
 					int baseLength = Random.Range (2, 11);
 					int altitude = Random.Range (2, 11);
-					QuestionText.text = "Find the area of a triangle with base " + baseLength.ToString () + "cm and altitude " + altitude.ToString() + "cm";
+					QuestionText.text = "Find the area of a triangle with base " + baseLength.ToString () + " cm and altitude " + altitude.ToString() + " cm.";
 					GeneralButton.gameObject.SetActive (true);
 					answerButton = GeneralButton;
 					Answer = baseLength * altitude * 0.5f;
@@ -286,20 +286,20 @@ namespace Cerebro {
 					float area = baseLength * altitude * 0.5f;;
 					QuestionText.text = "Find the altitude of the given triangle.";
 					SubQuestionLaText.gameObject.SetActive (true);
-					SubQuestionLaText.text = "Area = " + area.ToString () + "cm^2 and Base = " + baseLength.ToString () +"cm.";
+					SubQuestionLaText.text = "Area = " + area.ToString () + " cm^2 and Base = " + baseLength.ToString () +" cm.";
 					GeneralButton.gameObject.SetActive (true);
 					answerButton = GeneralButton;
 					Answer = altitude;
 				} else if (selector == 2) {    // Polygon -> Equilateral Triangle
 					int side = Random.Range(2, 11);
 					int perimeter = side * 4;
-					QuestionText.text = "FInd the area of square whose perimeter is " + perimeter.ToString() + "cm.";
+					QuestionText.text = "Find the area of a square whose perimeter is " + perimeter.ToString() + " cm.";
 					GeneralButton.gameObject.SetActive (true);
 					answerButton = GeneralButton;
 					Answer = side * side;
 				} else if (selector == 3) {    // Polygon -> Equilateral Triangle
 					int side = Random.Range(2, 11);
-					QuestionText.text = "FInd the area of square whose perimeter is : ";
+					QuestionText.text = "Find the area of a square whose diagonal is : ";
 					SubQuestionLaText.gameObject.SetActive (true);
 					SubQuestionLaText.text = side.ToString() + "\\root{ 2 } cm.";
 					GeneralButton.gameObject.SetActive (true);
@@ -307,7 +307,7 @@ namespace Cerebro {
 					Answer = side * 4;
 				} else if (selector == 4) {    // Cost of fencing
 					int side = Random.Range(2, 7) * 7;
-					QuestionText.text = "Find the perimeter of given shape.";
+					QuestionText.text = "Find the perimeter of the given shape.";
 					Shape.SetActive (true);
 					Shape.transform.Find ("Side").gameObject.GetComponent<Text> ().text = side.ToString() + " cm";
 					Shape.transform.Find ("Side1").gameObject.GetComponent<Text> ().text = side.ToString() + " cm";
@@ -320,7 +320,7 @@ namespace Cerebro {
 					int baseLength = (side/5) * 6;
 					int perimeter = 2 * side + baseLength;
 					float area = (baseLength/4)*(Mathf.Sqrt(4*side*side-baseLength*baseLength));
-					QuestionText.text = "Find the area of an isosceles triangle if the base of such triangle is " + baseLength.ToString() + "cm and its perimeter is " + perimeter.ToString() + "cm.";
+					QuestionText.text = "Find the area of an isosceles triangle if the base of such triangle is " + baseLength.ToString() + " cm and its perimeter is " + perimeter.ToString() + " cm.";
 					GeneralButton.gameObject.SetActive (true);
 					answerButton = GeneralButton;
 					Triangle.SetActive (true);
@@ -338,7 +338,7 @@ namespace Cerebro {
 					while(length == width)
 						width = Random.Range(5, 11);
 					int perimeter = 2 * length + 2 * width;
-					QuestionText.text = "The perimeter of a table top is " + perimeter.ToString() + "cm. If the length of the table is " + length.ToString() + "cm, Find its breadth";
+					QuestionText.text = "The perimeter of a table top is " + perimeter.ToString() + " cm. If the length of the table is " + length.ToString() + " cm, find its breadth.";
 					GeneralButton.gameObject.SetActive (true);
 					answerButton = GeneralButton;
 					Answer = width;
@@ -350,7 +350,7 @@ namespace Cerebro {
 					float side1 = 3 * rnd[rndSelector];
 					float side2 = 4 * rnd[rndSelector];
 					float side3 = 5 * rnd[rndSelector];
-					QuestionText.text = "The diagonal of a rectangle is " + side3.ToString() + "m. The shorter side of the rectangle is " + side1.ToString() + "m. Find the area of the rectangle(in sq. m).";
+					QuestionText.text = "The diagonal of a rectangle is " + side3.ToString() + " m. The shorter side of the rectangle is " + side1.ToString() + " m. Find the area of the rectangle (in sq. m).";
 					Rectangle.transform.Find ("Side1").gameObject.GetComponent<Text> ().text = side1.ToString () + " cm";
 					Rectangle.transform.Find ("Side2").gameObject.GetComponent<Text> ().text = side2.ToString () + " cm";
 					answerButton = GeneralButton;
@@ -362,7 +362,7 @@ namespace Cerebro {
 					while(length == side)
 						length = Random.Range (1, 2 * side - 1);
 					int width = 2 * side - length;
-					QuestionText.text = "A wire is in shape of a square of side " + side.ToString() + "cm. If the wire is rebent into a rectangle of length " + length.ToString() + "cm, find its breadth";
+					QuestionText.text = "A wire is in shape of a square of side " + side.ToString() + " cm. If the wire is rebent into a rectangle of length " + length.ToString() + " cm, find its breadth.";
 					answerButton = GeneralButton;
 					Answer = width;
 				} else if (selector == 4) {  //perimeter of rect given, l = multiplier * b, area = ?
@@ -373,9 +373,9 @@ namespace Cerebro {
 					int width = Random.Range (7, 10);
 					int area = width * length - subLength * subWidth;
 					int charge = Random.Range (2, 5);
-					QuestionText.text = "A door frame of dimensions " + subLength.ToString() + "mx" + subWidth.ToString() + "m is fixed on the wall of dimension " + length.ToString() + "mx" + width.ToString() + "m." ;
+					QuestionText.text = "A door frame of dimensions " + subLength.ToString() + " m \\times " + subWidth.ToString() + " m is fixed on the wall of dimension " + length.ToString() + " m \\times " + width.ToString() + " m." ;
 					//SubQuestionLaText.gameObject.SetActive (true);
-					QuestionText.text += "Find the total labour charges for painting the wall if the labour charges for painting 1 sq. m of the wall is Rs. 2.50";
+					QuestionText.text += " Find the total labour charges for painting the wall if the labour charges for painting 1 sq. m of the wall is Rs. 2.50.";
 					TwoRectangles.SetActive (true);
 					TwoRectangles.transform.Find ("length").gameObject.GetComponent<Text> ().text = length.ToString () + " m";
 					TwoRectangles.transform.Find ("width").gameObject.GetComponent<Text> ().text = width.ToString () + " m";
@@ -404,7 +404,7 @@ namespace Cerebro {
 						width = length;
 						length = temp;
 					}
-					QuestionText.text = "The area of a square and a rectangle are equal. If the side of the square is " + side.ToString() + "cm and the bredth of the rectangle is " + width.ToString() + "cm, find the perimeter of the rectangle.";
+					QuestionText.text = "The area of a square and a rectangle are equal. If the side of the square is " + side.ToString() + " cm and the breadth of the rectangle is " + width.ToString() + " cm, find the perimeter of the rectangle.";
 					answerButton = GeneralButton;
 					Answer = length + width;
 				}
@@ -414,7 +414,7 @@ namespace Cerebro {
 					GeneralButton.gameObject.SetActive (true);
 					int firstPerc = Random.Range (1, 5) * 10;
 					int secondPerc = Random.Range (1, 3) * 10;
-					QuestionText.text = "A cotton towel when bleached, lost " + firstPerc.ToString() + "% of its length and " + secondPerc.ToString() + "% of its breadth. Find the percentage of decrease in area.";
+					QuestionText.text = "A cotton towel when bleached, lost " + firstPerc.ToString() + "% of its length and " + secondPerc.ToString() + "% of its breadth. Find the percentage decrease in area.";
 					answerButton = GeneralButton;
 					Answer = 100 * (((firstPerc / 100) + (secondPerc / 100)) - ((firstPerc / 100) * (secondPerc / 100)));
 //					Answer = 100 - 100 * firstPerc * 0.1f;
@@ -422,18 +422,19 @@ namespace Cerebro {
 				} else if (selector == 2) {   //Shaded Region pavement cost
 					GeneralButton.gameObject.SetActive (true);
 					int radius = Random.Range (1, 8) * 7;
-					QuestionText.text = "Sagar divides a solid circular disc of radius " + radius.ToString() + "cm into two equal parts. What is the perimeter of each semicircular shaped disc?";
+					QuestionText.text = "Sagar divides a solid circular disc of radius " + radius.ToString() + " cm into two equal parts. What is the perimeter of each semicircular shaped disc?";
 					answerButton = GeneralButton;
 					Answer = (radius / 7) * 22;
 				} else if (selector == 3) {  //tiles required to cover room
 					int error = Random.Range (2, 5);
-					QuestionText.text = "An error of " + error.ToString() + "% in excess is made while measuring the side of a square. Find the percentage of error in the calculated area of the square. (upto 2 decimal places.)";
+					QuestionText.text = "An error of " + error.ToString() + "% in excess is made while measuring the side of a square. Find the percentage error in the calculated area of the square. (upto 2 decimal places.)";
 					answerButton = GeneralButton;
 					Answer = ((100f + error) * (100f + error) - 100f * 100f) / 100f;
 					Answer = (float)System.Math.Round ((((float)Answer) * 100), System.MidpointRounding.AwayFromZero) / (float)100;
 				} else if (selector == 4) { //L-shaped Shaded Region Area
 					MCQ.SetActive(true);
-					QuestionText.text = "A man walked diagonally across a square lot. Approximately what was the percentage saved by not walking along the edges.";
+					numPad.SetActive (false);
+					QuestionText.text = "A man walked diagonally across a square lot. Approximately what was the percentage saved by not walking along the edges?";
 					SubQuestionLaText.gameObject.SetActive (true);
 					SubQuestionLaText.text = "(Use \\root{ 2 } = 1.41)";
 					MCQ.transform.Find ("Option1").Find ("Text").GetComponent<Text> ().text = "20";
@@ -466,7 +467,7 @@ namespace Cerebro {
 					int length = Random.Range (8, 15) * 5;
 					int tileSize = MathFunctions.GetHCF (width, length);
 					int cost = Random.Range (3, 9) * 5;
-					QuestionText.text = "The assembly hall of AIS is " + length.ToString() + "m long and " + width.ToString() + "m wide. The floor has to be paved with square tiles, each having side length " + tileSize.ToString() + "cm. Determine the total cost of tiling at the rate of Rs. " + cost.ToString() + " per square tile.";
+					QuestionText.text = "The assembly hall of AIS is " + length.ToString() + " m long and " + width.ToString() + " m wide. The floor has to be paved with square tiles, each having side length " + tileSize.ToString() + " cm. Determine the total cost of tiling at the rate of Rs. " + cost.ToString() + " per square tile.";
 					answerButton = GeneralButton;
 					Answer = ((width * length) / tileSize) * cost;
 				} else if (selector == 2) {   //Shaded Region pavement cost
@@ -476,7 +477,7 @@ namespace Cerebro {
 					int perimeter = side1 + side2;
 					int area = side1 * side2;
 					int cost = Random.Range (10, 30);
-					QuestionText.text = "The length and breadth of a rectangle field are in the raio 5:4 and the perimeter of this field is " + perimeter.ToString() + "m. Calculate the cost of growing grass at the rate of Rs. " + cost.ToString() + " for sq. metre over the area.";
+					QuestionText.text = "The length and breadth of a rectangle field are in the raio 5 : 4 and the perimeter of this field is " + perimeter.ToString() + " m. Calculate the cost of growing grass at the rate of Rs. " + cost.ToString() + " per sq. metre over the area.";
 					answerButton = GeneralButton;
 					Answer = area * cost;
 				} else if (selector == 3) {  //tiles required to cover room
@@ -485,7 +486,7 @@ namespace Cerebro {
 					int diff = length - width;
 					int perimeter = 2 * (width + length);
 					int area = length * width;
-					QuestionText.text = "The difference between the length and breadth of a rectangle is " + diff.ToString() + "m. If its perimeter is " + perimeter.ToString() + "m, then find its area.";
+					QuestionText.text = "The difference between the length and breadth of a rectangle is " + diff.ToString() + " m. If its perimeter is " + perimeter.ToString() + " m, then find its area.";
 					answerButton = GeneralButton;
 					Answer = area;
 				} else if (selector == 4) { //L-shaped Shaded Region Area
@@ -499,8 +500,8 @@ namespace Cerebro {
 					int roadTwo = vertRoad * width;
 					int totalArea = roadOne + roadTwo - horiRoad * vertRoad;
 					int cost = Random.Range (10, 30);
-					QuestionText.text = "A rectangular playground, " + length.ToString() + "m long and " + width.ToString() + "m wide, has two crossroads. One road is " + horiRoad.ToString() + "m wide and runs parallel to the length ";
-					QuestionText.text += "and another road is " + vertRoad.ToString() + "m wide which runs parallel to the breadth. Determine the cost of construction of both roads at the rate of Rs. " + cost.ToString() + " per sq. metres.";
+					QuestionText.text = "A rectangular playground, " + length.ToString() + " m long and " + width.ToString() + " m wide, has two crossroads. One road is " + horiRoad.ToString() + " m wide and runs parallel to the length ";
+					QuestionText.text += "and another road is " + vertRoad.ToString() + " m wide which runs parallel to the breadth. Determine the cost of construction of both roads at the rate of Rs. " + cost.ToString() + " per sq. metres.";
 					TwoRoadsRectangle.SetActive (true);
 					TwoRoadsRectangle.transform.Find ("length").gameObject.GetComponent<Text> ().text = length.ToString () + " m";
 					TwoRoadsRectangle.transform.Find ("width").gameObject.GetComponent<Text> ().text = width.ToString () + " m";
@@ -514,14 +515,14 @@ namespace Cerebro {
 					int width = Random.Range (1, 5) * 50;
 					int perimeter = (width + length) * 2;
 					//int speed = Random.Range (1, 5) * 6;
-					int time = Random.Range (1, 5);
+					int time = Random.Range (2, 6);
 					int speed = (perimeter * 3) / (time * 50);
 //					int perimeter = (speed / 3) * time * 10 * 5;
 //					int width = Random.Range (2, perimeter/4);
 //					int length = perimeter/2 - width;
 					int hcf = MathFunctions.GetHCF (length, width);
-					QuestionText.text = "The ratio between the length and breadth of a rectangular park is " + (length/hcf).ToString() + ":" + (width/hcf).ToString() + ". If a man cycling along the boundary of the park at the speed of ";
-					QuestionText.text += speed.ToString() + " km/hr completes one round in " + time.ToString() + " minutes then find the area of the park(in sq metres).";
+					QuestionText.text = "The ratio between the length and breadth of a rectangular park is " + (length/hcf).ToString() + " : " + (width/hcf).ToString() + ". If a man cycling along the boundary of the park at the speed of ";
+					QuestionText.text += speed.ToString() + " km/hr completes one round in " + time.ToString() + " minutes then find the area of the park (in sq. metres).";
 					answerButton = GeneralButton;
 					Answer = width * length;
 				}
