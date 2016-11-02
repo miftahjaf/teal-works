@@ -359,27 +359,40 @@ namespace Cerebro {
 				else if (selector == 2) 
 				{
 					SetNumpadMode();
+
+					Repeat:   //In case Loop Hangs
+
 					xCord = Random.Range (-5, 6);
 					yCord = Random.Range (-5, 6);
-					slope = Random.Range (1, 5);
+					slope = Random.Range (1, 4);
 					if (Random.Range (1, 3) == 1)
 						slope *= -1;
-
-					xCord1 = Random.Range (-5, 6);
-					yCord1 = yCord - slope * (xCord - xCord1);
-					xCord2 = Random.Range (-5, 6);
-					while (xCord1 == xCord2)
+					
+					int loopCount = 0;
+					do
+					{	
+						loopCount ++;
+						xCord1 = Random.Range (-5, 6);
+						yCord1 = yCord - slope * (xCord - xCord1);
 						xCord2 = Random.Range (-5, 6);
+						yCord2 = yCord - slope * (xCord - xCord2);
+						if (loopCount == 1000)
+							goto Repeat;
+					} while (yCord1 > 5 || yCord1 < -5 || yCord1 == yCord || yCord2 > 5 || yCord2 < -5 || xCord2 == xCord1 || xCord2 == xCord);
 
-					yCord2 = yCord - slope * (xCord - xCord2);
 					randSelector = Random.Range (0, 2);
 					QuestionText.text = string.Format ("What is the {5} of the point with {6} = {0} on the line connecting ({1}, {2}) and ({3}, {4})?", (randSelector == 0 ? xCord2 : yCord2), xCord, yCord, xCord1, yCord1, (randSelector == 1 ? "abscissa" : "ordinate"), (randSelector == 0 ? "abscissa" : "ordinate"));
+
+					graphHelper.SetGridParameters(new Vector2(12,12),15);
+					graphHelper.DrawGraph();
+					graphHelper.DrawLineBetweenPoints (new Vector2 (xCord, yCord), new Vector2 (xCord1, yCord1));
+					graphHelper.ShiftPosition(new Vector2(0,165f));
 					Answer = string.Format ("{0}", (randSelector == 1 ? xCord2 : yCord2));
 				}
 				else if (selector == 3)
 				{
 					slope = Random.Range (1, 5); 
-					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x.", slope);
+					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x.", slope == 1? "": "" + slope);
 					graphHelper.SetGridParameters(new Vector2(20,20),22);
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
@@ -389,7 +402,7 @@ namespace Cerebro {
 				else if (selector == 4)
 				{
 					slope = - Random.Range (1, 5); 
-					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x.", slope);
+					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x.", slope == -1? "- ": "- " + Mathf.Abs (slope));
 					graphHelper.SetGridParameters(new Vector2(20,20),22);
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
@@ -399,7 +412,7 @@ namespace Cerebro {
 				else if (selector == 5)
 				{
 					slope = Random.Range (1, 5);
-					QuestionText.text = string.Format ("Plot the line y = {0}x.", slope);
+					QuestionText.text = string.Format ("Plot the line y = {0}x.", slope == 1? "": "" + slope);
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
@@ -408,7 +421,7 @@ namespace Cerebro {
 				else if (selector == 6)
 				{
 					slope = - Random.Range (1, 5);
-					QuestionText.text = string.Format ("Plot the line y = {0}x.", slope);
+					QuestionText.text = string.Format ("Plot the line y = {0}x.", slope == 1? "": "" + slope);
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
@@ -425,7 +438,7 @@ namespace Cerebro {
 				{
 					slope = Random.Range (1, 5); 
 					intercept = (Random.Range (1, 3) == 1 ? -1 : 1) * Random.Range (1, 5); 
-					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x + {1}.", slope, intercept);
+					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x {1}.", slope == 1? "": "" + slope, (intercept < 0? "- ": "+ ") + Mathf.Abs(intercept));
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
@@ -435,7 +448,7 @@ namespace Cerebro {
 				{
 					slope = - Random.Range (1, 5); 
 					intercept = (Random.Range (1, 3) == 1 ? -1 : 1) * Random.Range (1, 5); 
-					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x + {1}.", slope, intercept);
+					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x {1}.", slope == 1? "": "" + slope, (intercept < 0? "- ": "+ ") + Mathf.Abs(intercept));
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
@@ -445,7 +458,7 @@ namespace Cerebro {
 				{
 					slope = Random.Range (1, 5); 
 					intercept = (Random.Range (1, 3) == 1 ? -1 : 1) * Random.Range (1, 5); 
-					QuestionText.text = string.Format ("Plot the line y = {0}x + {1}.", slope, intercept);
+					QuestionText.text = string.Format ("Plot the line y = {0}x {1}.", slope == 1? "": "" + slope, (intercept < 0? "- ": "+ ") + Mathf.Abs(intercept));
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
@@ -455,7 +468,7 @@ namespace Cerebro {
 				{
 					slope = - Random.Range (1, 5); 
 					intercept = (Random.Range (1, 3) == 1 ? -1 : 1) * Random.Range (1, 5); 
-					QuestionText.text = string.Format ("Plot the line y = {0}x + {1}.", slope, intercept);
+					QuestionText.text = string.Format ("Plot the line y = {0}x {1}.", slope == 1? "": "" + slope, (intercept < 0? "- ": "+ ") + Mathf.Abs(intercept));
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
@@ -476,7 +489,7 @@ namespace Cerebro {
 					xCord1 = (Random.Range (1,3) == 1 ? 1 : -1) * Random.Range (2, 6); // coeff of x
 					yCord1 = (Random.Range (1,3) == 1 ? 1 : -1) * Random.Range (2, 6); // coeff of y
 					intercept = xCord1 * yCord1;
-					QuestionText.text = string.Format ("Plot the line {0}y + {1}x = {2}.", yCord1, xCord1, intercept);
+					QuestionText.text = string.Format ("Plot the line {0}y {1}x = {2}.", yCord1, (xCord1 < 0? "- ": "+ ") + Mathf.Abs (xCord1), intercept);
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
