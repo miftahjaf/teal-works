@@ -136,6 +136,8 @@ namespace Cerebro
 			List<string> missionQuestionIds = CheckMissions (isCorrect, difficulty, sublevel, practiceID);
 
 			int increment = 0;
+			string KCID = baseAssessment.GetCurrentKCID ();
+			string practiceItemID = baseAssessment.GetPracticeItemID ();
 			if (isCorrect) {
 				if (rightSound != null) {
 					audioSource.PlayOneShot (rightSound);
@@ -149,10 +151,11 @@ namespace Cerebro
 					}
 				}*/
 
-				if (CerebroProperties.instance.ShowCoins)
-					increment = UpdatePracticeItems (baseAssessment.GetPracticeItemID(), baseAssessment.GetCurrentKCID (), increment);
-				else
-					increment =0;
+				if (CerebroProperties.instance.ShowCoins) {
+					increment = UpdatePracticeItems (practiceItemID, KCID , increment);
+				} else {
+					increment = 0;
+				}
 
 				if (increment >0) {
 					incrementScore = increment;
@@ -189,6 +192,8 @@ namespace Cerebro
 			} else {
 				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, " ", UserAnswer, increment);  
 			}
+
+			UpdateKCMastery (practiceItemID, KCID, isCorrect);
 		}
 
 		List<string> CheckMissions (bool isCorrect, int level, int sublevel, string practiceID)
@@ -323,21 +328,17 @@ namespace Cerebro
 
 		public int UpdatePracticeItems(string practiceID,string KCID,int increment)
 		{
-			
 			if(string.IsNullOrEmpty(practiceID) || string.IsNullOrEmpty (KCID))
 			{
 				return 0;
 			}
-			if (LaunchList.instance.mPracticeItems.ContainsKey (practiceID)) 
-			{
-				PracticeItems practiceItem = LaunchList.instance.mPracticeItems[practiceID];
+			if (LaunchList.instance.mPracticeItems.ContainsKey (practiceID)) {
+				PracticeItems practiceItem = LaunchList.instance.mPracticeItems [practiceID];
 
-				if (practiceItem.KnowledgeComponents.ContainsKey (KCID))
-				{
+				if (practiceItem.KnowledgeComponents.ContainsKey (KCID)) {
 					KnowledgeComponent KCComponent = practiceItem.KnowledgeComponents [KCID];
 				
-					if (KCComponent.CurrentCoins + increment > KCComponent.TotalCoins) 
-					{
+					if (KCComponent.CurrentCoins + increment > KCComponent.TotalCoins) {
 						increment = (KCComponent.TotalCoins - KCComponent.CurrentCoins);
 					} 
 
@@ -345,20 +346,18 @@ namespace Cerebro
 					practiceItem.CurrentCoins += increment;
 					LaunchList.instance.mPracticeItems [practiceID] = practiceItem;
 
-				}
-				else
+				} else
 					return increment;
 
 				LaunchList.instance.mPracticeItems [practiceID] = practiceItem;
+			} else {
+				return increment;
 			}
-			else
-				return increment;
 
 
-
-			if (increment <= 0)
-				return increment;
-			
+			if (increment <= 0) {
+				return 0;
+			}
 
 			if (!LaunchList.instance.mKCCoins.ContainsKey (KCID))
 			{
@@ -368,57 +367,59 @@ namespace Cerebro
 			{
 				LaunchList.instance.mKCCoins [KCID] = LaunchList.instance.mKCCoins [KCID] + increment;
 			}
-
 			LaunchList.instance.UpdateKCCoinsData ();
-
 			return increment;
 
 		}
 
-		/*public void UpdatePracticeItems (string practiceID, int increment)
+		public void UpdateKCMastery(string practiceID, string KCID, bool isCorrect)
 		{
-			string fileName = Application.persistentDataPath + "/PracticeItems.txt";
-
-			List<string> lines = new List<string> ();
-			if (File.Exists (fileName)) {
-				var sr = File.OpenText (fileName);
-				var line = sr.ReadLine ();
-				string[] splitArr;
-
-				while (line != null) {
-					if (line != null) {
-						splitArr = line.Split ("," [0]);
-						if (splitArr [1] == practiceID) {
-							var currentCoins = int.Parse (splitArr [6]);
-							currentCoins += increment;
-
-							PracticeItems pItem = LaunchList.instance.mPracticeItems [splitArr [1]];
-							pItem.CurrentCoins = currentCoins;
-							LaunchList.instance.mPracticeItems [pItem.PracticeID] = pItem;
-							string regenerationStarted = "";
-							if (currentCoins >= pItem.TotalCoins) {
-								regenerationStarted = MaxCoinsReached (pItem.PracticeID);
-							}
-							string newLine = splitArr [0] + "," + splitArr [1] + "," + splitArr [2] + "," + splitArr [3] + "," + splitArr [4] + "," + splitArr [5] + "," + currentCoins.ToString () + "," + regenerationStarted + "," + splitArr[8];
-							lines.Add (newLine);
-						} else {
-							lines.Add (line);
-						}
-					}
-					line = sr.ReadLine ();
-				}  
-				sr.Close ();
-			} else {
+			if(string.IsNullOrEmpty(practiceID) || string.IsNullOrEmpty (KCID))
+			{
 				return;
 			}
+			float oldProficiency = 0f;
 
-			StreamWriter writesr = File.CreateText (fileName);
-			for (var i = 0; i < lines.Count; i++) {
-				writesr.WriteLine (lines [i]);
+			if (LaunchList.instance.mKCMastery.ContainsKey (KCID)) 
+			{
+				oldProficiency = LaunchList.instance.mKCMastery [KCID]/100f;
 			}
-			writesr.Close ();
-		}*/
 
+			int newProficiency = 0;
+			ProficiencyConstants proficiencyConstants = LaunchList.instance.proficiencyConstants;
+			float newProficiencyValue = 0f;
+			if (isCorrect) 
+			{
+				newProficiencyValue = (oldProficiency * (1f - proficiencyConstants.slipUp)) / ((oldProficiency * (1f - proficiencyConstants.slipUp)) + ((1f - oldProficiency) * proficiencyConstants.guess));
+			} 
+			else
+			{
+				newProficiencyValue = (oldProficiency * proficiencyConstants.slipUp) / ((oldProficiency * proficiencyConstants.slipUp) + ((1f - oldProficiency) * (1f - proficiencyConstants.guess)));
+			}
+
+			newProficiency = Mathf.RoundToInt(MathFunctions.GetRounded(newProficiencyValue + ( ( 1 - newProficiencyValue) * proficiencyConstants.learntWhileSolving ) , 3) *100f);
+			if (newProficiency >= 100) 
+			{
+				newProficiency = 99;
+			}
+	
+			Debug.Log ("KCID "+KCID +" oldProficiency " + oldProficiency + "  newProficiency" + newProficiency +" slip up"+proficiencyConstants.slipUp);
+
+			if (LaunchList.instance.mKCMastery.ContainsKey (KCID)) {
+				LaunchList.instance.mKCMastery [KCID] = newProficiency;
+			} else {
+				LaunchList.instance.mKCMastery.Add (KCID,newProficiency);
+		
+			}
+			if (LaunchList.instance.mPracticeItems.ContainsKey (mPracticeID) &&  LaunchList.instance.mPracticeItems [practiceID].KnowledgeComponents.ContainsKey(KCID))
+			{
+				KnowledgeComponent KC = LaunchList.instance.mPracticeItems [practiceID].KnowledgeComponents[KCID];
+				KC.Mastery = newProficiency;
+			}
+
+			LaunchList.instance.UpdateKCMastery ();
+		}
+			
 		string MaxCoinsReached (string practiceID)
 		{
 			PracticeItems pItem = LaunchList.instance.mPracticeItems [practiceID];

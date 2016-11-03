@@ -30,8 +30,8 @@ namespace Cerebro
 		
 
 		//		private string SERVER_URL = "http://192.168.1.28:3000/";
-		private string SERVER_URL = "https://teal-server.herokuapp.com/";
-//		private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
+		//private string SERVER_URL = "https://teal-server.herokuapp.com/";
+		private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
 
 		public event EventHandler MoveValidated;
 		public event EventHandler DescribeImageResponseSubmitted;
@@ -503,7 +503,10 @@ namespace Cerebro
 						PlayerPrefs.SetString(PlayerPrefKeys.GOTGameTeamID, jsonResponse ["baba_data"] ["color"].Value);
 					}
 
-
+					if(jsonResponse["student_proficiency_constants"] !=null)
+					{
+						LaunchList.instance.UpdateKCProficiencyConstants(jsonResponse["student_proficiency_constants"]);
+					}
 					PlayerPrefs.SetInt (PlayerPrefKeys.Coins, LaunchList.instance.mCurrentStudent.Coins);
 					int currentDeltaValue = PlayerPrefs.GetInt (PlayerPrefKeys.DeltaCoins);	
 					if (currentDeltaValue != 0) {
@@ -764,71 +767,67 @@ namespace Cerebro
 			});
 		}
 
+
+		public void GetKCMastery()
+		{
+			string fileName = Application.persistentDataPath + "/KCsMastery.txt";
+			if (File.Exists (fileName)) 
+			{
+				string json = File.ReadAllText (fileName);
+				JSONNode jsonNode = JSONNode.Parse (json);
+				if (jsonNode != null && jsonNode ["Data"] ["Mastery"] != null) 
+				{
+					LaunchList.instance.GotKCMastery ();
+					return;
+				}
+			}
+			try {
+
+				WWWForm form = new WWWForm ();
+				form.AddField ("student_id", PlayerPrefs.GetString (PlayerPrefKeys.IDKey,"0"));
+				Debug.Log("Load old kc mastery");
+				CreatePostRequestSimpleJSON (SERVER_URL + "practice_item/kc/mastery_all",form, (jsonResponse) => {
+					if (jsonResponse != null && jsonResponse.ToString () != "") {
+
+						JSONNode jsonNode;
+						if (File.Exists (fileName)) 
+						{
+							string json = File.ReadAllText (fileName);
+							jsonNode = JSONNode.Parse (json);
+						}
+						else
+						{
+							jsonNode = JSONClass.Parse ("{\"Data\"}");
+						}
+
+						jsonNode["Data"]["Mastery"] = jsonResponse;
+						jsonNode["VersionNumber"] = LaunchList.instance.VersionData;
+						File.WriteAllText(fileName,jsonNode.ToString());
+						CerebroHelper.DebugLog ("Loaded complete : mastery");
+						LaunchList.instance.GotKCMastery();
+
+
+					} else {
+						CerebroHelper.DebugLog ("EXCEPTION GetKCMastery");
+					}
+				});
+			} catch (Exception e) {
+				CerebroHelper.DebugLog ("Exception - GetKCMastery: " + e.Message);
+			}
+		}
+
 		public void GetPracticeItems ()
 		{
-			//string fileName = Application.persistentDataPath + "/PracticeItems.txt";
 			string fileName = Application.persistentDataPath + "/PracticeItemsWithKC.txt";
 			try {
 
-				StreamWriter sr = null;
-
-//				if (startKey != null) {
-//					request.ExclusiveStartKey = startKey;
-//					sr = File.AppendText (fileName);
-//				} else {
-				sr = File.CreateText (fileName);														
-//				}
-
-				/*CreatePostRequestNoFormSimpleJSON (SERVER_URL + "practice_item/get_practice_items", (jsonResponse) => {
-					if (jsonResponse != null && jsonResponse.ToString () != "") {
-						LaunchList.instance.mQuizAnalytics.Clear ();
-						for (int i = 0; i < jsonResponse.Count; i++) {
-							PracticeItems p = new PracticeItems ();
-							p.PracticeID = jsonResponse [i] ["practice_id"].Value;
-							p.DifficultyLevels = jsonResponse [i] ["difficulty_levels"].Value;
-							p.Grade = jsonResponse [i] ["grade"].Value;
-							p.PracticeItemName = jsonResponse [i] ["practice_item_name"].Value;
-							p.RegenRate = jsonResponse [i] ["regen_rate"].Value;
-							p.TotalCoins = jsonResponse [i] ["total_coins"].Value;
-							p.Show = jsonResponse [i] ["show"].Value;
-							char lastChar = p.PracticeItemName[p.PracticeItemName.Length - 1];
-							int lastNumber = -1;
-							if(!int.TryParse(lastChar+"", out lastNumber))
-							{
-								p.PracticeItemName += p.Grade;
-							}
-
-							if (LaunchList.instance.mPracticeItems.ContainsKey (p.PracticeID)) {
-								p.CurrentCoins = LaunchList.instance.mPracticeItems [p.PracticeID].CurrentCoins;
-								p.RegenerationStarted = LaunchList.instance.mPracticeItems [p.PracticeID].RegenerationStarted;
-							} else {
-								p.CurrentCoins = 0;
-								p.RegenerationStarted = "";
-							}
-
-							sr.WriteLine (p.Grade + "," + p.PracticeID + "," + p.DifficultyLevels + "," + p.PracticeItemName + "," + p.RegenRate + "," + p.TotalCoins + "," + p.CurrentCoins + "," + p.RegenerationStarted + "," + p.Show);
-						}
-
-						sr.Close ();
-//						if (result.Response.IsSetLastEvaluatedKey ()) {
-//							CerebroHelper.DebugLog ("LOAD PARTLY DONE");
-//							GetPracticeItems (result.Response.LastEvaluatedKey);
-//						} else {
-						CerebroHelper.DebugLog ("LOAD COMPLETE");
-						LaunchList.instance.GotPracticeItems ();
-//						}
-
-					} else {
-						CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
-					}
-				});*/
 				WWWForm form = new WWWForm ();
 				form.AddField ("grade", PlayerPrefs.GetString (PlayerPrefKeys.GradeKey,"0"));
 				Debug.Log("Load practice items");
 				CreatePostRequestSimpleJSON (SERVER_URL + "practice_item/with_kc",form, (jsonResponse) => {
 					if (jsonResponse != null && jsonResponse.ToString () != "") {
 						LaunchList.instance.mQuizAnalytics.Clear ();
-
+						StreamWriter sr = File.CreateText (fileName);	
 						sr.WriteLine (jsonResponse.ToString());
 						sr.Close ();
 
@@ -845,7 +844,7 @@ namespace Cerebro
 			}
 		}
 
-		public void GetPracticeMastery(string praticeId,Action<int> callback)
+		/*public void GetPracticeMastery(string praticeId,Action<int> callback)
 		{
 			try {
 				WWWForm form = new WWWForm ();
@@ -882,7 +881,7 @@ namespace Cerebro
 				callback (0);
 				CerebroHelper.DebugLog ("Exception - GetPractice: " + e.Message);
 			}
-		}
+		}*/
 
 		public void GetFeatureForDate (string date, Func<Feature,int> callback, int grade)
 		{

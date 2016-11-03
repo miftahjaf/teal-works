@@ -4,11 +4,11 @@ using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using System;
 using UnityEngine.EventSystems;
-
+using EnhancedUI.EnhancedScroller;
 
 namespace Cerebro
 {
-	public class AssessmentItemScript  : MonoBehaviour, IPointerClickHandler, ISubmitHandler 
+	public class AssessmentItemScript  : EnhancedScrollerCellView
 	{
 		public Text name;
 		public Text stats;
@@ -18,14 +18,11 @@ namespace Cerebro
 		public GameObject bg;
 		public GameObject KCprefab;
 		public GameObject KCParent;
-		public AccordionElement accordionElement;
-		public ProgressHelper progressHelper;
+
+		//public ProgressHelper progressHelper;
 		public Sprite plus;
 		public Sprite minus;
 		public Image accordingIcon;
-
-		private bool isMastryLoaded =false;
-
 
 		private PracticeItems m_PracticeItems;
 		public PracticeItems practiceItems
@@ -33,9 +30,7 @@ namespace Cerebro
 			get { return m_PracticeItems; }
 			set { m_PracticeItems = value; }
 		}
-
-	
-
+			
 		private Action<string,string> m_OnClickAction;
 		public Action<string,string> onClickAction
 		{
@@ -43,30 +38,41 @@ namespace Cerebro
 			set { m_OnClickAction = value; }
 		}
 
-		private Action m_OnScrollChanged;
-		public Action onScrollChanged
+		private Action<string> m_OnKCViewOpenStateChanged;
+		public Action<string> OnKCViewOpenStateChanged
 		{
-			get { return m_OnScrollChanged; }
-			set { m_OnScrollChanged = value; }
+			get { return m_OnKCViewOpenStateChanged; }
+			set { m_OnKCViewOpenStateChanged = value; }
 		}
-			
 
-		public void Initialise(PracticeItems _practiceItem,Action<string,string> _onClickAction,Color _stripColor,Action _onScrollChanged)
+		private Action m_OnKCViewHeightChanged;
+		public Action OnKCViewHeightChanged
+		{
+			get { return m_OnKCViewHeightChanged; }
+			set { m_OnKCViewHeightChanged = value; }
+		}
+
+		public void Initialise(PracticeItems _practiceItem,Action<string,string> _onClickAction,Action<string> _OnKCViewOpenStateChanged)
 		{
 			this.practiceItems = _practiceItem;
 			this.onClickAction = _onClickAction;
-			this.onScrollChanged = _onScrollChanged;
-			name.text = StringHelper.RemoveNumbers(_practiceItem.PracticeItemName);
-			this.RefreshStats ();
-			this.CoinBarAnimation ();
-			this.CoinTextAnimation ();
-			this.bg.GetComponent<Image> ().color = _stripColor;
-			this.CreateKCList ();
+			this.name.text = StringHelper.RemoveNumbers(_practiceItem.PracticeItemName);
+			this.bg.GetComponent<Image> ().color = practiceItems.stripColor;
+			this.OnKCViewOpenStateChanged = _OnKCViewOpenStateChanged;
+			this.Refresh ();
+		}
 
-			accordionElement.onAnimationStarted += OnAccordionAnimationStarted;
-			accordionElement.onAnimationCompleted += OnAccordioAnimationCompleted;
+		public void UpdateAccordianIcon()
+		{
+			this.accordingIcon.sprite =	practiceItems.isKCViewOpened ? minus : plus;
+			this.bgModifier.Radius = practiceItems.isKCViewOpened ? new Vector4 (4f, 4f, 0, 0) : Vector4.one * 4f;
+		}
 
-			SetProgress (false);
+		public void UpdateCellHeight(AbstractGoTween abstarctGoTween)
+		{
+			if (m_OnKCViewHeightChanged != null) {
+				m_OnKCViewHeightChanged.Invoke ();
+			}
 		}
 
 		private void RefreshStats()
@@ -79,53 +85,36 @@ namespace Cerebro
 			} else {
 				stats.gameObject.SetActive (false);
 				name.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (name.GetComponent<RectTransform> ().anchoredPosition.x, 0f);
-
 			}
 		}
 
-		public void OnPointerClick(PointerEventData eventData)
+		public override void RefreshCellView()
+		{
+			Refresh ();
+		}
+
+		public void OnPointerClick()
 		{
 			if (m_OnClickAction != null)
 			{
 				m_OnClickAction.Invoke(practiceItems.PracticeID,"");
 			}
 		}
-
-		public void OnSubmit(BaseEventData eventData)
-		{
-			if (m_OnClickAction != null)
-			{
-				m_OnClickAction.Invoke(practiceItems.PracticeID,"");
-			}
-		}
-
-
+			
 		private void CoinBarAnimation()
 		{
-			if (CerebroProperties.instance.ShowCoins) 
-			{
-				bg.transform.localScale = new Vector3 (0, 1, 1);
-
-				float ratio = practiceItems.TotalCoins >0f?((practiceItems.TotalCoins- practiceItems.CurrentCoins) / (float)practiceItems.TotalCoins):0;
-				Go.to (bg.transform, 0.75f, new GoTweenConfig ().scale (new Vector3 (ratio, 1, 1), false));
-			} 
-			else
-			{
-				bg.gameObject.SetActive (false);
-				coins.gameObject.SetActive (false);
-			}
-
+			float ratio = practiceItems.TotalCoins >0f?((practiceItems.TotalCoins- practiceItems.CurrentCoins) / (float)practiceItems.TotalCoins):0;
+			bg.transform.localScale = new Vector3 (ratio, 1, 1);
 		}
 
 		public void Refresh()
 		{
-			isMastryLoaded = false;
-			mastryLevel.gameObject.SetActive (false);
-			SetProgress (false);
 			this.RefreshStats ();
 			this.CoinBarAnimation ();
 			this.CoinTextAnimation ();
 			this.RefreshKCList ();
+			this.RefreshMasteryLoaded ();
+			this.UpdateAccordianIcon ();
 		}
 
 
@@ -136,100 +125,38 @@ namespace Cerebro
 			{
 				remainingCoins = 0;
 			}
-			iTween.ValueTo(this.gameObject, iTween.Hash(
-				"from", practiceItems.TotalCoins,
-				"to", remainingCoins,
-				"time",0.4f,
-				"onUpdate", (Action<object>) (value =>{this.coins.text = ((float)value).ToString("0") +" coins left";})
-			));
+			this.coins.text = remainingCoins.ToString ("0") + " coins left";
 		}
 
-		public void CreateKCList()
+
+
+		public void AccordianPressed()
 		{
-			int cnt = 1;
-			foreach (var KC in practiceItems.KnowledgeComponents) 
+			if (m_OnKCViewOpenStateChanged != null) 
 			{
-				GameObject KCObj = Instantiate (KCprefab);
-				KCObj.SetActive (true);
-				KCItemScript kcItemScript = KCObj.GetComponent<KCItemScript> ();
-				KCObj.GetComponent<RectTransform>().SetParent(KCParent.transform);
-				KCObj.GetComponent<RectTransform>().localScale = Vector3.one;
-				KCObj.GetComponent<RectTransform>().localEulerAngles = Vector3.zero;
-
-				kcItemScript.Initialise (cnt,practiceItems.PracticeID, KC.Value,m_OnClickAction);
-
-				cnt++;
+				m_OnKCViewOpenStateChanged.Invoke (practiceItems.PracticeID);
 			}
-			this.KCParent.transform.localScale = Vector3.zero;
-
-		}
-
-		public  void OnAccordionAnimationStarted(bool state)
-		{
-			if (state) {
-				
-				this.KCParent.transform.localScale = Vector3.one;
-				bgModifier.Radius = new Vector4(4f, 4f, 0f, 0f);
-			}
-			RefreshKCList ();
-			accordingIcon.sprite = state ? minus : plus;
-			if (m_OnScrollChanged != null) 
-			{
-				m_OnScrollChanged.Invoke ();
-			}
-		}
-
-		public  void OnAccordioAnimationCompleted(bool state)
-		{
-			
-			this.KCParent.transform.localScale = state ? Vector3.one:Vector3.zero;
-			bgModifier.Radius =state ? new Vector4(4f, 4f, 0f, 0f): new Vector4(4f, 4f, 4f, 4f);
-
-			if (m_OnScrollChanged != null) 
-			{
-				m_OnScrollChanged.Invoke ();
-			}
-
-			RefreshKCList ();
 		}
 
 		public void RefreshKCList()
 		{
-			if (!accordionElement.isOn) 
-			{
-				return;
-			}
 			foreach (KCItemScript kcItem in KCParent.GetComponentsInChildren<KCItemScript>()) 
 			{
 				kcItem.UpdateCoinText ();
 			}
-			if (isMastryLoaded)
-				return;
-
-			foreach (KCItemScript kcItem in KCParent.GetComponentsInChildren<KCItemScript>()) 
-			{
-				kcItem.ChangeMastryStatus (false);
-			}
-			SetProgress (true);
-			HTTPRequestHelper.instance.GetPracticeMastery (practiceItems.PracticeID,PracticeMasteryLoaded);
 		}
 
-		public void PracticeMasteryLoaded(int isDone)
+		public void RefreshMasteryLoaded()
 		{
 			if (KCParent == null)
 				return;
-			SetProgress (false);
-			if (isDone == 0)
-				return;
-
-			isMastryLoaded = true;
+	
 			int started = 0;
 			int inprogress = 0;
 			int mastered = 0;
-			foreach (KCItemScript kcItem in KCParent.GetComponentsInChildren<KCItemScript>()) 
+			foreach (var KC in practiceItems.KnowledgeComponents)
 			{
-				kcItem.UpdateMastry ();
-				int level = kcItem.GetLevel ();
+				int level = GetLevel(KC.Value.Mastery);
 				if (level == 1)
 					started++;
 				else if (level == 2)
@@ -237,24 +164,22 @@ namespace Cerebro
 				else if (level == 3)
 					mastered++;
 			}
-			mastryLevel.text = GetMasteryText (started,inprogress,mastered);
-			mastryLevel.gameObject.SetActive (true);
+			mastryLevel.text = GetMasteryText (started, inprogress, mastered);
 		}
 
-		private void SetProgress(bool enable)
+		public int GetLevel(int mastery)
 		{
-			if (progressHelper == null)
-			{
-				return;
-			}
-			progressHelper.gameObject.SetActive (enable);
+			if (mastery == 0)
+				return 1;
+			if (mastery >= 99f)
+				return 3;
+
+			return 2;
 		}
 
 		public string GetMasteryText(int started,int inprogress,int mastered)
 		{
 			return "<color=#9A9AA4>● </color><color=black>" + started.ToString ().PadRight (5, ' ') +"</color><color=#FDD000>● </color><color=black>"+inprogress.ToString ().PadRight (5, ' ') +"</color><color=#24C8A6>● </color><color=black>"+mastered.ToString ().PadRight (5, ' ') +"</color>";
 		}
-
-
 	}
 }

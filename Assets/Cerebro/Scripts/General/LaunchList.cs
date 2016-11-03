@@ -27,6 +27,7 @@ namespace Cerebro
 		tStudent,
 		tProperties,
 		tPracticeItems,
+		tKCMasetry,
 		kMaxTables}
 
 	;
@@ -59,6 +60,8 @@ namespace Cerebro
 		public List<StartableGame> mStartableGames = new List<StartableGame> ();
 		public Dictionary<string,int> mKCCoins =new Dictionary<string, int>();
 		public Dictionary<string,string> mRegenerationData =new Dictionary<string, string>();
+		public Dictionary<string,int> mKCMastery =new Dictionary<string, int>();
+		public ProficiencyConstants proficiencyConstants;
 		public bool IsVersionUptoDate, CheckingForVersion;
 //		public Daily CurrDaily;
 
@@ -70,7 +73,7 @@ namespace Cerebro
 		private bool IAmServer = false;
 		// analytics table intentionally not added here
 		private string[] mTableNames = new string[] { "Subject", "Topic", "Subtopic", "ContentItem", "Student" };
-		public bool[] mTableLoaded = new bool[] { false, false, false, false, false, false, false };
+		public bool[] mTableLoaded = new bool[] { false, false, false, false, false, false, false,false };
 
 		private bool mTablesLoaded = false;
 
@@ -194,6 +197,7 @@ namespace Cerebro
 			mMission = new Missions ();
 			mPracticeItems.Clear ();
 			mKCCoins.Clear ();
+			mKCMastery.Clear ();
 			mDescribeImageUserResponses.Clear ();
 			mLeaderboard.Clear ();
 			mExplanation.Clear ();
@@ -232,6 +236,7 @@ namespace Cerebro
 						mCurrentStudent.Coins = PlayerPrefs.GetInt (PlayerPrefKeys.Coins) + PlayerPrefs.GetInt (PlayerPrefKeys.DeltaCoins);
 						GotProperties ();
 						GotPracticeItems ();
+						GotKCMastery ();
 						AllTablesLoaded ();
 						firstTimeNetCheck = false;
 					} else {
@@ -1087,7 +1092,8 @@ namespace Cerebro
 
 				GetPracticeItems ();
 				GetExplanation ();
-				for (int i = 0; i < (int)Cerebro.TableTypes.kMaxTables - 2; i++) { 
+				GetKCMastery ();
+				for (int i = 0; i < (int)Cerebro.TableTypes.kMaxTables - 3; i++) { 
 					mTableLoaded [i] = true;
 				}
 				ScanTablesForWatchSection ();
@@ -1105,7 +1111,7 @@ namespace Cerebro
 			grade = grade + section;
 			CerebroHelper.DebugLog ("Scanning for watch section" + studentID + " " + grade + " " + section);
 
-			for (int i = 0; i < (int)Cerebro.TableTypes.kMaxTables - 2; i++) { 
+			for (int i = 0; i < (int)Cerebro.TableTypes.kMaxTables - 3; i++) { 
 				mTableLoaded [i] = true;
 				if (i == (int)Cerebro.TableTypes.tContent) {
 					mTableLoaded [i] = false;
@@ -3020,6 +3026,91 @@ namespace Cerebro
 			mGettingQuizAnalytics = false;
 		}
 
+		public void LoadKCMastery()
+		{
+			string fileName = Application.persistentDataPath + "/KCsMastery.txt";
+			proficiencyConstants = new ProficiencyConstants ();
+			if (File.Exists (fileName)) 
+			{
+				mKCMastery.Clear ();
+				string json = File.ReadAllText (fileName);
+				JSONNode jsonNode = JSONNode.Parse (json);
+
+				if (jsonNode != null) {
+					
+					if (jsonNode ["Data"] ["Mastery"] != null) {
+						jsonNode = jsonNode ["Data"] ["Mastery"];
+						int length = jsonNode.Count;
+						for (int i = 0; i < length; i++) {
+							string KCID = jsonNode [i] ["id"];
+							int mastery = jsonNode [i] ["mastery"].AsInt;
+							if (mKCMastery.ContainsKey (KCID)) {
+								mKCMastery [KCID] = mastery;
+							} else {
+								mKCMastery.Add (KCID, mastery);
+							}
+						}
+					}
+
+					if (jsonNode ["Data"] ["student_proficiency_constants"] != null) {
+						jsonNode = jsonNode ["Data"] ["student_proficiency_constants"];
+
+						proficiencyConstants.slipUp = jsonNode ["slip_up"].AsFloat;
+						proficiencyConstants.guess = jsonNode ["guess"].AsFloat;
+						proficiencyConstants.initial = jsonNode ["initial"].AsFloat;
+						proficiencyConstants.learntWhileSolving = jsonNode ["learnt_while_solving"].AsFloat;
+					}
+				}
+			}
+		}
+
+		public void UpdateKCProficiencyConstants(JSONNode proficiency)
+		{
+			Debug.Log ("Update KC proficiency constants");
+			string fileName = Application.persistentDataPath + "/KCsMastery.txt";
+			JSONNode jsonNode;
+			if (File.Exists (fileName)) {
+				string json = File.ReadAllText (fileName);
+				jsonNode = JSONNode.Parse (json);
+				if (jsonNode != null) {
+					jsonNode ["Data"] ["student_proficiency_constants"] = proficiency;
+				}
+
+			} else {
+				jsonNode = JSONClass.Parse ("{\"Data\"}");
+				jsonNode["Data"] ["student_proficiency_constants"] = proficiency;
+			}
+			proficiencyConstants = new ProficiencyConstants ();
+			proficiencyConstants.slipUp = proficiency ["slip_up"].AsFloat;
+			proficiencyConstants.guess = proficiency ["guess"].AsFloat;
+			proficiencyConstants.initial = proficiency ["initial"].AsFloat;
+			proficiencyConstants.learntWhileSolving = proficiency ["learnt_while_solving"].AsFloat;
+
+			File.WriteAllText (fileName,jsonNode.ToString());
+
+		}
+
+		public void UpdateKCMastery()
+		{
+			string fileName = Application.persistentDataPath + "/KCsMastery.txt";
+			JSONNode jsonNode;
+			if (File.Exists (fileName))
+			{
+				string json = File.ReadAllText (fileName);
+				jsonNode = JSONNode.Parse (json);
+				JSONNode masteryData = JSONNode.Parse ("[]");
+				foreach(var KCMastery in mKCMastery)
+				{
+			    	JSONNode data = JSONNode.Parse ("{}");
+					data ["id"] = KCMastery.Key.ToString();
+					data["mastery"]= KCMastery.Value.ToString();
+					masteryData.Add (data);
+				}
+				jsonNode ["Data"] ["Mastery"] = masteryData;
+				File.WriteAllText (fileName, jsonNode.ToString ());
+			}
+		}
+
 		public void LoadPracticeItems ()
 		{
 			
@@ -3093,7 +3184,7 @@ namespace Cerebro
 						{
 							pItem.PracticeItemName += grade;
 						}
-
+					
 						pItem.RegenRate = jsonNode [i] ["regen_rate"].Value;
 						pItem.Show =  jsonNode [i] ["show"].Value;
 						pItem.RegenerationStarted = "";
@@ -3106,10 +3197,12 @@ namespace Cerebro
 						for (int j = 0; j < KClength; j++)
 						{
 							KnowledgeComponent KC = new KnowledgeComponent ();
+							KC.PracticeID = pItem.PracticeID;
 							KC.ID = KCdata[j] ["id"].Value;
 							KC.KCName = KCdata[j] ["name"].Value;
 							KC.TotalCoins = KCdata[j] ["coins"].AsInt;
 							KC.CurrentCoins = 0;
+							KC.Index = j + 1;
 							if (mKCCoins.ContainsKey (KC.ID)) 
 							{
 								if (mKCCoins [KC.ID] > KC.TotalCoins)
@@ -3141,51 +3234,11 @@ namespace Cerebro
 						} else {
 							mPracticeItems.Add (pItem.PracticeID, pItem);
 						}
-
-
 					}
 				}
-				/*var line = sr.ReadLine ();
-				string[] splitArr;
-
-				while (line != null) {
-					if (line != null) {
-						splitArr = line.Split ("," [0]);
-						PracticeItems pItem = new PracticeItems ();
-						pItem.Grade = splitArr [0];
-						pItem.PracticeID = splitArr [1];
-						pItem.DifficultyLevels = splitArr [2];
-						pItem.PracticeItemName = splitArr [3];
-						pItem.RegenRate = splitArr [4];
-						pItem.TotalCoins = splitArr [5];
-						pItem.CurrentCoins = int.Parse (splitArr [6]);
-						pItem.RegenerationStarted = splitArr [7];
-						if (splitArr.Length == 9) {
-							pItem.Show = splitArr [8];
-						} else {
-							pItem.Show = "true";
-						}
-						if (pItem.RegenerationStarted != "" && pItem.RegenerationStarted != " ") {
-							if (checkRegeneration (pItem)) {
-								pItem.RegenerationStarted = "";
-								pItem.CurrentCoins = 0;
-								resetRegenerationList.Add (pItem.PracticeID);
-							}
-						}
-						if (mPracticeItems.ContainsKey (pItem.PracticeID)) {
-							mPracticeItems [pItem.PracticeID] = pItem;
-						} else {
-							mPracticeItems.Add (pItem.PracticeID, pItem);
-						}
-					}
-
-					line = sr.ReadLine ();
-				} */ 
-
 				sr.Close ();
 			}
 			PracticeRegeneration ();
-			//ResetRegenerationinPracticeItems (resetRegenerationList);
 		}
 
 		public void LoadExplanations ()
@@ -3328,55 +3381,7 @@ namespace Cerebro
 
 			File.WriteAllText (fileName, jsonNode.ToString ());
 		}
-
-		/*public bool checkRegeneration (PracticeItems pItem)
-		{
-			System.DateTime timestarted = System.DateTime.ParseExact (pItem.RegenerationStarted, "yyyyMMddHHmmss", null);
-			System.DateTime timeNow = System.DateTime.Now;
-			System.TimeSpan differenceTime = timeNow.Subtract (timestarted);
-			float diff = (float)differenceTime.TotalSeconds;
-			float secondsForRegeneration = float.Parse (pItem.RegenRate) * 60 * 60 * 24;
-			if (diff >= secondsForRegeneration) {
-				return true;
-			}
-			return false;
-		}
-
-		public void ResetRegenerationinPracticeItems (List<string> practiceIDs)
-		{
-			string fileName = Application.persistentDataPath + "/PracticeItems.txt";
-
-			List<string> lines = new List<string> ();
-			if (File.Exists (fileName)) {
-				var sr = File.OpenText (fileName);
-				var line = sr.ReadLine ();
-				string[] splitArr;
-				while (line != null) {
-
-					if (line != null) {
-						splitArr = line.Split ("," [0]);
-						if (practiceIDs.Contains (splitArr [1])) {
-							string newLine = splitArr [0] + "," + splitArr [1] + "," + splitArr [2] + "," + splitArr [3] + "," + splitArr [4] + "," + splitArr [5] + ",0,," + splitArr [8];
-							lines.Add (newLine);
-						} else {
-							lines.Add (line);
-						}
-					}
-					line = sr.ReadLine ();
-				}  
-				sr.Close ();
-			} else {
-				return;
-			}
-
-			StreamWriter writesr = File.CreateText (fileName);
-			for (var i = 0; i < lines.Count; i++) {
-				writesr.WriteLine (lines [i]);
-			}
-			writesr.Close ();
-		}*/
-
-
+			
 		public void GotPracticeItems ()
 		{		
 			mTableLoaded [(int)Cerebro.TableTypes.tPracticeItems] = true;	
@@ -3387,6 +3392,19 @@ namespace Cerebro
 		{
 			if (mHitServer) {
 				HTTPRequestHelper.instance.GetPracticeItems ();
+			}  
+		}
+
+		public void GotKCMastery()
+		{
+			mTableLoaded [(int)Cerebro.TableTypes.tKCMasetry] = true;
+			LoadKCMastery ();
+		}
+
+		public void GetKCMastery()
+		{
+			if (mHitServer) {
+				HTTPRequestHelper.instance.GetKCMastery ();
 			}  
 		}
 
@@ -4268,9 +4286,14 @@ namespace Cerebro
 		public string TimeTaken{ get; set; }
 	}
 
-	public class PracticeItems
+	public class AssessmentItem
 	{
 		public string PracticeID { get; set; }
+	}
+
+	public class PracticeItems : AssessmentItem
+	{
+		
 		public string DifficultyLevels{ get; set; }
 		//public string Grade { get; set; }
 		public string PracticeItemName{ get; set; }
@@ -4280,10 +4303,13 @@ namespace Cerebro
 		public int CurrentCoins{ get; set; }
 		public string RegenerationStarted { get; set; }
 		public Dictionary<string ,KnowledgeComponent> KnowledgeComponents;
+		public bool isKCViewOpened;
+		public Color stripColor;
 	}
 
-	public class KnowledgeComponent
+	public class KnowledgeComponent : AssessmentItem
 	{
+		public int Index { get; set;}
 		public string ID { get; set; }
 		public string KCName { get; set; }
 		public List<string> Mappings { get; set; }
@@ -4479,6 +4505,23 @@ namespace Cerebro
 		public string GroupID;
 		public int GroupCell;
 		public int GroupPoint;
+	}
+
+	public class ProficiencyConstants
+	{
+		public float slipUp;
+		public float guess;
+		public float initial;
+		public float learntWhileSolving;
+
+		public ProficiencyConstants()
+		{
+			slipUp = 0f;
+			guess = 0f;
+			initial = 0f;
+			learntWhileSolving = 0f;
+		}
+
 	}
 
 

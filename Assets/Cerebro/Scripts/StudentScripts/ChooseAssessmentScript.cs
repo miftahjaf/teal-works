@@ -34,7 +34,7 @@ namespace Cerebro
 
 		public FingersScript FingerScript;
 		private TapGestureRecognizer tapGesture;
-		private TapGestureRecognizer doubleTapGesture;
+	    private TapGestureRecognizer doubleTapGesture;
 		private List<string> checkTaps = new List<string> ();
 		// Use this for initialization
 		void Start ()
@@ -146,39 +146,12 @@ namespace Cerebro
 			list.AssessmentSelected -= List_AssessmentSelected; //if already done
 			list.AssessmentSelected += List_AssessmentSelected;
 
-			listHeight = list.getListHeight ();
-			listContentHeight = list.getContentHeight ();
-			totalListContentHeight = listContentHeight * assessments.Count;
-
 			upArrow.SetActive (false);
 			if (assessments.Count <= 3) {
 				downArrow.SetActive (false);
 			}
 		}
 
-	/*	private void CheckForRegeneration ()
-		{
-			List<string> resetRegenerationList = new List<string> ();
-			Dictionary<string,PracticeItems> dirtyItems = new Dictionary<string,PracticeItems> ();
-
-			foreach (var items in LaunchList.instance.mPracticeItems) {
-				PracticeItems pItem = items.Value;
-				if (pItem.RegenerationStarted != "") {
-					if (LaunchList.instance.checkRegeneration (pItem)) {
-						pItem.RegenerationStarted = "";
-						pItem.CurrentCoins = 0;
-						dirtyItems.Add (pItem.PracticeID, pItem);
-						resetRegenerationList.Add (pItem.PracticeID);
-					}
-				}
-			}
-
-			foreach (var items in dirtyItems) {
-				LaunchList.instance.mPracticeItems [items.Key] = items.Value;
-			}
-
-			LaunchList.instance.ResetRegenerationinPracticeItems (resetRegenerationList);
-		}*/
 
 		void List_AssessmentSelected (object sender, System.EventArgs e)
 		{
@@ -237,12 +210,13 @@ namespace Cerebro
 
 		public void BackOnScreen ()
 		{
+			list.RefreshActiveCellViews ();
 			if (isAnimating) {
 				return;
 			}
 //			CheckForRegeneration ();
-
-			list.RefreshCellData ();
+			//list.enhanceScroller.ReloadData();
+//			list.RefreshCellData ();
 			//StudentScript ss = GameObject.FindGameObjectWithTag ("StudentView").GetComponent<StudentScript> ();
 			//ss.ShowHeading ();
 		}

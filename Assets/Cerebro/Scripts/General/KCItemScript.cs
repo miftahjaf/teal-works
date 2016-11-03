@@ -5,10 +5,12 @@ using UnityEngine.EventSystems;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine.UI.ProceduralImage;
+using EnhancedUI.EnhancedScroller;
 
 namespace Cerebro
 {
-	public class KCItemScript  : MonoBehaviour, IPointerClickHandler, ISubmitHandler 
+	public class KCItemScript  :EnhancedScrollerCellView
 	{
 		public Text name;
 		public Text coins;
@@ -17,14 +19,6 @@ namespace Cerebro
 		public Text indexText;
 		public Image mastryImage;
 	
-
-		private string m_PracticeId;
-
-		public string praticeId
-		{
-			get { return m_PracticeId; }
-			set { m_PracticeId = value; }
-		}
 
 		private Action<string,string> m_OnClickAction;
 		public Action<string,string> onClickAction
@@ -40,30 +34,28 @@ namespace Cerebro
 			set { m_KnowledgeComponent = value; }
 		}
 			
-		public void Initialise(int index,string _practiceId, KnowledgeComponent _knowledgeComponent,Action<string,string> _OnClickAction)
+		public void Initialise(KnowledgeComponent _knowledgeComponent,Action<string,string> _OnClickAction)
 		{
 			knowledgeComponent = _knowledgeComponent;
-			praticeId = _practiceId;
-			indexText.text = index+".";
+			indexText.text = knowledgeComponent.Index+".";
 			name.text = _knowledgeComponent.KCName;
 			this.UpdateCoinText ();
 			onClickAction = _OnClickAction;
-			ChangeMastryStatus (false);
-		}
-
-		public void OnPointerClick(PointerEventData eventData)
-		{
-			if (m_OnClickAction != null)
+			if (LaunchList.instance.mKCMastery.ContainsKey (knowledgeComponent.ID))
 			{
-				m_OnClickAction.Invoke(praticeId,knowledgeComponent.ID);
+				knowledgeComponent.Mastery = LaunchList.instance.mKCMastery [knowledgeComponent.ID];
 			}
+			UpdateMastry ();
+
+			//ChangeMastryStatus (false);
 		}
 
-		public void OnSubmit(BaseEventData eventData)
+		public void OnPointerClick()
 		{
 			if (m_OnClickAction != null)
 			{
-				m_OnClickAction.Invoke(praticeId,knowledgeComponent.ID);
+				Debug.Log ("Practice Id " + knowledgeComponent.PracticeID + "Knowledge Component Id " + knowledgeComponent.ID);
+				m_OnClickAction.Invoke(knowledgeComponent.PracticeID,knowledgeComponent.ID);
 			}
 		}
 
@@ -77,7 +69,11 @@ namespace Cerebro
 			this.coins.text = diffCoins.ToString() +" coins left";
 		}
 
-
+		public override void RefreshCellView()
+		{
+			UpdateMastry ();
+			UpdateCoinText ();
+		}
 
 		public void UpdateMastry()
 		{
@@ -101,7 +97,7 @@ namespace Cerebro
 			mastryText.text = knowledgeComponent.Mastery + "%";
 			mastrySlider.value =Mathf.Clamp( knowledgeComponent.Mastery / 100f,0f,1f);
 
-			ChangeMastryStatus (true);
+			//ChangeMastryStatus (true);
 
 		}
 
@@ -115,11 +111,14 @@ namespace Cerebro
 			return 2;
 		}
 
-		public void ChangeMastryStatus(bool enable)
+		/*public void ChangeMastryStatus(bool enable)
 		{
 			mastrySlider.gameObject.SetActive (enable);
 			mastryText.gameObject.SetActive (enable);
-		}
+		}*/
+
+
+
 
 	}
 }
