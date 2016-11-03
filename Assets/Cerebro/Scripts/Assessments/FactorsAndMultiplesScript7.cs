@@ -288,7 +288,7 @@ namespace Cerebro {
 
 
                     Answer = MathFunctions.GetLCM(num1 * num3, num2 * num3).ToString();
-                    QuestionText.text = "The ratio of two numbers is " + num1 + ":" + num2 + " and their HCF is " + num3 + ". Their LCM is ";
+                    QuestionText.text = "The ratio of two numbers is " + num1 + ":" + num2 + " and their HCF is " + num3 + ". Their LCM is :";
                     GeneralButton.gameObject.SetActive(true);
                 }
             }

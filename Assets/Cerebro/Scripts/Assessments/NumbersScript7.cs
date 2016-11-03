@@ -194,23 +194,23 @@ namespace Cerebro {
             if (level == 1) {
 				selector = GetRandomSelector (1, 6);
                
-                QuestionText.text = "";
+                QuestionLatext.text = "";
                 subQuestionText.text = "";
 
                 if (selector == 1) {                                               
                     int a = Random.Range(0, 100);
                     int b = Random.Range(a+1, 1000);
-					QuestionText.text = "How many whole numbers are there between " + a + " and " + b + "?";
+					QuestionLatext.text = "How many whole numbers are there between " + a + " and " + b + "?";
                     int Ans = b - a - 1;					
 					Answer = Ans.ToString ();
 				} else if (selector == 2) {											
-					QuestionText.text = "Find the value of x:";
+					QuestionLatext.text = "Find the value of \\xalgebra:";
 					int p = Random.Range (5, 100);
 					int q = Random.Range (5, 100);
                     int r = Random.Range(1, 100);
 					subQuestionText.gameObject.SetActive (true);
 
-                    subQuestionText.text = p + "\\times(  x   + " + r + " ) = ";
+                    subQuestionText.text = p + "\\times(  \\xalgebra   + " + r + " ) = ";
 
                     subQuestionText.text += (p +"\\times" + q) + " + " + (p +"\\times"+ r);
 
@@ -224,7 +224,7 @@ namespace Cerebro {
                     int e = Random.Range(2, 30);
                     int f = Random.Range(2, 30);
                  
-					QuestionText.text = "Using the properties of integers, evaluate:";
+					QuestionLatext.text = "Using the properties of integers, evaluate:";
 
                     subQuestionText.text = a + "\\times " + b +" + (" + (-e) + "\\times" + f + ")";
                     int Ans = (a * b ) - (e * f);
@@ -233,8 +233,8 @@ namespace Cerebro {
 					subQuestionText.gameObject.SetActive (true);
                     int a = Random.Range(-200, 200);
                    
-                    QuestionText.text = "Find the value of x:";
-                    subQuestionText.text =   "x + (" +  a + ") = 0";
+                    QuestionLatext.text = "Find the value of \\xalgebra:";
+                    subQuestionText.text =   "\\xalgebra + (" +  a + ") = 0";
                     Answer = (-a ).ToString();
 
                 }              
@@ -248,8 +248,8 @@ namespace Cerebro {
                     while (b == 0 || a % b == 0 )
                         b = Random.Range(-50, 999);
                    
-                    QuestionText.text = "Find the value of x:";
-                    subQuestionText.text = "\\frac{" + a +"}{"+b+"} \\times ( x ) = 1" ;
+					QuestionLatext.text = "Find the value of \\xalgebra:";
+					subQuestionText.text = "\\frac{" + a +"}{"+b+"} \\times ( \\xalgebra ) = 1" ;
                     int hcf = MathFunctions.GetHCF(a, b);
                     while (hcf != 1)
                     {
@@ -276,7 +276,7 @@ namespace Cerebro {
             #region L2
             else if (level == 2) {
 				selector = GetRandomSelector (1, 6);
-                QuestionText.text = "";
+                QuestionLatext.text = "";
                 subQuestionText.text = "";
                if (selector == 1)
                 {
@@ -298,10 +298,10 @@ namespace Cerebro {
                         d = Random.Range(-100, 100);
 
 
-                    QuestionText.text = "Evaluate:";
+                    QuestionLatext.text = "Evaluate:";
                     if (e < 0)
-                        subQuestionText.text = -a + "[(" + (-b) + "- \\frac{" + c + "}{" + d + "} )" + "- (" + e + ")]";
-                    else subQuestionText.text = -a + "[(" + (-b) + "- \\frac{" + c + "}{" + d + "} )" + "-" + e + "]";
+						subQuestionText.text = -a + "{[{({" + (-b) + "- \\frac{" + c + "}{" + d + "} })" + "- {({" + e + "})}}]}";
+					else subQuestionText.text = -a + "{[{({" + (-b) + "- \\frac{" + c + "}{" + d + "} })" + "-" + e + "}}]}";
                     int Ans = -a * (-(d * b) - c - (d * e));
                     int Ans2 = d;
                     int hcf = MathFunctions.GetHCF(Ans, Ans2);
@@ -338,9 +338,9 @@ namespace Cerebro {
                     int h = Random.Range(1, 10);
                     int i = Random.Range(1, 10);
 
-                    QuestionText.text = "Simplify:";
+                    QuestionLatext.text = "Simplify:";
 
-                    subQuestionText.text = a + "[" + (-b) + "-[" + c + "+" + d + "( " + e + "\\times" + f + "\\div" + g + " + (" + h + "-" + i + "))]]";
+					subQuestionText.text = a + "{[{" + (-b) + "-{[{" + c + "+" + d + "{({ " + e + "\\times" + f + "\\div" + g + " + {({" + h + "-" + i + "})}})}}]}}]}";
                     int Ans = a * (-(g * b) - (g * c) - (d * e * f) - (g * d * h) + (g * d * i));
                     int Ans2 = g;
                     int hcf = MathFunctions.GetHCF(Ans, Ans2);
@@ -369,7 +369,7 @@ namespace Cerebro {
                     int a = Random.Range(c + 1, 15);
                     int b = Random.Range(1, 15);
 
-                    QuestionText.text = "The division of a whole number N by " + a + " gives a quotient of " + b + " and a remainder of " + c + ". Find N.";
+                    QuestionLatext.text = "The division of a whole number N by " + a + " gives a quotient of " + b + " and a remainder of " + c + ". Find N.";
                     int Ans = (b * a) + c;
                     Answer = Ans.ToString();
 
@@ -406,7 +406,7 @@ namespace Cerebro {
                         Ans = 9 * a;
                     }
 
-                    QuestionText.text = "Calculate the difference in place value and face value of " + a + " in " + s + ".";
+                    QuestionLatext.text = "Calculate the difference in place value and face value of " + a + " in " + s + ".";
                     Answer = Ans.ToString();
 
                 }
@@ -447,7 +447,7 @@ namespace Cerebro {
 
                     int num2 = int.Parse(s1);
                     int num3 = int.Parse(s2);
-                    QuestionText.text = "What is the difference of place values of " + a + " in the numbers " + num2 + " and " + num3 + "?";
+                    QuestionLatext.text = "What is the difference of place values of " + a + " in the numbers " + num2 + " and " + num3 + "?";
                     Answer = Ans.ToString();
                 }
                 //else if (selector == 4)
@@ -456,7 +456,7 @@ namespace Cerebro {
                 //    int b = Random.Range(4, 7);
                 //    int c = Random.Range(7, 10);
                   
-                //    QuestionText.text = "How many 3 digit numbers can be formed by using " + a + ", " + b + ", " + c + " as its digits without using repetition of digits?";
+                //    QuestionLatext.text = "How many 3 digit numbers can be formed by using " + a + ", " + b + ", " + c + " as its digits without using repetition of digits?";
 
                 //    Answer = 6.ToString();
                 //}
@@ -467,7 +467,7 @@ namespace Cerebro {
             else if (level == 3) {
 				selector = GetRandomSelector (1, 4);
               
-                QuestionText.text = "";
+                QuestionLatext.text = "";
                 subQuestionText.text = "";
                if (selector == 1)
                 {
@@ -482,8 +482,8 @@ namespace Cerebro {
                     }
                     subQuestionText.gameObject.SetActive(true);
 
-                    QuestionText.text = "A drum full of rice weighs x kgs. If the empty drum weighs y kgs. Find the weight(in kgs) of rice in the drum.";
-                    subQuestionText.text = "x = \\frac{" + a + "}{" + b + "}, y = \\frac{" + c + "}{" + d + "}";
+                    QuestionLatext.text = "A drum full of rice weighs \\xalgebra kgs. If the empty drum weighs \\yalgebra kgs. Find the weight(in kgs) of rice in the drum.";
+                    subQuestionText.text = "\\xalgebra = \\frac{" + a + "}{" + b + "}, \\yalgebra = \\frac{" + c + "}{" + d + "}";
                     int a1 = (a * d) - (c * b);
                     int a2 = b * d;
                     int hcf = MathFunctions.GetHCF(a1, a2);
@@ -538,7 +538,7 @@ namespace Cerebro {
 
 
 
-                        QuestionText.text = "Write the largest 4 digit number using the digits " + a + ", " + b + ", " + c + ", " + d + " without repetition of digits.";
+                        QuestionLatext.text = "Write the largest 4 digit number using the digits " + a + ", " + b + ", " + c + ", " + d + " without repetition of digits.";
                         int Ans = temp[0] * 1000 + temp[1] * 100 + temp[2] * 10 + temp[3];
                         Answer = Ans.ToString();
 
@@ -557,7 +557,7 @@ namespace Cerebro {
                             d = Random.Range(1, 10);
                         }
                         int big = Mathf.Max(Mathf.Max(a, b), Mathf.Max(c, d));
-                        QuestionText.text = "Write the largest 4 digit number using the digits " + a + ", " + b + ", " + c + ", " + d + " with repetition of digits allowed.";
+                        QuestionLatext.text = "Write the largest 4 digit number using the digits " + a + ", " + b + ", " + c + ", " + d + " with repetition of digits allowed.";
                         int Ans = big * 1000 + big * 100 + big * 10 + big;
                         Answer = Ans.ToString();
 
@@ -602,8 +602,8 @@ namespace Cerebro {
                     //    r3 = e / f;
                     temp = temp - ((e * temp) / f);
                     CerebroHelper.DebugLog(temp + " : 3");
-                    QuestionText.text = "Adrian earns Rs. " + num + " per month. He spends x of his income on food; y of the remainder on rent and z of the remainder on education. How much money is still left with him?";
-                    subQuestionText.text = "x = \\frac{" + a + "}{" + b + "}, y = \\frac{" + c + "}{" + d + "}, z = \\frac{" + e + "}{" + f + "}";
+                    QuestionLatext.text = "Adrian earns Rs. " + num + " per month. He spends \\xalgebra of his income on food; \\yalgebra of the remainder on rent and \\zalgebra of the remainder on education. How much money is still left with him?";
+                    subQuestionText.text = "\\xalgebra = \\frac{" + a + "}{" + b + "}, \\yalgebra = \\frac{" + c + "}{" + d + "}, \\zalgebra = \\frac{" + e + "}{" + f + "}";
 
                     Answer = temp.ToString();
 

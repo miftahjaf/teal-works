@@ -112,7 +112,99 @@ namespace Cerebro
 		[MenuItem ("Assets/Edit AssessmentPrefabs")]
 		private static void EditAssessmentPrefabs ()
 		{
-			Font fntBook = Resources.Load<Text> ("Fonts/SampleTextBook").font;
+
+
+			for (var i = 0; i < Selection.objects.Length; i++) 
+			{
+				Object prefab = PrefabUtility.InstantiatePrefab (Selection.gameObjects [i]);
+				GameObject gameObject = prefab as GameObject;
+
+				gameObject.transform.localScale = new Vector3 (1f, 1f, 1f);
+
+				foreach (Text  t in gameObject.GetComponentsInChildren<Text>(true)) 
+				{
+					if (t.name == "Question" || t.transform.parent.name =="AnswerTab" || t.name=="subQuestion") 
+					{
+						t.color = new Color (0.176f,0.176f,0.176f,1f);
+					}
+					if (t.name.Contains ("subQuestion"))
+					{
+						t.fontSize = 24;
+					}
+				}
+
+				foreach (TEXDraw  t in gameObject.GetComponentsInChildren<TEXDraw>(true)) 
+				{
+					if (t.size == 25 || t.name =="Question") 
+					{
+						t.size = 22;
+					}
+					else if (t.size == 30)
+					{
+						t.size = 26;
+					}
+
+					if (t.name.Contains ("subQuestion"))
+					{
+						t.size = 24;
+					}
+
+					if (t.name == "QuestionLaTex" || t.name == "QuestionTEX" || t.transform.parent.name == "AnswerTab" || t.name == "subQuestionTEX") 
+					{
+						t.color = new Color (0.176f,0.176f,0.176f,1f);
+					}
+
+					GameObject parent = t.transform.parent.gameObject;
+					if (parent.GetComponent<MaterialButton> ()) 
+					{
+						DestroyImmediate (parent.GetComponent<MaterialButton> ());
+					}
+
+					if (parent.GetComponent<MaterialButton> ()) 
+					{
+						DestroyImmediate (parent.GetComponent<MaterialButton> ());
+					}
+					if (parent.GetComponent<MaterialRipple> ()) 
+					{
+						DestroyImmediate (parent.GetComponent<MaterialRipple> ());
+					}
+					if (parent.GetComponent<SpriteSwapper> ()) 
+					{
+						DestroyImmediate (parent.GetComponent<SpriteSwapper> ());
+					}
+
+					if (parent.GetComponent<ButtonRectInstantiationHelper> ()) 
+					{
+						DestroyImmediate (parent.GetComponent<ButtonRectInstantiationHelper> ());
+					}
+
+					if(parent.name == "AnswerTab" || parent.name =="GeneralButton")
+					{
+						parent.name = "AnswerTab";
+						t.size = 35;
+					}
+				}
+
+
+				if (gameObject.transform.Find ("GeneralButton")) 
+				{
+					gameObject.transform.Find ("GeneralButton").name = "AnswerTab";
+				}
+
+				if ( gameObject.transform.Find ("numPad"))
+				{
+					
+					if (gameObject.transform.Find ("numPad").Find ("BG")) 
+					{
+						DestroyImmediate (gameObject.transform.Find ("numPad").Find ("BG").gameObject);
+					}
+				}
+
+				PrefabUtility.ReplacePrefab (gameObject, PrefabUtility.GetPrefabParent (prefab));
+				DestroyImmediate (gameObject);
+			}
+			//============================ Old Function ==============================================================//
+			/*Font fntBook = Resources.Load<Text> ("Fonts/SampleTextBook").font;
 			Font fntLight = Resources.Load<Text> ("Fonts/SampleTextLight").font;
 			GameObject Canvas = GameObject.Find ("Canvas").gameObject;
 			for (var i = 0; i < Selection.objects.Length; i++) {
@@ -162,7 +254,7 @@ namespace Cerebro
 				}
 				PrefabUtility.ReplacePrefab (gameObject, PrefabUtility.GetPrefabParent (prefab));
 				DestroyImmediate (gameObject);
-			}
+			}*/
 		}
 
 		[MenuItem ("Assets/Edit Numpad")]

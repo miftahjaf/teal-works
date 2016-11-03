@@ -298,7 +298,7 @@ namespace Cerebro
 					Answer = ans.ToString ();
 					GeneralButton.gameObject.SetActive (true);
 				} else if (selector == 2) {
-					string[] main = new string[] { "kg", "l", "years", "months", "weeks", "hours", "rupees" };
+					string[] main = new string[] { "kg", "liters", "years", "months", "weeks", "hours", "rupees" };
 					string[] sub = new string[] { "g", "ml", "months", "days", "days", "minutes", "paise" };
 					int[] conversion = new int[] { 1000, 1000, 12, 30, 7, 60, 100 };
 
@@ -347,7 +347,7 @@ namespace Cerebro
 					string tempd = d + "." + e + f + g + e + f + g + "...";
 
 					MCQ.gameObject.SetActive (true);
-					QuestionText.text = "Which of the following is an example of non-recurring non-terminating decimal ?";
+					QuestionText.text = "Which of the following is an example of non-recurring non-terminating decimal?";
 					int rand1 = Random.Range (1, 5);
 					int rand2 = Random.Range (1, 5);
 					int rand3 = Random.Range (1, 5);

@@ -184,7 +184,7 @@ public class VolumeAndSurfaceArea7 : BaseAssessment
 		base.QuestionStarted ();
 		// Generating the parameters
 
-		QuestionLatext.size = 25;
+		//QuestionLatext.size = 25;
 		MCQ.SetActive (false);
 		AnswerText = "";
 		AnswerInText = false;

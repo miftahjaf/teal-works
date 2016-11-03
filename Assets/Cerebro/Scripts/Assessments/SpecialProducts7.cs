@@ -407,13 +407,13 @@ namespace Cerebro
 					while (coeff1 == coeff2)
 						coeff2 = Random.Range (2, 10);
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = "(x + " + coeff1 + ")(x + " + coeff2 + ")";
+					subQuestionTEX.text = "(\\xalgebra + " + coeff1 + ")(\\xalgebra + " + coeff2 + ")";
 					int[] Ans = SolveEquation(1, coeff1, 1, coeff2);
 
-					options.Add ("x^{2} + " + Ans[1] + "x + " + Ans[2]);
-					options.Add ("x^{2} + " + Ans[2] + "x + " + Ans[1]);
-					options.Add ("x^{2} + " + Ans[2]);
-					options.Add ("x^{2} + " + Ans[1] + "x + " + (2 * Ans[2]));
+					options.Add ("\\xalgebra^{2} + " + Ans[1] + "\\xalgebra + " + Ans[2]);
+					options.Add ("\\xalgebra^{2} + " + Ans[2] + "\\xalgebra + " + Ans[1]);
+					options.Add ("\\xalgebra^{2} + " + Ans[2]);
+					options.Add ("\\xalgebra^{2} + " + Ans[1] + "\\xalgebra + " + (2 * Ans[2]));
 
 				} 
 				else if (selector == 2)
@@ -424,13 +424,13 @@ namespace Cerebro
 						coeff2 = Random.Range (2, 10);
 					coeff2 *=  - 1;
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = "(x + " + coeff1 + ")(x" + coeff2 + ")";
+					subQuestionTEX.text = "(\\xalgebra + " + coeff1 + ")(\\xalgebra" + coeff2 + ")";
 					int[] Ans = SolveEquation(1, coeff1, 1, coeff2);
 
-					options.Add ("x^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "x" + Ans[2]);
-					options.Add ("x^{2}" + Ans[2] + "x" + (Ans[1] < 0 ? "" : " + ") + Ans[1]);
-					options.Add ("x^{2}" + Ans[2]);
-					options.Add ("x^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "x" + (2 * Ans[2]));
+					options.Add ("\\xalgebra^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "\\xalgebra" + Ans[2]);
+					options.Add ("\\xalgebra^{2}" + Ans[2] + "\\xalgebra" + (Ans[1] < 0 ? "" : " + ") + Ans[1]);
+					options.Add ("\\xalgebra^{2}" + Ans[2]);
+					options.Add ("\\xalgebra^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "\\xalgebra" + (2 * Ans[2]));
 
 				}
 				else if (selector == 3)
@@ -442,13 +442,13 @@ namespace Cerebro
 					float No1 = -coeff1 / 10f;
 					float No2 = -coeff2 / 10f;
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = "(xy" + No1 + ")(xy" + No2 + ")";
+					subQuestionTEX.text = "(\\xalgebra\\yalgebra" + No1 + ")(\\xalgebra\\yalgebra" + No2 + ")";
 					float[] Ans = SolveEquation(1f, No1, 1f, No2);
 
-					options.Add ("x^{2}y^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "xy+" + Ans[2]);
-					options.Add ("x^{2}y^{2}+" + Ans[2] + "xy" + (Ans[1] < 0 ? "" : " + ") + Ans[1]);
-					options.Add ("x^{2}y^{2}+" + Ans[2]);
-					options.Add ("x^{2}y^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "xy+" + (2 * Ans[2]));
+					options.Add ("\\xalgebra^{2}\\yalgebra^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "\\xalgebra\\yalgebra+" + Ans[2]);
+					options.Add ("\\xalgebra^{2}\\yalgebra^{2}+" + Ans[2] + "\\xalgebra\\yalgebra" + (Ans[1] < 0 ? "" : " + ") + Ans[1]);
+					options.Add ("\\xalgebra^{2}\\yalgebra^{2}+" + Ans[2]);
+					options.Add ("\\xalgebra^{2}\\yalgebra^{2}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "\\xalgebra\\yalgebra+" + (2 * Ans[2]));
 
 				}
 				else if (selector == 4)
@@ -459,13 +459,13 @@ namespace Cerebro
 						coeff2 = Random.Range (2, 10);
 					coeff1 *=  - 1;
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = "(x^{2}" + coeff1 + "y)(x^{2} + " + coeff2 + "y)";
+					subQuestionTEX.text = "(\\xalgebra^{2}" + coeff1 + "\\yalgebra)(\\xalgebra^{2} + " + coeff2 + "\\yalgebra)";
 					int[] Ans = SolveEquation(1, coeff1, 1, coeff2);
 
-					options.Add ("x^{4}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "x^{2}y" + Ans[2] + "y^{2}");
-					options.Add ("x^{4}" + Ans[2] + "x^{2}y" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "y^{2}");
-					options.Add ("x^{4}" + Ans[2] + "y^{2}");
-					options.Add ("x^{4}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "x^{2}y" + (2 * Ans[2]) + "y^{2}");
+					options.Add ("\\xalgebra^{4}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "\\xalgebra^{2}\\yalgebra" + Ans[2] + "\\yalgebra^{2}");
+					options.Add ("\\xalgebra^{4}" + Ans[2] + "\\xalgebra^{2}\\yalgebra" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "\\yalgebra^{2}");
+					options.Add ("\\xalgebra^{4}" + Ans[2] + "\\yalgebra^{2}");
+					options.Add ("\\xalgebra^{4}" + (Ans[1] < 0 ? (Ans[1] ==  - 1 ? " - " : Ans[1].ToString()) : (Ans[1] == 1 ? " + " : " + " + Ans[1])) + "\\xalgebra^{2}\\yalgebra" + (2 * Ans[2]) + "\\yalgebra^{2}");
 
 				}
 				else if (selector == 5)
@@ -481,7 +481,7 @@ namespace Cerebro
 						coeff3 = Random.Range (2, 10);
 					
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = "({\\frac{" + coeff1 + "}{" + coeff2 + "} + x})({\\frac{" + coeff3 + "}{" + coeff2 + "} - x})";
+					subQuestionTEX.text = "({\\frac{" + coeff1 + "}{" + coeff2 + "} + \\xalgebra})({\\frac{" + coeff3 + "}{" + coeff2 + "} - \\xalgebra})";
 
 					int No1 = coeff1 * coeff3;
 					int No2 = coeff2 * coeff2;
@@ -495,22 +495,22 @@ namespace Cerebro
 					coeff2 /= hcf;
 
 					if (coeff2 == 1 && No3 == 1){
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + sign + "x - x^{2}");
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + "x + x^{2}");
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + "x - x^{2}");
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "} - x^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + sign + "\\xalgebra - \\xalgebra^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + "\\xalgebra + \\xalgebra^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + "\\xalgebra - \\xalgebra^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "} - \\xalgebra^{2}");
 					}
 					else if (coeff2 == 1 && No3 != 1){
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + sign + No3 + "x - x^{2}");
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + No3 + "x + x^{2}");
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + No3 + "x - x^{2}");
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "} - x^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + sign + No3 + "\\xalgebra - \\xalgebra^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + No3 + "\\xalgebra + \\xalgebra^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + No3 + "\\xalgebra - \\xalgebra^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "} - \\xalgebra^{2}");
 					}
 					else{
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + sign + "\\frac{" + No3 + "}{" + coeff2 + "}x - x^{2}");
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + "\\frac{" + No3 + "}{" + coeff2 + "}x + x^{2}");
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + "\\frac{" + No3 + "}{" + coeff2 + "}x - x^{2}");
-						options.Add ("\\frac{" + No1 + "}{" + No2 + "} - x^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + sign + "\\frac{" + No3 + "}{" + coeff2 + "}\\xalgebra - \\xalgebra^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + "\\frac{" + No3 + "}{" + coeff2 + "}\\xalgebra + \\xalgebra^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "}" + signInv + "\\frac{" + No3 + "}{" + coeff2 + "}\\xalgebra - \\xalgebra^{2}");
+						options.Add ("\\frac{" + No1 + "}{" + No2 + "} - \\xalgebra^{2}");
 					}
 				}
             }
@@ -529,13 +529,13 @@ namespace Cerebro
 						coeff2 = Random.Range (2, 10);
 					
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = "(" + coeff1 + "x + " + coeff2 + "y)^{2}";
+					subQuestionTEX.text = "(" + coeff1 + "\\xalgebra + " + coeff2 + "\\yalgebra)^{2}";
 					int[] Ans = SolveEquationDiffPoly(coeff1, coeff2, coeff1, coeff2);
 
-					options.Add (Ans[0] + "x^{2} + " + (Ans[1] + Ans[2]) + "xy + " + Ans[3] + "y^{2}");  
-					options.Add (Ans[0] + "x^{2} + " + Ans[3] + "y^{2}");  
-					options.Add (Ans[0] + "x^{2} + " + Ans[2] + "xy + " + Ans[3] + "y^{2}");  
-					options.Add (Ans[0] + "x^{2} + " + (Ans[0] + Ans[1]) + "xy + " + Ans[3] + "y^{2}");  
+					options.Add (Ans[0] + "\\xalgebra^{2} + " + (Ans[1] + Ans[2]) + "\\xalgebra\\yalgebra + " + Ans[3] + "\\yalgebra^{2}");  
+					options.Add (Ans[0] + "\\xalgebra^{2} + " + Ans[3] + "\\yalgebra^{2}");  
+					options.Add (Ans[0] + "\\xalgebra^{2} + " + Ans[2] + "\\xalgebra\\yalgebra + " + Ans[3] + "\\yalgebra^{2}");  
+					options.Add (Ans[0] + "\\xalgebra^{2} + " + (Ans[0] + Ans[1]) + "\\xalgebra\\yalgebra + " + Ans[3] + "\\yalgebra^{2}");  
 				
 				}
 				else if (selector == 2)
@@ -556,7 +556,7 @@ namespace Cerebro
 						coeff4 = Random.Range (2, 10); 
 					
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = coeff5 + "{({\\frac{" + coeff1 + "}{" + coeff2 + "}x + \\frac{" + coeff3 + "}{" + coeff4 + "}y})}^{2}";
+					subQuestionTEX.text = coeff5 + "{({\\frac{" + coeff1 + "}{" + coeff2 + "}\\xalgebra + \\frac{" + coeff3 + "}{" + coeff4 + "}\\yalgebra})}^{2}";
 
 					int No1 = coeff1 * coeff1 * coeff5;
 					int No2 = coeff2 * coeff2;
@@ -600,10 +600,10 @@ namespace Cerebro
 					else
 						expression3 = "\\frac{" + No5 + "}{" + No6 + "}";
 
-					options.Add (expression1 + "x^{2} + " + expression2 + "xy + " + expression3 + "y^{2}");
-					options.Add (expression1 + "x^{2} + " + expression3 + "xy + " + expression2 + "y^{2}");
-					options.Add (expression3 + "x^{2} + " + expression2 + "xy + " + expression1 + "y^{2}");
-					options.Add (expression2 + "x^{2} + " + expression3 + "xy + " + expression1 + "y^{2}");
+					options.Add (expression1 + "\\xalgebra^{2} + " + expression2 + "\\xalgebra\\yalgebra + " + expression3 + "\\yalgebra^{2}");
+					options.Add (expression1 + "\\xalgebra^{2} + " + expression3 + "\\xalgebra\\yalgebra + " + expression2 + "\\yalgebra^{2}");
+					options.Add (expression3 + "\\xalgebra^{2} + " + expression2 + "\\xalgebra\\yalgebra + " + expression1 + "\\yalgebra^{2}");
+					options.Add (expression2 + "\\xalgebra^{2} + " + expression3 + "\\xalgebra\\yalgebra + " + expression1 + "\\yalgebra^{2}");
 
 				}
 				else if (selector == 3)
@@ -624,7 +624,7 @@ namespace Cerebro
 						coeff4 = Random.Range (2, 10); 
 
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = coeff5 + "{({\\frac{" + coeff1 + "}{" + coeff2 + "}x - \\frac{" + coeff3 + "}{" + coeff4 + "}y})}^{2}";
+					subQuestionTEX.text = coeff5 + "{({\\frac{" + coeff1 + "}{" + coeff2 + "}\\xalgebra - \\frac{" + coeff3 + "}{" + coeff4 + "}\\yalgebra})}^{2}";
 
 					int No1 = coeff1 * coeff1 * coeff5;
 					int No2 = coeff2 * coeff2;
@@ -668,10 +668,10 @@ namespace Cerebro
 					else
 						expression3 = "\\frac{" + No5 + "}{" + No6 + "}";
 
-					options.Add (expression1 + "x^{2} - " + expression2 + "xy + " + expression3 + "y^{2}");
-					options.Add (expression1 + "x^{2} - " + expression3 + "xy + " + expression2 + "y^{2}");
-					options.Add (expression3 + "x^{2} - " + expression2 + "xy + " + expression1 + "y^{2}");
-					options.Add (expression2 + "x^{2} - " + expression3 + "xy + " + expression1 + "y^{2}");
+					options.Add (expression1 + "\\xalgebra^{2} - " + expression2 + "\\xalgebra\\yalgebra + " + expression3 + "\\yalgebra^{2}");
+					options.Add (expression1 + "\\xalgebra^{2} - " + expression3 + "\\xalgebra\\yalgebra + " + expression2 + "\\yalgebra^{2}");
+					options.Add (expression3 + "\\xalgebra^{2} - " + expression2 + "\\xalgebra\\yalgebra + " + expression1 + "\\yalgebra^{2}");
+					options.Add (expression2 + "\\xalgebra^{2} - " + expression3 + "\\xalgebra\\yalgebra + " + expression1 + "\\yalgebra^{2}");
 
 
 				}
@@ -684,12 +684,12 @@ namespace Cerebro
 						coeff2 = Random.Range (2, 10);	
 					
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = "(" + coeff1 + "x + " + coeff2 + "y)(" + coeff1 + "x - " + coeff2 + "y)";
+					subQuestionTEX.text = "(" + coeff1 + "\\xalgebra + " + coeff2 + "\\yalgebra)(" + coeff1 + "\\xalgebra - " + coeff2 + "\\yalgebra)";
 
-					options.Add ((coeff1 * coeff1) + "x^{2} - " + (coeff2 * coeff2) + "y^{2}");
-					options.Add ((coeff1 * coeff1) + "x^{2} + " + (coeff2 * coeff2) + "y^{2}");
-					options.Add (coeff1 + "x^{2} - " + coeff2 + "y^{2}");
-					options.Add (coeff1 + "x^{2} + " + coeff2 + "y^{2}");
+					options.Add ((coeff1 * coeff1) + "\\xalgebra^{2} - " + (coeff2 * coeff2) + "\\yalgebra^{2}");
+					options.Add ((coeff1 * coeff1) + "\\xalgebra^{2} + " + (coeff2 * coeff2) + "\\yalgebra^{2}");
+					options.Add (coeff1 + "\\xalgebra^{2} - " + coeff2 + "\\yalgebra^{2}");
+					options.Add (coeff1 + "\\xalgebra^{2} + " + coeff2 + "\\yalgebra^{2}");
 
 				}
 				else if (selector == 5)
@@ -710,7 +710,7 @@ namespace Cerebro
 						coeff4 = Random.Range (2, 10); 
 
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = coeff5 + "({\\frac{" + coeff1 + "}{" + coeff2 + "}x^{2} + \\frac{" + coeff3 + "}{" + coeff4 + "}y^{2}})({\\frac{" + coeff1 + "}{" + coeff2 + "}x^{2} - \\frac{" + coeff3 + "}{" + coeff4 + "}y^{2}})";
+					subQuestionTEX.text = coeff5 + "({\\frac{" + coeff1 + "}{" + coeff2 + "}\\xalgebra^{2} + \\frac{" + coeff3 + "}{" + coeff4 + "}\\yalgebra^{2}})({\\frac{" + coeff1 + "}{" + coeff2 + "}\\xalgebra^{2} - \\frac{" + coeff3 + "}{" + coeff4 + "}\\yalgebra^{2}})";
 
 					int No1 = coeff1 * coeff1 * coeff5;
 					int No2 = coeff2 * coeff2;
@@ -754,10 +754,10 @@ namespace Cerebro
 					else
 						expression3 = "\\frac{" + No5 + "}{" + No6 + "}";
 
-					options.Add (expression1 + "x^{4} - " + expression3 + "y^{4}");
-					options.Add (expression1 + "x^{2} - " + expression3 + "y^{2}");
-					options.Add (expression1 + "x^{4} - " + expression2 + "x^{2}y^{2} + " + expression3 + "y^{4}");
-					options.Add (expression1 + "x^{2} - " + expression2 + "xy + " + expression3 + "y^{2}");
+					options.Add (expression1 + "\\xalgebra^{4} - " + expression3 + "\\yalgebra^{4}");
+					options.Add (expression1 + "\\xalgebra^{2} - " + expression3 + "\\yalgebra^{2}");
+					options.Add (expression1 + "\\xalgebra^{4} - " + expression2 + "\\xalgebra^{2}\\yalgebra^{2} + " + expression3 + "\\yalgebra^{4}");
+					options.Add (expression1 + "\\xalgebra^{2} - " + expression2 + "\\xalgebra\\yalgebra + " + expression3 + "\\yalgebra^{2}");
 
 				}
 			}
@@ -816,12 +816,12 @@ namespace Cerebro
 						coeff1 = Random.Range (2, 10);
 					
 					QuestionText.text = "Solve :";
-					subQuestionTEX.text = coeff3 + "{({" + coeff1 + "x - \\frac{" + coeff2 + "}{" + coeff3 + "x}})}^{2}"; 
+					subQuestionTEX.text = coeff3 + "{({" + coeff1 + "\\xalgebra - \\frac{" + coeff2 + "}{" + coeff3 + "\\xalgebra}})}^{2}"; 
 
-					options.Add ((coeff1 * coeff1 * coeff3) + "x^{2} - " + (2 * coeff1 * coeff2) + " + \\frac{" + (coeff2 * coeff2) + "}{" + coeff3 + "x^{2}}");
-					options.Add ((coeff1 * coeff1) + "x^{2} - \\frac{" + (coeff1 * coeff2) + "}{" + coeff3 + "} + \\frac{" + (coeff2 * coeff2) + "}{" + coeff3 + "x^{2}}");
-					options.Add ((coeff1 * coeff1 * coeff3) + "x^{2} - " + (coeff1 * coeff2) + " + \\frac{" + (coeff2 * coeff2) + "}{" + coeff3 + "x^{2}}");
-					options.Add ((coeff1 * coeff1) + "x^{2} - \\frac{" + (2 * coeff1 * coeff2) + "}{" + coeff3 + "} + \\frac{" + (coeff2 * coeff2) + "}{" + coeff3 + "x^{2}}");
+					options.Add ((coeff1 * coeff1 * coeff3) + "\\xalgebra^{2} - " + (2 * coeff1 * coeff2) + " + \\frac{" + (coeff2 * coeff2) + "}{" + coeff3 + "\\xalgebra^{2}}");
+					options.Add ((coeff1 * coeff1) + "\\xalgebra^{2} - \\frac{" + (coeff1 * coeff2) + "}{" + coeff3 + "} + \\frac{" + (coeff2 * coeff2) + "}{" + coeff3 + "\\xalgebra^{2}}");
+					options.Add ((coeff1 * coeff1 * coeff3) + "\\xalgebra^{2} - " + (coeff1 * coeff2) + " + \\frac{" + (coeff2 * coeff2) + "}{" + coeff3 + "\\xalgebra^{2}}");
+					options.Add ((coeff1 * coeff1) + "\\xalgebra^{2} - \\frac{" + (2 * coeff1 * coeff2) + "}{" + coeff3 + "} + \\frac{" + (coeff2 * coeff2) + "}{" + coeff3 + "\\xalgebra^{2}}");
 
                 }
 				else if (selector == 4)
@@ -833,12 +833,12 @@ namespace Cerebro
 						coeff2 = Random.Range (2, 5);
 					
 					QuestionText.text = "Express as a perfect square:";
-					subQuestionTEX.text = (coeff1 * coeff1) + "x^{2} - " + (coeff1 * coeff2) + "xy + " + (coeff2 * coeff2) + "y^{2}";
+					subQuestionTEX.text = (coeff1 * coeff1) + "\\xalgebra^{2} - " + (coeff1 * coeff2) + "\\xalgebra\\yalgebra + " + (coeff2 * coeff2) + "\\yalgebra^{2}";
 
-					options.Add ("(" + coeff1 + "x - " + coeff2 + "y)^{2}");
-					options.Add ("(" + (coeff1 * coeff1) + "x - " + (coeff2 * coeff2) + "y)^{2}");
-					options.Add ("(" + coeff1 + "x + " + coeff2 + "y)^{2}");
-					options.Add ("(" + (coeff1 * coeff1) + "x + " + (coeff2 * coeff2) + "y)^{2}");
+					options.Add ("(" + coeff1 + "\\xalgebra - " + coeff2 + "\\yalgebra)^{2}");
+					options.Add ("(" + (coeff1 * coeff1) + "\\xalgebra - " + (coeff2 * coeff2) + "\\yalgebra)^{2}");
+					options.Add ("(" + coeff1 + "\\xalgebra + " + coeff2 + "\\yalgebra)^{2}");
+					options.Add ("(" + (coeff1 * coeff1) + "\\xalgebra + " + (coeff2 * coeff2) + "\\yalgebra)^{2}");
 
 				}
 				else if (selector == 5)
@@ -872,7 +872,7 @@ namespace Cerebro
 					coeff1 = Random.Range (2, 10);
 
 					QuestionText.text = "";
-					subQuestionTEX.text = "If x - \\frac{1}{x} = " + coeff1 + ", determine x^{2} + \\frac{1}{x^{2}}.";
+					subQuestionTEX.text = "If \\xalgebra - \\frac{1}{\\xalgebra} = " + coeff1 + ", determine \\xalgebra^{2} + \\frac{1}{\\xalgebra^{2}}.";
 
 					Answer = (coeff1 * coeff1 + 2).ToString();
 					SingleExpression = true;
@@ -887,7 +887,7 @@ namespace Cerebro
 					coeff1 = Random.Range (2, 10);
 
 					QuestionText.text = "";
-					subQuestionTEX.text = "If x + \\frac{1}{x} = " + coeff1 + ", determine x^{2} + \\frac{1}{x^{2}}.";
+					subQuestionTEX.text = "If \\xalgebra + \\frac{1}{\\xalgebra} = " + coeff1 + ", determine \\xalgebra^{2} + \\frac{1}{\\xalgebra^{2}}.";
 
 					Answer = (coeff1 * coeff1 - 2).ToString();
 					SingleExpression = true;
@@ -917,12 +917,12 @@ namespace Cerebro
 						coeff2 = Random.Range (2, 10);
 					
 					QuestionText.text = "Simplify :";
-					subQuestionTEX.text = "(" + coeff1 + "x + " + coeff2 + "y)^{2} - (" + coeff1 + "x - " + coeff2 + "y)^{2}";
+					subQuestionTEX.text = "(" + coeff1 + "\\xalgebra + " + coeff2 + "\\yalgebra)^{2} - (" + coeff1 + "\\xalgebra - " + coeff2 + "\\yalgebra)^{2}";
 
-					options.Add ((coeff1 * coeff2 * 4) + "xy"); 
-					options.Add ((-1 * coeff1 * coeff2 * 4) + "xy"); 
-					options.Add ((2 * coeff1 * coeff1) + "x^{2} + " + (2 * coeff2 * coeff2) + "y^{2}"); 
-					options.Add ((2 * coeff1 * coeff1) + "x^{2} - " + (2 * coeff2 * coeff2) + "y^{2}"); 
+					options.Add ((coeff1 * coeff2 * 4) + "\\xalgebra\\yalgebra"); 
+					options.Add ((-1 * coeff1 * coeff2 * 4) + "\\xalgebra\\yalgebra"); 
+					options.Add ((2 * coeff1 * coeff1) + "\\xalgebra^{2} + " + (2 * coeff2 * coeff2) + "\\yalgebra^{2}"); 
+					options.Add ((2 * coeff1 * coeff1) + "\\xalgebra^{2} - " + (2 * coeff2 * coeff2) + "\\yalgebra^{2}"); 
 
 				}
 			}
@@ -936,12 +936,12 @@ namespace Cerebro
 					coeff1 = Random.Range (4, 15);
 
 					QuestionText.text = "Simplify :";
-					subQuestionTEX.text = "(x + y)^{2} + (x - y)^{2} - " + coeff1 + "(x + y)(x - y)";
+					subQuestionTEX.text = "(\\xalgebra + \\yalgebra)^{2} + (\\xalgebra - \\yalgebra)^{2} - " + coeff1 + "(\\xalgebra + \\yalgebra)(\\xalgebra - \\yalgebra)";
 
-					options.Add ((2 - coeff1) + "x^{2} + " + (2 + coeff1) + "y^{2}");
-					options.Add ((2 + coeff1) + "x^{2} " + (2 - coeff1) + "y^{2}");
-					options.Add ((2 - coeff1) + "x^{2} " + (2 - coeff1) + "y^{2}");
-					options.Add ((2 + coeff1) + "x^{2} + " + (2 + coeff1) + "y^{2}");
+					options.Add ((2 - coeff1) + "\\xalgebra^{2} + " + (2 + coeff1) + "\\yalgebra^{2}");
+					options.Add ((2 + coeff1) + "\\xalgebra^{2} " + (2 - coeff1) + "\\yalgebra^{2}");
+					options.Add ((2 - coeff1) + "\\xalgebra^{2} " + (2 - coeff1) + "\\yalgebra^{2}");
+					options.Add ((2 + coeff1) + "\\xalgebra^{2} + " + (2 + coeff1) + "\\yalgebra^{2}");
 
 				}            
                 else if (selector == 2)
@@ -956,12 +956,12 @@ namespace Cerebro
 						coeff2 = Random.Range (2, 10);
 
 					QuestionText.text = "What must be added to the middle term of the given equation to make it a perfect square expression?";
-					subQuestionTEX.text = (coeff1 * coeff1) + "x^{2} + " + (coeff3 == 1? "" : coeff3.ToString ()) + "xy + " + (coeff2 * coeff2) + "y^{2}";
+					subQuestionTEX.text = (coeff1 * coeff1) + "\\xalgebra^{2} + " + (coeff3 == 1? "" : coeff3.ToString ()) + "\\xalgebra\\yalgebra + " + (coeff2 * coeff2) + "\\yalgebra^{2}";
 
-					options.Add ((coeff1 * coeff2 * 2 - coeff3) + "xy");
-					options.Add (" - " + (coeff3 == 1? "" : coeff3.ToString ()) + "xy");
-					options.Add (coeff3 == 1 ? "0" : ((coeff3 * coeff3 - coeff3) + "xy"));
-					options.Add (" - " + (3 * coeff3) + "xy");
+					options.Add ((coeff1 * coeff2 * 2 - coeff3) + "\\xalgebra\\yalgebra");
+					options.Add (" - " + (coeff3 == 1? "" : coeff3.ToString ()) + "\\xalgebra\\yalgebra");
+					options.Add (coeff3 == 1 ? "0" : ((coeff3 * coeff3 - coeff3) +"\\xalgebra\\yalgebra"));
+					options.Add (" - " + (3 * coeff3) + "\\xalgebra\\yalgebra");
 
                 }
 				else if (selector == 3)
@@ -975,12 +975,12 @@ namespace Cerebro
 						coeff3 = Random.Range (3, 10);
 
 					QuestionText.text = "What must be subtracted from the middle term of the given equation to make it a perfect square expression?";
-					subQuestionTEX.text = (coeff1 * coeff1) + "x^{2} + " + coeff3 + "\\frac{x}{y} + \\frac{1}{" + (coeff1 * coeff1) + "y^{2}}";
+					subQuestionTEX.text = (coeff1 * coeff1) + "\\xalgebra^{2} + " + coeff3 + "\\frac{\\xalgebra}{\\yalgebra} + \\frac{1}{" + (coeff1 * coeff1) + "\\yalgebra^{2}}";
 
-					options.Add ((coeff3 == 3 ? "" : (coeff3 - 2).ToString ()) + "\\frac{x}{y}");
-					options.Add ((coeff3 == 3 ? "-" : (2 - coeff3).ToString ()) + "\\frac{x}{y}");
-					options.Add ("-" + coeff3 + "\\frac{x}{y}");
-					options.Add (coeff3 + "\\frac{x}{y}");
+					options.Add ((coeff3 == 3 ? "" : (coeff3 - 2).ToString ()) + "\\frac{\\xalgebra}{\\yalgebra}");
+					options.Add ((coeff3 == 3 ? "-" : (2 - coeff3).ToString ()) + "\\frac{\\xalgebra}{\\yalgebra}");
+					options.Add ("-" + coeff3 + "\\frac{\\xalgebra}{\\yalgebra}");
+					options.Add (coeff3 + "\\frac{\\xalgebra}{\\yalgebra}");
 
                 }
 				else if (selector == 4)
@@ -993,7 +993,7 @@ namespace Cerebro
 					coeff2 = coeff1 * coeff1 - 2;
 
 					QuestionText.text = "";
-					subQuestionTEX.text = "If x + \\frac{1}{x} = " + coeff1 + ", find the value of x^{4} + \\frac{1}{x^{4}}.";
+					subQuestionTEX.text = "If \\xalgebra + \\frac{1}{\\xalgebra} = " + coeff1 + ", find the value of \\xalgebra^{4} + \\frac{1}{\\xalgebra^{4}}.";
 
 					Answer = (coeff2 * coeff2 - 2).ToString();
 					SingleExpression = true;

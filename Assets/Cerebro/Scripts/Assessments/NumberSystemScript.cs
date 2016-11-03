@@ -179,7 +179,7 @@ namespace Cerebro {
 					float num1 = Random.Range (-25, 25);
 					float num2 = Random.Range (-25, 25);
 					if (Random.Range (0, 2) == 0) {
-						subQuestionText.text = "( " + num1 + " ) X ( " + num2 + " )";
+						subQuestionText.text = "( " + num1 + " ) x ( " + num2 + " )";
 						Answer = (num1 * num2).ToString ();
 					} else {
 						float multiplier = Random.Range (-10, 10);

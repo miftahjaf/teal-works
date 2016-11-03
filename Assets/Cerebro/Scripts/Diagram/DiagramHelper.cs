@@ -148,10 +148,10 @@ namespace Cerebro {
 				Vector2 centerPosition = (new Vector2 (arcAngle.origin.x + tempRadius* Mathf.Cos (Mathf.Deg2Rad * (arcAngle.startAngle + 90f)), arcAngle.origin.y + tempRadius* Mathf.Sin (Mathf.Deg2Rad * (arcAngle.startAngle + 90f))) - new Vector2 (arcAngle.origin.x + tempRadius * Mathf.Cos (Mathf.Deg2Rad * (arcAngle.endAngle + 90f)), arcAngle.origin.y + tempRadius * Mathf.Sin (Mathf.Deg2Rad * (arcAngle.endAngle + 90f)))).normalized *(arcAngle.textInsideArc?tempRadius / 3f: tempRadius);
 
 				//Set text position in center of  arc
-				UIpolygon.GetComponentInChildren<Text> ().GetComponent<RectTransform> ().anchoredPosition = centerPosition;
+				UIpolygon.GetComponentInChildren<TEXDraw> ().GetComponent<RectTransform> ().anchoredPosition = centerPosition;
 
 				//Set arc value text
-				UIpolygon.GetComponentInChildren<Text> ().text = arcAngle.value;
+				UIpolygon.GetComponentInChildren<TEXDraw> ().text = arcAngle.value;
 
 				//Update arc radius for next arc draw
 				arcRadius += 10f;

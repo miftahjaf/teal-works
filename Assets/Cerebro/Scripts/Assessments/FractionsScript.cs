@@ -643,7 +643,7 @@ namespace Cerebro
 
 					QuestionText.text = "Simplify :";
 					subQuestionText.gameObject.SetActive (true);
-					subQuestionText.text = "\\frac{" + num1.ToString () + "}{" + den1.ToString () + "} \\x \\frac{" + num2.ToString () + "}{" + den2.ToString () + "}";
+					subQuestionText.text = "\\frac{" + num1.ToString () + "}{" + den1.ToString () + "} \\times \\frac{" + num2.ToString () + "}{" + den2.ToString () + "}";
 					GeneralButton.gameObject.SetActive (true);
 					int hcf = Mathf.Abs(MathFunctions.GetHCF (num1 * num2, den1 * den2));
 					Answer = "=" + (num1 * num2/hcf).ToString () + "/" + (den1 * den2/hcf).ToString ();
@@ -667,16 +667,16 @@ namespace Cerebro
 
 					int subselector = Random.Range (1, 10);
 					if (subselector <= 4) {
-						subQuestionText.text = whole1.ToString () + " \\frac{" + num1.ToString () + "}{" + den1.ToString () + "} \\x " + whole2.ToString () + " \\frac{" + num2.ToString () + "}{" + den2.ToString () + "}";
+						subQuestionText.text = whole1.ToString () + " \\frac{" + num1.ToString () + "}{" + den1.ToString () + "} \\times " + whole2.ToString () + " \\frac{" + num2.ToString () + "}{" + den2.ToString () + "}";
 						num1 = (whole1 * den1) + num1;
 						num2 = (whole2 * den2) + num2;
 						Answer = (num1 * num2).ToString () + "/" + (den1 * den2).ToString ();
 					} else if (subselector <= 8) {
-						subQuestionText.text = whole1.ToString () + " \\frac{" + num1.ToString () + "}{" + den1.ToString () + "} \\x \\frac{" + num2.ToString () + "}{" + den2.ToString () + "}";
+						subQuestionText.text = whole1.ToString () + " \\frac{" + num1.ToString () + "}{" + den1.ToString () + "} \\times \\frac{" + num2.ToString () + "}{" + den2.ToString () + "}";
 						num1 = (whole1 * den1) + num1;
 						Answer = (num1 * num2).ToString () + "/" + (den1 * den2).ToString ();
 					} else {
-						subQuestionText.text = whole1.ToString () + " \\frac{" + num1.ToString () + "}{" + den1.ToString () + "} \\x 0 \\x " + whole2.ToString () + " \\frac{" + num2.ToString () + "}{" + den2.ToString () + "}";
+						subQuestionText.text = whole1.ToString () + " \\frac{" + num1.ToString () + "}{" + den1.ToString () + "} \\times 0 \\times " + whole2.ToString () + " \\frac{" + num2.ToString () + "}{" + den2.ToString () + "}";
 						num1 = (whole1 * den1) + num1;
 						num2 = (whole2 * den2) + num2;
 						Answer = "=0";
@@ -736,7 +736,7 @@ namespace Cerebro
 					while (MathFunctions.GetHCF (num3, den3) != 1)
 						num3 = Random.Range (1, 6);
 
-					string[] operations = new string[]{ "+", "-", "\\div", "\\x" };
+					string[] operations = new string[]{ "+", "-", "\\div", "\\times" };
 					string operation1 = operations [Random.Range (0, operations.Length)];
 					string operation2 = operations [Random.Range (0, operations.Length)];
 
@@ -759,7 +759,7 @@ namespace Cerebro
 						Answer = (num1 - num2).ToString () + "/" + lcm.ToString ();
 					} else if (operation1 == "\\div") {
 						Answer = (num1 * den2).ToString () + "/" + (den1 * num2).ToString ();
-					} else if (operation1 == "\\x") {
+					} else if (operation1 == "\\times") {
 						Answer = (num1 * num2).ToString () + "/" + (den1 * den2).ToString ();
 					}
 
@@ -778,7 +778,7 @@ namespace Cerebro
 						Answer = (tmpansnum - num3).ToString () + "/" + lcm.ToString ();
 					} else if (operation2 == "\\div") {
 						Answer = (tmpansnum * den3).ToString () + "/" + (tmpansnden * num3).ToString ();
-					} else if (operation2 == "\\x") {
+					} else if (operation2 == "\\times") {
 						Answer = (tmpansnum * num3).ToString () + "/" + (tmpansnden * den3).ToString ();
 					}
 				}

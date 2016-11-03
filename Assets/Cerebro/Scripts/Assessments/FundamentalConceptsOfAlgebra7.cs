@@ -12,8 +12,8 @@ namespace Cerebro
         
         public Text subQuestionText;
         public TEXDraw subQuestionTEX;
-        public TEXDraw QuestionTEX;
-        public TEXDraw tempQuestionTEX;
+       // public TEXDraw QuestionTEX;
+      //  public TEXDraw tempQuestionTEX;
         public GameObject MCQ;
         public GameObject ThreeChoice;
         private string Answer;
@@ -641,7 +641,7 @@ namespace Cerebro
             // Generating the parameters
 
 
-            subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -50);
+          //  subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -50);
 
             level = Queslevel;
 			for (int i = 1; i < 3; i++) {
@@ -654,9 +654,10 @@ namespace Cerebro
             answerButton = GeneralButton;
             GeneralButton.gameObject.SetActive(true);
             subQuestionText.gameObject.SetActive(false);
-            subQuestionTEX.gameObject.SetActive(false);
-            QuestionTEX.gameObject.SetActive(false);
-            tempQuestionTEX.gameObject.SetActive(false);
+			subQuestionTEX.gameObject.SetActive(true);
+           // QuestionTEX.gameObject.SetActive(false);
+          //  tempQuestionTEX.gameObject.SetActive(false);
+			QuestionLatext.gameObject.SetActive(false);
             QuestionText.gameObject.SetActive(true);
             MCQ.gameObject.SetActive(false);
             ThreeChoice.gameObject.SetActive(false);
@@ -665,36 +666,36 @@ namespace Cerebro
             {
                 level = UnityEngine.Random.Range(1, scorestreaklvls.Length + 1);
             }
-           
+			subQuestionTEX.text = "";
             #region L1
             if (level == 1)
             {
                
                 selector = GetRandomSelector(1, 5);
-                subQuestionText.text = "";
+                QuestionText.text =  "";
               
                 if (selector == 1)
                 {
                     coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(10, 50);
-                   // subQuestionText.gameObject.SetActive(true);
-                    QuestionTEX.gameObject.SetActive(true);
-                    QuestionText.text = "Choose the variable from the expression:";
+                   // //subQuestionText.gameObject.SetActive (true);
+					subQuestionTEX.gameObject.SetActive(true);
+                  QuestionText.text = "Choose the variable from the expression:";
                     int temp = Random.Range(1, 4);
                     if (temp == 1)
                     {
-                        QuestionTEX.text = coeff1 + " + " + coeff2 + "x";
-                        Answer = "x";
+						subQuestionTEX.text = coeff1 + " + " + coeff2 + "\\xalgebra";
+						Answer = "\\xalgebra";
                     }
                     else if(temp == 2)
                     {
-                        QuestionTEX.text = coeff1 + " + " + coeff2 + "y";
-                        Answer = "y";
+						subQuestionTEX.text = coeff1 + " + " + coeff2 + "\\yalgebra";
+						Answer = "\\yalgebra";
                     }
                     else
                     {
-                        QuestionTEX.text = coeff1 + " + " + coeff2 + "z";
-                        Answer = "z";
+						subQuestionTEX.text = coeff1 + " + " + coeff2 + "\\zalgebra";
+						Answer = "\\zalgebra";
                     }
                    
                 }
@@ -704,17 +705,17 @@ namespace Cerebro
                     coeff2 = Random.Range(10, 50);
                     coeff3 = Random.Range(10, 50);
                     coeff4 = Random.Range(10, 50);
-                   // subQuestionText.gameObject.SetActive(true);
-                    QuestionTEX.gameObject.SetActive(true);
-                    QuestionText.text = "Choose the constant from the expression:";
+                   // //subQuestionText.gameObject.SetActive (true);
+					subQuestionTEX.gameObject.SetActive(true);
+                  QuestionText.text = "Choose the constant from the expression:";
                     int temp = Random.Range(1, 3);
                     if (temp == 1)
                     {
-                        QuestionTEX.text = coeff3 + "x + " + coeff4 + "y + " + coeff1 + " + " + coeff2 + "z";
+						subQuestionTEX.text = coeff3 + "\\xalgebra + " + coeff4 + "\\yalgebra + " + coeff1 + " + " + coeff2 + "\\zalgebra";
                     }
                     else if(temp == 2)
                     {
-                        QuestionTEX.text = coeff3 + "x^2 + " + coeff4 + "y + "  + coeff2 + "z + " + coeff1 ;
+						subQuestionTEX.text = coeff3 + "\\xalgebra^{2} + " + coeff4 + "\\yalgebra + "  + coeff2 + "\\zalgebra + " + coeff1 ;
                     }
                     Answer = coeff1.ToString();
                   
@@ -727,48 +728,48 @@ namespace Cerebro
                     pow1 = Random.Range(2, 10);
                     pow2 = Random.Range(2, 10);
 
-                    QuestionText.text = "The number of terms in the following expression :";
-                    QuestionTEX.gameObject.SetActive(true);
-                    expression1 = coeff1 + "x^{" + pow1 + "}";
+                  QuestionText.text = "The number of terms in the following expression :";
+					subQuestionTEX.gameObject.SetActive(true);
+                    expression1 = coeff1 + "\\xalgebra^{" + pow1 + "}";
                     int temp = Random.Range(1, 4);
                     if (temp == 1)
                     {
-                        expression1 += " + " + coeff2 + "y^{" + pow2 + "} + " + coeff3 + "xy(x+y)";
+						expression1 += " + " + coeff2 + "\\yalgebra^{" + pow2 + "} + " + coeff3 + "\\xalgebra\\yalgebra(\\xalgebra+\\yalgebra)";
                         Answer = "4";
                     }
                     else if (temp == 2)
                     {
-                        expression1 += " + " + coeff3 + "xy(x+y)";
+						expression1 += " + " + coeff3 + "\\xalgebra\\yalgebra(\\xalgebra+\\yalgebra)";
                         Answer = "3";
                     }
                     else 
                     {
-                        expression1 += " + " + coeff2 + "(x+y) + " + coeff3 + "xy(x+y)";
+						expression1 += " + " + coeff2 + "(\\xalgebra+\\yalgebra) + " + coeff3 + "\\xalgebra\\yalgebra(\\xalgebra+\\yalgebra)";
                         Answer = "5";
                     }
-                    QuestionTEX.text = expression1;
+					subQuestionTEX.text = expression1;
                    
                 }
                 
                 else if (selector == 4)
                 {
-                    QuestionTEX.gameObject.SetActive(true);
+					subQuestionTEX.gameObject.SetActive(true);
 					GeneralButton.gameObject.SetActive(false);
                     MCQ.gameObject.SetActive(true);
                     numPad.SetActive(false);
-                    QuestionText.text = "State True or False :";
+                  QuestionText.text = "State True or False :";
                     int temp = Random.Range(1, 3);
                     if (temp == 1)
                     {
-                        expression3 = "\\frac{2}{3}xy\\^2, -\\frac{1}{3}x^2y and \\frac{2}{3}xy\\^2 are like terms";
+						expression3 = "\\frac{2}{3}\\xalgebra\\yalgebra^2, -\\frac{1}{3}\\xalgebra^2\\yalgebra and \\frac{2}{3}\\xalgebra\\yalgebra^2 are like terms";
                         Answer = "False";
                     }
                     else
                     {
-                        expression3 = "\\frac{2}{3}xy\\^2, -\\frac{1}{3}xy\\^2 and \\frac{2}{3}xy\\^2 are like terms";
+						expression3 = "\\frac{2}{3}\\xalgebra\\yalgebra^2, -\\frac{1}{3}\\xalgebra\\yalgebra^2 and \\frac{2}{3}\\xalgebra\\yalgebra^2 are like terms";
                         Answer = "True";
                     }
-                    QuestionTEX.text = expression3;
+					subQuestionTEX.text = expression3;
                    
                     MCQ.transform.Find("Option1").Find("Text").GetComponent<TEXDraw>().text = "True";
                     MCQ.transform.Find("Option2").Find("Text").GetComponent<TEXDraw>().text = "False";
@@ -779,44 +780,44 @@ namespace Cerebro
             else if (level == 2)
             {
                 selector = GetRandomSelector(1, 6);
-                subQuestionText.text = "";
+                QuestionText.text =  "";
                
                 if (selector == 1)
                 {
                     coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(10, 50);
                     coeff3 = Random.Range(10, 50);
-                   // subQuestionText.gameObject.SetActive(true);
-                    QuestionTEX.gameObject.SetActive(true);
-                    QuestionText.text = "Find the unlike term from the expression :";
+                   // //subQuestionText.gameObject.SetActive (true);
+					subQuestionTEX.gameObject.SetActive(true);
+                  QuestionText.text = "Find the unlike term from the expression :";
                     int temp = Random.Range(1, 3) ;
                     if(temp == 1)
                     {
-                        QuestionTEX.text = coeff1 + "xy^{2} + " + coeff2 + "x^{2}y + " + coeff3 + "xy^{2}";
+						subQuestionTEX.text = coeff1 + "\\xalgebra\\yalgebra^{2} + " + coeff2 + "\\xalgebra^{2}\\yalgebra + " + coeff3 + "\\xalgebra\\yalgebra^{2}";
                     }else
                     {
-                        QuestionTEX.text = coeff1 + "xy^{2} + " + coeff3 + "xy^{2} + " + coeff2 + "x^{2}y" ;
+						subQuestionTEX.text = coeff1 + "\\xalgebra\\yalgebra^{2} + " + coeff3 + "\\xalgebra\\yalgebra^{2} + " + coeff2 + "\\xalgebra^{2}\\yalgebra" ;
                     }
                    
-                    Answer = coeff2 + "x^{2}y";
+					Answer = coeff2 + "\\xalgebra^{2}\\yalgebra";
                 }
                 else if (selector == 2)
                 {
-                    QuestionTEX.gameObject.SetActive(true);
+					subQuestionTEX.gameObject.SetActive(true);
                     coeff1 = Random.Range(2, 50);
 					if(Random.Range(1,3) == 1)
 						coeff1 *= -1;
                     pow1 = Random.Range(2, 6);
 					pow2 = Random.Range(2, 6);
 					pow3 = Random.Range(2, 6);
-                    QuestionText.text = "Write the numerical co-efficient of :";
-                    expression3 = coeff1 + "x\\^{" + pow1 + "}y\\^{" + pow2 + "}z\\^{" + pow3 + "}";
-                    QuestionTEX.text = expression3;
+                  QuestionText.text = "Write the numerical co-efficient of :";
+                    expression3 = coeff1 + "\\xalgebra^{" + pow1 + "}\\yalgebra^{" + pow2 + "}\\zalgebra^{" + pow3 + "}";
+					subQuestionTEX.text = expression3;
                     Answer = coeff1.ToString();
                 }
                 else if (selector == 3)
                 {
-					QuestionTEX.gameObject.SetActive(true);
+					subQuestionTEX.gameObject.SetActive(true);
                     coeff1 = Random.Range(2,10);
 					if(Random.Range(1,3) == 1)
 						coeff1 *= -1;
@@ -824,10 +825,10 @@ namespace Cerebro
                     pow2 = Random.Range(2, 10);
                     pow3 = Random.Range(2, 10);
 					QuestionText.text = "Write the coefficient of :";
-                    expression1 = coeff1 + "x\\^{" + pow1 + "}y\\^{" + pow2 + "}z\\^{" + pow3 + "}";
-                    expression3 = "x\\^{" + pow1 + "}";
-					QuestionTEX.text = expression3 + " in " + expression1;
-                    Answer = coeff1 + "y^{" + pow2 + "}z^{" + pow3 + "}";
+                    expression1 = coeff1 + "\\xalgebra^{" + pow1 + "}\\yalgebra^{" + pow2 + "}\\zalgebra^{" + pow3 + "}";
+                    expression3 = "\\xalgebra^{" + pow1 + "}";
+					subQuestionTEX.text = expression3 + " in " + expression1;
+                    Answer = coeff1 + "\\yalgebra^{" + pow2 + "}\\zalgebra^{" + pow3 + "}";
 
                 }
                 else if (selector == 4)
@@ -838,27 +839,27 @@ namespace Cerebro
                     a = Random.Range(2, 10);
                     b = Random.Range(2, 10);
                     c = Random.Range(2, 10);
-                    QuestionTEX.gameObject.SetActive(true);
-                    QuestionText.text = "Write the coefficient of :";
+					subQuestionTEX.gameObject.SetActive(true);
+                  QuestionText.text = "Write the coefficient of :";
                     int temp = Random.Range(1, 3);
                     if (temp == 1)
                     {
-                        QuestionTEX.text = "x^{" + a + "}y^{" + b + "} in " + coeff1 + "x^{" + a + "}y^{" + b + "}z^{" + c + "}";
-                        Answer = coeff1.ToString() + "z^{" + c + "}";
+						subQuestionTEX.text = "\\xalgebra^{" + a + "}\\yalgebra^{" + b + "} in " + coeff1 + "\\xalgebra^{" + a + "}\\yalgebra^{" + b + "}\\zalgebra^{" + c + "}";
+                        Answer = coeff1.ToString() + "\\zalgebra^{" + c + "}";
                     }
                     else if(temp ==2){
-                        QuestionTEX.text = "x^{" + a + "}z^{" + c + "} in " + coeff1 + "x^{" + a + "}y^{" + b + "}z^{" + c + "}";
-                        Answer = coeff1.ToString() + "y^{" + b + "}";
+						subQuestionTEX.text = "\\xalgebra^{" + a + "}\\zalgebra^{" + c + "} in " + coeff1 + "\\xalgebra^{" + a + "}\\yalgebra^{" + b + "}\\zalgebra^{" + c + "}";
+                        Answer = coeff1.ToString() + "\\yalgebra^{" + b + "}";
                     }
                     else
                     {
-                        QuestionTEX.text = "x^{" + a + "}y^{" + b + "}z^{" + c + "} in " + coeff1 + "x^{" + a + "}y^{" + b + "}z^{" + c + "}";
+						subQuestionTEX.text = "\\xalgebra^{" + a + "}\\yalgebra^{" + b + "}\\zalgebra^{" + c + "} in " + coeff1 + "\\xalgebra^{" + a + "}\\yalgebra^{" + b + "}\\zalgebra^{" + c + "}";
                         Answer = coeff1.ToString() ;
                     }
                 }
                 else if (selector == 5)
                 {
-                    QuestionTEX.gameObject.SetActive(true);
+					subQuestionTEX.gameObject.SetActive(true);
                     ThreeChoice.gameObject.SetActive(true);
 					GeneralButton.gameObject.SetActive(false);
                     numPad.SetActive(false);
@@ -869,21 +870,21 @@ namespace Cerebro
                     int temp = Random.Range(1, 4);
                     if (temp == 1)
                     {
-                        expression3 = coeff1 + "\\frac{x}{y}";
+						expression3 = coeff1 + "\\frac{\\xalgebra}{\\yalgebra}";
                         Answer = "Monomial";
                     }
                     else if(temp == 2)
                     {
-                        expression3 = coeff1 + "\\frac{x}{y} + " + coeff2 + "x + 13x";
+						expression3 = coeff1 + "\\frac{\\xalgebra}{\\yalgebra} + " + coeff2 + "\\xalgebra + 13\\xalgebra";
                         Answer = "Binomial";
                     }
                     else
                     {
-                        expression3 = coeff1 + "\\frac{x}{y} + " + coeff2 + "\\frac{y}{x} + x";
+						expression3 = coeff1 + "\\frac{\\xalgebra}{\\yalgebra} + " + coeff2 + "\\frac{\\yalgebra}{\\xalgebra} + \\xalgebra";
                         Answer = "Trinomial";
                     }
-                    QuestionText.text = "Is the following a monomial, binomial or trinomial?";
-                    QuestionTEX.text = expression3;
+                  QuestionText.text = "Is the following a monomial, binomial or trinomial?";
+					subQuestionTEX.text = expression3;
                     
                     ThreeChoice.transform.Find("Option1").Find("Text").GetComponent<TEXDraw>().text = "Monomial";
                     ThreeChoice.transform.Find("Option2").Find("Text").GetComponent<TEXDraw>().text = "Binomial";
@@ -897,8 +898,8 @@ namespace Cerebro
             else if (level == 3)
             {
 
-                QuestionText.text = "";
-                subQuestionText.text = "";
+              QuestionText.text = "";
+                QuestionText.text =  "";
                 subQuestionTEX.text = "";
                 selector = GetRandomSelector(1, 6);
 
@@ -916,44 +917,44 @@ namespace Cerebro
                         b = Random.Range(2, 10);
                         c = Random.Range(2, 10);
                     }
-                    //subQuestionText.gameObject.SetActive(true);
+                    ////subQuestionText.gameObject.SetActive (true);
 
-                    QuestionText.text = "Write the exponential form of the following expression :";
-                    QuestionTEX.gameObject.SetActive(true);
+                  QuestionText.text = "Write the exponential form of the following expression :";
+					subQuestionTEX.gameObject.SetActive(true);
 
-                    QuestionTEX.text = coeff1.ToString();
+					subQuestionTEX.text = coeff1.ToString();
 
                     for (int i = 0; i < a; i++)
                     {
-                        QuestionTEX.text += "\\times x ";
+						subQuestionTEX.text += "\\times \\xalgebra ";
                     }
-                    QuestionTEX.text += "\\times " + coeff2.ToString();
+					subQuestionTEX.text += "\\times " + coeff2.ToString();
                     for (int i = 0; i < b; i++)
                     {
-                        QuestionTEX.text += "\\times y ";
+						subQuestionTEX.text += "\\times \\yalgebra ";
                     }
-                    QuestionTEX.text += "\\times " + coeff3.ToString();
+					subQuestionTEX.text += "\\times " + coeff3.ToString();
                     for (int i = 0; i < c; i++)
                     {
-                        QuestionTEX.text += "\\times z ";
+						subQuestionTEX.text += "\\times \\zalgebra ";
                     }
 
 
-					Answer = coeff1*coeff2*coeff3 + "x^{" + a + "}" + "y^{" + b + "}" + "z^{" + c + "}";
+					Answer = coeff1*coeff2*coeff3 + "\\xalgebra^{" + a + "}" + "\\yalgebra^{" + b + "}" + "\\zalgebra^{" + c + "}";
                 }
                 else if (selector == 2)
                 {
                     coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(2, 100);
                     coeff3 = Random.Range(2, 100);
-                    //subQuestionText.gameObject.SetActive(true);
-                    QuestionText.text = "Find the degree of :";
-                    QuestionTEX.gameObject.SetActive(true);
+                    ////subQuestionText.gameObject.SetActive (true);
+                  QuestionText.text = "Find the degree of :";
+					subQuestionTEX.gameObject.SetActive(true);
                     a = Random.Range(2, 10);
                     int temp = Random.Range(1, 3);
                     if(temp == 1)
-                        QuestionTEX.text = coeff1 + "x^" + a + " + " + coeff2 + "x + " + coeff3;
-                    else QuestionTEX.text = coeff2 + "x + " + coeff1 + "x^" + a + " + " + coeff3;
+						subQuestionTEX.text = coeff1 + "\\xalgebra^" + a + " + " + coeff2 + "\\xalgebra + " + coeff3;
+					else subQuestionTEX.text = coeff2 + "\\xalgebra + " + coeff1 + "\\xalgebra^" + a + " + " + coeff3;
                     Answer = a.ToString();
                 }
                 else if (selector == 3)
@@ -964,9 +965,9 @@ namespace Cerebro
                     coeff4 = Random.Range(2, 10);
                     coeff5 = Random.Range(2, 10);
                     coeff6 = Random.Range(10, 50);
-                    //subQuestionText.gameObject.SetActive(true);
-                    QuestionText.text = "Find the degree of :";
-                    QuestionTEX.gameObject.SetActive(true);
+                    ////subQuestionText.gameObject.SetActive (true);
+                  QuestionText.text = "Find the degree of :";
+					subQuestionTEX.gameObject.SetActive(true);
                     a = Random.Range(2, 10);
                     b = Random.Range(2, 10);
                     c = Random.Range(2, 10);
@@ -977,7 +978,7 @@ namespace Cerebro
                         d = Random.Range(2, 10);
                         c = 2;
                     }
-                    QuestionTEX.text = coeff1 + "x^2 + \\frac{" + 1 + "}{" + coeff2 + "}y^" + c + " + " + coeff3 + "x^" + a + "y^" + b + " + " + coeff4 + "." + coeff5 + "x^" + c + "y^" + d + " +" + coeff6;
+					subQuestionTEX.text = coeff1 + "\\xalgebra^2 + \\frac{" + 1 + "}{" + coeff2 + "}\\yalgebra^" + c + " + " + coeff3 + "\\xalgebra^" + a + "\\yalgebra^" + b + " + " + coeff4 + "." + coeff5 + "\\xalgebra^" + c + "\\yalgebra^" + d + " +" + coeff6;
                     Answer = (a + b).ToString();
                 }
                 else if (selector == 4)
@@ -986,16 +987,16 @@ namespace Cerebro
                     coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(2, 100);
 					QuestionText.text = "Express in algebraic form :";
-                    expression3 = coeff1 + " times x subtracted from " + coeff1 + " times y is equal to " + coeff2;
-					subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -106);
+					expression3 = coeff1 + " times \\xalgebra subtracted from " + coeff1 + " times \\yalgebra is equal to " + coeff2;
+					//subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -106);
                     subQuestionTEX.text = expression3;
                     string[] answer = new string[4];
                     
-                    answer[0] = coeff1 + "y-" + coeff1 + "x=" + coeff2;
-					answer[1] = "-" + coeff1 + "x" + coeff1 + "y=" + coeff2;
-					answer[2] = coeff1 + "y=" + coeff1 + "x+" + coeff2;
+					answer[0] = coeff1 + "\\yalgebra-" + coeff1 + "\\xalgebra=" + coeff2;
+					answer[1] = "-" + coeff1 + "\\xalgebra" + coeff1 + "\\yalgebra=" + coeff2;
+					answer[2] = coeff1 + "\\yalgebra=" + coeff1 + "\\xalgebra+" + coeff2;
                     Answerarray = answer; 
-					Answer = coeff1 + "y-" + coeff1 + "x=" + coeff2;
+					Answer = coeff1 + "\\yalgebra-" + coeff1 + "\\xalgebra=" + coeff2;
                 }
                 else if (selector == 5)
                 {
@@ -1006,20 +1007,20 @@ namespace Cerebro
                     coeff3 = Random.Range(1, 100);
 					QuestionText.text = "Express in algebraic form :";
                     subQuestionTEX.gameObject.SetActive(true);
-                    expression3 = coeff1 + "x added to -" + coeff2 + "x gives " + coeff3;
-					subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -106);
+					expression3 = coeff1 + "\\xalgebra added to -" + coeff2 + "\\xalgebra gives " + coeff3;
+					//subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -106);
                     subQuestionTEX.text = expression3;
                     string[] answer = new string[4];
                    
-                    answer[0] = coeff1-coeff2 + "x=" + coeff3;
-                    answer[1] = coeff1 + "x=" + coeff2 + "x+" + coeff3;
-                    answer[2] = coeff1 + "x=" + coeff3 + coeff2 + "x";                    
+					answer[0] = coeff1-coeff2 + "\\xalgebra=" + coeff3;
+					answer[1] = coeff1 + "\\xalgebra=" + coeff2 + "\\xalgebra+" + coeff3;
+					answer[2] = coeff1 + "\\xalgebra=" + coeff3 + coeff2 + "\\xalgebra";                    
 					if (coeff1 - coeff2 ==1)
-						Answer = "x=" + coeff3;
+						Answer = "\\xalgebra=" + coeff3;
 					else if( coeff1 - coeff2 == -1)
-						Answer = "-x=" + coeff3;
+						Answer = "-\\xalgebra=" + coeff3;
 					else
-						Answer = (coeff1 - coeff2) + "x=" + coeff3;
+						Answer = (coeff1 - coeff2) + "\\xalgebra=" + coeff3;
 					answer[3] = Answer;
 					Answerarray = answer;
                 }
@@ -1029,7 +1030,7 @@ namespace Cerebro
             else if (level == 4)
             {
                 selector = GetRandomSelector(1, 6);
-                QuestionText.text = "";
+              QuestionText.text = "";
                 
 
                 if (selector == 1)
@@ -1043,10 +1044,10 @@ namespace Cerebro
                     coeff6 = Random.Range(10, 50);
 					while (coeff2 == coeff5 || Mathf.Abs(coeff2-coeff5) == 1)
 						coeff5 = Random.Range(10,50);
-                    QuestionText.text = "Add :";
-                    QuestionTEX.gameObject.SetActive(true);
-                    QuestionTEX.text = coeff1 + "x + " + coeff2 + "y + " + coeff3 + "z^{2}, " + coeff4 + "x - " + coeff5 + "y + " + coeff6 + "z^{2}";
-					Answer = (coeff1 + coeff4) + "x" + (coeff2 - coeff5 < 0 ? (coeff2 - coeff5).ToString() : ("+" + (coeff2 - coeff5).ToString())) + "y+" + (coeff3 + coeff6) + "z^{2}";
+                  QuestionText.text = "Add :";
+					subQuestionTEX.gameObject.SetActive(true);
+					subQuestionTEX.text = coeff1 + "\\xalgebra + " + coeff2 + "\\yalgebra + " + coeff3 + "\\zalgebra^{2}, " + coeff4 + "\\xalgebra - " + coeff5 + "\\yalgebra + " + coeff6 + "\\zalgebra^{2}";
+					Answer = (coeff1 + coeff4) + "\\xalgebra" + (coeff2 - coeff5 < 0 ? (coeff2 - coeff5).ToString() : ("+" + (coeff2 - coeff5).ToString())) + "\\yalgebra+" + (coeff3 + coeff6) + "\\zalgebra^{2}";
                 }
                 else if (selector == 2)
                 {
@@ -1070,35 +1071,35 @@ namespace Cerebro
 						coeff6 *= -1;
 					
 					QuestionText.text = "Subtract :";
-					QuestionTEX.gameObject.SetActive(true);
-					QuestionTEX.text = coeff1 + "x " + (coeff2 > 0 ? "+" : "") + coeff2 + "y " + (coeff3 > 0 ? "+" : "") + coeff3 + "z^{2} from " + coeff4 + "x " + (coeff5 > 0 ? "+" : "") + coeff5 + "y " + (coeff6 > 0 ? "+" : "") + coeff6 + "z^{2}";
+					subQuestionTEX.gameObject.SetActive(true);
+					subQuestionTEX.text = coeff1 + "\\xalgebra " + (coeff2 > 0 ? "+" : "") + coeff2 + "\\yalgebra " + (coeff3 > 0 ? "+" : "") + coeff3 + "\\zalgebra^{2} from " + coeff4 + "\\xalgebra " + (coeff5 > 0 ? "+" : "") + coeff5 + "\\yalgebra " + (coeff6 > 0 ? "+" : "") + coeff6 + "\\zalgebra^{2}";
 					Answer = "";
 					if (coeff4 - coeff1 == 1)
-						Answer += "x";
+						Answer += "\\xalgebra";
 					else if (coeff4 - coeff1 == -1)
-						Answer += "-x";
+						Answer += "-\\xalgebra";
 					else if (coeff4 - coeff1 == 0)
 						Answer += "";
 					else
-						Answer += (coeff4 - coeff1 > 0 ? "+" : "") + (coeff4 - coeff1) + "x";
+						Answer += (coeff4 - coeff1 > 0 ? "+" : "") + (coeff4 - coeff1) + "\\xalgebra";
 					
 					if (coeff5 - coeff2 == 1)
-						Answer += "+y";
+						Answer += "+\\yalgebra";
 					else if (coeff5 - coeff2 == -1)
-						Answer += "-y";
+						Answer += "-\\yalgebra";
 					else if (coeff5 - coeff2 == 0)
 						Answer += "";
 					else
-						Answer += (coeff5 - coeff2 > 0 ? "+" : "") + (coeff5 - coeff2) + "y";
+						Answer += (coeff5 - coeff2 > 0 ? "+" : "") + (coeff5 - coeff2) + "\\yalgebra";
 
 					if (coeff6 - coeff3 == 1)
-						Answer += "+z^{2}";
+						Answer += "+\\zalgebra^{2}";
 					else if (coeff6 - coeff3 == -1)
-						Answer += "-z^{2}";
+						Answer += "-\\zalgebra^{2}";
 					else if (coeff6 - coeff3 == 0)
 						Answer += "";
 					else
-						Answer += (coeff6 - coeff3 > 0 ? "+" : "") + (coeff6 - coeff3) + "z^{2}";
+						Answer += (coeff6 - coeff3 > 0 ? "+" : "") + (coeff6 - coeff3) + "\\zalgebra^{2}";
 					
 					while (Answer[0] == '+')
 						Answer = Answer.Substring(1);
@@ -1107,9 +1108,9 @@ namespace Cerebro
 				}
                 else if (selector == 3)
                 {
-                    QuestionTEX.gameObject.SetActive(true);
+					subQuestionTEX.gameObject.SetActive(true);
 
-                    QuestionText.text = "Subtract :";
+                  QuestionText.text = "Subtract :";
                     coeff1 = Random.Range(2, 100);
                     coeff2 = Random.Range(10, 50);
                     coeff3 = Random.Range(10, 50);
@@ -1130,31 +1131,31 @@ namespace Cerebro
                     int e = Random.Range(10, 50);
 					while (e == coeff1 || Mathf.Abs(e - coeff5) == 1)
 						e = Random.Range(2, 100);
-                    QuestionTEX.text = coeff1 + "x^4+" + coeff2 + "x^3+" + coeff3 + "x^2+" + coeff4 + "x+" + coeff5 + " from " + a + "x^4+" + b + "x^3+" + c + "x^2+" + d + "x+" + e;
-                    Answer = (a - coeff1) + "x^{4}";
+					subQuestionTEX.text = coeff1 + "\\xalgebra^4+" + coeff2 + "\\xalgebra^3+" + coeff3 + "\\xalgebra^2+" + coeff4 + "\\xalgebra+" + coeff5 + " from " + a + "\\xalgebra^4+" + b + "\\xalgebra^3+" + c + "\\xalgebra^2+" + d + "\\xalgebra+" + e;
+                    Answer = (a - coeff1) + "\\xalgebra^{4}";
                     if (b - coeff2 > 0)
                     {
-                        Answer += "+" + (b - coeff2) + "x^{3}";
+                        Answer += "+" + (b - coeff2) + "\\xalgebra^{3}";
                     }
                     else
                     {
-                        Answer += (b - coeff2) + "x^{3}";
+                        Answer += (b - coeff2) + "\\xalgebra^{3}";
                     }
                     if ((c - coeff3) > 0)
                     {
-                        Answer += "+" + (c - coeff3) + "x^{2}";
+                        Answer += "+" + (c - coeff3) + "\\xalgebra^{2}";
                     }
                     else
                     {
-                        Answer += (c - coeff3) + "x^{2}";
+                        Answer += (c - coeff3) + "\\xalgebra^{2}";
                     }
                     if ((d - coeff4) > 0)
                     {
-                        Answer += "+" + (d - coeff4) + "x";
+						Answer += "+" + (d - coeff4) + "\\xalgebra";
                     }
                     else
                     {
-                        Answer += (d - coeff4) + "x";
+						Answer += (d - coeff4) + "\\xalgebra";
                     }
                     if ((e - coeff5) > 0)
                     {
@@ -1169,9 +1170,9 @@ namespace Cerebro
                 }
                 else if (selector == 4)
                 {
-                    QuestionTEX.gameObject.SetActive(true);
+					subQuestionTEX.gameObject.SetActive(true);
 
-                    QuestionText.text = "Simplify the following :";
+                  QuestionText.text = "Simplify the following :";
 					coeff1 = Random.Range(2,20);
 					if (Random.Range(1,3) == 1)
 						coeff1 *= -1;
@@ -1211,39 +1212,39 @@ namespace Cerebro
 					if (coeff2 + coeff4 + a == -1)
 						a--;
 
-                    QuestionTEX.text = coeff1 + "x ";
+					subQuestionTEX.text = coeff1 + "\\xalgebra ";
                     if (coeff2 > 0)
-                        QuestionTEX.text +=  "+" + coeff2 + "y ";
-                    else QuestionTEX.text +=   coeff2 + "y ";
+						subQuestionTEX.text +=  "+" + coeff2 + "\\yalgebra ";
+					else subQuestionTEX.text +=   coeff2 + "\\yalgebra ";
                     if (coeff3 > 0)
-                        QuestionTEX.text += "+" + coeff3 + "x^2y^2 ";
-                    else QuestionTEX.text += coeff3 + "x^2y^2 ";
+						subQuestionTEX.text += "+" + coeff3 + "\\xalgebra^2\\yalgebra^2 ";
+					else subQuestionTEX.text += coeff3 + "\\xalgebra^2\\yalgebra^2 ";
                     if (coeff4 > 0)
-                        QuestionTEX.text += "+" + coeff4 + "y ";
-                    else QuestionTEX.text += coeff4 + "y ";
+						subQuestionTEX.text += "+" + coeff4 + "\\yalgebra ";
+					else subQuestionTEX.text += coeff4 + "\\yalgebra ";
                     if (coeff5 > 0)
-                        QuestionTEX.text += "+" + coeff5 + "x ";
-                    else QuestionTEX.text += coeff5 + "x ";
+						subQuestionTEX.text += "+" + coeff5 + "\\xalgebra ";
+					else subQuestionTEX.text += coeff5 + "\\xalgebra ";
                     if (a > 0)
-                        QuestionTEX.text += "+" + a + "y ";
-                    else QuestionTEX.text += a + "y ";
+						subQuestionTEX.text += "+" + a + "\\yalgebra ";
+					else subQuestionTEX.text += a + "\\yalgebra ";
                     if (b > 0)
-                        QuestionTEX.text += "+" + b + "x^2y^2 ";
-                    else QuestionTEX.text += b + "x^2y^2 ";
+						subQuestionTEX.text += "+" + b + "\\xalgebra^2\\yalgebra^2 ";
+					else subQuestionTEX.text += b + "\\xalgebra^2\\yalgebra^2 ";
                     if (c > 0)
-                        QuestionTEX.text += "+" + c + "x ";
-                    else QuestionTEX.text += c + "x ";
+						subQuestionTEX.text += "+" + c + "\\xalgebra ";
+					else subQuestionTEX.text += c + "\\xalgebra ";
                     if (d > 0)
-                        QuestionTEX.text += "+" + d + "x^2y^2 ";
-                    else QuestionTEX.text += d + "x^2y^2 ";
+						subQuestionTEX.text += "+" + d + "\\xalgebra^2\\yalgebra^2 ";
+					else subQuestionTEX.text += d + "\\xalgebra^2\\yalgebra^2 ";
 
-					Answer = coeff1 + coeff5 + c == 0 ? "" : ((coeff1 + coeff5 + c) + "x");
+					Answer = coeff1 + coeff5 + c == 0 ? "" : ((coeff1 + coeff5 + c) + "\\xalgebra");
                     if (coeff2 + coeff4 + a > 0)
-                        Answer += "+" + (coeff2 + coeff4 + a) + "y";
-					else Answer += coeff2 + coeff4 + a == 0 ? "" : ((coeff2 + coeff4 + a) + "y");
+						Answer += "+" + (coeff2 + coeff4 + a) + "\\yalgebra";
+					else Answer += coeff2 + coeff4 + a == 0 ? "" : ((coeff2 + coeff4 + a) + "\\yalgebra");
 					if (coeff3 + b + d > 0)
-						Answer += "+" + (coeff3 + b + d) + "x^{2}y^{2}";
-					else Answer += coeff3 + b + d == 0 ? "" : ((coeff3 + b + d) + "x^{2}y^{2}");
+						Answer += "+" + (coeff3 + b + d) + "\\xalgebra^{2}\\yalgebra^{2}";
+					else Answer += coeff3 + b + d == 0 ? "" : ((coeff3 + b + d) + "\\xalgebra^{2}\\yalgebra^{2}");
 
                 }
                 else if (selector == 5)
@@ -1274,13 +1275,13 @@ namespace Cerebro
 					if (coeff6-coeff3 == 0)
 						coeff3 *= -1;
                     // subQuestionText.gameObject.SetActive(fa);
-                    QuestionText.text = "What must be subtracted from expression A to get expression B?";
-                    QuestionTEX.gameObject.SetActive(true);
-                    tempQuestionTEX.gameObject.SetActive(true);
-					QuestionTEX.text = "B : " + coeff1 + "x^3 " + (coeff2 < 0 ? "" : "+") + coeff2 + "x^2y^2 " +(coeff3 < 0 ? "" : "+") + coeff3 + "z";
-					tempQuestionTEX.text = "A : " + coeff4 + "x^3 " + (coeff5 < 0 ? "" : "+") + coeff5 + "x^2y^2 " + (coeff6 < 0 ? "" : "+") + coeff6 + "z";
+                  QuestionText.text = "What must be subtracted from expression A to get expression B?";
+					subQuestionTEX.gameObject.SetActive(true);
+                    //tempQuestionTEX.gameObject.SetActive(true);
+					subQuestionTEX.text = "B : " + coeff1 + "\\xalgebra^3 " + (coeff2 < 0 ? "" : "+") + coeff2 + "\\xalgebra^2\\yalgebra^2 " +(coeff3 < 0 ? "" : "+") + coeff3 + "\\zalgebra";
+					subQuestionTEX.text +="\n\n" + "A : " + coeff4 + "\\xalgebra^3 " + (coeff5 < 0 ? "" : "+") + coeff5 + "\\xalgebra^2\\yalgebra^2 " + (coeff6 < 0 ? "" : "+") + coeff6 + "\\zalgebra";
 
-					Answer = (coeff4 - coeff1) + "x^{3}" + (coeff5 - coeff2 < 0 ? "" : "+") + (coeff5 - coeff2) + "x^{2}y^{2}" + (coeff6 - coeff3 < 0 ? "" : "+") + (coeff6 - coeff3) + "z";
+					Answer = (coeff4 - coeff1) + "\\xalgebra^{3}" + (coeff5 - coeff2 < 0 ? "" : "+") + (coeff5 - coeff2) + "\\xalgebra^{2}\\yalgebra^{2}" + (coeff6 - coeff3 < 0 ? "" : "+") + (coeff6 - coeff3) + "\\zalgebra";
                 }
 
             }
@@ -1289,8 +1290,8 @@ namespace Cerebro
             else if (level == 5)
             {
                 selector = GetRandomSelector(1, 5);
-                QuestionText.text = "";
-                subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -110);
+              QuestionText.text = "";
+               // subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition = new Vector2(subQuestionTEX.gameObject.GetAddComponent<RectTransform>().anchoredPosition.x, -110);
                 if (selector == 1)
                 {
                     coeff1 = Random.Range(2, 20);
@@ -1320,50 +1321,50 @@ namespace Cerebro
                     c = Random.Range(10, 20);
 					if (Random.Range(1,3) == 1)
 						c *= -1;
-                    //subQuestionText.gameObject.SetActive(true);
-                    QuestionText.text = "Subtract A from the sum of B and C.";
-                    QuestionTEX.gameObject.SetActive(true);
+                    ////subQuestionText.gameObject.SetActive (true);
+                  QuestionText.text = "Subtract A from the sum of B and C.";
+					subQuestionTEX.gameObject.SetActive(true);
                     subQuestionTEX.gameObject.SetActive(true);
-                    tempQuestionTEX.gameObject.SetActive(true);
-					QuestionTEX.text = "B : " + coeff1 + "x^2 " + (coeff2 < 0 ? coeff2.ToString() : ("+ " + coeff2.ToString())) + "xy " + (coeff3 < 0 ? coeff3.ToString() :( "+ " + coeff3.ToString())) + "y^2";
-					subQuestionTEX.text = "A : " + coeff4 + "x^2 " + (coeff5 < 0 ? coeff5.ToString() : ("+ " + coeff5.ToString())) + "xy " + (coeff6 < 0 ? coeff6.ToString() : ("+ " + coeff6.ToString())) + "y^2";
-					tempQuestionTEX.text = "C : " + a + "x^2 " + (b < 0 ? b.ToString() : ("+ " + b.ToString())) + "xy " + (c < 0 ? c.ToString() : ("+ " + c.ToString())) + "y^2";
+                   // tempQuestionTEX.gameObject.SetActive(true);
+					subQuestionTEX.text = "B : " + coeff1 + "\\xalgebra^2 " + (coeff2 < 0 ? coeff2.ToString() : ("+ " + coeff2.ToString())) + "\\xalgebra\\yalgebra " + (coeff3 < 0 ? coeff3.ToString() :( "+ " + coeff3.ToString())) + "\\yalgebra^2";
+					subQuestionTEX.text +="\n\n" +  "A : " + coeff4 + "\\xalgebra^2 " + (coeff5 < 0 ? coeff5.ToString() : ("+ " + coeff5.ToString())) + "\\xalgebra\\yalgebra " + (coeff6 < 0 ? coeff6.ToString() : ("+ " + coeff6.ToString())) + "\\yalgebra^2";
+					subQuestionTEX.text +="\n\n" + "C : " + a + "\\xalgebra^2 " + (b < 0 ? b.ToString() : ("+ " + b.ToString())) + "\\xalgebra\\yalgebra " + (c < 0 ? c.ToString() : ("+ " + c.ToString())) + "\\yalgebra^2";
 
 					if (coeff1 + a - coeff4 == 1)
-						Answer = "x^2";
+						Answer = "\\xalgebra^2";
 					else if (coeff1 + a - coeff4 == -1)
-						Answer = "-x^2";
+						Answer = "-\\xalgebra^2";
 					else if (coeff1 + a - coeff4 == 0)
 						Answer = "";
 					else
-                    	Answer = (coeff1 + a - coeff4) + "x^2";
+						Answer = (coeff1 + a - coeff4) + "\\xalgebra^2";
                     if (coeff2 + b - coeff5 > 0)
                     {
 						if (coeff2 + b - coeff5 == 1)
-							Answer += "+xy";
+							Answer += "+\\xalgebra\\yalgebra";
 						else
-                        	Answer += "+" + (coeff2 + b - coeff5) + "xy";
+							Answer += "+" + (coeff2 + b - coeff5) + "\\xalgebra\\yalgebra";
                     }
                     else
                     {
 						if (coeff2 + b - coeff5 == -1)
-							Answer += "-xy";
+							Answer += "-\\xalgebra\\yalgebra";
 						else
-                        	Answer += (coeff2 + b - coeff5) + "xy";
+							Answer += (coeff2 + b - coeff5) + "\\xalgebra\\yalgebra";
                     }
                     if ((coeff3 + c - coeff6) > 0)
                     {
 						if (coeff3 + c - coeff6 == 1)
-							Answer += "+y^2";
+							Answer += "+\\yalgebra^2";
 						else
-                        	Answer += "+" + (coeff3 + c - coeff6) + "y^2";
+							Answer += "+" + (coeff3 + c - coeff6) + "\\yalgebra^2";
                     }
                     else
                     {
 						if (coeff3 + c - coeff6 == -1)
-							Answer += "-y^2";
+							Answer += "-\\yalgebra^2";
 						else
-                        	Answer += (coeff3 + c - coeff6) + "y^2";
+							Answer += (coeff3 + c - coeff6) + "\\yalgebra^2";
                     }
 					while (Answer[0] == '+')
 						Answer = Answer.Substring(1);
@@ -1396,15 +1397,15 @@ namespace Cerebro
 					if (coeff2 + coeff5 == 0)
 						coeff2 *= -1;
 
-                    // subQuestionText.gameObject.SetActive(true);
-                    QuestionText.text = "Find the perimeter of a rectangle whose length and breadth are given as A and B.";
-                    QuestionTEX.gameObject.SetActive(true);
-                    subQuestionTEX.gameObject.SetActive(true);
+                    // //subQuestionText.gameObject.SetActive (true);
+                  QuestionText.text = "Find the perimeter of a rectangle whose length and breadth are given as A and B.";
+					subQuestionTEX.gameObject.SetActive(true);
+                   
 
-					QuestionTEX.text = "B : " + coeff4 + "x " + (coeff5 < 0 ? coeff5.ToString() : ("+ " + coeff5.ToString())) + "y " + (coeff6 < 0 ? coeff6.ToString() : ("+ " + coeff6.ToString())) + "z";
-					subQuestionTEX.text = "A : " + coeff1 + "x " + (coeff2 < 0 ? coeff2.ToString() : ("+ " + coeff2.ToString())) + "y " + (coeff3 < 0 ? coeff3.ToString() : ("+ " + coeff3.ToString())) + "z";
+					subQuestionTEX.text = "B : " + coeff4 + "\\xalgebra " + (coeff5 < 0 ? coeff5.ToString() : ("+ " + coeff5.ToString())) + "\\yalgebra " + (coeff6 < 0 ? coeff6.ToString() : ("+ " + coeff6.ToString())) + "\\zalgebra";
+					subQuestionTEX.text  +="\n\n" +  "A : " + coeff1 + "\\xalgebra " + (coeff2 < 0 ? coeff2.ToString() : ("+ " + coeff2.ToString())) + "\\yalgebra " + (coeff3 < 0 ? coeff3.ToString() : ("+ " + coeff3.ToString())) + "\\zalgebra";
 
-					Answer = (2*(coeff1 + coeff4)).ToString() + "x" + (coeff2 + coeff5 > 0 ? "+" : "") + (2*(coeff2 + coeff5)).ToString() + "y" + (coeff3 + coeff6 > 0 ? "+" : "") + (2*(coeff3 + coeff6)).ToString() + "z";
+					Answer = (2*(coeff1 + coeff4)).ToString() + "\\xalgebra" + (coeff2 + coeff5 > 0 ? "+" : "") + (2*(coeff2 + coeff5)).ToString() + "\\yalgebra" + (coeff3 + coeff6 > 0 ? "+" : "") + (2*(coeff3 + coeff6)).ToString() + "\\zalgebra";
                 }
                 else if (selector == 3)
                 {
@@ -1435,17 +1436,17 @@ namespace Cerebro
 						c = Random.Range(2, 20);
 
 
-                    //  subQuestionText.gameObject.SetActive(true);
-                    QuestionText.text = "Find the semiperimeter of a triangle whose sides are given as A, B and C.";
-                    QuestionTEX.gameObject.SetActive(true);
+                    //  //subQuestionText.gameObject.SetActive (true);
+                  QuestionText.text = "Find the semiperimeter of a triangle whose sides are given as A, B and C.";
+					subQuestionTEX.gameObject.SetActive(true);
                     subQuestionTEX.gameObject.SetActive(true);
-                    tempQuestionTEX.gameObject.SetActive(true);
+                    //tempQuestionTEX.gameObject.SetActive(true);
 
-					subQuestionTEX.text = "A : " + coeff1 + "x " + (coeff2 > 0 ? "+" : "") + coeff2 + "y " + (coeff3 > 0 ? "+" : "") + coeff3 + "z";
-					QuestionTEX.text = "B : " + coeff4 + "x " + (coeff5 > 0 ? "+" : "") + coeff5 + "y " + (coeff6 > 0 ? "+" : "") + coeff6 + "z";
-					tempQuestionTEX.text = "C : " + a + "x " + (b > 0 ? "+" : "") + b + "y " + (c > 0 ? "+" : "") + c + "z";
+					subQuestionTEX.text = "A : " + coeff1 + "\\xalgebra " + (coeff2 > 0 ? "+" : "") + coeff2 + "\\yalgebra " + (coeff3 > 0 ? "+" : "") + coeff3 + "\\zalgebra";
+					subQuestionTEX.text +="\n\n" +  "B : " + coeff4 + "\\xalgebra " + (coeff5 > 0 ? "+" : "") + coeff5 + "\\yalgebra " + (coeff6 > 0 ? "+" : "") + coeff6 + "\\zalgebra";
+					subQuestionTEX.text +="\n\n" + "C : " + a + "\\xalgebra " + (b > 0 ? "+" : "") + b + "\\yalgebra " + (c > 0 ? "+" : "") + c + "\\zalgebra";
 
-					Answer = (coeff1 + coeff4 + a) / 2 + "x" + (coeff2 + coeff5 + b > 0 ? "+" : "") + (coeff2 + coeff5 + b) / 2 + "y" + (coeff3 + coeff6 + c > 0 ? "+" : "") + (coeff3 + coeff6 + c) / 2 + "z";
+					Answer = (coeff1 + coeff4 + a) / 2 + "\\xalgebra" + (coeff2 + coeff5 + b > 0 ? "+" : "") + (coeff2 + coeff5 + b) / 2 + "\\yalgebra" + (coeff3 + coeff6 + c > 0 ? "+" : "") + (coeff3 + coeff6 + c) / 2 + "\\zalgebra";
                 }
                 else if (selector == 4)
                 {
@@ -1477,17 +1478,17 @@ namespace Cerebro
 					
 
 
-                    // subQuestionText.gameObject.SetActive(true);
-                    QuestionText.text = "The semiperimeter of a triangle is given by A and the two sides are B and C. Determine the third side.";
-                    QuestionTEX.gameObject.SetActive(true);
+                    // //subQuestionText.gameObject.SetActive (true);
+                  QuestionText.text = "The semiperimeter of a triangle is given by A and the two sides are B and C. Determine the third side.";
+					subQuestionTEX.gameObject.SetActive(true);
                     subQuestionTEX.gameObject.SetActive(true);
-                    tempQuestionTEX.gameObject.SetActive(true);
+                    //tempQuestionTEX.gameObject.SetActive(true);
 
-					subQuestionTEX.text = "A : " + (coeff1 + coeff4 + a) / 2 + "x" + (coeff2 + coeff5 + b > 0 ? "+" : "") + (coeff2 + coeff5 + b) / 2 + "y" + (coeff3 + coeff6 + c > 0 ? "+" : "") + (coeff3 + coeff6 + c) / 2 + "z";
-					QuestionTEX.text = "B : " + coeff4 + "x " + (coeff5 > 0 ? "+" : "") + coeff5 + "y " + (coeff6 > 0 ? "+" : "") + coeff6 + "z";
-					tempQuestionTEX.text = "C : " + coeff1 + "x " + (coeff2 > 0 ? "+" : "") + coeff2 + "y " + (coeff3 > 0 ? "+" : "") + coeff3 + "z";
+					subQuestionTEX.text = "A : " + (coeff1 + coeff4 + a) / 2 + "\\xalgebra" + (coeff2 + coeff5 + b > 0 ? "+" : "") + (coeff2 + coeff5 + b) / 2 + "\\yalgebra" + (coeff3 + coeff6 + c > 0 ? "+" : "") + (coeff3 + coeff6 + c) / 2 + "\\zalgebra";
+					subQuestionTEX.text +="\n\n" + "B : " + coeff4 + "\\xalgebra " + (coeff5 > 0 ? "+" : "") + coeff5 + "\\yalgebra " + (coeff6 > 0 ? "+" : "") + coeff6 + "\\zalgebra";
+					subQuestionTEX.text += "\n\n" + "C : " + coeff1 + "\\xalgebra " + (coeff2 > 0 ? "+" : "") + coeff2 + "\\yalgebra " + (coeff3 > 0 ? "+" : "") + coeff3 + "\\zalgebra";
 
-					Answer = a + "x " + (b > 0 ? "+" : "") + b + "y " + (c > 0 ? "+" : "") + c + "z";
+					Answer = a + "\\xalgebra " + (b > 0 ? "+" : "") + b + "\\yalgebra " + (c > 0 ? "+" : "") + c + "\\zalgebra";
                 }
             }
 
@@ -1497,8 +1498,8 @@ namespace Cerebro
 			else if (level == 6)
 			{
 				selector = GetRandomSelector(1, 5);
-				QuestionTEX.gameObject.SetActive(true);
-				subQuestionTEX.gameObject.SetActive(false);
+				subQuestionTEX.gameObject.SetActive(true);
+
 
 				if (selector == 1)
 				{
@@ -1515,17 +1516,17 @@ namespace Cerebro
 					if (Random.Range(1,3) == 1)
 						coeff4 *= -1;
 					QuestionText.text = "Find the remainder :";
-					QuestionTEX.text = "x^{3}" + (coeff1 > 0 ? "+" : "") + coeff1 + "x" + (coeff2 > 0 ? "+" : "") + coeff2 + " by x^{2}" + (coeff3 > 0 ? "+" : "") + coeff3 + "x" + (coeff4 > 0 ? "+" : "") + coeff4;
+					subQuestionTEX.text = "\\xalgebra^{3}" + (coeff1 > 0 ? "+" : "") + coeff1 + "\\xalgebra" + (coeff2 > 0 ? "+" : "") + coeff2 + " by \\xalgebra^{2}" + (coeff3 > 0 ? "+" : "") + coeff3 + "\\xalgebra" + (coeff4 > 0 ? "+" : "") + coeff4;
 					int No1 = (coeff3*coeff3) + coeff1 - coeff4;
 					int No2 = coeff2 + (coeff3*coeff4);
 					if(No1 == 0)
 						Answer = No2.ToString();
 					else if(No1 == 1)
-						Answer = "x" + No2.ToString();
+						Answer = "\\xalgebra" + No2.ToString();
 					else if(No1 == -1)
-						Answer = "-x" + No2.ToString();
+						Answer = "-\\xalgebra" + No2.ToString();
 					else
-						Answer = No1 + "x" + (No2 > 0 ? "+" : "") + No2;
+						Answer = No1 + "\\xalgebra" + (No2 > 0 ? "+" : "") + No2;
 				}
 				else if (selector == 2)
 				{
@@ -1548,31 +1549,34 @@ namespace Cerebro
 					if (Random.Range(1,3) == 1)
 						coeff6 *= -1;
 					QuestionText.text = "Solve using the laws of exponents :";
-					QuestionTEX.text = "\\frac{x^{"+coeff1+"}y^{"+coeff2+"}z^{"+coeff3+"}}{x^{"+coeff4+"}y^{"+coeff5+"}z^{"+coeff6+"}}";
-					Answer = "x^{" + (coeff1-coeff4) + "}y^{" + (coeff2-coeff5) + "}z^{" + (coeff3-coeff6) + "}";
+					subQuestionTEX.text = "\\frac{\\xalgebra^{"+coeff1+"}\\yalgebra^{"+coeff2+"}\\zalgebra^{"+coeff3+"}}{\\xalgebra^{"+coeff4+"}\\yalgebra^{"+coeff5+"}\\zalgebra^{"+coeff6+"}}";
+					Answer = "\\xalgebra^{" + (coeff1-coeff4) + "}\\yalgebra^{" + (coeff2-coeff5) + "}\\zalgebra^{" + (coeff3-coeff6) + "}";
 				}
 				else if (selector == 3)
 				{
-					QuestionTEX.gameObject.SetActive(false);
+					QuestionText.text = "";
+					QuestionLatext.gameObject.SetActive(true);
 					coeff1 = Random.Range(2, 8); 
 					coeff2 = Random.Range(2, 8);
 					coeff3 = Random.Range(2, 8); 
 					coeff4 = Random.Range(2, 8); 
 					coeff5 = Random.Range(2, 8); 
 					coeff6 = Random.Range(2, 8); 
-					QuestionText.text = "The sides of a rectangle are given by " + coeff1 + "x+" + coeff2 + "y+" + coeff3 + "z and " + coeff4 + "x+" + coeff5 + "y+" + coeff6 + "z. Find its area.";
-					Answer = (coeff1*coeff4) + "x^{2}+" + (coeff2*coeff5) + "y^{2}+" + (coeff3*coeff6) + "z^{2}+" + (coeff1*coeff5 + coeff2*coeff4) + "xy+" + (coeff2*coeff6 + coeff3*coeff5) + "yz+" + (coeff1*coeff6 + coeff3*coeff4) + "xz";
+					QuestionLatext.text = "The sides of a rectangle are given by " + coeff1 + "\\xalgebra+" + coeff2 + "\\yalgebra+" + coeff3 + "\\zalgebra and " + coeff4 + "\\xalgebra+" + coeff5 + "\\yalgebra+" + coeff6 + "\\zalgebra. Find its area.";
+					Answer = (coeff1*coeff4) + "\\xalgebra^{2}+" + (coeff2*coeff5) + "\\yalgebra^{2}+" + (coeff3*coeff6) + "\\zalgebra^{2}+" + (coeff1*coeff5 + coeff2*coeff4) + "\\xalgebra\\yalgebra+" + (coeff2*coeff6 + coeff3*coeff5) + "\\yalgebra\\zalgebra+" + (coeff1*coeff6 + coeff3*coeff4) + "\\xalgebra\\zalgebra";
 				}
 				else if (selector == 4)
 				{
+					QuestionLatext.gameObject.SetActive(true);
+					QuestionText.text = "";
 					coeff1 = Random.Range(5, 15) * 2;
 					coeff2 = Random.Range(1, coeff1/2);
 					coeff3 = Random.Range(1, 3);
 					coeff4 = coeff1 - (coeff2+coeff3+1);
 					coeff5 = Random.Range(2, 6);
 					coeff6 = Random.Range(6, 9);
-					QuestionText.text = "Find x :";
-					QuestionTEX.text = "(\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{-" + coeff2 + "}\\times(\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{-" + coeff3 + "}\\times(\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{-" + coeff4 + "} = (\\frac{" + coeff5 + "}{" + coeff6 + "})\\^{1-2x}";
+					QuestionLatext.text = "Find \\xalgebra :";
+					subQuestionTEX.text = "{({\\frac{" + coeff5 + "}{" + coeff6 + "}})}^{-" + coeff2 + "}\\times{({\\frac{" + coeff5 + "}{" + coeff6 + "}})}^{-" + coeff3 + "}\\times{({\\frac{" + coeff5 + "}{" + coeff6 + "}})}^{-" + coeff4 + "} = {({\\frac{" + coeff5 + "}{" + coeff6 + "}})}^{1-2\\xalgebra}";
 					Answer = (coeff1/2).ToString();
 				}
 			}
@@ -1641,9 +1645,12 @@ namespace Cerebro
                     upflag = 1;
                     numPad.transform.Find("PanelLayer").Find("^").gameObject.GetChildByName<Image>("Image").color = CerebroHelper.HexToRGB("191923");
                 }
-                else {
-                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
-                }
+				else if(checkLastTextFor (new string[3] { "\\xalgebra","\\yalgebra","\\zalgebra" })) {
+						userAnswerLaText.text = userAnswerLaText.text.Substring (0, userAnswerLaText.text.Length - 9);
+					}
+				else {
+					userAnswerLaText.text = userAnswerLaText.text.Substring (0, userAnswerLaText.text.Length - 1);
+				}
 
                 // last check to remove ^{} if that's the last part of userAnswer
                 if (checkLastTextFor(new string[1] { "^{}" }))
@@ -1717,31 +1724,31 @@ namespace Cerebro
             {   // x
                 upflag = 0;
                 numPad.transform.Find("PanelLayer").Find("^").gameObject.GetChildByName<Image>("Image").color = CerebroHelper.HexToRGB("191923");
-                if (checkLastTextFor(new string[1] { "x" }))
+                if (checkLastTextFor(new string[1] { "\\xalgebra" }))
                 {
-                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
+                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 9);
                 }
-                userAnswerLaText.text += "x";
+                userAnswerLaText.text += "\\xalgebra";
             }
             else if (value == 16)
             {   // y
                 upflag = 0;
                 numPad.transform.Find("PanelLayer").Find("^").gameObject.GetChildByName<Image>("Image").color = CerebroHelper.HexToRGB("191923");
-                if (checkLastTextFor(new string[1] { "y" }))
+                if (checkLastTextFor(new string[1] { "\\yalgebra" }))
                 {
-                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
+                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 9);
                 }
-                userAnswerLaText.text += "y";
+                userAnswerLaText.text += "\\yalgebra";
             }
             else if (value == 17)
             {   // z
                 upflag = 0;
                 numPad.transform.Find("PanelLayer").Find("^").gameObject.GetChildByName<Image>("Image").color = CerebroHelper.HexToRGB("191923");
-                if (checkLastTextFor(new string[1] { "z" }))
+                if (checkLastTextFor(new string[1] { "\\zalgebra" }))
                 {
-                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
+                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 9);
                 }
-                userAnswerLaText.text += "z";
+                userAnswerLaText.text += "\\zalgebra";
             }
             else if (value == 19)
             {    // AC

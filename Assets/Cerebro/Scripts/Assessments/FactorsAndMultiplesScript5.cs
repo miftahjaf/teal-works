@@ -230,13 +230,13 @@ namespace Cerebro {
             
                  if (selector == 1)
                 {
-                    int num1 = Random.Range(2, 201);
-                    int num2 = Random.Range(2, 201);
-                    while(num1==num2 || MathFunctions.GetHCF(num1,num2)==1)
+					int hcf = Random.Range (10, 21);
+					int num1 = hcf * Random.Range(2, 10);
+					int num2 = hcf * Random.Range(2, 10);
+					while(num1 == num2 || MathFunctions.GetHCF(num1, num2)>hcf)
                     {
-                        num2 = Random.Range(2, 201);
+						num2 = hcf * Random.Range(2, 10);
                     }
-                    int hcf = MathFunctions.GetHCF(num1, num2);
                     int num3 = Random.Range(1, hcf);
                     int num4 = num1 + num3;
                     int num5 = num2 + num3;
