@@ -113,6 +113,7 @@ namespace Cerebro
 
 		public EnhancedScrollerCellView GetCellView(EnhancedScroller scroller, int dataIndex, int cellIndex)
 		{
+
 			if (m_OptionDataList [dataIndex] is PracticeItems) {
 				AssessmentItemScript cellView = scroller.GetCellView (m_OptionTemplate) as AssessmentItemScript; 
 				cellView.Initialise ((PracticeItems)m_OptionDataList [dataIndex], OnItemClick, UpdateKCViewShowStatus);

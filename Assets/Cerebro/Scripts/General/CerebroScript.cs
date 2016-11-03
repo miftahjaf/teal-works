@@ -407,6 +407,7 @@ namespace Cerebro {
 			LaunchList.instance.mhasInternet = true;
 			LaunchList.instance.setWifiIcon ();
 			LaunchList.instance.CheckVersionNumber ();
+			LaunchList.instance.ChangeMpfsCounterVisibility ();
 
 			SplashScreen.SetActive (true);
 			GameObject splashText = SplashScreen.transform.Find ("Text").gameObject;

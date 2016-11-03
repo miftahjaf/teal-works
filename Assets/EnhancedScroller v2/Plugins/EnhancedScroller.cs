@@ -202,6 +202,7 @@ namespace EnhancedUI.EnhancedScroller
         /// </summary>
         public ScrollerTweeningChangedDelegate scrollerTweeningChanged;
 
+
         /// <summary>
         /// The Delegate is what the scroller will call when it needs to know information about
         /// the underlying data or views. This allows a true MVC process.

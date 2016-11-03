@@ -111,11 +111,6 @@ namespace Cerebro
 			return 2;
 		}
 
-		/*public void ChangeMastryStatus(bool enable)
-		{
-			mastrySlider.gameObject.SetActive (enable);
-			mastryText.gameObject.SetActive (enable);
-		}*/
 
 
 

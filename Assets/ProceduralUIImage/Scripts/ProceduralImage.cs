@@ -87,9 +87,9 @@ namespace UnityEngine.UI.ProceduralImage {
 			}
 			this.material = materialInstance;
 		}
-		public void Update(){
+		/*public void Update(){
 			this.UpdateMaterial ();
-		}
+		}*/
 		/// <summary>
 		/// Prevents radius to get bigger than rect size
 		/// </summary>
@@ -168,6 +168,11 @@ namespace UnityEngine.UI.ProceduralImage {
 			Vector4 radius = FixRadius (Modifier.CalculateRadius (rect));
 			Material m = MaterialHelper.SetMaterialValues (new ProceduralImageMaterialInfo(rect.width+falloffDistance,rect.height+falloffDistance,Mathf.Max(pixelSize,0),radius,Mathf.Max(borderWidth,0)),baseMaterial);
 			return base.GetModifiedMaterial (m);
+		}
+
+		public void MaterialUpdate()
+		{
+			this.UpdateMaterial ();
 		}
 	}
 }

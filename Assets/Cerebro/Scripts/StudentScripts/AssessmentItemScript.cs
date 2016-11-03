@@ -16,13 +16,10 @@ namespace Cerebro
 		public Text coins;
 		public FreeModifier bgModifier;
 		public GameObject bg;
-		public GameObject KCprefab;
-		public GameObject KCParent;
-
 		//public ProgressHelper progressHelper;
 		public Sprite plus;
 		public Sprite minus;
-		public Image accordingIcon;
+		public Image accordionIcon;
 
 		private PracticeItems m_PracticeItems;
 		public PracticeItems practiceItems
@@ -44,14 +41,7 @@ namespace Cerebro
 			get { return m_OnKCViewOpenStateChanged; }
 			set { m_OnKCViewOpenStateChanged = value; }
 		}
-
-		private Action m_OnKCViewHeightChanged;
-		public Action OnKCViewHeightChanged
-		{
-			get { return m_OnKCViewHeightChanged; }
-			set { m_OnKCViewHeightChanged = value; }
-		}
-
+			
 		public void Initialise(PracticeItems _practiceItem,Action<string,string> _onClickAction,Action<string> _OnKCViewOpenStateChanged)
 		{
 			this.practiceItems = _practiceItem;
@@ -62,19 +52,12 @@ namespace Cerebro
 			this.Refresh ();
 		}
 
-		public void UpdateAccordianIcon()
+		public void UpdateAccordionIcon()
 		{
-			this.accordingIcon.sprite =	practiceItems.isKCViewOpened ? minus : plus;
+			this.accordionIcon.sprite =	practiceItems.isKCViewOpened ? minus : plus;
 			this.bgModifier.Radius = practiceItems.isKCViewOpened ? new Vector4 (4f, 4f, 0, 0) : Vector4.one * 4f;
 		}
-
-		public void UpdateCellHeight(AbstractGoTween abstarctGoTween)
-		{
-			if (m_OnKCViewHeightChanged != null) {
-				m_OnKCViewHeightChanged.Invoke ();
-			}
-		}
-
+			
 		private void RefreshStats()
 		{
 			if (PracticeData.mPracticeData.ContainsKey (practiceItems.PracticeID))
@@ -112,9 +95,8 @@ namespace Cerebro
 			this.RefreshStats ();
 			this.CoinBarAnimation ();
 			this.CoinTextAnimation ();
-			this.RefreshKCList ();
 			this.RefreshMasteryLoaded ();
-			this.UpdateAccordianIcon ();
+			this.UpdateAccordionIcon ();
 		}
 
 
@@ -127,42 +109,35 @@ namespace Cerebro
 			}
 			this.coins.text = remainingCoins.ToString ("0") + " coins left";
 		}
-
-
-
-		public void AccordianPressed()
+			
+		public void AccordionPressed()
 		{
 			if (m_OnKCViewOpenStateChanged != null) 
 			{
 				m_OnKCViewOpenStateChanged.Invoke (practiceItems.PracticeID);
 			}
 		}
-
-		public void RefreshKCList()
-		{
-			foreach (KCItemScript kcItem in KCParent.GetComponentsInChildren<KCItemScript>()) 
-			{
-				kcItem.UpdateCoinText ();
-			}
-		}
-
+			
 		public void RefreshMasteryLoaded()
 		{
-			if (KCParent == null)
-				return;
-	
 			int started = 0;
 			int inprogress = 0;
 			int mastered = 0;
 			foreach (var KC in practiceItems.KnowledgeComponents)
 			{
-				int level = GetLevel(KC.Value.Mastery);
-				if (level == 1)
+				if (LaunchList.instance.mKCMastery.ContainsKey (KC.Value.ID)) 
+				{
+					int level = GetLevel (LaunchList.instance.mKCMastery [KC.Value.ID]);
+					if (level == 1)
+						started++;
+					else if (level == 2)
+						inprogress++;
+					else if (level == 3)
+						mastered++;
+				} else {
 					started++;
-				else if (level == 2)
-					inprogress++;
-				else if (level == 3)
-					mastered++;
+				}
+
 			}
 			mastryLevel.text = GetMasteryText (started, inprogress, mastered);
 		}

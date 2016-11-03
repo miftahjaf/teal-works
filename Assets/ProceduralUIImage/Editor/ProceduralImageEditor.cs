@@ -34,7 +34,7 @@ namespace UnityEditor.UI
 		/// </summary>
 		public void UpdateProceduralImage(){
 			if (target != null) {
-				(target as ProceduralImage).Update ();
+				(target as ProceduralImage).MaterialUpdate ();
 			} else {
 				EditorApplication.update -= UpdateProceduralImage;
 			}

@@ -131,7 +131,7 @@ namespace Cerebro
 				prefab = null;
 			}
 				
-			CreateTapGesture ();
+		    CreateTapGesture ();
 			CreateDoubleTapGesture ();
 
 			tapGesture.RequireGestureRecognizerToFail = doubleTapGesture;

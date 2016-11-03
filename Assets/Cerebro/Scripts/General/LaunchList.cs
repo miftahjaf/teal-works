@@ -102,9 +102,6 @@ namespace Cerebro
 		public bool mhasInternet;
 		private bool mcheckingInternet;
 
-		private float mMSPF = 0.0f;
-		private GUIStyle counterStyle;
-
 		public GameObject wifiOff;
 
 		public InternetReachabilityVerifier irv;
@@ -130,6 +127,8 @@ namespace Cerebro
 
 		private string[] AllLocalFiles;
 
+		public Mfpscounter mpfsCounter;
+
 		public static LaunchList instance {
 			get {
 //				if (m_Instance == null)
@@ -140,19 +139,9 @@ namespace Cerebro
 				return m_Instance;
 			}
 		}
-
-		void OnGUI() {
-			if (CerebroHelper.isTestUser () && mMSPF >= 17.0) {
-				GUI.Label (new Rect (100, 10, 100, 20), mMSPF.ToString (), counterStyle);
-			}
-		}
-
+			
 		void Awake ()
 		{
-			counterStyle = new GUIStyle ();
-			counterStyle.fontSize = 42;
-			counterStyle.normal.textColor = Color.green;
-
 			if (m_Instance != null && m_Instance != this) {
 				CerebroHelper.DebugLog ("Destroying this shit");
 				m_Instance.wifiOff = GameObject.Find ("WifiOff");
@@ -181,6 +170,8 @@ namespace Cerebro
 			AllLocalFiles = new string[2];
 			AllLocalFiles [0] = "DescribeImageSubmitted";
 			AllLocalFiles [1] = "Missions";
+
+			ChangeMpfsCounterVisibility ();
 		}
 
 		public void LogoutUser() {
@@ -931,6 +922,11 @@ namespace Cerebro
 			HTTPRequestHelper.instance.CheckVersionNumber (VersionVerified);
 		}
 
+		public void ChangeMpfsCounterVisibility()
+		{
+			mpfsCounter.enabled = CerebroHelper.isTestUser ();
+		}
+
 		public void VersionVerified(bool dummy)
 		{
 			PlayerPrefs.SetString (PlayerPrefKeys.IsVersionUpdated, LaunchList.instance.IsVersionUptoDate.ToString ());
@@ -1175,11 +1171,12 @@ namespace Cerebro
 			CerebroHelper.DebugLog ("Exception EXCEPTION");
 		}
 
+
+
 		public void ScanTables ()
 		{
 			CerebroHelper.DebugLog ("Scanning Tables");
 			mTablesLoaded = false;
-
 			if (!PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
 				CerebroHelper.DebugLog ("ScanTables - no ID set");
 				return;
@@ -2888,9 +2885,9 @@ namespace Cerebro
 
 			}
 
-			if (CerebroHelper.isTestUser ()) {
+			/*if (CerebroHelper.isTestUser ()) {
 				mMSPF = Time.deltaTime * 1000.0f;
-			}
+			}*/
 
 			if (mUpdateServerTime) {
 				if (Time.time > mServerNextTime) {
