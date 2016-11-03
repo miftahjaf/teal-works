@@ -63,7 +63,7 @@ namespace Cerebro
 		public Dictionary<string,int> mKCMastery =new Dictionary<string, int>();
 		public ProficiencyConstants proficiencyConstants;
 		public bool IsVersionUptoDate, CheckingForVersion;
-//		public Daily CurrDaily;
+		public Daily CurrDaily;
 
 		public bool mUpdateTimer = false;
 		public System.TimeSpan mTimer;
@@ -119,6 +119,11 @@ namespace Cerebro
 		private bool mHitServer = true;
 		private bool mUpdatingServerFlagged = false;
 
+		private System.TimeSpan mServerTimeSpan;
+		private bool mUpdateServerTime = false;
+		private float mServerNextTime;
+		private int mServerTimeInterval = 1;
+		private DateTime mLastServerTime;
 		public bool mUseJSON = false;
 		public string VersionData = "v0.1.0.0";
 		private string VersionFlagged = "v0.1.0.0";
@@ -283,6 +288,7 @@ namespace Cerebro
 			}
 			PlayerPrefs.SetString (PlayerPrefKeys.CerebroLastVersion, VersionHelper.GetVersionNumber());
 
+//			UpdateServerTime ();
 			LoadPracticeItems ();
 			CheckIfFileJSON ();
 
@@ -298,6 +304,104 @@ namespace Cerebro
 //			BackupTable (null, "Moves", Application.persistentDataPath + "/MovesCSV.csv");
 //			BackupTable (null, "Analytics", Application.persistentDataPath + "/Analytics.csv");
 		}
+
+		public void UpdateServerTime()
+		{
+			HTTPRequestHelper.instance.GetServerTime ();
+		}
+
+		public DateTime GetCurrentTime()
+		{
+			DateTime currTime = mLastServerTime.Add (mServerTimeSpan);
+//			Debug.Log (currTime.ToString("G"));
+			GetCurrentLocalTime ();
+			return currTime;
+		}
+
+		public DateTime GetCurrentLocalTime()
+		{
+			DateTime currTime = mLastServerTime.Add (mServerTimeSpan);
+			currTime = currTime.Add (new TimeSpan (5, 30, 0));
+//			Debug.Log ("Local "+currTime.ToString("G"));
+			return currTime;
+		}
+
+		public void SetCurrentTime(string time)
+		{
+			if (time == "-1" || time.Length < 23) {
+				DateTime lastDt = DateTime.MinValue;
+				time = PlayerPrefs.GetString (PlayerPrefKeys.LastLocalTime, "-1");
+				Debug.Log ("time "+time);
+				if (time != "-1" && DateTime.TryParseExact (time, "yyyy-MM-ddTHH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeLocal, out lastDt)) {
+					DateTime now = System.DateTime.Now;
+					TimeSpan diff = now.Subtract (lastDt);
+					Debug.Log ("diff "+diff.Ticks);
+					if (diff.Ticks > 0) {
+						mServerTimeSpan = mServerTimeSpan.Add (diff);
+						mUpdateServerTime = true;
+					} else {
+						Debug.Log ("Invalid time. have to use local time");
+					}
+				}
+			} else {
+				if (time.Length > 23) {
+					time = time.Substring (0, 23);
+				}
+
+				DateTime now = DateTime.MinValue;
+				if (DateTime.TryParseExact (time, "yyyy-MM-ddTHH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeLocal, out now)) {
+					Debug.Log ("time " + now.ToString ("T"));
+					mServerTimeSpan = new TimeSpan (0);
+					mUpdateServerTime = true;
+					mLastServerTime = now;
+					mServerNextTime = Time.time + mServerTimeInterval;
+				}
+			}
+		}
+
+//		void OnApplicationFocus( bool focusStatus )
+//		{
+//			if(!focusStatus)
+//			{				
+//				if (mUpdateServerTime) {
+//					PlayerPrefs.SetString (PlayerPrefKeys.LastLocalTime, System.DateTime.Now.ToString ("yyyy-MM-ddTHH:mm:ss.fff"));
+//				} else {
+//					PlayerPrefs.SetString (PlayerPrefKeys.LastLocalTime, "-1");
+//				}
+////				Debug.Log ("setting "+PlayerPrefs.GetString (PlayerPrefKeys.LastLocalTime, "-1"));
+//				mUpdateServerTime = false;
+//			}
+//			else
+//			{
+//				if (mhasInternet) {
+//					Debug.Log ("I have internet");
+//					UpdateServerTime ();
+//				} else {
+//					DateTime lastDt = DateTime.MinValue;
+//					string time = PlayerPrefs.GetString (PlayerPrefKeys.LastLocalTime, "-1");
+////					Debug.Log ("time "+time);
+//					if (time != "-1" && DateTime.TryParseExact (time, "yyyy-MM-ddTHH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeLocal, out lastDt)) {
+//						DateTime now = System.DateTime.Now;
+//						TimeSpan diff = now.Subtract (lastDt);
+////						Debug.Log ("diff "+diff.TotalSeconds);
+//						if (diff.Ticks > 0) {
+//							DateTime currTime = mLastServerTime.Add (mServerTimeSpan);
+//							currTime = currTime.Add (new TimeSpan (5, 30, 0));
+////							Debug.Log ("before "+currTime.ToString("G"));
+////							Debug.Log ("b seconds "+mServerTimeSpan.TotalSeconds);
+//							mServerTimeSpan = mServerTimeSpan.Add (diff);
+//							currTime = mLastServerTime.Add (mServerTimeSpan);
+//							currTime = currTime.Add (new TimeSpan (5, 30, 0));
+////							Debug.Log ("after "+currTime.ToString("G"));
+////							Debug.Log ("a seconds "+mServerTimeSpan.TotalSeconds);
+//							mUpdateServerTime = true;
+//						} else {
+//							Debug.Log ("Invalid time. have to use local time");
+//						}
+//					}
+//				}
+//			}
+//		}
 
 		string GetEmptyFileWithVersion()
 		{
@@ -2788,6 +2892,14 @@ namespace Cerebro
 				mMSPF = Time.deltaTime * 1000.0f;
 			}
 
+			if (mUpdateServerTime) {
+				if (Time.time > mServerNextTime) {
+					mServerTimeSpan = mServerTimeSpan.Add (new TimeSpan (0, 0, mServerTimeInterval));
+					mServerNextTime += mServerTimeInterval;
+//					GetCurrentTime ();
+				}
+			}
+
 		}
 
 		//void GotQuizForDate()
@@ -3759,7 +3871,7 @@ namespace Cerebro
 							}
 						}
 					} else {
-						response += "/n"+line;
+						response += Environment.NewLine+line;
 					}
 					line = sr.ReadLine ();									
 				}

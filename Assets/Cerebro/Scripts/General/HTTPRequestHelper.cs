@@ -1120,22 +1120,22 @@ namespace Cerebro
 					LaunchList.instance.mContentItems = new List<ContentItem> ();
 					for (int i = 0; i < jsonResponse.Count; i++) {
 						ContentItem c = new ContentItem ();
-						c.SubtopicID = getValue (jsonResponse [i] ["sub_topic_id"]);
-						c.ContentID = getValue (jsonResponse [i] ["content_id"]);
-						c.ContentName = getValue (jsonResponse [i] ["content_name"]);
-						c.ContentDate = getValue (jsonResponse [i] ["content_date"]);
-						c.ContentDescription = getValue (jsonResponse [i] ["content_description"]);
-						c.ContentLink = getValue (jsonResponse [i] ["content_link"]);
-						c.ContentType = getValue (jsonResponse [i] ["content_type"]);
-						c.ContentDifficulty = getInt (jsonResponse [i] ["content_difficulty"]);
-						c.ContentRating = getInt (jsonResponse [i] ["content_rating"]);
-						c.ContentViews = getInt (jsonResponse [i] ["content_views"]);
+						c.SubtopicID = jsonResponse [i] ["sub_topic_id"].Value;
+						c.ContentID = jsonResponse [i] ["content_id"].Value;
+						c.ContentName = jsonResponse [i] ["content_name"].Value;
+						c.ContentDate = jsonResponse [i] ["content_date"].Value;
+						c.ContentDescription = jsonResponse [i] ["content_description"].Value;
+						c.ContentLink = jsonResponse [i] ["content_link"].Value;
+						c.ContentType = jsonResponse [i] ["content_type"].Value;
+						c.ContentDifficulty = jsonResponse [i] ["content_difficulty"].AsInt;
+						c.ContentRating = jsonResponse [i] ["content_rating"].AsInt;
+						c.ContentViews = jsonResponse [i] ["content_views"].AsInt;
 						c.ContentTags = new List<string> ();
 						for (int j = 0; j < jsonResponse ["content_tags"].Count; j++) {
 							if (jsonResponse [i] ["content_tags"] [j].Value != null)
 								c.ContentTags.Add (jsonResponse [i] ["content_tags"] [j].Value);
 						}
-						c.Userdata = getValue (jsonResponse [i] ["user_date"]);
+						c.Userdata = jsonResponse [i] ["user_date"].Value;
 						LaunchList.instance.mContentItems.Add (c);
 					}
 					CerebroHelper.DebugLog ("added " + LaunchList.instance.mContentItems.Count + " rows");
@@ -1147,20 +1147,19 @@ namespace Cerebro
 			});
 		}
 
-		string getValue (JSONNode j)
+		public void GetServerTime ()
 		{
-			if (j.Value != null)
-				return j.Value;
-			else
-				return "";
-		}
-
-		int getInt (JSONNode j)
-		{
-			if (j.Value != null)
-				return j.AsInt;
-			else
-				return 0;
+			Debug.Log ("calling for time");
+			CreateGetRequestSimpleJSON (SERVER_URL + "get/server_time", (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString () != "") {
+					string currTime = jsonResponse ["current_time"].Value;
+					Debug.Log("curr time "+currTime);
+					LaunchList.instance.SetCurrentTime(currTime);
+				} else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					LaunchList.instance.SetCurrentTime("-1");
+				}
+			});
 		}
 
 		//

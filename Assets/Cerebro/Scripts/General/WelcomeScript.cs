@@ -78,14 +78,14 @@ namespace Cerebro
 //			StartCoroutine (ShowDailyView());
 		}
 
-//		IEnumerator ShowDailyView()
-//		{
-//			yield return new WaitForSeconds (0.1f);
-//			DailyView = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Daily, MainView.transform);
-//			DailyView.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (300f, 110f);
-//			DailyView.transform.SetAsLastSibling ();
-//			DailyView.GetComponent<DailyView> ().Initialize ();
-//		}
+		IEnumerator ShowDailyView()
+		{
+			yield return new WaitForSeconds (0.1f);
+			GameObject DailyView = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Daily, MainView.transform);
+			DailyView.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (300f, 110f);
+			DailyView.transform.SetAsLastSibling ();
+			DailyView.GetComponent<DailyView> ().Initialize ();
+		}
 
 		public void ProfileImagePressed ()
 		{
