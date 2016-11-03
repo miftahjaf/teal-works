@@ -133,7 +133,7 @@ Example: <i>3^(4^8)</i> not <i>3^4^8</i>";
 
     public void UpdateWrap(int wrap)
     {
-        tex.autoWrap = (TEXDraw.WrappingMethod)wrap;
+        tex.autoWrap = (Wrapping)wrap;
     }
 
 }

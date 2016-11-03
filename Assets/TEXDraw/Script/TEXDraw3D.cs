@@ -1,17 +1,16 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System;
 using TexDrawLib;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 [ExecuteInEditMode]
-[AddComponentMenu("Mesh/TEXDraw 3D")]
-public class TEXDraw3D : MonoBehaviour
+[AddComponentMenu("TEXDraw/TEXDraw 3D", 2)]
+public class TEXDraw3D : MonoBehaviour, ITEXDraw
 {
     public TEXPreference pref;
 
     const string assetID = "TEXDraw 3D Instance";
-    public const string assetSID = "TEXDr 3D Instance";
     [TextArea(3, 15)]
     [SerializeField]
     string
@@ -19,21 +18,14 @@ public class TEXDraw3D : MonoBehaviour
 
     public virtual string text
     {
-        get
-        {
-            return m_Text;
-        }
-        set
-        {
-            if (String.IsNullOrEmpty(value))
-            {
+        get { return m_Text; }
+        set {
+            if (String.IsNullOrEmpty(value)) {
                 if (String.IsNullOrEmpty(m_Text))
                     return;
                 m_Text = "";
                 Redraw();
-            }
-            else if (m_Text != value)
-            {
+            } else if (m_Text != value) {
                 m_Text = value;
                 Redraw();
             }
@@ -45,14 +37,9 @@ public class TEXDraw3D : MonoBehaviour
 
     public virtual int fontIndex
     {
-        get
-        {
-            return m_FontIndex;
-        }
-        set
-        {
-            if (m_FontIndex != value)
-            {
+        get { return m_FontIndex; }
+        set {
+            if (m_FontIndex != value) {
                 m_FontIndex = Mathf.Clamp(value, -1, 15);
                 Redraw();
             }
@@ -65,14 +52,9 @@ public class TEXDraw3D : MonoBehaviour
 
     public virtual float size
     {
-        get
-        {
-            return m_Size;
-        }
-        set
-        {
-            if (m_Size != value)
-            {
+        get { return m_Size; }
+        set {
+            if (m_Size != value) {
                 m_Size = Mathf.Max(value, 0f);
                 Redraw();
             }
@@ -86,14 +68,9 @@ public class TEXDraw3D : MonoBehaviour
 
     public virtual int fontSize
     {
-        get
-        {
-            return m_FontSize;
-        }
-        set
-        {
-            if (m_FontSize != value)
-            {
+        get { return m_FontSize; }
+        set {
+            if (m_FontSize != value) {
                 m_FontSize = Mathf.Max(value, 1);
                 Redraw();
             }
@@ -106,14 +83,9 @@ public class TEXDraw3D : MonoBehaviour
 
     public virtual Color color
     {
-        get
-        {
-            return m_Color;
-        }
-        set
-        {
-            if (m_Color != value)
-            {
+        get { return m_Color; }
+        set {
+            if (m_Color != value) {
                 m_Color = value;
                 Redraw();
             }
@@ -126,19 +98,38 @@ public class TEXDraw3D : MonoBehaviour
 
     public virtual Material material
     {
-        get
-        {
-            return m_Material;
-        }
-        set
-        {
-            if (m_Material != value)
-            {
+        get { return m_Material; }
+        set {
+            if (m_Material != value) {
                 m_Material = value;
                 Repaint();
             }
         }
     }
+
+    public virtual Fitting autoFit
+    {
+        get { return Fitting.RectSize; }
+        set { }
+    }
+
+    public virtual Wrapping autoWrap
+    {
+        get { return Wrapping.NoWrap; }
+        set { }
+    }
+
+    public virtual Filling autoFill
+    {
+        get { return m_AutoFill; }
+        set {
+            if (m_AutoFill != value) {
+                m_AutoFill = value;
+                Redraw();
+            }
+        }
+    }
+
 
     [SerializeField]
     [Range(0, 2)]
@@ -146,14 +137,9 @@ public class TEXDraw3D : MonoBehaviour
 
     public virtual float spaceSize
     {
-        get
-        {
-            return m_SpaceSize;
-        }
-        set
-        {
-            if (m_SpaceSize != value)
-            {
+        get { return m_SpaceSize; }
+        set {
+            if (m_SpaceSize != value) {
                 m_SpaceSize = value;
                 Redraw();
             }
@@ -166,26 +152,27 @@ public class TEXDraw3D : MonoBehaviour
 
     public virtual Vector2 alignment
     {
-        get
-        {
-            return m_Align;
-        }
-        set
-        {
-            if (m_Align != value)
-            {
+        get { return m_Align; }
+        set {
+            if (m_Align != value) {
                 m_Align = value;
                 Redraw();
             }
         }
     }
 
+    [SerializeField]
+    Filling
+        m_AutoFill = Filling.None;
+
+
+
+
     public string debugReport = String.Empty;
 	
     #if UNITY_EDITOR
     void Reset()
     {
-        m_Text = String.Empty;
         pref = TEXPreference.main;
         GetComponent<MeshRenderer>().material = pref.defaultMaterial;
     }
@@ -198,18 +185,14 @@ public class TEXDraw3D : MonoBehaviour
 
     void OnEnable()
     {
-        if (!pref)
-        {
+        if (!pref) {
             pref = TEXPreference.main;
             if (!pref)
                 Debug.LogWarning("A TEXDraw 3D Component hasn't the preference yet");
         }
-        if (drawingContext == null)
-            drawingContext = new DrawingContext();
-
+    
         Font.textureRebuilt += OnFontRebuild;
-        if (!mesh)
-        {
+        if (!mesh) {
             mesh = new Mesh();
             mesh.name = assetID;
         }
@@ -223,8 +206,6 @@ public class TEXDraw3D : MonoBehaviour
 			TEXPreference.main = pref; //Assign the Preference to main stack
 		else if(!pref)
 			pref = TEXPreference.main; //This component may added runtimely
-		if(drawingContext == null)
-			drawingContext = new DrawingContext();
 	Font.textureRebuilt += OnFontRebuild;
 	if(!mesh)
 	{
@@ -237,13 +218,32 @@ public class TEXDraw3D : MonoBehaviour
 	#endif
     #region Engine
 
-    public DrawingContext drawingContext;
+    DrawingContext m_drawingContext;
+
+    public DrawingContext drawingContext
+    {
+        get {
+            if (m_drawingContext == null)
+                m_drawingContext = new DrawingContext();
+            return m_drawingContext;
+        }
+    }
+
     Mesh mesh;
+
+    public void SetTextDirty()
+    {
+        Redraw();
+    }
+
+    public void SetTextDirty(bool now)
+    {
+        Redraw();
+    }
 
     public void Redraw()
     {
-        if (isActiveAndEnabled)
-        {
+        if (isActiveAndEnabled) {
             if (drawingContext == null || pref == null)
                 OnEnable();
             #if UNITY_EDITOR
@@ -251,8 +251,10 @@ public class TEXDraw3D : MonoBehaviour
                 return;
             #endif
             TexUtility.RenderFont = m_FontIndex;
-            drawingContext.Parse(m_Text, out debugReport);
-            drawingContext.Render(mesh, GenerateParam());
+	        drawingContext.Parse(m_Text, out debugReport);
+	        GenerateParam();
+	        cacheParam.formulas = DrawingContext.ToRenderers(drawingContext.parsed, cacheParam);
+            drawingContext.Render(mesh, cacheParam);
             mesh.RecalculateBounds();
             GetComponent<MeshFilter>().mesh = mesh;
         }
@@ -270,8 +272,7 @@ public class TEXDraw3D : MonoBehaviour
 
     DrawingParams GenerateParam()
     {
-        if (cacheParam == null)
-        {
+        if (cacheParam == null) {
             cacheParam = new DrawingParams();
             cacheParam.hasRect = false;
             cacheParam.rectArea = new Rect();
@@ -281,18 +282,16 @@ public class TEXDraw3D : MonoBehaviour
         cacheParam.fontSize = m_FontSize;
         cacheParam.scale = m_Size;
         cacheParam.spaceSize = m_SpaceSize;
+        cacheParam.uv3Filling = (int)m_AutoFill;
         return cacheParam;
     }
 
     void OnDestroy()
     {
 #if UNITY_EDITOR
-        if (!Application.isPlaying)
-        {
+        if (!Application.isPlaying) {
             DestroyImmediate(mesh);
-        }
-        else
-        {
+        } else {
 #endif
             Destroy(mesh);
 #if UNITY_EDITOR

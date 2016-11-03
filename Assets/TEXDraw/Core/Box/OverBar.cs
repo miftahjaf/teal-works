@@ -11,7 +11,7 @@ namespace TexDrawLib
 		public static VerticalBox Get(Box box, float kern, float thickness)
 		{
             var atom = ObjPool<VerticalBox>.Get();
-			atom.Add (HorizontalRule.Get (thickness, box.width, 0));
+			atom.Add (HorizontalRule.Get (thickness, box.width, box.shift));
             kern += thickness;
             atom.Add (StrutBox.Get (0, kern / 2, 0, 0));
             atom.Add (box);

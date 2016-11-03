@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,16 +38,8 @@ namespace TexDrawLib
             Type = CharType.Ordinary;
         }
 
-        bool m_flushed;
-
-        public bool GetFlushed()
-        { 
-            return m_flushed;
-        }
-
-        public void SetFlushed(bool flushed)
-        {
-            m_flushed = flushed;
-        }
+       	bool m_flushed = false;
+	    public bool IsFlushed { get { return m_flushed; } set { m_flushed = value; } }
+	    
     }
 }

@@ -40,14 +40,18 @@ namespace TexDrawLib
 		// True to draw delimeter and script over base; false to draw under base.
         public bool Over;
 
+        //Should we rotate over our delimeter?
+        public bool Rotated;
+
 		public override void Draw (DrawingContext drawingContext, float scale, float x, float y)
 		{
+            //base.Draw();
 			BaseBox.Draw (drawingContext, scale, x, y);
 
-			if (Over)
+			if (Over && Rotated)
 			{
 				// Draw delimeter and script boxes over base box.
-				var centerY = y - BaseBox.height - DelimeterBox.width;
+				var centerY = y + BaseBox.height + DelimeterBox.width;
 //            var translationX = x + DelimeterBox.width / 2;
 				//           var translationY = centerY + DelimeterBox.width / 2;
 

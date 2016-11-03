@@ -4,42 +4,53 @@ using System.Collections;
 namespace TexDrawLib
 {
 
-	internal class AttrColorBox : Box
-	{
+    internal class AttrColorBox : Box
+    {
 
-		public static AttrColorBox Get(Box BaseBox, Color RenderColor)
-		{
+        public static AttrColorBox Get(Color RenderColor, int MixMode, AttrColorBox EndBox)
+        {
             var box = ObjPool<AttrColorBox>.Get();
-			box.baseBox = BaseBox;
-            box.width = BaseBox.width;
-            box.height = BaseBox.height;
-            box.depth = BaseBox.depth;
             box.renderColor = RenderColor;
+            box.mixMode = MixMode;
+            box.endBox = EndBox;
             return box;
-		}
+        }
 
-		public Color renderColor;
+        public Color renderColor;
 
-		public Box baseBox;
+        //If null, then this is the end box
+        public AttrColorBox endBox;
 
-		public override void Draw (DrawingContext drawingContext, float scale, float x, float y)
-		{
-			base.Draw (drawingContext, scale, x, y);
-			Color tmpC = TexUtility.RenderColor;
-			TexUtility.RenderColor = renderColor;
-			baseBox.Draw(drawingContext, scale, x, y);
-			TexUtility.RenderColor = tmpC;
-		}
+        //0 = Overwrite, 1 = Alpha-Multiply, 2 = RGBA-Multiply
+        public int mixMode;
+
+        public override void Draw(DrawingContext drawingContext, float scale, float x, float y)
+        {
+            var oldColor = TexUtility.RenderColor;
+            var newColor = endBox != null ? ProcessFinalColor(oldColor) : (Color32)renderColor;
+
+            if (endBox != null)
+                endBox.renderColor = oldColor;
+
+            TexUtility.RenderColor = newColor;
+        }
+
+        Color32 ProcessFinalColor(Color32 old)
+        {
+            switch (mixMode) {
+                case 1:
+                    return TexUtility.MultiplyAlphaOnly(renderColor, old.a / 255f);
+                case 2:
+                    return TexUtility.MultiplyColor(old, renderColor);
+            }
+            return renderColor;
+        }
 
         public override void Flush()
-        {
+	    {
             base.Flush();
-            if(baseBox != null)
-            {
-                baseBox.Flush();
-                baseBox = null;
-            }
-            ObjPool<AttrColorBox>.Release(this);
+		    endBox = null;
+		    ObjPool<AttrColorBox>.Release(this);
         }
-	}
+    }
 }

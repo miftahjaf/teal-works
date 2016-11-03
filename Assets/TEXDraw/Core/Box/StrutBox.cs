@@ -31,7 +31,7 @@ namespace TexDrawLib
 
 		public static StrutBox Get (float Width, float Height, float Depth, float Shift)
 		{
-            var box = ObjPool<StrutBox>.Get();
+            var box = Get();
 			box.width = Width;
             box.height = Height;
             box.depth = Depth;
@@ -42,13 +42,18 @@ namespace TexDrawLib
 
         public static StrutBox Get (float Width, float Height, float Depth, float Shift, StrutPolicy Policy)
         {
-            var box = ObjPool<StrutBox>.Get();
+            var box = Get();
             box.width = Width;
             box.height = Height;
             box.depth = Depth;
             box.shift = Shift;
             box.policy = Policy;
             return box;
+        }
+
+        public static StrutBox Get()
+        {
+            return ObjPool<StrutBox>.Get();
         }
 
         public StrutPolicy policy;
@@ -60,7 +65,7 @@ namespace TexDrawLib
         public override void Flush()
         {
             base.Flush();
-            ObjPool<StrutBox>.Release(this);
+           ObjPool<StrutBox>.Release(this);
         }
  	}
 }

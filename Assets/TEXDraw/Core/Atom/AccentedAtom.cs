@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -61,11 +60,11 @@ namespace TexDrawLib
                 accentChar = nextLargerChar;
             }
 
-            var resultBox = ObjPool<VerticalBox>.Get();
+            var resultBox = VerticalBox.Get();
 
             // Create and add box for accent symbol.
-            Box accentBox = ObjPool<HorizontalBox>.Get();
-            resultBox.Add(HorizontalBox.Get(CharBox.Get(style, accentChar)));
+            Box accentBox = HorizontalBox.Get(CharBox.Get(style, accentChar));
+            resultBox.Add(accentBox);
 
             var delta = Mathf.Min(-accentChar.depth, baseBox.height);
             resultBox.Add(StrutBox.Get(0, -delta + TEXPreference.main.GetPreference("OverUnderMargin", style), 0, 0));

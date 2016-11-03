@@ -17,6 +17,7 @@ namespace TexDrawLib
             metric.bearing = Bearing * Scale;
             metric.italic = Italic * Scale;
             metric.width = Width * Scale;
+            metric.appliedScale = Scale;
             return metric;
         }
 
@@ -26,17 +27,9 @@ namespace TexDrawLib
             ObjPool<TexCharMetric>.Release(this);
         }
 
-        bool m_flushed;
+        bool m_flushed = false;
+        public bool IsFlushed { get { return m_flushed; } set { m_flushed = value; } }
 
-        public bool GetFlushed()
-        { 
-            return m_flushed;
-        }
-
-        public void SetFlushed(bool flushed)
-        {
-            m_flushed = flushed;
-        }
 
         public TexChar ch;
 
@@ -49,6 +42,8 @@ namespace TexDrawLib
         public float italic;
 
         public float width;
+
+        public float appliedScale;
 
         public float advanceDelta
         {

@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 using UnityEngine;
 using System.Collections;
 using UnityEditor;
@@ -15,6 +15,7 @@ public class TEXDraw3DEditor : Editor
     SerializedProperty m_Align;
     SerializedProperty m_Color;
     SerializedProperty m_Material;
+    SerializedProperty m_Filling;
 	
     SerializedProperty m_debugReport;
     //static bool foldExpand = false;
@@ -30,8 +31,15 @@ public class TEXDraw3DEditor : Editor
         m_SpaceSize = serializedObject.FindProperty("m_SpaceSize");
         m_Color = serializedObject.FindProperty("m_Color");
         m_Material = serializedObject.FindProperty("m_Material");
+        m_Filling = serializedObject.FindProperty("m_AutoFill");
         m_debugReport = serializedObject.FindProperty("debugReport");		
+	    Undo.undoRedoPerformed += Redraw;
     }
+	
+	void OnDisable()
+	{
+		Undo.undoRedoPerformed -= Redraw;
+	}
 	
     // Update is called once per frame
     public override void OnInspectorGUI()
@@ -52,6 +60,7 @@ public class TEXDraw3DEditor : Editor
             EditorGUILayout.PropertyField(m_SpaceSize);
             EditorGUILayout.PropertyField(m_Color);
             EditorGUILayout.PropertyField(m_Material);		
+            EditorGUILayout.PropertyField(m_Filling);      
             EditorGUI.indentLevel--;
         }
 

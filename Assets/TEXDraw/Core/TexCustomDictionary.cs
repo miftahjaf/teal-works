@@ -73,7 +73,7 @@ namespace TexDrawLib
     }
 
     [Serializable]
-    public abstract class SerializableDictionary<TKey, TValue>
+    public abstract class SerializableDictionary<TKey, TValue> where TKey : IEquatable<TKey>
     {
         public List<TKey> keys;
         public List<TValue> values;
@@ -115,7 +115,7 @@ namespace TexDrawLib
                     if (key.Equals(keys[i]))
                         return values[i];
                 }
-                throw new TexParseException(string.Format("Key \"{0}\" Not Found, {1}", key, NotFoundError()));
+                throw new KeyNotFoundException(string.Format("Key \"{0}\" Not Found, {1}", key, NotFoundError()));
             }
             set
             {

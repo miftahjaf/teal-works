@@ -3,37 +3,53 @@ using System.Collections;
 
 namespace TexDrawLib
 {
-	public class AttrColorAtom : Atom
-	{
-		Color color = Color.white;
-		public static AttrColorAtom Get (Atom baseAtom, string colorStr)
-		{
+    public class AttrColorAtom : Atom
+    {
+		      
+        public static AttrColorAtom Get(string colorStr, int mix, out AttrColorAtom endBlock)
+        {
             var atom = ObjPool<AttrColorAtom>.Get();
-			atom.BaseAtom = baseAtom;
-			ColorUtility.TryParseHtmlString(colorStr, out atom.color);
+            endBlock = ObjPool<AttrColorAtom>.Get();
+            atom.EndAtom = endBlock;
+            atom.Mix = mix;
+            endBlock.Mix = mix;
+            if (colorStr == null)
+                return atom;
+            if (colorStr.Length == 1)
+                colorStr = "#" + new string(colorStr[0], 3);
+            if (!ColorUtility.TryParseHtmlString(colorStr, out atom.color))
+            if (!ColorUtility.TryParseHtmlString("#" + colorStr, out atom.color))
+                atom.color = Color.white;
+            endBlock.color = atom.color;
             return atom;
-		}
+        }
 
-        public Atom BaseAtom;
+        public AttrColorAtom EndAtom;
 
-		public override Box CreateBox (TexStyle style)
-		{
-            if(BaseAtom == null)
-                return StrutBox.Empty;
-            else
-            {
-                return AttrColorBox.Get(BaseAtom.CreateBox(style), color);
+        public int Mix;
+
+        internal AttrColorBox ProcessedEndBox;
+
+        Color color = Color.white;
+
+        public override Box CreateBox(TexStyle style)
+        {
+            if (ProcessedEndBox != null) {
+                if (ProcessedEndBox.IsFlushed)
+                    ProcessedEndBox = null;
+                else
+                    return ProcessedEndBox;
             }
-		}
+            ProcessedEndBox = AttrColorBox.Get(color, Mix, EndAtom == null ? null : (AttrColorBox)EndAtom.CreateBox(style));
+            return ProcessedEndBox;
+            
+        }
 
         public override void Flush()
         {
-            if(BaseAtom != null)
-            {
-                BaseAtom.Flush();
-                BaseAtom = null;
-            }
+            EndAtom = null;
+            //ProcessedEndBox = null;
             ObjPool<AttrColorAtom>.Release(this);
         }
-	}
+    }
 }

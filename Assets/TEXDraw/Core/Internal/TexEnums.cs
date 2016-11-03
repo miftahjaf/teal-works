@@ -73,4 +73,46 @@ namespace TexDrawLib
         TabSpace = 4
     }
 
+    public enum TexFontType
+    {
+        Font = 0,
+        Sprite = 1
+    }
+
+    public enum Wrapping
+    {
+        NoWrap = 0,
+        LetterWrap = 1,
+        WordWrap = 2,
+        WordWrapJustified = 3
+    }
+
+    public enum Fitting
+    {
+        Off = 0,
+        DownScale = 1,
+        RectSize = 2,
+        HeightOnly = 3,
+        Scale = 4,
+        //BestFit = 5 //Not yet ready
+    }
+
+    public enum Filling
+    {
+        None = 0,
+        Rectangle = 1,
+        WholeText = 2,
+        WholeTextSquared = 3,
+        PerLine = 4,
+        //PerWord = 5, //Not yet ready
+        PerCharacter = 6,
+        PerCharacterSquared = 7
+    }
+
+    public enum Effects
+    {
+        Shadow = 0,
+        Outline = 1
+    }
+
 }

@@ -12,19 +12,27 @@ namespace TexDrawLib
             diagonal = 0,
             diagonalInverse = 1,
             horizontal = 2,
-            doubleHorizontal = 3
+            doubleHorizontal = 3,
+            underline = 4,
+            overline = 5,
+            vertical = 6,
+            verticalInverse = 7
         }
 
         public float margin;
         public float thickness;
+        public float offsetPlus;
+        public float offsetMinus;
         public StrikeMode mode;
 
-        public static StrikeBox Get(float Height, float Width, float Depth, float Margin, float Thickness, StrikeMode Mode)
+        public static StrikeBox Get(float Height, float Width, float Depth, float Margin, float Thickness, StrikeMode Mode, float OffsetM, float OffsetP)
         {
             var box = Get(Height, Width, Depth);
             box.margin = Margin;
             box.thickness = Thickness;
             box.mode = Mode;
+            box.offsetPlus = OffsetP;
+            box.offsetMinus = OffsetM;
             return box;
         }
 
@@ -41,25 +49,28 @@ namespace TexDrawLib
         {
             base.Draw(drawingContext, scale, x, y);
             PrepareDraw(drawingContext);
-            
-            float angle = Mathf.Atan2(totalHeight + margin*2, width);
+
+            //This is for people who are very nerd about math
+            float angle = Mathf.Atan2(totalHeight + margin * 2, width);
             float s = Mathf.Sin(angle) * thickness, c = Mathf.Cos(angle) * thickness;
-            float w = width, ww = width + margin, h = totalHeight/2f + margin;
+            float w = width, ww = width + margin, h = totalHeight / 2f + margin;
+            float op = Mathf.Max(0, offsetPlus), om = Mathf.Min(0, offsetMinus);
             Vector2[] v = new Vector2[4];
             y += totalHeight / 2f - depth;
-            switch (mode)
-            {
+            if ((int)mode > 1 && (int)mode < 6 )
+                y += op + om;
+            switch (mode) {
                 case StrikeMode.diagonal:
-                    v[0] = new Vector2((x + w + s) * scale, (y + h - c) * scale); //Top-Left
-                    v[1] = new Vector2((x + w - s) * scale, (y + h + c) * scale); //Top-Right
-                    v[2] = new Vector2((x - s) * scale, (y - h + c) * scale); //Bottom-Right
-                    v[3] = new Vector2((x + s) * scale, (y - h - c) * scale); //Bottom-Left
+                    v[0] = new Vector2((x + w + s) * scale, (y + h - c + om) * scale); //Top-Left
+                    v[1] = new Vector2((x + w - s) * scale, (y + h + c + om) * scale); //Top-Right
+                    v[2] = new Vector2((x - s) * scale, (y - h + c + op) * scale); //Bottom-Right
+                    v[3] = new Vector2((x + s) * scale, (y - h - c + op) * scale); //Bottom-Left
                     break;
                 case StrikeMode.diagonalInverse:
-                    v[0] = new Vector2((x + s) * scale, (y + h + c) * scale); //Top-Left
-                    v[1] = new Vector2((x - s) * scale, (y + h - c) * scale); //Top-Right
-                    v[2] = new Vector2((x + w - s) * scale, (y - h - c) * scale); //Bottom-Right
-                    v[3] = new Vector2((x + w + s) * scale, (y - h + c) * scale); //Bottom-Left
+                    v[0] = new Vector2((x + s) * scale, (y + h + c + om) * scale); //Top-Left
+                    v[1] = new Vector2((x - s) * scale, (y + h - c + om) * scale); //Top-Right
+                    v[2] = new Vector2((x + w - s) * scale, (y - h - c + op) * scale); //Bottom-Right
+                    v[3] = new Vector2((x + w + s) * scale, (y - h + c + op) * scale); //Bottom-Left
                     break;
                 case StrikeMode.horizontal:
                     v[0] = new Vector2((x - margin) * scale, (y + thickness) * scale); //Top-Left
@@ -80,6 +91,32 @@ namespace TexDrawLib
                     v[2] = new Vector2((x + ww) * scale, (y - thickness - doubleOffset) * scale); //Bottom-Right
                     v[3] = new Vector2((x - margin) * scale, (y - thickness - doubleOffset) * scale); //Bottom-Left
                     break;
+                case StrikeMode.underline:
+                    y -= totalHeight / 2f - depth + thickness * 2;
+                    v[0] = new Vector2((x - margin) * scale, (y + thickness) * scale); //Top-Left
+                    v[1] = new Vector2((x + ww) * scale, (y + thickness) * scale); //Top-Right
+                    v[2] = new Vector2((x + ww) * scale, (y - thickness) * scale); //Bottom-Right
+                    v[3] = new Vector2((x - margin) * scale, (y - thickness) * scale); //Bottom-Left
+                    break;
+                case StrikeMode.overline:
+                    y += totalHeight / 2 + thickness * 2;
+                    v[0] = new Vector2((x - margin) * scale, (y + thickness) * scale); //Top-Left
+                    v[1] = new Vector2((x + ww) * scale, (y + thickness) * scale); //Top-Right
+                    v[2] = new Vector2((x + ww) * scale, (y - thickness) * scale); //Bottom-Right
+                    v[3] = new Vector2((x - margin) * scale, (y - thickness) * scale); //Bottom-Left
+                    break;
+                case StrikeMode.vertical:
+                    v[0] = new Vector2((x + w + s + om) * scale, (y + h - c) * scale); //Top-Left
+                    v[1] = new Vector2((x + w - s + om) * scale, (y + h + c) * scale); //Top-Right
+                    v[2] = new Vector2((x - s + op) * scale, (y - h + c) * scale); //Bottom-Right
+                    v[3] = new Vector2((x + s + op) * scale, (y - h - c) * scale); //Bottom-Left
+                    break;
+                case StrikeMode.verticalInverse:
+                    v[0] = new Vector2((x + s + op) * scale, (y + h + c) * scale); //Top-Left
+                    v[1] = new Vector2((x - s + op) * scale, (y + h - c) * scale); //Top-Right
+                    v[2] = new Vector2((x + w - s + om) * scale, (y - h - c) * scale); //Bottom-Right
+                    v[3] = new Vector2((x + w + s + om) * scale, (y - h + c) * scale); //Bottom-Left
+                    break;
             }
             Draw(drawingContext, v);
         }
@@ -89,6 +126,7 @@ namespace TexDrawLib
 
         void PrepareDraw(DrawingContext context)
         {
+            /*
             TexChar n = TEXPreference.main.GetChar(NegateSkin);
             CharacterInfo c = DrawingContext.GetCharInfo(n.fontIndex, (char)TEXPreference.TranslateChar(n.index), context.prefFontSize);
             fontIdx = n.fontIndex;
@@ -98,6 +136,15 @@ namespace TexDrawLib
                 c.uvBottomRight,
                 c.uvTopRight,
                 c.uvTopLeft
+            };
+            */
+            fontIdx = TexUtility.blockFontIndex;
+            uv = new Vector2[4]
+            {
+                Vector2.zero,
+                Vector2.zero,
+                Vector2.zero,
+                Vector2.zero,
             };
         }
 

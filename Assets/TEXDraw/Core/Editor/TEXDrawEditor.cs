@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 using UnityEngine;
 using System.Collections;
 using UnityEditor;
@@ -18,8 +18,10 @@ public class TEXDrawEditor : Editor
     SerializedProperty m_SpaceSize;
     SerializedProperty m_Color;
     SerializedProperty m_Material;
+    SerializedProperty m_Filling;
 
     SerializedProperty m_debugReport;
+    SerializedProperty m_raycastTarget;
     //static bool foldExpand = false;
     
     // Use this for initialization
@@ -35,8 +37,15 @@ public class TEXDrawEditor : Editor
         m_Color = serializedObject.FindProperty("m_Color");
         m_Material = serializedObject.FindProperty("m_Material");
         m_debugReport = serializedObject.FindProperty("debugReport");
-        
+        m_Filling = serializedObject.FindProperty("m_AutoFill");
+	    m_raycastTarget = serializedObject.FindProperty("m_RaycastTarget");
+	    Undo.undoRedoPerformed += Redraw;
     }
+	
+	void OnDisable()
+	{
+		Undo.undoRedoPerformed -= Redraw;
+	}
 	
     // Update is called once per frame
     public override void OnInspectorGUI()
@@ -52,27 +61,24 @@ public class TEXDrawEditor : Editor
             EditorGUI.indentLevel++;
             DoFontIndexSelection();
             EditorGUILayout.PropertyField(m_AutoFit);
+            EditorGUI.BeginDisabledGroup(m_AutoFit.enumValueIndex == 2);
             EditorGUILayout.PropertyField(m_AutoWrap);
+            EditorGUI.EndDisabledGroup();
             DoTextAligmentControl(EditorGUILayout.GetControlRect(), m_Align);
             EditorGUILayout.PropertyField(m_SpaceSize);
             EditorGUILayout.PropertyField(m_Color);
             EditorGUILayout.PropertyField(m_Material);
+            EditorGUILayout.PropertyField(m_Filling);
             EditorGUI.indentLevel--;
         }
+        EditorGUILayout.PropertyField(m_raycastTarget);
     
         if (EditorGUI.EndChangeCheck())
             Redraw();
 
-        if (serializedObject.targetObjects.Length == 1)
-        {
-            if (m_debugReport.stringValue == string.Empty)
-            {
-                EditorGUILayout.HelpBox("No Errors", MessageType.Info);
-            }
-            else
-            {
+        if (serializedObject.targetObjects.Length == 1) {
+            if (m_debugReport.stringValue != string.Empty)
                 EditorGUILayout.HelpBox(m_debugReport.stringValue, MessageType.Warning);
-            }
         }
         serializedObject.ApplyModifiedProperties();
     }
@@ -80,8 +86,8 @@ public class TEXDrawEditor : Editor
 
     public void Redraw()
     {
-        foreach (TEXDraw i in (serializedObject.targetObjects))
-        {
+        foreach (TEXDraw i in (serializedObject.targetObjects)) {
+            i.SetTextDirty();
             i.SetVerticesDirty();   
             i.SetLayoutDirty();
         }
@@ -90,8 +96,7 @@ public class TEXDrawEditor : Editor
     public void DoFontIndexSelection()
     {
         TEXDraw t = (TEXDraw)target;
-        if (!m_FontIndex.hasMultipleDifferentValues)
-        {
+        if (!m_FontIndex.hasMultipleDifferentValues) {
             m_FontIndex.intValue = EditorGUILayout.IntPopup("Font Index", m_FontIndex.intValue, t.pref.FontIDs, t.pref.FontIndexs);
             return;
         }
@@ -181,8 +186,7 @@ public class TEXDrawEditor : Editor
 
         static void FixAlignmentButtonStyles(params GUIStyle[] styles)
         {
-            foreach (GUIStyle style in styles)
-            {
+            foreach (GUIStyle style in styles) {
                 style.padding.left = 2;
                 style.padding.right = 2;
             }
@@ -221,10 +225,8 @@ public class TEXDrawEditor : Editor
         bool centerAlign = (horizontalAlignment == 0.5f);
         bool rightAlign = (horizontalAlignment == 1f);
 		
-        if (alignment.hasMultipleDifferentValues)
-        {
-            foreach (var obj in alignment.serializedObject.targetObjects)
-            {
+        if (alignment.hasMultipleDifferentValues) {
+            foreach (var obj in alignment.serializedObject.targetObjects) {
                 TEXDraw text = obj as TEXDraw;
                 horizontalAlignment = text.alignment.x;
                 leftAlign = leftAlign || (horizontalAlignment == 0f);
@@ -237,24 +239,21 @@ public class TEXDrawEditor : Editor
 		
         EditorGUI.BeginChangeCheck();
         EditorToggle(position, leftAlign, leftAlign ? Styles.m_LeftAlignTextActive : Styles.m_LeftAlignText, Styles.alignmentButtonLeft);
-        if (EditorGUI.EndChangeCheck())
-        {
+        if (EditorGUI.EndChangeCheck()) {
             SetHorizontalAlignment(alignment, 0f);
         }
 		
         position.x += position.width;
         EditorGUI.BeginChangeCheck();
         EditorToggle(position, centerAlign, centerAlign ? Styles.m_CenterAlignTextActive : Styles.m_CenterAlignText, Styles.alignmentButtonMid);
-        if (EditorGUI.EndChangeCheck())
-        {
+        if (EditorGUI.EndChangeCheck()) {
             SetHorizontalAlignment(alignment, 0.5f);
         }
 		
         position.x += position.width;
         EditorGUI.BeginChangeCheck();
         EditorToggle(position, rightAlign, rightAlign ? Styles.m_RightAlignTextActive : Styles.m_RightAlignText, Styles.alignmentButtonRight);
-        if (EditorGUI.EndChangeCheck())
-        {
+        if (EditorGUI.EndChangeCheck()) {
             SetHorizontalAlignment(alignment, 1f);
         }
     }
@@ -267,10 +266,8 @@ public class TEXDrawEditor : Editor
         bool middleAlign = (verticalTextAligment == 0.5f);
         bool bottomAlign = (verticalTextAligment == 0f);
 		
-        if (alignment.hasMultipleDifferentValues)
-        {
-            foreach (var obj in alignment.serializedObject.targetObjects)
-            {
+        if (alignment.hasMultipleDifferentValues) {
+            foreach (var obj in alignment.serializedObject.targetObjects) {
                 TEXDraw text = obj as TEXDraw;
                 verticalTextAligment = text.alignment.y;
                 topAlign = topAlign || (verticalTextAligment == 1f);
@@ -285,24 +282,21 @@ public class TEXDrawEditor : Editor
         // position.x += position.width;
         EditorGUI.BeginChangeCheck();
         EditorToggle(position, topAlign, topAlign ? Styles.m_TopAlignTextActive : Styles.m_TopAlignText, Styles.alignmentButtonLeft);
-        if (EditorGUI.EndChangeCheck())
-        {
+        if (EditorGUI.EndChangeCheck()) {
             SetVerticalAlignment(alignment, 1f);
         }
 		
         position.x += position.width;
         EditorGUI.BeginChangeCheck();
         EditorToggle(position, middleAlign, middleAlign ? Styles.m_MiddleAlignTextActive : Styles.m_MiddleAlignText, Styles.alignmentButtonMid);
-        if (EditorGUI.EndChangeCheck())
-        {
+        if (EditorGUI.EndChangeCheck()) {
             SetVerticalAlignment(alignment, 0.5f);
         }
 		
         position.x += position.width;
         EditorGUI.BeginChangeCheck();
         EditorToggle(position, bottomAlign, bottomAlign ? Styles.m_BottomAlignTextActive : Styles.m_BottomAlignText, Styles.alignmentButtonRight);
-        if (EditorGUI.EndChangeCheck())
-        {
+        if (EditorGUI.EndChangeCheck()) {
             SetVerticalAlignment(alignment, 0f);
         }
     }
@@ -314,15 +308,13 @@ public class TEXDrawEditor : Editor
         Event evt = Event.current;
 		
         // Toggle selected toggle on space or return key
-        if (EditorGUIUtility.keyboardControl == id && evt.type == EventType.KeyDown && (evt.keyCode == KeyCode.Space || evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.KeypadEnter))
-        {
+        if (EditorGUIUtility.keyboardControl == id && evt.type == EventType.KeyDown && (evt.keyCode == KeyCode.Space || evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.KeypadEnter)) {
             value = !value;
             evt.Use();
             GUI.changed = true;
         }
 		
-        if (evt.type == EventType.KeyDown && Event.current.button == 0 && position.Contains(Event.current.mousePosition))
-        {
+        if (evt.type == EventType.KeyDown && Event.current.button == 0 && position.Contains(Event.current.mousePosition)) {
             GUIUtility.keyboardControl = id;
             EditorGUIUtility.editingTextField = false;
             HandleUtility.Repaint();
@@ -336,8 +328,7 @@ public class TEXDrawEditor : Editor
     // We can't go through serialzied properties here since we're showing two controls for a single SerializzedProperty.
     private static void SetHorizontalAlignment(SerializedProperty alignment, float horizontalAlignment)
     {
-        foreach (var obj in alignment.serializedObject.targetObjects)
-        {
+        foreach (var obj in alignment.serializedObject.targetObjects) {
             TEXDraw text = obj as TEXDraw;
             Undo.RecordObject(text, "Horizontal Alignment");
             text.alignment = new Vector2(horizontalAlignment, text.alignment.y);
@@ -347,8 +338,7 @@ public class TEXDrawEditor : Editor
 
     private static void SetVerticalAlignment(SerializedProperty alignment, float verticalAlignment)
     {
-        foreach (var obj in alignment.serializedObject.targetObjects)
-        {
+        foreach (var obj in alignment.serializedObject.targetObjects) {
             TEXDraw text = obj as TEXDraw;
             Undo.RecordObject(text, "Vertical Alignment");
             text.alignment = new Vector2(text.alignment.x, verticalAlignment);
@@ -389,8 +379,7 @@ public class TEXDrawEditor : Editor
     private static void PlaceUIElementRoot(GameObject element, MenuCommand menuCommand)
     {
         GameObject parent = menuCommand.context as GameObject;
-        if (parent == null || parent.GetComponentInParent<Canvas>() == null)
-        {
+        if (parent == null || parent.GetComponentInParent<Canvas>() == null) {
             parent = GetOrCreateCanvasGameObject();
         }
 
@@ -438,8 +427,7 @@ public class TEXDrawEditor : Editor
         Vector2 localPlanePosition;
         Camera camera = sceneView.camera;
         Vector3 position = Vector3.zero;
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRTransform, new Vector2(camera.pixelWidth / 2, camera.pixelHeight / 2), camera, out localPlanePosition))
-        {
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRTransform, new Vector2(camera.pixelWidth / 2, camera.pixelHeight / 2), camera, out localPlanePosition)) {
             // Adjust for canvas pivot
             localPlanePosition.x = localPlanePosition.x + canvasRTransform.sizeDelta.x * canvasRTransform.pivot.x;
             localPlanePosition.y = localPlanePosition.y + canvasRTransform.sizeDelta.y * canvasRTransform.pivot.y;
@@ -472,8 +460,7 @@ public class TEXDrawEditor : Editor
     private static void CreateEventSystem(bool select, GameObject parent)
     {
         var esys = Object.FindObjectOfType<EventSystem>();
-        if (esys == null)
-        {
+        if (esys == null) {
             var eventSystem = new GameObject("EventSystem");
             GameObjectUtility.SetParentAndAlign(eventSystem, parent);
             esys = eventSystem.AddComponent<EventSystem>();
@@ -485,8 +472,7 @@ public class TEXDrawEditor : Editor
             Undo.RegisterCreatedObjectUndo(eventSystem, "Create " + eventSystem.name);
         }
 
-        if (select && esys != null)
-        {
+        if (select && esys != null) {
             Selection.activeGameObject = esys.gameObject;
         }
     }

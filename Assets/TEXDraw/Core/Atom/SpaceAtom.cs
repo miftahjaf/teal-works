@@ -60,7 +60,10 @@ namespace TexDrawLib
 
 		public static Box CreateGlueBox(CharType leftType, CharType rightType, TexStyle style)
 		{
-			return TexUtility.GetBox(SpaceAtom.Get(true, TEXPreference.main.GetGlue(leftType, rightType), 0, 0), style);
+            float width = TEXPreference.main.GetGlue(leftType, rightType);
+            if(width != 0)
+                return TexUtility.GetBox(SpaceAtom.Get(true, width, 0, 0), style);
+            return null;
 		}
 
         public override void Flush()

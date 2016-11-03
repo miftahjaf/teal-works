@@ -12,41 +12,71 @@ namespace TexDrawLib
     public class TEXPreference : ScriptableObject
     {
         #if UNITY_EDITOR
+        //PAY ATTENTION TO THIS: IF YOU DECIDE TO MOVE WHOLE TEXDRAW
+        //FOLDER, THEN REPLACE THIS IN DEBUG INSPECTOR (NOT HERE)
         public string MainFolderPath = "Assets/TEXDraw";
-        //Editor Management for Fonts
+        const string DefaultTexFolder = "Assets/TEXDraw";
 
+        public bool IncludeMathSlot = true;
+ 
         #region Data Management
 
         public TextAsset XMLFontDefinitions;
         public TextAsset XMLSymbolDefinitions;
-        public TextAsset XMLConfiguration;
+	    public TextAsset XMLMathDefinitions;
+	    public TextAsset XMLConfiguration;
         public TexFontHeader[] fontHeaders;
         public TexConfigurationMember[] configs;
         public bool editorReloading = false;
 
         [ContextMenu("Read (Import) from XML Data")]
         public void Reload()
-        {
+	    {
+		    #if UNITY_WEBPLAYER
+		    	throw new System.Exception("Please switch your platform into PC first!");
+			#else
             if (!EditorUtility.DisplayDialog("Confirm Reload", 
                 "Are you sure to reload all data from XML files? This will take a moment.\n (your unexported changes will lost)", 
                 "OK, Discard my Changes", "No"))
                 return;	
-            FirstInitialize(MainFolderPath);
+		    FirstInitialize(MainFolderPath);
+		    #endif
         }
 
         [ContextMenu("Write (Export) to XML Data")] 
         public void WriteData()
         {
-            if (!TryPushToDictionaries())
+            #if UNITY_WEBPLAYER
+		    	throw new System.Exception("Please switch your platform into PC first!");
+			#else
+	        if (!TryPushToDictionaries())
                 return;
             if (!EditorUtility.DisplayDialog("Confirm Export", 
-                "Are you sure to write modified data to XML files? This will take a moment.\n (existing XML will be overwritten)", 
+	            "Are you sure to save modified data to XML files? This will take a moment.\n (existing XML will be overwritten)", 
                 "OK, Overwrite it", "No"))
                 return;	
-            TexXmlParser.WriteSymbols(this);
+	        TexXmlParser.WriteSymbols(this, false);
             TexXmlParser.WritePreferences(this);
             AssetDatabase.Refresh();
+            #endif
         }
+	    
+	    [ContextMenu("Overwrite Math to XML Data")] 
+	    public void WriteMathData()
+	    {
+            #if UNITY_WEBPLAYER
+		    	throw new System.Exception("Please switch your platform into PC first!");
+			#else
+		    if (!TryPushToDictionaries())
+			    return;
+		    if (!EditorUtility.DisplayDialog("Confirm Overwrite", 
+			    "Are you sure you want to overwrite Math Definition? \n (This is not recommended, Math definition shouldn't be overwritten by users)", 
+			    "OK, Overwrite it", "No"))
+			    return;	
+		    TexXmlParser.WriteSymbols(this, true);
+		    AssetDatabase.Refresh();
+            #endif
+	    }
 
         public void FirstInitialize(string mainPath)
         {
@@ -54,8 +84,8 @@ namespace TexDrawLib
             {
                 editorReloading = true;
                 EditorUtility.DisplayProgressBar("Reloading", "Reading XML Files...", 0f);
-
-                preferences = new TexPrefsDictionary();
+	            
+	            preferences = new TexPrefsDictionary();
                 symbolData = new TexSymbolDictionary();
                 defaultTypefaces = new TexTypeFaceDictionary();
                 charMapData = new TexCharMapDictionary();
@@ -64,12 +94,14 @@ namespace TexDrawLib
                 MainFolderPath = mainPath;
                 XMLFontDefinitions = AssetDatabase.LoadAssetAtPath<TextAsset>(MainFolderPath + "/XMLs/TexFontDefinitions.xml");
                 XMLSymbolDefinitions = AssetDatabase.LoadAssetAtPath<TextAsset>(MainFolderPath + "/XMLs/TexSymbolDefinitions.xml");
-                XMLConfiguration = AssetDatabase.LoadAssetAtPath<TextAsset>(MainFolderPath + "/XMLs/TexConfigurations.xml");
+	            XMLMathDefinitions = AssetDatabase.LoadAssetAtPath<TextAsset>(MainFolderPath + "/XMLs/TexMathDefinitions.xml");
+	            XMLConfiguration = AssetDatabase.LoadAssetAtPath<TextAsset>(MainFolderPath + "/XMLs/TexConfigurations.xml");
 
                 TexXmlParser.LoadPrimaryDefinitions(this);
                 EditorUtility.DisplayProgressBar("Reloading", "Reading Configurations...", .95f);
-                TexXmlParser.ReadSymbols(this);
-                TexXmlParser.ReadPreferences(this);
+	            TexXmlParser.ReadSymbols(this, true);
+	            TexXmlParser.ReadSymbols(this, false);
+	            TexXmlParser.ReadPreferences(this);
                 EditorUtility.DisplayProgressBar("Reloading", "Refreshing Instances...", .95f);
 
                 PaintFontList();
@@ -86,19 +118,11 @@ namespace TexDrawLib
 
         void Reset()
         {
-            string dataPath = AssetDatabase.GetAssetPath(this);
+            string dataPath = System.IO.Path.GetDirectoryName(AssetDatabase.GetAssetPath(this));
             if(string.IsNullOrEmpty(dataPath))
                 return;
             m_main = AssetDatabase.LoadAssetAtPath<TEXPreference>(dataPath);
             FirstInitialize (dataPath);
-            /*
-            preferences = new TexPrefsDictionary();
-            symbolData = new TexSymbolDictionary();
-            defaultTypefaces = new TexTypeFaceDictionary();
-            charMapData = new TexCharMapDictionary();
-            glueTable = new int[100];
-
-            TexXmlParser.LoadPrimaryDefinitions(this);*/
         }
         #endregion
 
@@ -222,20 +246,15 @@ namespace TexDrawLib
 
         public void CallRedraw()
         {
-            TEXDraw[] tex = Object.FindObjectsOfType<TEXDraw>();
-            foreach (var i in tex)
-            {
-                i.SetAllDirty();
-            }
-            TEXDraw3D[] tex3d = Object.FindObjectsOfType<TEXDraw3D>();
-            foreach (var i in tex3d)
-            {
-                i.Redraw();
+            Component[] tex = Object.FindObjectsOfType<Component>();
+            for (int i = 0; i < tex.Length; i++) {
+                if(tex[i] is ITEXDraw)
+                    ((ITEXDraw)tex[i]).SetTextDirty(true);
             }
             SceneView.RepaintAll();
         }
 
-        public string[] ModifiableIDs;
+        public string[] ConfigIDs;
         public string[] FontIDs;
         public int[] FontIndexs;
 
@@ -245,45 +264,16 @@ namespace TexDrawLib
             List<string> t = new List<string>();
             List<int> n = new List<int>();
             n.Add(-1);
-            t.Add("-1 (No Override)");
+            t.Add("-1 (Use Math Typefaces)");
             for (int i = 0; i < fontData.Length; i++)
             {
-                if(i >= 8 && i < 15)
-                {
-                    t.Add(string.Format("{0} - {1}.ttf", i , fontData[i].ID));
-                    n.Add(i);
-                }
-                if (fontData[i].modifiable)
-                {
-                    s.Add(fontData[i].ID);
-                }
+                t.Add(string.Format("{0} - {1}.ttf", i , fontData[i].id));
+                n.Add(i);
+                s.Add(fontData[i].id);
             }
-            ModifiableIDs = s.ToArray();
+            ConfigIDs = s.ToArray();
             FontIDs = t.ToArray();
             FontIndexs = n.ToArray();
-        }
-
-        public void ShiftFontIndex(int current, int now)
-        {
-            if (fontData[current].modifiable)
-            {
-                TexFont old = fontData[current];
-                fontData[current] = fontData[now];
-                fontData[now] = old;
-
-                fontData[current].index = current;
-                for (int i = 0; i < fontData[current].chars.Length; i++)
-                {
-                    fontData[current].chars[i].fontIndex = current;
-                }
-                fontData[now].index = now;
-                for (int i = 0; i < fontData[now].chars.Length; i++)
-                {
-                    fontData[now].chars[i].fontIndex = now;
-                }
-                PaintFontList();
-                RebuildMaterial();
-            }
         }
 
         public Material[] watchedMaterial;
@@ -298,19 +288,26 @@ namespace TexDrawLib
             }
 
             if(!watchedMaterial.Contains(defaultMaterial))
-                ArrayUtility.Add(ref watchedMaterial, defaultMaterial);
+                ArrayUtility.Insert(ref watchedMaterial, 0, defaultMaterial);
             foreach (var mat in watchedMaterial)
             {
-                if(mat)
+	            if(!mat)
+	            	continue;
+                for (int i = 0; i < fontData.Length; i++)
                 {
-                    for (int i = 0; i < 15; i++)
+                    string propName = string.Format("_Font{0:X}", i);
+                    if(!mat.HasProperty(propName))
                     {
-                        mat.SetTexture(string.Format("_Font{0:X}", i), fontData[i].font.material.mainTexture);
+                        mat.shader = Shader.Find("TEXDraw/Default/4 Pass");
+                        Debug.LogWarning("Changing Material (named '" + mat.name + "') shader to Default 4 Pass since it doesn't have a suifficient texture slot", mat);
                     }
+                    if(fontData[i].type == TexFontType.Font)
+                        mat.SetTexture(propName, fontData[i].font.material.mainTexture);
+                    else
+                        mat.SetTexture(propName, fontData[i].sprite);
                 }
             }
         }
-
 
         #endregion
 
@@ -320,8 +317,7 @@ namespace TexDrawLib
 
         static TEXPreference m_main;
         #if UNITY_EDITOR
-        const string DefaultTexFolder = "Assets/TEXDraw";
-
+        //Main & Shared access to TEXDraw Preference
         static public TEXPreference main
         {
             get
@@ -332,7 +328,9 @@ namespace TexDrawLib
                     string[] targetData = AssetDatabase.FindAssets("t:TEXPreference");
                     if (targetData.Length > 0)
                     {
-                        m_main = AssetDatabase.LoadAssetAtPath<TEXPreference>(AssetDatabase.GUIDToAssetPath(targetData[0]));
+                        var path = AssetDatabase.GUIDToAssetPath(targetData[0]);
+                        m_main = AssetDatabase.LoadAssetAtPath<TEXPreference>(path);
+                        m_main.MainFolderPath = System.IO.Path.GetDirectoryName(path);
                         if (targetData.Length > 1)
                             Debug.LogWarning("You have more than one TEXDraw preference, ensure that only one Preference exist in your Project");
                     }
@@ -359,6 +357,9 @@ namespace TexDrawLib
             }
             set
             {
+                //Leaving this empty,
+                //TEXDraw will assign this manually
+                //when on real build.
             }
         }
         #else
@@ -376,8 +377,12 @@ namespace TexDrawLib
 	#endif
         #endregion
 
+        #region Runtime Utilities
+        //Default Material
         public Material defaultMaterial;
+        //The most important reference to Central font data
         public TexFont[] fontData;
+        //Dictionaries for references, etc.
         public TexSymbolDictionary symbolData;
         public TexCharMapDictionary charMapData;
         public TexPrefsDictionary preferences;
@@ -389,7 +394,7 @@ namespace TexDrawLib
         {
             try
             {
-                return System.Array.Find<TexFont>(fontData, x => x.ID == id);
+                return System.Array.Find<TexFont>(fontData, x => x.id == id);
             }
             catch (System.Exception)
             {
@@ -401,7 +406,7 @@ namespace TexDrawLib
         {
             try
             {
-                return System.Array.Find<TexFont>(fontData, x => x.ID == id).index;
+                return System.Array.Find<TexFont>(fontData, x => x.id == id).index;
             }
             catch (System.Exception)
             {
@@ -423,7 +428,7 @@ namespace TexDrawLib
 
         public TexChar GetChar(string symbol)
         {
-            return GetChar(symbolData[symbol]);
+            return GetChar(symbolData.GetOrNone(symbol, -1));
         }
 
         public TexCharMetric GetCharMetric(string symbol, float size)
@@ -492,7 +497,7 @@ namespace TexDrawLib
 
         static public int TranslateChar(int charIdx)
         {
-            //An Integer Conversion from TEX-Character-Space to Actual-Character-Map
+            //An Integer Conversion from TEX-Character-Space (0-7F) to Actual-Character-Map (ASCII Latin-1)
             if (charIdx >= 0x0 && charIdx <= 0xf)
                 return charIdx + 0xc0;
             if (charIdx == 0x10)
@@ -516,5 +521,6 @@ namespace TexDrawLib
             return 0;
         }
 		
+        #endregion
     }
 }

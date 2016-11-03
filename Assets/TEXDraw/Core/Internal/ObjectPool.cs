@@ -4,29 +4,28 @@ using UnityEngine;
 
 namespace TexDrawLib
 {
-    public class ObjectPool<T> where T : new ()
+    public class ObjectPool<T> : IObjectPool where T : new()
     {
         private readonly Stack<T> m_Stack = new Stack<T>();
- 
-        #if UNITY_EDITOR
-        public int countAll { get; private set; }
+
+        public int countAll { get; set; }
+
         public int countActive { get { return countAll - countInactive; } }
+
         public int countInactive { get { return m_Stack.Count; } }
-        #endif
- 
+
         public T Get()
         {
             T element;
-            if (m_Stack.Count == 0)
-            {
+            if (m_Stack.Count == 0) {
                 element = new T();
                 #if UNITY_EDITOR
                 countAll++;
-            //    Debug.LogFormat( "Pop New {0}, Total {1}", typeof(T).Name, countAll);
+                // Debug.LogFormat( "Pop New {0}, Total {1}", typeof(T).Name, countAll);
+                if (!EditorObjectPool.l.Contains(this))
+                    EditorObjectPool.l.Add(this);
                 #endif
-            }
-            else
-            {
+            } else {
                 element = m_Stack.Pop();
             }
             return element;
@@ -40,5 +39,14 @@ namespace TexDrawLib
             #endif
             m_Stack.Push(element);
         }
+    }
+
+    public interface IObjectPool
+    {
+        int countAll { get; set; }
+
+        int countActive { get; }
+
+        int countInactive { get; }
     }
 }

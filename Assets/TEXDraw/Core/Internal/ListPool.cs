@@ -1,19 +1,27 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+//It's okay to remove this if you wanted to
 namespace TexDrawLib
 {
+    //This one is used for getting a List class
     public static class ListPool<T>
     {
         // Object pool to avoid allocations.
         private static readonly ObjectPool<List<T>> s_ListPool = new ObjectPool<List<T>>();
 
-        public static List<T> Get()
+        /// Get a new list instance
+	    /// Replacement for new List<T>()
+	    public static List<T> Get()
         {
+            //if(typeof(T) == typeof(Box))
+            //   Debug.LogWarning("POP " + Time.frameCount);
+       
             return s_ListPool.Get();
         }
 
+        /// Releasing this list with its children if possible
         public static void Release(List<T> toRelease)
         {
             if(toRelease.Count > 0 && toRelease[0] is IFlushable)
@@ -25,39 +33,22 @@ namespace TexDrawLib
                 }
             }
             toRelease.Clear();
+            //if(typeof(T) == typeof(Box))
+            //    Debug.Log("PUSH " + Time.frameCount);
             s_ListPool.Release(toRelease);
         }
 
+        /// Releasing this list without flushing the childs
+        /// used if reference child is still used somewhere
         public static void ReleaseNoFlush(List<T> toRelease)
         {
             toRelease.Clear();
+            //if(typeof(T) == typeof(Box))
+            //    Debug.Log("PUSH " + Time.frameCount);
             s_ListPool.Release(toRelease);
         }
     }
 
-    /* public static class ObjPool<T> where T : class, new()
-    {
-        public static Stack<T> m_objectStack = new Stack<T>();
-
-        public static T Get()
-        {
-            if (m_objectStack.Count == 0)
-            {
-                Debug.Log("Pop New " + typeof(T).FullName);
-                return new T();
-            }
-            else
-            {
-                T x = m_objectStack.Pop();
-                return x;
-            }
-        }
-
-        public static void Release(T t)
-        {
-            m_objectStack.Push(t);
-        }
-    }*/
     internal static class ObjPool<T> where T : class, IFlushable, new()
     {
         // Object pool to avoid allocations.
@@ -66,25 +57,58 @@ namespace TexDrawLib
         public static T Get()
         {
             T obj = s_ObjPool.Get();
-            obj.SetFlushed(false);
-            return obj;
+	        obj.IsFlushed = false;
+	        return obj;
         }
 
         public static void Release(T toRelease)
         {
-            if(toRelease.GetFlushed())
+	        if(toRelease.IsFlushed)
                 return;
-            toRelease.SetFlushed(true);
+	        toRelease.IsFlushed = true;
             s_ObjPool.Release(toRelease);
         }
     }
 
+    //Interface to get a class to be flushable (flush means to be released to the main class stack
+    //when it's unused, later if code need a new instance, the main stack will give this class back
+    //instead of creating a new instance (which later introducing Memory Garbages)).
     internal interface IFlushable
     {
-        bool GetFlushed();
-
-        void SetFlushed(bool flushed);
+	    bool IsFlushed { get; set; }
 
         void Flush();
     }
+	
+	/* Example of Implementation: (Copy snippet code below as Template)
+	
+	using TexDrawLib;
+	public class SomeClass : IFlushable 
+	{
+		
+		///This class is replacement for New()
+		public static SomeClass Get()
+		{
+			var obj = ObjPool<SomeClass>.Get();
+			//Set up some stuff here
+			return obj;
+		}
+		
+		///used Internally, check whether it's already released or not
+		///Public for convience, you shouldn't set this manually
+		bool m_flushed = false;
+		public bool IsFlushed { get { return m_flushed; } set { m_flushed = value; } }
+		
+		//Call this in your code if this class is in no longer use
+		public void Flush()
+		{
+			//Reset additional stuff, properties, variables, all have to be set to it's default value.
+			//then you can ...
+			ObjPool<SomeClass>.Release(this);
+		}
+	}
+	
+	*/
+	
+	 
 }

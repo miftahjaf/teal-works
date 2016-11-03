@@ -22,6 +22,9 @@ namespace TexDrawLib
 
         public float Scale;
 
+        /// 0 = No, 1 = Yes, 2 = Yes (and there's a space erased)
+		public int partOfPreviousLine = 0;
+
 		public Vector2 RenderSize
 		{
 			get
@@ -51,19 +54,12 @@ namespace TexDrawLib
                 Box.Flush();
                 Box = null;
             }
+			partOfPreviousLine = 0;
             ObjPool<TexRenderer>.Release(this);
         }
 
-        bool m_flushed;
+        bool m_flushed = false;
+        public bool IsFlushed { get { return m_flushed; } set { m_flushed = value; } }
 
-        public bool GetFlushed()
-        { 
-            return m_flushed;
-        }
-
-        public void SetFlushed(bool flushed)
-        {
-            m_flushed = flushed;
-        }
 	}
 }

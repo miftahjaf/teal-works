@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 // Atom representing single character in specific text style.
 namespace TexDrawLib
@@ -14,6 +15,7 @@ namespace TexDrawLib
             var atom = ObjPool<CharAtom>.Get();
 			atom.Character = character;
 			atom.TextStyle = textStyle;
+            atom.StyleFont = TexUtility.RenderFontStyle;
             return atom;
 		}
 
@@ -26,10 +28,12 @@ namespace TexDrawLib
 
         public int TextStyle;
 
+        public FontStyle StyleFont;
+
 		public override Box CreateBox (TexStyle style)
 		{
 			var charInfo = GetChar(style);
-			return CharBox.Get (style, charInfo);
+			return CharBox.Get (style, charInfo, StyleFont);
 		}
 
 		public TexCharMetric GetChar (TexStyle style)

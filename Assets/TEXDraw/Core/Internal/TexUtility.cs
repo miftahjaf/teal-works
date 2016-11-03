@@ -12,11 +12,16 @@ namespace TexDrawLib
 	{
 		// Few const for simple adjusting ------------------------------------------------------------------------------
 		public const float FloatPrecision = 0.001f;
-		
+        //The reason why it's 31 textures: because index 32 preserved for this block font!
+        public const int blockFontIndex = 31;
+        public static readonly Color white = Color.white; //Cached for speed
+
 		// Preserved Dynamic Configurations ----------------------------------------------------------------------------
-		public static float RenderSize;
+		public static float RenderSizeFactor = 1;
 		public static Color32 RenderColor;
         public static int RenderFont = -1;
+        public static int RenderTextureSize = 0;
+		public static FontStyle RenderFontStyle = FontStyle.Normal;
             
 		public static float spaceWidth
 		{
@@ -39,11 +44,11 @@ namespace TexDrawLib
 		public static float SizeFactor (TexStyle style)
 		{
 			if (style < TexStyle.Script)
-				return 1f;
+				return RenderSizeFactor;
 			else if (style < TexStyle.ScriptScript)
-				return TEXPreference.main.preferences["ScriptFactor"];
+                return TEXPreference.main.preferences["ScriptFactor"] * RenderSizeFactor;
 			else
-				return TEXPreference.main.preferences["NestedScriptFactor"];
+                return TEXPreference.main.preferences["NestedScriptFactor"] * RenderSizeFactor;
 		}
 
 		public static TexStyle GetCrampedStyle (TexStyle Style)
@@ -89,15 +94,55 @@ namespace TexDrawLib
             return box;
         }
 
+        public static Color MultiplyColor(Color a, Color b)
+        {
+        	if(a == white)
+        		return b;
+        	a.a *= b.a;
+			a.r *= b.r;
+			a.g *= b.g;
+			a.b *= b.b;
+			return a;
+        }
+
+        public static Color32 MultiplyAlphaOnly(Color32 c, float a)
+        {
+            c.a = (byte)(c.a * a);
+            return c;
+        }
+
+
         static public List<T> GetRangePool<T> (this List<T> source, int index, int count)
         {
             List<T> list = ListPool<T>.Get();
+			//Method 1: Not working (Still Produces GC)
+            /*
             T[] a = new T[count];
-            //list.AddRange
             source.CopyTo(index, a, 0, count);
             list.AddRange(a);
-//            System.Array.Copy (source, index, list, 0, count);
-            return list;
+            */
+            //Method 2: Too Slow
+            /*
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(source[i + index]);
+            }
+             */
+			//Method 3
+            //CHAMPAGNE! It's works ;-D
+			list.AddRange(source);
+			if(index > 0)
+				list.RemoveRange(0, index);
+			if(list.Count > count)
+				list.RemoveRange(count, list.Count - count);
+			return list;
+
+			//The only known thing that Produces GC, 
+			//however, it currently the fastest thing to process
+			//So I leave as it is,
+            //return source.GetRange(index, count);
         }
+
+
     }
 }

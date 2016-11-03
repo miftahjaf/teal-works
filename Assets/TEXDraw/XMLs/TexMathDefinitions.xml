@@ -1,0 +1,843 @@
+<?xml version='1.0'?>
+<!-- AUTO-GENERATED: this file contains per-character configurations, do not modify directly unless you know what are you doing -->
+<TexSymbols>
+    <FontIDs>
+     <Font index="0" id="cmex"/>
+     <Font index="1" id="cmmi"/>
+     <Font index="2" id="cmr"/>
+     <Font index="3" id="cmsy"/>
+     <Font index="4" id="msam"/>
+     <Font index="5" id="msbm"/>
+     <Font index="6" id="stmary"/>
+     <Font index="7" id="wasy"/>
+ </FontIDs>
+    <SymbolMap>
+		<C38 hash="56" name="lgroup" nameAlt="" typeId="5"/>
+		<C39 hash="57" name="rgroup" nameAlt="" typeId="6"/>
+		<C3A hash="58" name="lmoustache" nameAlt="" typeId="3"/>
+		<C3B hash="59" name="rmoustache" nameAlt="" typeId="3"/>
+		<C42 hash="66" name="negateskin" nameAlt="" typeId="8"/>
+		<C46 hash="70" name="bigsqcup" nameAlt="" typeId="7"/>
+		<C48 hash="72" name="oint" nameAlt="" typeId="7"/>
+		<C4A hash="74" name="bigodot" nameAlt="" typeId="7"/>
+		<C4C hash="76" name="bigoplus" nameAlt="" typeId="7"/>
+		<C4E hash="78" name="bigotimes" nameAlt="" typeId="7"/>
+		<C50 hash="80" name="sum" nameAlt="" typeId="7"/>
+		<C51 hash="81" name="prod" nameAlt="" typeId="7"/>
+		<C52 hash="82" name="int" nameAlt="" typeId="7"/>
+		<C53 hash="83" name="bigcup" nameAlt="" typeId="7"/>
+		<C54 hash="84" name="bigcap" nameAlt="" typeId="7"/>
+		<C55 hash="85" name="biguplus" nameAlt="" typeId="7"/>
+		<C56 hash="86" name="bigwedge" nameAlt="bigland" typeId="7"/>
+		<C57 hash="87" name="bigvee" nameAlt="biglor" typeId="7"/>
+		<C60 hash="96" name="coprod" nameAlt="" typeId="7"/>
+		<C62 hash="98" name="widehat" nameAlt="" typeId="9"/>
+		<C65 hash="101" name="widetilde" nameAlt="" typeId="9"/>
+		<C70 hash="112" name="surdsign" nameAlt="" typeId="8"/>
+		<C100 hash="256" name="Gamma" nameAlt="" typeId="0"/>
+		<C101 hash="257" name="Delta" nameAlt="" typeId="0"/>
+		<C102 hash="258" name="Theta" nameAlt="" typeId="0"/>
+		<C103 hash="259" name="Lambda" nameAlt="" typeId="0"/>
+		<C104 hash="260" name="Xi" nameAlt="" typeId="0"/>
+		<C105 hash="261" name="Pi" nameAlt="" typeId="0"/>
+		<C106 hash="262" name="Sigma" nameAlt="" typeId="0"/>
+		<C107 hash="263" name="Upsilon" nameAlt="" typeId="0"/>
+		<C108 hash="264" name="Phi" nameAlt="" typeId="0"/>
+		<C109 hash="265" name="Psi" nameAlt="" typeId="0"/>
+		<C10A hash="266" name="Omega" nameAlt="" typeId="0"/>
+		<C10B hash="267" name="alpha" nameAlt="" typeId="0"/>
+		<C10C hash="268" name="beta" nameAlt="" typeId="0"/>
+		<C10D hash="269" name="gamma" nameAlt="" typeId="0"/>
+		<C10E hash="270" name="delta" nameAlt="" typeId="0"/>
+		<C10F hash="271" name="epsilon" nameAlt="" typeId="0"/>
+		<C110 hash="272" name="zeta" nameAlt="" typeId="0"/>
+		<C111 hash="273" name="eta" nameAlt="" typeId="0"/>
+		<C112 hash="274" name="theta" nameAlt="" typeId="0"/>
+		<C113 hash="275" name="iota" nameAlt="" typeId="0"/>
+		<C114 hash="276" name="kappa" nameAlt="" typeId="0"/>
+		<C115 hash="277" name="lambda" nameAlt="" typeId="0"/>
+		<C116 hash="278" name="mu" nameAlt="" typeId="0"/>
+		<C117 hash="279" name="nu" nameAlt="" typeId="0"/>
+		<C118 hash="280" name="xi" nameAlt="" typeId="0"/>
+		<C119 hash="281" name="pi" nameAlt="" typeId="0"/>
+		<C11A hash="282" name="rho" nameAlt="" typeId="0"/>
+		<C11B hash="283" name="sigma" nameAlt="" typeId="0"/>
+		<C11C hash="284" name="tau" nameAlt="" typeId="0"/>
+		<C11D hash="285" name="upsilon" nameAlt="" typeId="0"/>
+		<C11E hash="286" name="phi" nameAlt="" typeId="0"/>
+		<C11F hash="287" name="chi" nameAlt="" typeId="0"/>
+		<C120 hash="288" name="psi" nameAlt="" typeId="0"/>
+		<C121 hash="289" name="omega" nameAlt="" typeId="0"/>
+		<C122 hash="290" name="varepsilon" nameAlt="" typeId="0"/>
+		<C123 hash="291" name="vartheta" nameAlt="" typeId="0"/>
+		<C124 hash="292" name="varpi" nameAlt="" typeId="0"/>
+		<C125 hash="293" name="varrho" nameAlt="" typeId="0"/>
+		<C126 hash="294" name="varsigma" nameAlt="" typeId="0"/>
+		<C127 hash="295" name="varphi" nameAlt="" typeId="0"/>
+		<C128 hash="296" name="leftharpoonup" nameAlt="" typeId="4"/>
+		<C129 hash="297" name="leftharpoondown" nameAlt="" typeId="4"/>
+		<C12A hash="298" name="rightharpoonup" nameAlt="" typeId="4"/>
+		<C12B hash="299" name="rightharpoondown" nameAlt="" typeId="4"/>
+		<C12C hash="300" name="hookright" nameAlt="" typeId="4"/>
+		<C12D hash="301" name="hookleft" nameAlt="" typeId="0"/>
+		<C12E hash="302" name="triangleright" nameAlt="" typeId="3"/>
+		<C12F hash="303" name="triangleleft" nameAlt="" typeId="3"/>
+		<C13A hash="314" name="ldot" nameAlt="" typeId="0"/>
+		<C13C hash="316" name="less" nameAlt="l" typeId="3"/>
+		<C13D hash="317" name="forwardslash" nameAlt="" typeId="0"/>
+		<C13E hash="318" name="gtr" nameAlt="g" typeId="3"/>
+		<C13F hash="319" name="star" nameAlt="" typeId="1"/>
+		<C140 hash="320" name="partial" nameAlt="" typeId="0"/>
+		<C15B hash="347" name="flat" nameAlt="" typeId="1"/>
+		<C15C hash="348" name="natural" nameAlt="" typeId="1"/>
+		<C15D hash="349" name="sharp" nameAlt="" typeId="1"/>
+		<C15E hash="350" name="smile" nameAlt="" typeId="1"/>
+		<C15F hash="351" name="frown" nameAlt="" typeId="1"/>
+		<C160 hash="352" name="ell" nameAlt="" typeId="0"/>
+		<C17B hash="379" name="imath" nameAlt="" typeId="0"/>
+		<C17C hash="380" name="jmath" nameAlt="" typeId="0"/>
+		<C17D hash="381" name="wp" nameAlt="" typeId="0"/>
+		<C17E hash="382" name="vec" nameAlt="" typeId="9"/>
+		<C17F hash="383" name="floatband" nameAlt="" typeId="9"/>
+		<C20B hash="523" name="ff" nameAlt="" typeId="0"/>
+		<C20C hash="524" name="fi" nameAlt="" typeId="0"/>
+		<C20D hash="525" name="fl" nameAlt="" typeId="0"/>
+		<C20E hash="526" name="ffi" nameAlt="" typeId="0"/>
+		<C20F hash="527" name="ffl" nameAlt="" typeId="0"/>
+		<C212 hash="530" name="grave" nameAlt="" typeId="9"/>
+		<C213 hash="531" name="acute" nameAlt="" typeId="9"/>
+		<C214 hash="532" name="tip" nameAlt="" typeId="9"/>
+		<C215 hash="533" name="breve" nameAlt="" typeId="9"/>
+		<C216 hash="534" name="bar" nameAlt="" typeId="9"/>
+		<C217 hash="535" name="Dot" nameAlt="" typeId="9"/>
+		<C21A hash="538" name="ae" nameAlt="" typeId="0"/>
+		<C21B hash="539" name="ce" nameAlt="" typeId="0"/>
+		<C21D hash="541" name="AE" nameAlt="" typeId="0"/>
+		<C21E hash="542" name="CE" nameAlt="" typeId="0"/>
+		<C221 hash="545" name="faculty" nameAlt="" typeId="0"/>
+		<C222 hash="546" name="doublequote" nameAlt="cdqot" typeId="0"/>
+		<C223 hash="547" name="numbersign" nameAlt="" typeId="0"/>
+		<C224 hash="548" name="dollar" nameAlt="" typeId="0"/>
+		<C225 hash="549" name="percent" nameAlt="" typeId="0"/>
+		<C226 hash="550" name="ampersand" nameAlt="" typeId="0"/>
+		<C227 hash="551" name="semiquote" nameAlt="" typeId="0"/>
+		<C228 hash="552" name="lbrack" nameAlt="" typeId="5"/>
+		<C229 hash="553" name="rbrack" nameAlt="" typeId="6"/>
+		<C22A hash="554" name="asttop" nameAlt="" typeId="0"/>
+		<C22B hash="555" name="plus" nameAlt="" typeId="2"/>
+		<C22C hash="556" name="comma" nameAlt="" typeId="0"/>
+		<C22D hash="557" name="varminus" nameAlt="min" typeId="0"/>
+		<C22E hash="558" name="ldotp" nameAlt="" typeId="0"/>
+		<C22F hash="559" name="slash" nameAlt="" typeId="0"/>
+		<C23A hash="570" name="colon" nameAlt="" typeId="0"/>
+		<C23B hash="571" name="semicolon" nameAlt="" typeId="0"/>
+		<C23C hash="572" name="invfaculty" nameAlt="" typeId="0"/>
+		<C23D hash="573" name="equal" nameAlt="eq" typeId="3"/>
+		<C23E hash="574" name="invquestion" nameAlt="" typeId="0"/>
+		<C23F hash="575" name="question" nameAlt="" typeId="0"/>
+		<C240 hash="576" name="commercialat" nameAlt="" typeId="0"/>
+		<C25B hash="603" name="lsqbrack" nameAlt="" typeId="5"/>
+		<C25C hash="604" name="vardoublequote" nameAlt="odqot" typeId="0"/>
+		<C25D hash="605" name="rsqbrack" nameAlt="" typeId="6"/>
+		<C25E hash="606" name="hat" nameAlt="" typeId="9"/>
+		<C25F hash="607" name="dot" nameAlt="" typeId="9"/>
+		<C27D hash="637" name="floatquote" nameAlt="" typeId="9"/>
+		<C27E hash="638" name="tilde" nameAlt="" typeId="9"/>
+		<C27F hash="639" name="ddot" nameAlt="" typeId="9"/>
+		<C300 hash="768" name="minus" nameAlt="" typeId="2"/>
+		<C301 hash="769" name="cdot" nameAlt="" typeId="2"/>
+		<C302 hash="770" name="times" nameAlt="" typeId="2"/>
+		<C303 hash="771" name="ast" nameAlt="" typeId="2"/>
+		<C304 hash="772" name="div" nameAlt="" typeId="2"/>
+		<C305 hash="773" name="diamond" nameAlt="" typeId="1"/>
+		<C306 hash="774" name="pm" nameAlt="" typeId="2"/>
+		<C307 hash="775" name="mp" nameAlt="" typeId="2"/>
+		<C308 hash="776" name="oplus" nameAlt="" typeId="2"/>
+		<C309 hash="777" name="ominus" nameAlt="" typeId="2"/>
+		<C30A hash="778" name="otimes" nameAlt="" typeId="2"/>
+		<C30B hash="779" name="oslash" nameAlt="" typeId="2"/>
+		<C30C hash="780" name="odot" nameAlt="" typeId="2"/>
+		<C30D hash="781" name="bigcirc" nameAlt="" typeId="1"/>
+		<C30E hash="782" name="circ" nameAlt="" typeId="1"/>
+		<C30F hash="783" name="bullet" nameAlt="" typeId="1"/>
+		<C310 hash="784" name="asymp" nameAlt="" typeId="3"/>
+		<C311 hash="785" name="equiv" nameAlt="" typeId="3"/>
+		<C312 hash="786" name="subseteq" nameAlt="" typeId="3"/>
+		<C313 hash="787" name="supseteq" nameAlt="" typeId="3"/>
+		<C314 hash="788" name="leq" nameAlt="" typeId="3"/>
+		<C315 hash="789" name="geq" nameAlt="" typeId="3"/>
+		<C316 hash="790" name="preceq" nameAlt="" typeId="3"/>
+		<C317 hash="791" name="succeq" nameAlt="" typeId="3"/>
+		<C318 hash="792" name="sim" nameAlt="" typeId="3"/>
+		<C319 hash="793" name="approx" nameAlt="" typeId="3"/>
+		<C31A hash="794" name="subset" nameAlt="" typeId="3"/>
+		<C31B hash="795" name="supset" nameAlt="" typeId="3"/>
+		<C31C hash="796" name="ll" nameAlt="Less" typeId="3"/>
+		<C31D hash="797" name="gg" nameAlt="Gtr" typeId="3"/>
+		<C31E hash="798" name="prec" nameAlt="" typeId="3"/>
+		<C31F hash="799" name="succ" nameAlt="" typeId="3"/>
+		<C320 hash="800" name="leftarrow" nameAlt="" typeId="4"/>
+		<C321 hash="801" name="rightarrow" nameAlt="" typeId="4"/>
+		<C322 hash="802" name="uparrow" nameAlt="" typeId="4"/>
+		<C323 hash="803" name="downarrow" nameAlt="" typeId="4"/>
+		<C324 hash="804" name="leftrightarrow" nameAlt="" typeId="4"/>
+		<C325 hash="805" name="nearrow" nameAlt="" typeId="4"/>
+		<C326 hash="806" name="searrow" nameAlt="" typeId="4"/>
+		<C327 hash="807" name="simeq" nameAlt="" typeId="3"/>
+		<C328 hash="808" name="Leftarrow" nameAlt="" typeId="4"/>
+		<C329 hash="809" name="Rightarrow" nameAlt="" typeId="4"/>
+		<C32A hash="810" name="Uparrow" nameAlt="" typeId="4"/>
+		<C32B hash="811" name="Downarrow" nameAlt="" typeId="4"/>
+		<C32C hash="812" name="Leftrightarrow" nameAlt="" typeId="4"/>
+		<C32D hash="813" name="swarrow" nameAlt="" typeId="4"/>
+		<C32E hash="814" name="nwarrow" nameAlt="" typeId="4"/>
+		<C32F hash="815" name="propto" nameAlt="" typeId="3"/>
+		<C330 hash="816" name="prime" nameAlt="" typeId="0"/>
+		<C331 hash="817" name="infty" nameAlt="" typeId="0"/>
+		<C332 hash="818" name="in" nameAlt="" typeId="3"/>
+		<C333 hash="819" name="ni" nameAlt="" typeId="3"/>
+		<C334 hash="820" name="bigtriangleup" nameAlt="triangle" typeId="1"/>
+		<C335 hash="821" name="bigtriangledown" nameAlt="" typeId="1"/>
+		<C338 hash="824" name="forall" nameAlt="" typeId="0"/>
+		<C339 hash="825" name="exists" nameAlt="" typeId="0"/>
+		<C33A hash="826" name="neg" nameAlt="lnot" typeId="0"/>
+		<C33B hash="827" name="emptyset" nameAlt="" typeId="0"/>
+		<C33C hash="828" name="Re" nameAlt="" typeId="0"/>
+		<C33D hash="829" name="Im" nameAlt="" typeId="0"/>
+		<C33E hash="830" name="top" nameAlt="" typeId="1"/>
+		<C33F hash="831" name="bot" nameAlt="perp" typeId="1"/>
+		<C340 hash="832" name="aleph" nameAlt="" typeId="0"/>
+		<C35B hash="859" name="cup" nameAlt="" typeId="2"/>
+		<C35C hash="860" name="cap" nameAlt="" typeId="2"/>
+		<C35D hash="861" name="uplus" nameAlt="" typeId="2"/>
+		<C35E hash="862" name="wedge" nameAlt="land" typeId="2"/>
+		<C35F hash="863" name="vee" nameAlt="lor" typeId="2"/>
+		<C360 hash="864" name="vdash" nameAlt="" typeId="3"/>
+		<C361 hash="865" name="dashv" nameAlt="" typeId="3"/>
+		<C362 hash="866" name="lfloor" nameAlt="" typeId="5"/>
+		<C363 hash="867" name="rfloor" nameAlt="" typeId="6"/>
+		<C364 hash="868" name="lceil" nameAlt="" typeId="5"/>
+		<C365 hash="869" name="rceil" nameAlt="" typeId="6"/>
+		<C366 hash="870" name="lbrace" nameAlt="" typeId="5"/>
+		<C367 hash="871" name="rbrace" nameAlt="" typeId="6"/>
+		<C368 hash="872" name="langle" nameAlt="" typeId="5"/>
+		<C369 hash="873" name="rangle" nameAlt="" typeId="6"/>
+		<C36A hash="874" name="mid" nameAlt="vert" typeId="3"/>
+		<C36B hash="875" name="parallel" nameAlt="Vert" typeId="3"/>
+		<C36C hash="876" name="updownarrow" nameAlt="" typeId="4"/>
+		<C36D hash="877" name="Updownarrow" nameAlt="" typeId="4"/>
+		<C36E hash="878" name="setminus" nameAlt="backslash" typeId="0"/>
+		<C36F hash="879" name="wr" nameAlt="" typeId="2"/>
+		<C370 hash="880" name="surd" nameAlt="" typeId="0"/>
+		<C371 hash="881" name="amalg" nameAlt="" typeId="0"/>
+		<C372 hash="882" name="nabla" nameAlt="" typeId="0"/>
+		<C373 hash="883" name="smallint" nameAlt="" typeId="0"/>
+		<C374 hash="884" name="sqcup" nameAlt="" typeId="2"/>
+		<C375 hash="885" name="sqcap" nameAlt="" typeId="2"/>
+		<C376 hash="886" name="sqsubseteq" nameAlt="" typeId="3"/>
+		<C377 hash="887" name="sqsupseteq" nameAlt="" typeId="3"/>
+		<C379 hash="889" name="dagger" nameAlt="" typeId="1"/>
+		<C37A hash="890" name="ddagger" nameAlt="" typeId="1"/>
+		<C37B hash="891" name="pilcrow" nameAlt="" typeId="1"/>
+		<C37C hash="892" name="clubsuit" nameAlt="" typeId="1"/>
+		<C37D hash="893" name="diamondsuit" nameAlt="" typeId="1"/>
+		<C37E hash="894" name="heartsuit" nameAlt="" typeId="1"/>
+		<C37F hash="895" name="spadesuit" nameAlt="" typeId="1"/>
+		<C400 hash="1024" name="boxdot" nameAlt="" typeId="2"/>
+		<C401 hash="1025" name="boxplus" nameAlt="" typeId="2"/>
+		<C402 hash="1026" name="boxtimes" nameAlt="" typeId="2"/>
+		<C403 hash="1027" name="square" nameAlt="" typeId="1"/>
+		<C404 hash="1028" name="blacksquare" nameAlt="" typeId="1"/>
+		<C405 hash="1029" name="centerdot" nameAlt="" typeId="2"/>
+		<C406 hash="1030" name="lozenge" nameAlt="" typeId="1"/>
+		<C407 hash="1031" name="blacklozenge" nameAlt="" typeId="1"/>
+		<C408 hash="1032" name="circlearrowright" nameAlt="" typeId="4"/>
+		<C409 hash="1033" name="circlearrowleft" nameAlt="" typeId="4"/>
+		<C40A hash="1034" name="rightleftharpoons" nameAlt="" typeId="4"/>
+		<C40B hash="1035" name="leftrightharpoons" nameAlt="" typeId="4"/>
+		<C40C hash="1036" name="boxminus" nameAlt="" typeId="2"/>
+		<C40D hash="1037" name="Vdash" nameAlt="" typeId="3"/>
+		<C40E hash="1038" name="Vvdash" nameAlt="" typeId="3"/>
+		<C40F hash="1039" name="vDash" nameAlt="" typeId="3"/>
+		<C410 hash="1040" name="twoheadrightarrow" nameAlt="" typeId="4"/>
+		<C411 hash="1041" name="twoheadleftarrow" nameAlt="" typeId="4"/>
+		<C412 hash="1042" name="leftleftarrows" nameAlt="" typeId="4"/>
+		<C413 hash="1043" name="rightrightarrows" nameAlt="" typeId="4"/>
+		<C414 hash="1044" name="upuparrows" nameAlt="" typeId="4"/>
+		<C415 hash="1045" name="downdownarrows" nameAlt="" typeId="4"/>
+		<C416 hash="1046" name="upharpoonright" nameAlt="restriction" typeId="4"/>
+		<C417 hash="1047" name="downharpoonright" nameAlt="" typeId="4"/>
+		<C418 hash="1048" name="upharpoonleft" nameAlt="" typeId="4"/>
+		<C419 hash="1049" name="downharpoonleft" nameAlt="" typeId="4"/>
+		<C41A hash="1050" name="rightarrowtail" nameAlt="" typeId="4"/>
+		<C41B hash="1051" name="leftarrowtail" nameAlt="" typeId="4"/>
+		<C41C hash="1052" name="leftrightarrows" nameAlt="" typeId="4"/>
+		<C41D hash="1053" name="rightleftarrows" nameAlt="" typeId="4"/>
+		<C41E hash="1054" name="Lsh" nameAlt="" typeId="4"/>
+		<C41F hash="1055" name="Rsh" nameAlt="" typeId="4"/>
+		<C420 hash="1056" name="rightsquigarrow" nameAlt="" typeId="4"/>
+		<C421 hash="1057" name="leftrightsquigarrow" nameAlt="" typeId="4"/>
+		<C422 hash="1058" name="looparrowleft" nameAlt="" typeId="4"/>
+		<C423 hash="1059" name="looparrowright" nameAlt="" typeId="4"/>
+		<C424 hash="1060" name="circeq" nameAlt="" typeId="3"/>
+		<C425 hash="1061" name="succsim" nameAlt="" typeId="3"/>
+		<C426 hash="1062" name="gtrsim" nameAlt="" typeId="3"/>
+		<C427 hash="1063" name="gtrapprox" nameAlt="" typeId="3"/>
+		<C428 hash="1064" name="multimap" nameAlt="" typeId="4"/>
+		<C429 hash="1065" name="therefore" nameAlt="" typeId="3"/>
+		<C42A hash="1066" name="because" nameAlt="" typeId="3"/>
+		<C42B hash="1067" name="doteqdot" nameAlt="Doteq" typeId="3"/>
+		<C42C hash="1068" name="triangleq" nameAlt="" typeId="3"/>
+		<C42D hash="1069" name="precsim" nameAlt="" typeId="3"/>
+		<C42E hash="1070" name="lesssim" nameAlt="" typeId="3"/>
+		<C42F hash="1071" name="lessapprox" nameAlt="" typeId="3"/>
+		<C430 hash="1072" name="eqslantless" nameAlt="" typeId="3"/>
+		<C431 hash="1073" name="eqslantgtr" nameAlt="" typeId="3"/>
+		<C432 hash="1074" name="curlyeqprec" nameAlt="" typeId="3"/>
+		<C433 hash="1075" name="curlyeqsucc" nameAlt="" typeId="3"/>
+		<C434 hash="1076" name="preccurlyeq" nameAlt="" typeId="3"/>
+		<C435 hash="1077" name="leqq" nameAlt="" typeId="3"/>
+		<C436 hash="1078" name="leqslant" nameAlt="" typeId="3"/>
+		<C437 hash="1079" name="lessgtr" nameAlt="" typeId="3"/>
+		<C438 hash="1080" name="backprime" nameAlt="" typeId="0"/>
+		<C43A hash="1082" name="risingdotseq" nameAlt="" typeId="3"/>
+		<C43B hash="1083" name="fallingdotseq" nameAlt="" typeId="3"/>
+		<C43C hash="1084" name="succcurlyeq" nameAlt="" typeId="3"/>
+		<C43D hash="1085" name="geqq" nameAlt="" typeId="3"/>
+		<C43E hash="1086" name="geqslant" nameAlt="" typeId="3"/>
+		<C43F hash="1087" name="gtrless" nameAlt="" typeId="3"/>
+		<C440 hash="1088" name="sqsubset" nameAlt="" typeId="3"/>
+		<C441 hash="1089" name="sqsupset" nameAlt="" typeId="3"/>
+		<C442 hash="1090" name="vartriangleright" nameAlt="" typeId="3"/>
+		<C443 hash="1091" name="vartriangleleft" nameAlt="" typeId="3"/>
+		<C444 hash="1092" name="trianglerighteq" nameAlt="" typeId="3"/>
+		<C445 hash="1093" name="trianglelefteq" nameAlt="" typeId="3"/>
+		<C446 hash="1094" name="blackstar" nameAlt="" typeId="1"/>
+		<C447 hash="1095" name="between" nameAlt="" typeId="3"/>
+		<C448 hash="1096" name="blacktriangledown" nameAlt="" typeId="1"/>
+		<C449 hash="1097" name="blacktriangleright" nameAlt="" typeId="1"/>
+		<C44A hash="1098" name="blacktriangleleft" nameAlt="" typeId="1"/>
+		<C44D hash="1101" name="vartriangle" nameAlt="" typeId="1"/>
+		<C44E hash="1102" name="blacktriangle" nameAlt="" typeId="1"/>
+		<C44F hash="1103" name="triangledown" nameAlt="" typeId="1"/>
+		<C450 hash="1104" name="eqcirc" nameAlt="" typeId="3"/>
+		<C451 hash="1105" name="lesseqgtr" nameAlt="" typeId="3"/>
+		<C452 hash="1106" name="gtreqless" nameAlt="" typeId="3"/>
+		<C453 hash="1107" name="lesseqqgtr" nameAlt="" typeId="3"/>
+		<C454 hash="1108" name="gtreqqless" nameAlt="" typeId="3"/>
+		<C455 hash="1109" name="yen" nameAlt="" typeId="0"/>
+		<C456 hash="1110" name="Rrightarrow" nameAlt="" typeId="4"/>
+		<C457 hash="1111" name="Lleftarrow" nameAlt="" typeId="4"/>
+		<C45D hash="1117" name="measuredangle" nameAlt="" typeId="1"/>
+		<C45E hash="1118" name="sphericalangle" nameAlt="" typeId="1"/>
+		<C45F hash="1119" name="varpropto" nameAlt="" typeId="3"/>
+		<C460 hash="1120" name="smallsmile" nameAlt="" typeId="1"/>
+		<C461 hash="1121" name="smallfrown" nameAlt="" typeId="1"/>
+		<C462 hash="1122" name="Subset" nameAlt="doublesubset" typeId="3"/>
+		<C463 hash="1123" name="Supset" nameAlt="doublesupset" typeId="3"/>
+		<C464 hash="1124" name="Cap" nameAlt="doublecap" typeId="2"/>
+		<C465 hash="1125" name="Cup" nameAlt="doublecup" typeId="2"/>
+		<C466 hash="1126" name="curlywedge" nameAlt="" typeId="2"/>
+		<C467 hash="1127" name="curlyvee" nameAlt="" typeId="2"/>
+		<C468 hash="1128" name="leftthreetimes" nameAlt="" typeId="2"/>
+		<C469 hash="1129" name="rightthreetimes" nameAlt="" typeId="2"/>
+		<C46A hash="1130" name="subseteqq" nameAlt="" typeId="3"/>
+		<C46B hash="1131" name="supseteqq" nameAlt="" typeId="3"/>
+		<C46C hash="1132" name="bumpeq" nameAlt="" typeId="3"/>
+		<C46D hash="1133" name="Bumpeq" nameAlt="" typeId="3"/>
+		<C46E hash="1134" name="llless" nameAlt="lll" typeId="3"/>
+		<C46F hash="1135" name="gggtr" nameAlt="ggg" typeId="3"/>
+		<C472 hash="1138" name="circledR" nameAlt="" typeId="0"/>
+		<C473 hash="1139" name="circledS" nameAlt="" typeId="0"/>
+		<C474 hash="1140" name="pitchfork" nameAlt="" typeId="3"/>
+		<C475 hash="1141" name="dotplus" nameAlt="" typeId="2"/>
+		<C476 hash="1142" name="backsim" nameAlt="" typeId="3"/>
+		<C477 hash="1143" name="backsimeq" nameAlt="" typeId="3"/>
+		<C47A hash="1146" name="maltese" nameAlt="" typeId="1"/>
+		<C47B hash="1147" name="complement" nameAlt="" typeId="0"/>
+		<C47C hash="1148" name="intercal" nameAlt="" typeId="2"/>
+		<C47D hash="1149" name="circledcirc" nameAlt="" typeId="2"/>
+		<C47E hash="1150" name="circledast" nameAlt="" typeId="2"/>
+		<C47F hash="1151" name="circleddast" nameAlt="" typeId="2"/>
+		<C500 hash="1280" name="lvertneqq" nameAlt="" typeId="3"/>
+		<C501 hash="1281" name="gvertneqq" nameAlt="" typeId="3"/>
+		<C502 hash="1282" name="nleq" nameAlt="" typeId="3"/>
+		<C503 hash="1283" name="ngeq" nameAlt="" typeId="3"/>
+		<C504 hash="1284" name="nless" nameAlt="" typeId="3"/>
+		<C505 hash="1285" name="ngtr" nameAlt="" typeId="3"/>
+		<C506 hash="1286" name="nprec" nameAlt="" typeId="3"/>
+		<C507 hash="1287" name="nsucc" nameAlt="" typeId="3"/>
+		<C508 hash="1288" name="lneqq" nameAlt="" typeId="3"/>
+		<C509 hash="1289" name="gneqq" nameAlt="" typeId="3"/>
+		<C50A hash="1290" name="nleqslant" nameAlt="" typeId="3"/>
+		<C50B hash="1291" name="ngeqslant" nameAlt="" typeId="3"/>
+		<C50C hash="1292" name="lneq" nameAlt="" typeId="3"/>
+		<C50D hash="1293" name="gneq" nameAlt="" typeId="3"/>
+		<C50E hash="1294" name="npreceq" nameAlt="" typeId="3"/>
+		<C50F hash="1295" name="nsucceq" nameAlt="" typeId="3"/>
+		<C510 hash="1296" name="precnsim" nameAlt="" typeId="3"/>
+		<C511 hash="1297" name="succnsim" nameAlt="" typeId="3"/>
+		<C512 hash="1298" name="lnsim" nameAlt="" typeId="3"/>
+		<C513 hash="1299" name="gnsim" nameAlt="" typeId="3"/>
+		<C514 hash="1300" name="nleqq" nameAlt="" typeId="3"/>
+		<C515 hash="1301" name="ngeqq" nameAlt="" typeId="3"/>
+		<C516 hash="1302" name="precneqq" nameAlt="" typeId="3"/>
+		<C517 hash="1303" name="succneqq" nameAlt="" typeId="3"/>
+		<C518 hash="1304" name="precnapprox" nameAlt="" typeId="3"/>
+		<C519 hash="1305" name="succnapprox" nameAlt="" typeId="3"/>
+		<C51A hash="1306" name="lnapprox" nameAlt="" typeId="3"/>
+		<C51B hash="1307" name="gnapprox" nameAlt="" typeId="3"/>
+		<C51C hash="1308" name="nsim" nameAlt="" typeId="3"/>
+		<C51D hash="1309" name="ncong" nameAlt="" typeId="3"/>
+		<C51E hash="1310" name="diagup" nameAlt="" typeId="0"/>
+		<C51F hash="1311" name="diagdown" nameAlt="" typeId="0"/>
+		<C520 hash="1312" name="varsubsetneq" nameAlt="" typeId="3"/>
+		<C521 hash="1313" name="varsupsetneq" nameAlt="" typeId="3"/>
+		<C522 hash="1314" name="nsubseteqq" nameAlt="" typeId="3"/>
+		<C523 hash="1315" name="nsupseteqq" nameAlt="" typeId="3"/>
+		<C524 hash="1316" name="subsetneqq" nameAlt="" typeId="3"/>
+		<C525 hash="1317" name="supsetneqq" nameAlt="" typeId="3"/>
+		<C526 hash="1318" name="varsubsetneqq" nameAlt="" typeId="3"/>
+		<C527 hash="1319" name="varsupsetneqq" nameAlt="" typeId="3"/>
+		<C528 hash="1320" name="subsetneq" nameAlt="" typeId="3"/>
+		<C529 hash="1321" name="supsetneq" nameAlt="" typeId="3"/>
+		<C52A hash="1322" name="nsubseteq" nameAlt="" typeId="3"/>
+		<C52B hash="1323" name="nsupseteq" nameAlt="" typeId="3"/>
+		<C52C hash="1324" name="nparallel" nameAlt="" typeId="3"/>
+		<C52D hash="1325" name="nmid" nameAlt="" typeId="3"/>
+		<C52E hash="1326" name="nshortmid" nameAlt="" typeId="3"/>
+		<C52F hash="1327" name="nshortparallel" nameAlt="" typeId="3"/>
+		<C530 hash="1328" name="nvdash" nameAlt="" typeId="3"/>
+		<C531 hash="1329" name="nVdash" nameAlt="" typeId="3"/>
+		<C532 hash="1330" name="nvDash" nameAlt="" typeId="3"/>
+		<C533 hash="1331" name="nVDash" nameAlt="" typeId="3"/>
+		<C534 hash="1332" name="ntrianglerighteq" nameAlt="" typeId="3"/>
+		<C535 hash="1333" name="ntrianglelefteq" nameAlt="" typeId="3"/>
+		<C536 hash="1334" name="ntriangleleft" nameAlt="" typeId="3"/>
+		<C537 hash="1335" name="ntriangleright" nameAlt="" typeId="3"/>
+		<C538 hash="1336" name="nleftarrow" nameAlt="" typeId="4"/>
+		<C539 hash="1337" name="nrightarrow" nameAlt="" typeId="4"/>
+		<C53A hash="1338" name="nLeftarrow" nameAlt="" typeId="4"/>
+		<C53B hash="1339" name="nRightarrow" nameAlt="" typeId="4"/>
+		<C53C hash="1340" name="nLeftrightarrow" nameAlt="" typeId="4"/>
+		<C53D hash="1341" name="nleftrightarrow" nameAlt="" typeId="4"/>
+		<C53E hash="1342" name="divideontimes" nameAlt="" typeId="2"/>
+		<C53F hash="1343" name="varnothing" nameAlt="" typeId="0"/>
+		<C540 hash="1344" name="nexists" nameAlt="" typeId="0"/>
+		<C560 hash="1376" name="Finv" nameAlt="" typeId="0"/>
+		<C561 hash="1377" name="Game" nameAlt="" typeId="0"/>
+		<C566 hash="1382" name="mho" nameAlt="" typeId="0"/>
+		<C567 hash="1383" name="eth" nameAlt="" typeId="0"/>
+		<C568 hash="1384" name="eqsim" nameAlt="" typeId="3"/>
+		<C569 hash="1385" name="beth" nameAlt="" typeId="0"/>
+		<C56A hash="1386" name="gimel" nameAlt="" typeId="0"/>
+		<C56B hash="1387" name="daleth" nameAlt="" typeId="0"/>
+		<C56C hash="1388" name="lessdot" nameAlt="" typeId="3"/>
+		<C56D hash="1389" name="gtrdot" nameAlt="" typeId="3"/>
+		<C56E hash="1390" name="ltimes" nameAlt="" typeId="2"/>
+		<C56F hash="1391" name="rtimes" nameAlt="" typeId="2"/>
+		<C570 hash="1392" name="shortmid" nameAlt="" typeId="3"/>
+		<C571 hash="1393" name="shortparallel" nameAlt="" typeId="3"/>
+		<C573 hash="1395" name="thicksim" nameAlt="" typeId="3"/>
+		<C574 hash="1396" name="thickapprox" nameAlt="" typeId="3"/>
+		<C575 hash="1397" name="approxeq" nameAlt="" typeId="3"/>
+		<C576 hash="1398" name="succapprox" nameAlt="" typeId="3"/>
+		<C577 hash="1399" name="precapprox" nameAlt="" typeId="3"/>
+		<C578 hash="1400" name="curvearrowleft" nameAlt="" typeId="4"/>
+		<C579 hash="1401" name="curvearrowright" nameAlt="" typeId="4"/>
+		<C57A hash="1402" name="digamma" nameAlt="" typeId="0"/>
+		<C57B hash="1403" name="varkappa" nameAlt="" typeId="0"/>
+		<C57C hash="1404" name="Bbbk" nameAlt="" typeId="0"/>
+		<C57D hash="1405" name="hslash" nameAlt="" typeId="0"/>
+		<C57E hash="1406" name="hbar" nameAlt="" typeId="0"/>
+		<C57F hash="1407" name="backepsilon" nameAlt="" typeId="0"/>
+		<C600 hash="1536" name="shortleftarrow" nameAlt="" typeId="4"/>
+		<C601 hash="1537" name="shortrightarrow" nameAlt="" typeId="4"/>
+		<C602 hash="1538" name="shortuparrow" nameAlt="" typeId="4"/>
+		<C603 hash="1539" name="shortdownarrow" nameAlt="" typeId="4"/>
+		<C604 hash="1540" name="Yup" nameAlt="" typeId="2"/>
+		<C605 hash="1541" name="Ydown" nameAlt="" typeId="2"/>
+		<C606 hash="1542" name="Yleft" nameAlt="" typeId="2"/>
+		<C607 hash="1543" name="Yright" nameAlt="" typeId="2"/>
+		<C608 hash="1544" name="varcurlywee" nameAlt="" typeId="2"/>
+		<C609 hash="1545" name="varcurlywedge" nameAlt="" typeId="2"/>
+		<C60A hash="1546" name="minuso" nameAlt="" typeId="2"/>
+		<C60B hash="1547" name="baro" nameAlt="" typeId="2"/>
+		<C60C hash="1548" name="sslash" nameAlt="" typeId="2"/>
+		<C60D hash="1549" name="bbslash" nameAlt="" typeId="2"/>
+		<C60E hash="1550" name="moo" nameAlt="" typeId="2"/>
+		<C60F hash="1551" name="varotimes" nameAlt="" typeId="2"/>
+		<C610 hash="1552" name="varoast" nameAlt="" typeId="2"/>
+		<C611 hash="1553" name="varobar" nameAlt="" typeId="2"/>
+		<C612 hash="1554" name="varodot" nameAlt="" typeId="2"/>
+		<C613 hash="1555" name="varoslash" nameAlt="" typeId="2"/>
+		<C614 hash="1556" name="varobslash" nameAlt="" typeId="2"/>
+		<C615 hash="1557" name="varocirc" nameAlt="" typeId="2"/>
+		<C616 hash="1558" name="varoplus" nameAlt="" typeId="2"/>
+		<C617 hash="1559" name="varominus" nameAlt="" typeId="2"/>
+		<C618 hash="1560" name="varboxast" nameAlt="" typeId="2"/>
+		<C619 hash="1561" name="varboxbar" nameAlt="" typeId="2"/>
+		<C61A hash="1562" name="varboxdot" nameAlt="" typeId="2"/>
+		<C61B hash="1563" name="varboxslash" nameAlt="" typeId="2"/>
+		<C61C hash="1564" name="varboxbslash" nameAlt="" typeId="2"/>
+		<C61D hash="1565" name="varboxcirc" nameAlt="" typeId="2"/>
+		<C61E hash="1566" name="varboxbox" nameAlt="" typeId="2"/>
+		<C61F hash="1567" name="varboxempty" nameAlt="" typeId="2"/>
+		<C620 hash="1568" name="lightning" nameAlt="" typeId="1"/>
+		<C621 hash="1569" name="merge" nameAlt="" typeId="2"/>
+		<C622 hash="1570" name="vartimes" nameAlt="" typeId="2"/>
+		<C623 hash="1571" name="fatsemi" nameAlt="" typeId="2"/>
+		<C624 hash="1572" name="sswarrow" nameAlt="" typeId="4"/>
+		<C625 hash="1573" name="ssearrow" nameAlt="" typeId="4"/>
+		<C626 hash="1574" name="curlywedgeuparrow" nameAlt="" typeId="4"/>
+		<C627 hash="1575" name="curlywedgedownarrow" nameAlt="" typeId="4"/>
+		<C628 hash="1576" name="fatslash" nameAlt="" typeId="2"/>
+		<C629 hash="1577" name="fatbslash" nameAlt="" typeId="2"/>
+		<C62A hash="1578" name="lbag" nameAlt="" typeId="5"/>
+		<C62B hash="1579" name="rbag" nameAlt="" typeId="6"/>
+		<C62C hash="1580" name="varbigcirc" nameAlt="" typeId="2"/>
+		<C62D hash="1581" name="leftrightarroweq" nameAlt="" typeId="4"/>
+		<C62E hash="1582" name="curlyveedownarrow" nameAlt="" typeId="4"/>
+		<C62F hash="1583" name="curlyveeuparrow" nameAlt="" typeId="4"/>
+		<C630 hash="1584" name="nnwarrow" nameAlt="" typeId="4"/>
+		<C631 hash="1585" name="nnearrow" nameAlt="" typeId="4"/>
+		<C632 hash="1586" name="leftslice" nameAlt="" typeId="3"/>
+		<C633 hash="1587" name="rightslice" nameAlt="" typeId="3"/>
+		<C634 hash="1588" name="varolessthan" nameAlt="" typeId="2"/>
+		<C635 hash="1589" name="varogreaterthan" nameAlt="" typeId="2"/>
+		<C636 hash="1590" name="varovee" nameAlt="" typeId="2"/>
+		<C637 hash="1591" name="varowedge" nameAlt="" typeId="2"/>
+		<C638 hash="1592" name="talloblong" nameAlt="" typeId="2"/>
+		<C639 hash="1593" name="interleave" nameAlt="" typeId="3"/>
+		<C63A hash="1594" name="obar" nameAlt="" typeId="2"/>
+		<C63B hash="1595" name="obslash" nameAlt="" typeId="2"/>
+		<C63C hash="1596" name="olessthan" nameAlt="" typeId="2"/>
+		<C63D hash="1597" name="ogreaterthan" nameAlt="" typeId="2"/>
+		<C63E hash="1598" name="ovee" nameAlt="" typeId="2"/>
+		<C63F hash="1599" name="owedge" nameAlt="" typeId="2"/>
+		<C640 hash="1600" name="oblong" nameAlt="" typeId="2"/>
+		<C641 hash="1601" name="inplus" nameAlt="" typeId="3"/>
+		<C642 hash="1602" name="niplus" nameAlt="" typeId="3"/>
+		<C643 hash="1603" name="nplus" nameAlt="" typeId="2"/>
+		<C644 hash="1604" name="subsetplus" nameAlt="" typeId="3"/>
+		<C645 hash="1605" name="supsetplus" nameAlt="" typeId="3"/>
+		<C646 hash="1606" name="subsetpluseq" nameAlt="" typeId="3"/>
+		<C647 hash="1607" name="supsetpluseq" nameAlt="" typeId="3"/>
+		<C648 hash="1608" name="Lbag" nameAlt="" typeId="5"/>
+		<C649 hash="1609" name="Rbag" nameAlt="" typeId="6"/>
+		<C64A hash="1610" name="llbracket" nameAlt="" typeId="5"/>
+		<C64B hash="1611" name="rrbracket" nameAlt="" typeId="6"/>
+		<C64C hash="1612" name="llparenthesis" nameAlt="" typeId="5"/>
+		<C64D hash="1613" name="rrparenthesis" nameAlt="" typeId="6"/>
+		<C64E hash="1614" name="binampersand" nameAlt="" typeId="2"/>
+		<C64F hash="1615" name="bindnasrepma" nameAlt="" typeId="2"/>
+		<C650 hash="1616" name="trianglelefteqslant" nameAlt="" typeId="3"/>
+		<C651 hash="1617" name="trianglerighteqslant" nameAlt="" typeId="3"/>
+		<C652 hash="1618" name="ntrianglelefteqslant" nameAlt="" typeId="3"/>
+		<C653 hash="1619" name="ntrianglerighteqslant" nameAlt="" typeId="3"/>
+		<C654 hash="1620" name="llfloor" nameAlt="" typeId="5"/>
+		<C655 hash="1621" name="rrfloor" nameAlt="" typeId="6"/>
+		<C656 hash="1622" name="llceil" nameAlt="" typeId="5"/>
+		<C657 hash="1623" name="rrceil" nameAlt="" typeId="6"/>
+		<C65D hash="1629" name="leftrightarrowtriangle" nameAlt="" typeId="4"/>
+		<C65E hash="1630" name="leftarrowtriangle" nameAlt="" typeId="4"/>
+		<C660 hash="1632" name="varbigtriangledown" nameAlt="" typeId="7"/>
+		<C661 hash="1633" name="varbigtriangleup" nameAlt="" typeId="7"/>
+		<C666 hash="1638" name="bigparallel" nameAlt="" typeId="7"/>
+		<C667 hash="1639" name="biginterleave" nameAlt="" typeId="7"/>
+		<C670 hash="1648" name="bignplus" nameAlt="" typeId="7"/>
+		<C706 hash="1798" name="recorder" nameAlt="" typeId="1"/>
+		<C707 hash="1799" name="phone" nameAlt="" typeId="1"/>
+		<C708 hash="1800" name="check" nameAlt="" typeId="1"/>
+		<C709 hash="1801" name="pointer" nameAlt="" typeId="1"/>
+		<C70A hash="1802" name="bell" nameAlt="" typeId="1"/>
+		<C70B hash="1803" name="eighthnote" nameAlt="" typeId="1"/>
+		<C70C hash="1804" name="quarternote" nameAlt="" typeId="1"/>
+		<C70D hash="1805" name="halfnote" nameAlt="" typeId="1"/>
+		<C70E hash="1806" name="fullnote" nameAlt="" typeId="1"/>
+		<C70F hash="1807" name="twonote" nameAlt="" typeId="1"/>
+		<C710 hash="1808" name="leftblacktriangle" nameAlt="" typeId="1"/>
+		<C711 hash="1809" name="rightblacktriangle" nameAlt="" typeId="1"/>
+		<C712 hash="1810" name="varlightning" nameAlt="" typeId="1"/>
+		<C713 hash="1811" name="ascnode" nameAlt="" typeId="1"/>
+		<C714 hash="1812" name="descnode" nameAlt="" typeId="1"/>
+		<C715 hash="1813" name="invdiameter" nameAlt="" typeId="1"/>
+		<C716 hash="1814" name="ball" nameAlt="" typeId="1"/>
+		<C717 hash="1815" name="vernal" nameAlt="" typeId="1"/>
+		<C718 hash="1816" name="rnot" nameAlt="" typeId="0"/>
+		<C719 hash="1817" name="male" nameAlt="" typeId="1"/>
+		<C71A hash="1818" name="female" nameAlt="" typeId="1"/>
+		<C71B hash="1819" name="currency" nameAlt="" typeId="1"/>
+		<C71C hash="1820" name="clock" nameAlt="" typeId="1"/>
+		<C71D hash="1821" name="varsmallpropto" nameAlt="" typeId="3"/>
+		<C71E hash="1822" name="varangle" nameAlt="" typeId="1"/>
+		<C71F hash="1823" name="diameter" nameAlt="" typeId="1"/>
+		<C721 hash="1825" name="rightturn" nameAlt="" typeId="1"/>
+		<C722 hash="1826" name="leftturn" nameAlt="" typeId="1"/>
+		<C724 hash="1828" name="leftmoon" nameAlt="" typeId="1"/>
+		<C725 hash="1829" name="rightmoon" nameAlt="" typeId="1"/>
+		<C726 hash="1830" name="earth" nameAlt="" typeId="1"/>
+		<C727 hash="1831" name="mercury" nameAlt="" typeId="1"/>
+		<C728 hash="1832" name="pointleft" nameAlt="" typeId="2"/>
+		<C729 hash="1833" name="pointright" nameAlt="" typeId="2"/>
+		<C72A hash="1834" name="pointup" nameAlt="" typeId="2"/>
+		<C72B hash="1835" name="pointdown" nameAlt="" typeId="2"/>
+		<C72C hash="1836" name="smiley" nameAlt="" typeId="1"/>
+		<C72D hash="1837" name="blacksmiley" nameAlt="" typeId="1"/>
+		<C72E hash="1838" name="sun" nameAlt="" typeId="1"/>
+		<C72F hash="1839" name="frownie" nameAlt="" typeId="1"/>
+		<C731 hash="1841" name="bowtie" nameAlt="" typeId="0"/>
+		<C735 hash="1845" name="bendsquare" nameAlt="" typeId="1"/>
+		<C736 hash="1846" name="kreuz" nameAlt="" typeId="1"/>
+		<C737 hash="1847" name="hexagon" nameAlt="" typeId="1"/>
+		<C738 hash="1848" name="octagon" nameAlt="" typeId="1"/>
+		<C739 hash="1849" name="varhexagon" nameAlt="" typeId="1"/>
+		<C73A hash="1850" name="AC" nameAlt="photon" typeId="1"/>
+		<C740 hash="1856" name="VHF" nameAlt="" typeId="1"/>
+		<C741 hash="1857" name="hexstar" nameAlt="" typeId="1"/>
+		<C742 hash="1858" name="varhexstar" nameAlt="" typeId="1"/>
+		<C743 hash="1859" name="davidsstar" nameAlt="" typeId="1"/>
+		<C744 hash="1860" name="pentagon" nameAlt="" typeId="1"/>
+		<C745 hash="1861" name="penstar" nameAlt="" typeId="1"/>
+		<C747 hash="1863" name="blackhalfleftcirc" nameAlt="" typeId="1"/>
+		<C748 hash="1864" name="blackhalfrightcirc" nameAlt="" typeId="1"/>
+		<C749 hash="1865" name="halfleftcirc" nameAlt="" typeId="1"/>
+		<C74A hash="1866" name="halfrightcirc" nameAlt="" typeId="1"/>
+		<C750 hash="1872" name="gluon" nameAlt="" typeId="1"/>
+		<C755 hash="1877" name="inve" nameAlt="" typeId="0"/>
+		<C756 hash="1878" name="conjunction" nameAlt="" typeId="1"/>
+		<C757 hash="1879" name="opposition" nameAlt="" typeId="1"/>
+		<C758 hash="1880" name="jupiter" nameAlt="" typeId="1"/>
+		<C759 hash="1881" name="saturn" nameAlt="" typeId="1"/>
+		<C75A hash="1882" name="uranus" nameAlt="" typeId="1"/>
+		<C75B hash="1883" name="neptune" nameAlt="" typeId="1"/>
+		<C75C hash="1884" name="pluto" nameAlt="" typeId="1"/>
+		<C75D hash="1885" name="taurus" nameAlt="" typeId="1"/>
+		<C75E hash="1886" name="gemini" nameAlt="" typeId="1"/>
+		<C75F hash="1887" name="cancer" nameAlt="" typeId="1"/>
+		<C760 hash="1888" name="virgo" nameAlt="" typeId="1"/>
+		<C761 hash="1889" name="libra" nameAlt="" typeId="1"/>
+		<C762 hash="1890" name="scorpio" nameAlt="" typeId="1"/>
+		<C763 hash="1891" name="sagittarius" nameAlt="" typeId="1"/>
+		<C764 hash="1892" name="capricornus" nameAlt="" typeId="1"/>
+		<C765 hash="1893" name="aquarius" nameAlt="" typeId="1"/>
+		<C766 hash="1894" name="pisces" nameAlt="" typeId="1"/>
+		<C767 hash="1895" name="cent" nameAlt="" typeId="0"/>
+		<C768 hash="1896" name="permil" nameAlt="" typeId="0"/>
+		<C769 hash="1897" name="thorn" nameAlt="" typeId="0"/>
+		<C76A hash="1898" name="Thorn" nameAlt="" typeId="0"/>
+		<C76B hash="1899" name="dh" nameAlt="" typeId="0"/>
+		<C76C hash="1900" name="openo" nameAlt="" typeId="0"/>
+		<C76D hash="1901" name="ataribox" nameAlt="" typeId="1"/>
+		<C76E hash="1902" name="boxarrowup" nameAlt="" typeId="2"/>
+		<C76F hash="1903" name="boxarrowdown" nameAlt="" typeId="2"/>
+		<C770 hash="1904" name="boxarrowleft" nameAlt="" typeId="2"/>
+		<C771 hash="1905" name="boxarrowright" nameAlt="" typeId="2"/>
+		<C772 hash="1906" name="varint" nameAlt="" typeId="7"/>
+		<C773 hash="1907" name="iint" nameAlt="" typeId="7"/>
+		<C774 hash="1908" name="iiint" nameAlt="" typeId="7"/>
+		<C775 hash="1909" name="varoint" nameAlt="" typeId="7"/>
+		<C776 hash="1910" name="oiint" nameAlt="" typeId="7"/>
+		<C77C hash="1916" name="brokenvert" nameAlt="" typeId="0"/>
+		<C77F hash="1919" name="comment" nameAlt="" typeId="1"/>
+ </SymbolMap>
+    <LargerMap>
+		<C0 hash="0" targetHash="16"/>
+		<C1 hash="1" targetHash="17"/>
+		<C2 hash="2" targetHash="104"/>
+		<C3 hash="3" targetHash="105"/>
+		<C4 hash="4" targetHash="106"/>
+		<C5 hash="5" targetHash="107"/>
+		<C6 hash="6" targetHash="108"/>
+		<C7 hash="7" targetHash="109"/>
+		<C8 hash="8" targetHash="110"/>
+		<C9 hash="9" targetHash="111"/>
+		<CA hash="10" targetHash="68"/>
+		<CB hash="11" targetHash="69"/>
+		<CE hash="14" targetHash="30"/>
+		<CF hash="15" targetHash="31"/>
+		<C10 hash="16" targetHash="18"/>
+		<C11 hash="17" targetHash="19"/>
+		<C12 hash="18" targetHash="32"/>
+		<C13 hash="19" targetHash="33"/>
+		<C14 hash="20" targetHash="34"/>
+		<C15 hash="21" targetHash="35"/>
+		<C16 hash="22" targetHash="36"/>
+		<C17 hash="23" targetHash="37"/>
+		<C18 hash="24" targetHash="38"/>
+		<C19 hash="25" targetHash="39"/>
+		<C1A hash="26" targetHash="40"/>
+		<C1B hash="27" targetHash="41"/>
+		<C1C hash="28" targetHash="42"/>
+		<C1D hash="29" targetHash="43"/>
+		<C20 hash="32" targetHash="48"/>
+		<C21 hash="33" targetHash="49"/>
+		<C22 hash="34" targetHash="50"/>
+		<C23 hash="35" targetHash="51"/>
+		<C24 hash="36" targetHash="52"/>
+		<C25 hash="37" targetHash="53"/>
+		<C26 hash="38" targetHash="54"/>
+		<C27 hash="39" targetHash="55"/>
+		<C28 hash="40" targetHash="60"/>
+		<C29 hash="41" targetHash="61"/>
+		<C2A hash="42" targetHash="44"/>
+		<C2B hash="43" targetHash="45"/>
+		<C44 hash="68" targetHash="28"/>
+		<C45 hash="69" targetHash="29"/>
+		<C46 hash="70" targetHash="71"/>
+		<C48 hash="72" targetHash="73"/>
+		<C4A hash="74" targetHash="75"/>
+		<C4C hash="76" targetHash="77"/>
+		<C4E hash="78" targetHash="79"/>
+		<C50 hash="80" targetHash="88"/>
+		<C51 hash="81" targetHash="89"/>
+		<C52 hash="82" targetHash="90"/>
+		<C53 hash="83" targetHash="91"/>
+		<C54 hash="84" targetHash="92"/>
+		<C55 hash="85" targetHash="93"/>
+		<C56 hash="86" targetHash="94"/>
+		<C57 hash="87" targetHash="95"/>
+		<C60 hash="96" targetHash="97"/>
+		<C62 hash="98" targetHash="99"/>
+		<C63 hash="99" targetHash="100"/>
+		<C64 hash="100" targetHash="1371"/>
+		<C65 hash="101" targetHash="102"/>
+		<C66 hash="102" targetHash="103"/>
+		<C67 hash="103" targetHash="1373"/>
+		<C68 hash="104" targetHash="20"/>
+		<C69 hash="105" targetHash="21"/>
+		<C6A hash="106" targetHash="22"/>
+		<C6B hash="107" targetHash="23"/>
+		<C6C hash="108" targetHash="24"/>
+		<C6D hash="109" targetHash="25"/>
+		<C6E hash="110" targetHash="26"/>
+		<C6F hash="111" targetHash="27"/>
+		<C70 hash="112" targetHash="113"/>
+		<C71 hash="113" targetHash="114"/>
+		<C72 hash="114" targetHash="115"/>
+		<C73 hash="115" targetHash="116"/>
+		<C228 hash="552" targetHash="0"/>
+		<C229 hash="553" targetHash="1"/>
+		<C25B hash="603" targetHash="2"/>
+		<C25D hash="605" targetHash="3"/>
+		<C322 hash="802" targetHash="120"/>
+		<C323 hash="803" targetHash="121"/>
+		<C32A hash="810" targetHash="126"/>
+		<C32B hash="811" targetHash="127"/>
+		<C362 hash="866" targetHash="4"/>
+		<C363 hash="867" targetHash="5"/>
+		<C364 hash="868" targetHash="6"/>
+		<C365 hash="869" targetHash="7"/>
+		<C366 hash="870" targetHash="8"/>
+		<C367 hash="871" targetHash="9"/>
+		<C368 hash="872" targetHash="10"/>
+		<C369 hash="873" targetHash="11"/>
+		<C36C hash="876" targetHash="63"/>
+		<C36D hash="877" targetHash="119"/>
+		<C55B hash="1371" targetHash="1372"/>
+		<C55D hash="1373" targetHash="1374"/>
+		<C64A hash="1610" targetHash="1649"/>
+		<C64B hash="1611" targetHash="1657"/>
+		<C660 hash="1632" targetHash="1640"/>
+		<C661 hash="1633" targetHash="1641"/>
+		<C666 hash="1638" targetHash="1646"/>
+		<C667 hash="1639" targetHash="1647"/>
+		<C670 hash="1648" targetHash="1400"/>
+		<C671 hash="1649" targetHash="1650"/>
+		<C672 hash="1650" targetHash="1651"/>
+		<C673 hash="1651" targetHash="1652"/>
+		<C674 hash="1652" targetHash="1653"/>
+		<C679 hash="1657" targetHash="1658"/>
+		<C67A hash="1658" targetHash="1659"/>
+		<C67B hash="1659" targetHash="1660"/>
+		<C67C hash="1660" targetHash="1661"/>
+		<C772 hash="1906" targetHash="1911"/>
+		<C773 hash="1907" targetHash="1912"/>
+		<C774 hash="1908" targetHash="1913"/>
+		<C775 hash="1909" targetHash="1914"/>
+		<C776 hash="1910" targetHash="1915"/>
+ </LargerMap>
+    <ExtensionMap>
+        <CC hash="12" top="-1" middle="-1" bottom="-1" repeat="12" horizontal="0"/>
+        <CD hash="13" top="-1" middle="-1" bottom="-1" repeat="13" horizontal="0"/>
+        <C2C hash="44" top="44" middle="-1" bottom="45" repeat="-1" horizontal="0"/>
+        <C2D hash="45" top="45" middle="-1" bottom="44" repeat="-1" horizontal="0"/>
+        <C30 hash="48" top="48" middle="-1" bottom="64" repeat="66" horizontal="0"/>
+        <C31 hash="49" top="49" middle="-1" bottom="65" repeat="67" horizontal="0"/>
+        <C32 hash="50" top="50" middle="-1" bottom="52" repeat="54" horizontal="0"/>
+        <C33 hash="51" top="51" middle="-1" bottom="53" repeat="55" horizontal="0"/>
+        <C34 hash="52" top="-1" middle="-1" bottom="52" repeat="54" horizontal="0"/>
+        <C35 hash="53" top="-1" middle="-1" bottom="53" repeat="55" horizontal="0"/>
+        <C36 hash="54" top="50" middle="-1" bottom="-1" repeat="54" horizontal="0"/>
+        <C37 hash="55" top="51" middle="-1" bottom="-1" repeat="55" horizontal="0"/>
+        <C38 hash="56" top="56" middle="-1" bottom="58" repeat="62" horizontal="0"/>
+        <C39 hash="57" top="57" middle="-1" bottom="59" repeat="62" horizontal="0"/>
+        <C3A hash="58" top="56" middle="-1" bottom="59" repeat="62" horizontal="0"/>
+        <C3B hash="59" top="57" middle="-1" bottom="58" repeat="62" horizontal="0"/>
+        <C3C hash="60" top="56" middle="60" bottom="58" repeat="62" horizontal="0"/>
+        <C3D hash="61" top="57" middle="61" bottom="59" repeat="62" horizontal="0"/>
+        <C3E hash="62" top="-1" middle="-1" bottom="-1" repeat="62" horizontal="0"/>
+        <C3F hash="63" top="120" middle="-1" bottom="121" repeat="63" horizontal="0"/>
+        <C40 hash="64" top="56" middle="-1" bottom="59" repeat="62" horizontal="0"/>
+        <C41 hash="65" top="57" middle="-1" bottom="58" repeat="62" horizontal="0"/>
+        <C42 hash="66" top="-1" middle="-1" bottom="-1" repeat="66" horizontal="0"/>
+        <C43 hash="67" top="-1" middle="-1" bottom="-1" repeat="67" horizontal="0"/>
+        <C74 hash="116" top="118" middle="-1" bottom="116" repeat="117" horizontal="0"/>
+        <C77 hash="119" top="126" middle="-1" bottom="127" repeat="119" horizontal="0"/>
+        <C78 hash="120" top="120" middle="-1" bottom="-1" repeat="63" horizontal="0"/>
+        <C79 hash="121" top="-1" middle="-1" bottom="121" repeat="63" horizontal="0"/>
+        <C7E hash="126" top="126" middle="-1" bottom="-1" repeat="119" horizontal="0"/>
+        <C7F hash="127" top="-1" middle="-1" bottom="127" repeat="119" horizontal="0"/>
+        <C128 hash="296" top="296" middle="-1" bottom="-1" repeat="768" horizontal="0"/>
+        <C129 hash="297" top="297" middle="-1" bottom="-1" repeat="768" horizontal="0"/>
+        <C12A hash="298" top="-1" middle="-1" bottom="298" repeat="768" horizontal="0"/>
+        <C12B hash="299" top="-1" middle="-1" bottom="299" repeat="768" horizontal="0"/>
+        <C12C hash="300" top="300" middle="-1" bottom="801" repeat="768" horizontal="1"/>
+        <C12D hash="301" top="301" middle="-1" bottom="800" repeat="768" horizontal="1"/>
+        <C320 hash="800" top="800" middle="-1" bottom="-1" repeat="768" horizontal="1"/>
+        <C321 hash="801" top="-1" middle="-1" bottom="801" repeat="768" horizontal="1"/>
+        <C324 hash="804" top="800" middle="-1" bottom="801" repeat="768" horizontal="1"/>
+        <C328 hash="808" top="808" middle="-1" bottom="-1" repeat="573" horizontal="1"/>
+        <C329 hash="809" top="-1" middle="-1" bottom="809" repeat="573" horizontal="1"/>
+        <C32C hash="812" top="808" middle="-1" bottom="809" repeat="573" horizontal="1"/>
+        <C36A hash="874" top="-1" middle="-1" bottom="-1" repeat="874" horizontal="0"/>
+        <C36B hash="875" top="-1" middle="-1" bottom="-1" repeat="875" horizontal="0"/>
+        <C456 hash="1110" top="-1" middle="-1" bottom="1110" repeat="785" horizontal="1"/>
+        <C457 hash="1111" top="1111" middle="-1" bottom="-1" repeat="785" horizontal="1"/>
+        <C639 hash="1593" top="-1" middle="-1" bottom="-1" repeat="1337" horizontal="0"/>
+        <C675 hash="1653" top="1653" middle="-1" bottom="1654" repeat="1655" horizontal="0"/>
+        <C67D hash="1661" top="1661" middle="-1" bottom="1662" repeat="1663" horizontal="0"/>
+ </ExtensionMap>
+    <CharMap>
+		<C13C hash="316" char="10"/>
+		<C13D hash="317" char="4"/>
+		<C13E hash="318" char="11"/>
+		<C221 hash="545" char="22"/>
+		<C222 hash="546" char="20"/>
+		<C223 hash="547" char="24"/>
+		<C224 hash="548" char="25"/>
+		<C225 hash="549" char="26"/>
+		<C226 hash="550" char="27"/>
+		<C227 hash="551" char="19"/>
+		<C228 hash="552" char="6"/>
+		<C229 hash="553" char="7"/>
+		<C22A hash="554" char="3"/>
+		<C22B hash="555" char="1"/>
+		<C22C hash="556" char="14"/>
+		<C22E hash="558" char="13"/>
+		<C23A hash="570" char="16"/>
+		<C23B hash="571" char="15"/>
+		<C23D hash="573" char="5"/>
+		<C23F hash="575" char="21"/>
+		<C240 hash="576" char="23"/>
+		<C25B hash="603" char="8"/>
+		<C25D hash="605" char="9"/>
+		<C300 hash="768" char="2"/>
+		<C318 hash="792" char="18"/>
+		<C330 hash="816" char="17"/>
+		<C366 hash="870" char="28"/>
+		<C367 hash="871" char="29"/>
+		<C36A hash="874" char="12"/>
+		<C36E hash="878" char="30"/>
+ </CharMap>
+</TexSymbols>

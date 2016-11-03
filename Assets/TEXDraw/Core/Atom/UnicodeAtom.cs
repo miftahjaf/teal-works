@@ -22,7 +22,7 @@ namespace TexDrawLib
             Font f =TEXPreference.main.fontData[fontIndex].font;
             f.RequestCharactersInTexture(new string(charIndex, 1));
             f.GetCharacterInfo(charIndex, out ch);
-            return UnicodeBox.Get(style, fontIndex, ch);                
+            return UnicodeBox.Get(style, fontIndex, ch, TexUtility.SizeFactor(style));                
         }
 
         public override void Flush()

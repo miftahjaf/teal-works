@@ -35,10 +35,10 @@ namespace TexDrawLib
 
         public Atom RootAtom;
 
+        /// extract the content and flush this formula
         public Atom GetRoot
         {
-            get
-            {
+            get {
                 Atom root = RootAtom;
                 RootAtom = null;
                 ObjPool<TexFormula>.Release(this);
@@ -48,13 +48,11 @@ namespace TexDrawLib
 
         public TexRenderer GetRenderer(TexStyle style, float scale)
         {
-            try
-            {
-                TexUtility.RenderSize = scale;
+            try {
+                TexUtility.RenderSizeFactor = 1;
                 return TexRenderer.Get(CreateBox(style), scale);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Console.WriteLine(e);
                 throw;
             }
@@ -71,17 +69,13 @@ namespace TexDrawLib
         public void Add(Atom atom)
         {
             if (RootAtom == null)
-            {
                 RootAtom = atom;
-            }
-            else
-            {
+            else {
                 if (!(RootAtom is RowAtom))
                     RootAtom = RowAtom.Get(RootAtom);
                 ((RowAtom)RootAtom).Add(atom);
             }
         }
-
 
         public Box CreateBox(TexStyle style)
         {
@@ -93,24 +87,15 @@ namespace TexDrawLib
 
         public void Flush()
         {
-            if (RootAtom != null)
-            {
+            if (RootAtom != null) {
                 RootAtom.Flush();
                 RootAtom = null;
             }
             ObjPool<TexFormula>.Release(this);
         }
 
-        bool m_flushed;
+        bool m_flushed = false;
+        public bool IsFlushed { get { return m_flushed; } set { m_flushed = value; } }
 
-        public bool GetFlushed()
-        { 
-            return m_flushed;
-        }
-
-        public void SetFlushed(bool flushed)
-        {
-            m_flushed = flushed;
-        }
     }
 }

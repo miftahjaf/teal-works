@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,11 +78,17 @@ namespace TexDrawLib
             }
 
             // Create boxes for upper and lower limits.
-            var upperLimitBox = UpperLimitAtom == null ? null : UpperLimitAtom.CreateBox(
-                           TexUtility.GetSuperscriptStyle(style));
-            var lowerLimitBox = LowerLimitAtom == null ? null : LowerLimitAtom.CreateBox(
-                           TexUtility.GetSubscriptStyle(style));
-
+	        Box  upperLimitBox, lowerLimitBox;
+	        if(UpperLimitAtom is SymbolAtom && ((SymbolAtom)UpperLimitAtom).Character.extensionHorizontal)
+	        	upperLimitBox = DelimiterFactory.CreateBoxHorizontal(((SymbolAtom)UpperLimitAtom).Name, baseBox.width, TexUtility.GetSuperscriptStyle(style));
+	        else
+	        	upperLimitBox = UpperLimitAtom == null ? null : UpperLimitAtom.CreateBox(TexUtility.GetSuperscriptStyle(style));
+	        
+	        if(LowerLimitAtom is SymbolAtom && ((SymbolAtom)LowerLimitAtom).Character.extensionHorizontal)
+	        	lowerLimitBox = DelimiterFactory.CreateBoxHorizontal(((SymbolAtom)LowerLimitAtom).Name, baseBox.width, TexUtility.GetSubscriptStyle(style));
+	        else
+	        	lowerLimitBox = LowerLimitAtom == null ? null : LowerLimitAtom.CreateBox(TexUtility.GetSubscriptStyle(style));
+           
             // Make all component boxes equally wide.
             var maxWidth = Mathf.Max(Mathf.Max(baseBox.width, upperLimitBox == null ? 0 : upperLimitBox.width),
                       lowerLimitBox == null ? 0 : lowerLimitBox.width);
