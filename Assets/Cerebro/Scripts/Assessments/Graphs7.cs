@@ -149,8 +149,9 @@ namespace Cerebro {
 		{
 			userAnswerText.color = MaterialColor.red800;
 			Go.to(userAnswerText.gameObject.transform, 0.5f, new GoTweenConfig().shake(new Vector3(0, 0, 20), GoShakeType.Eulers));
+			graphHelper.HandleIncorrectAnwer (isRevisitedQuestion);
 			yield return new WaitForSeconds(0.5f);
-			graphHelper.HandleIncorrectAnwer ();
+
 			if (isRevisitedQuestion)
 			{
 				if (numPad.activeSelf)
@@ -162,9 +163,11 @@ namespace Cerebro {
 					userAnswerText.color = MaterialColor.textDark;
 				}
 				ignoreTouches = false;
+				graphHelper.ResetAnswer ();
 			}
 			else
 			{
+				this.CheckButton.gameObject.SetActive(false);
 				if (numPad.activeSelf)
 				{               // is not MCQ type question
 					userAnswerText.text = Answer.ToString();
@@ -176,7 +179,7 @@ namespace Cerebro {
 					userAnswerText.color = MaterialColor.textDark;
 				}
 			}
-			this.CheckButton.gameObject.SetActive(false);
+
 			ShowContinueButton();
 		}
 

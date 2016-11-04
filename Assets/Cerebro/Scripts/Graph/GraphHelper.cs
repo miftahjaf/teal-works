@@ -569,7 +569,6 @@ namespace Cerebro
 		public bool CheckAnswer()
 		{
 			bool correct = false;
-			canClick = false;
 			switch (graphQuesType)
 			{
 				case GraphQuesType.HighlightQuadrant:
@@ -630,47 +629,89 @@ namespace Cerebro
 		}
 
 		//Handle incorrect answer according to graph question type
-		public void HandleIncorrectAnwer()
+		public void HandleIncorrectAnwer(bool isRevisited = false)
 		{
+			if (!isRevisited) {
+				canClick = false;
+			}
 			switch (graphQuesType)
 			{
-				case GraphQuesType.HighlightQuadrant:
+			case GraphQuesType.HighlightQuadrant:
+				if (!isRevisited) {
 					GameObject correctQuadrant = GenerateQuadrantObject ();
 					SetQudrantPosition (correctQuadrant, currentCorrectQuadrant);
 					correctQuadrant.GetComponent<Image> ().color = new Color (MaterialColor.green800.r, MaterialColor.green800.g, MaterialColor.green800.b, 0.5f);
+				}
 					if (highLightedQuadrant) {
 						highLightedQuadrant.GetComponent<Image> ().color = new Color (MaterialColor.red800.r, MaterialColor.red800.g, MaterialColor.red800.b, 0.5f);
 					}
 					break;
 
-				case GraphQuesType.HighlightAxis:
-					axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (MaterialColor.red800, currentSelectedAxis);
+			case GraphQuesType.HighlightAxis:
+				axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (MaterialColor.red800, currentSelectedAxis);
+				if (!isRevisited) {
 					axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (MaterialColor.green800, currentCorrectAxis);
+				}
 					break;
 
-				case GraphQuesType.PlotPoint:
+			case GraphQuesType.PlotPoint:
+				currentPlottedPoint.dot.color = MaterialColor.red800;
+				if (!isRevisited) {
 					RemoveDragEventInGraphPoint (currentPlottedPoint);
-					currentPlottedPoint.dot.color = MaterialColor.red800;
 					GraphPointScript plot = PlotPoint (correctPlottedPoint, currentPlottedPoint.linePoint.name, false);
 					plot.dot.color = MaterialColor.green800;
+				}
 					break;
 
 			case GraphQuesType.PlotLine:
+				currenGraphLine.vectorLine.color = MaterialColor.red800;
+				if (!isRevisited) {
 					RemoveDragEventInGraphPoint (currenGraphLine.point1);
 					RemoveDragEventInGraphPoint (currenGraphLine.point2);
-					currenGraphLine.vectorLine.color = MaterialColor.red800;
 					Vector2[] maxBoundPoints = GetMaxBoundPointsOnCurrentLine ();
-				    GraphLine correctLine = DrawLineBetweenPoints (maxBoundPoints[0],maxBoundPoints[1]);
+					GraphLine correctLine = DrawLineBetweenPoints (maxBoundPoints [0], maxBoundPoints [1]);
 					correctLine.vectorLine.color = MaterialColor.green800;
+				}
 					break;
 
-				case GraphQuesType.PlotFixedLine:
+			case GraphQuesType.PlotFixedLine:
+				currenGraphLine.vectorLine.color = MaterialColor.red800;
+				if (!isRevisited) {
 					RemoveDragEventInGraphPoint (currenGraphLine.point1);
 					RemoveDragEventInGraphPoint (currenGraphLine.point2);
-					currenGraphLine.vectorLine.color = MaterialColor.red800;
-					GraphLine correctLine1 = DrawLineBetweenPoints (fixedLinePoints [0],fixedLinePoints [1]);
+					GraphLine correctLine1 = DrawLineBetweenPoints (fixedLinePoints [0], fixedLinePoints [1]);
 					correctLine1.vectorLine.color = MaterialColor.green800;
+				}
 					break;
+			}
+		}
+
+
+		public void ResetAnswer()
+		{
+			switch (graphQuesType)
+			{
+			case GraphQuesType.HighlightQuadrant:
+				if (highLightedQuadrant) {
+					Destroy (highLightedQuadrant);
+				}
+				break;
+
+			case GraphQuesType.HighlightAxis:
+				axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (Color.black, currentSelectedAxis);
+				break;
+
+			case GraphQuesType.PlotPoint:
+				currentPlottedPoint.dot.color = Color.black;
+				break;
+
+			case GraphQuesType.PlotLine:
+				currenGraphLine.vectorLine.color = Color.black;
+				break;
+
+			case GraphQuesType.PlotFixedLine:
+				currenGraphLine.vectorLine.color = Color.black;
+				break;
 			}
 		}
 
