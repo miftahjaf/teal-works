@@ -383,9 +383,14 @@ namespace Cerebro {
 			return lineParameters.x * point.x + lineParameters.y * point.y + lineParameters.z == 0;
 		}
 
-		public static Vector2 GetValidLinePoint( Vector3 lineParameters ,Vector2 point)
+		public static float GetPointX( Vector3 lineParameters ,float y)
 		{
-			return new Vector2(point.x,lineParameters.y ==0 ? 0: (- lineParameters.z - lineParameters.x * point.x) /lineParameters.y);
+			return lineParameters.x ==0 ? 0: (- lineParameters.z - lineParameters.y * y) /lineParameters.x;
+		}
+
+		public static float GetPointY( Vector3 lineParameters ,float x)
+		{
+			return lineParameters.y ==0 ? 0: (- lineParameters.z - lineParameters.x * x) /lineParameters.y;
 		}
 	}
 }

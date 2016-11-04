@@ -393,7 +393,9 @@ namespace Cerebro
 
 			VectorLine vectorLine = lineObj.GetComponent<VectorObject2D> ().vectorLine;
 			GraphLine graphLine = new GraphLine (vectorLine, graphPointScript1, graphPointScript2);
+
 			graphLine.Draw ();
+
 			graphPointScript1.SetLineObject (graphLine);
 			graphPointScript2.SetLineObject (graphLine);
 
@@ -653,11 +655,12 @@ namespace Cerebro
 					plot.dot.color = MaterialColor.green800;
 					break;
 
-				case GraphQuesType.PlotLine:
+			case GraphQuesType.PlotLine:
 					RemoveDragEventInGraphPoint (currenGraphLine.point1);
 					RemoveDragEventInGraphPoint (currenGraphLine.point2);
 					currenGraphLine.vectorLine.color = MaterialColor.red800;
-					GraphLine correctLine = DrawLineBetweenPoints (MathFunctions.GetValidLinePoint (currentLineParameters, Vector2.zero),MathFunctions.GetValidLinePoint (currentLineParameters, Vector2.one));
+					Vector2[] maxBoundPoints = GetMaxBoundPointsOnCurrentLine ();
+				    GraphLine correctLine = DrawLineBetweenPoints (maxBoundPoints[0],maxBoundPoints[1]);
 					correctLine.vectorLine.color = MaterialColor.green800;
 					break;
 
@@ -714,5 +717,50 @@ namespace Cerebro
 		{
 			fixedLinePoints = _fixedLinePoints;
 		}
+
+
+		public Vector2[] GetMaxBoundPointsOnCurrentLine()
+		{
+			Vector2[] points = new Vector2[2];
+
+			points [0] = new Vector2(graphMaxValue.x , MathFunctions.GetPointY (currentLineParameters, graphMaxValue.x));
+
+			if(!IsContainInGraph(points[0]))
+			{
+				points [0] = new Vector2( MathFunctions.GetPointX (currentLineParameters, graphMaxValue.y) ,graphMaxValue.y);
+			}
+
+			points [1] = new Vector2(graphMinValue.x, MathFunctions.GetPointY (currentLineParameters, graphMinValue.x));
+
+			if(!IsContainInGraph(points[1]))
+			{
+				points [1] = new Vector2( MathFunctions.GetPointX (currentLineParameters, graphMinValue.y) ,graphMinValue.y);
+			}
+
+			return points;
+		}
+			
+		public void DrawDiagram(List<Vector2>  graphPoints,LineType linetype,float width = 2)
+		{
+			GameObject diagramObj = GameObject.Instantiate (vectorObjectPrefab);
+			diagramObj.transform.SetParent (this.transform,false);
+			diagramObj.name = "diagram";
+
+			List<Vector2> UIPoints = new List<Vector2> ();
+
+			foreach (Vector2 graphPoint in graphPoints) 
+			{
+				UIPoints.Add(GraphPosToUIPos (graphPoint));
+			}
+
+			VectorLine vectorLine = diagramObj.GetComponent<VectorObject2D> ().vectorLine;
+			vectorLine.points2 = UIPoints;
+			vectorLine.SetWidth (width);
+			vectorLine.SetColor (Color.black);
+			vectorLine.lineType = linetype;
+			vectorLine.Draw ();
+		}
+
+
 	}
 }

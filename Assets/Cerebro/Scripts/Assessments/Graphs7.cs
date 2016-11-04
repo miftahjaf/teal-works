@@ -385,7 +385,7 @@ namespace Cerebro {
 
 					graphHelper.SetGridParameters(new Vector2(12,12),15);
 					graphHelper.DrawGraph();
-					graphHelper.DrawLineBetweenPoints (new Vector2 (xCord, yCord), new Vector2 (xCord1, yCord1));
+					graphHelper.DrawRandomLine();
 					graphHelper.ShiftPosition(new Vector2(0,165f));
 					Answer = string.Format ("{0}", (randSelector == 1 ? xCord2 : yCord2));
 				}
