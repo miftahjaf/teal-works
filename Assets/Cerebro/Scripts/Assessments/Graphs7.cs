@@ -451,11 +451,11 @@ namespace Cerebro {
 				{
 					slope = - Random.Range (1, 5); 
 					intercept = (Random.Range (1, 3) == 1 ? -1 : 1) * Random.Range (1, 5); 
-					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x {1}.", slope == -1? "- ": "- " + -slope, (intercept < 0? "- ": "+ ") + Mathf.Abs(intercept));
+					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x {1}.", slope == -1? "- ": ("- " + -slope), (intercept < 0? "- ": "+ ") + Mathf.Abs(intercept));
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
-					graphHelper.SetCurrentLineParameters(new Vector3(slope,0,intercept));
+					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,intercept));
 				}
 				else if (selector == 3) 
 				{
