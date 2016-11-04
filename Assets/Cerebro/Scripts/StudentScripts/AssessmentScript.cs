@@ -403,7 +403,9 @@ namespace Cerebro
 				newProficiency = 99;
 			}
 	
-			Debug.Log ("KCID "+KCID +" oldProficiency " + oldProficiency + "  newProficiency" + newProficiency +" slip up"+proficiencyConstants.slipUp);
+			if (newProficiency < 0) {
+				newProficiency = 0;
+			}
 
 			if (LaunchList.instance.mKCMastery.ContainsKey (KCID)) {
 				LaunchList.instance.mKCMastery [KCID] = newProficiency;
