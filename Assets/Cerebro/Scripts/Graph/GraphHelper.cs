@@ -73,11 +73,10 @@ namespace Cerebro
 			axisOffset = new Vector2 (1, 1);
 			fontMultiPlier = 1f;
 			graphQuesType = GraphQuesType.None;
-			currentSelectedQuadrant = 0;
+			currentSelectedQuadrant = -1;
 			currentLineParameters = Vector3.zero;
 			currentSelectedAxis = -1;
 			currentCorrectAxis = -1;
-			currentSelectedQuadrant = 0;
 			currentCorrectQuadrant = 0;
 			this.ShiftPosition(Vector2.zero);
 			fixedLinePoints = new Vector2[]{ Vector2.zero, Vector2.zero };
@@ -587,6 +586,34 @@ namespace Cerebro
 			}
 
 			return 0;
+		}
+
+		//Check is userAnsweredQuetion
+		public bool IsAnswered()
+		{
+			bool isAnswered = true;
+			switch (graphQuesType)
+			{
+			    case GraphQuesType.HighlightQuadrant:
+				isAnswered = (currentSelectedQuadrant > -1);
+				break;
+
+				case GraphQuesType.HighlightAxis:
+				isAnswered = (currentSelectedAxis > -1);
+				break;
+
+				case GraphQuesType.PlotPoint:
+				isAnswered = currentPlottedPoint.IsValueChanged ();
+				break;
+
+				case GraphQuesType.PlotLine:
+				case GraphQuesType.PlotFixedLine:
+				isAnswered = (currentGraphLine.point1.IsValueChanged () || currentGraphLine.point2.IsValueChanged ());
+				break;
+					
+			}
+
+			return isAnswered;
 		}
 
 		//Check answer according to graph question type

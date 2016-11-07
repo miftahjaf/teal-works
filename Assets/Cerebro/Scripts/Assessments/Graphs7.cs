@@ -38,7 +38,7 @@ namespace Cerebro {
 		}
 
 		public override void SubmitClick(){
-			if (ignoreTouches || (userAnswerText.text == "" && graphHelper.graphQuesType == GraphQuesType.None)) {
+			if (ignoreTouches || (userAnswerText.text == "" && graphHelper.graphQuesType == GraphQuesType.None) || (graphHelper.graphQuesType != GraphQuesType.None && !graphHelper.IsAnswered())) {
 				return;
 			}
 			int increment = 0;

@@ -19,6 +19,7 @@ namespace Cerebro
 		public Action<GraphPointScript,Vector2> onDragEvent;
 		public Action<GraphPointScript> onDragEndEvent;
 		public LinePoint linePoint;
+		private bool isValueChanged;
 
 		public void SetPoint( LinePoint linePoint)
 		{
@@ -83,6 +84,8 @@ namespace Cerebro
 			{
 				return;
 			}
+
+			this.isValueChanged = true;
 			this.onDragEvent.Invoke (this,eventData.position);
 		}
 
@@ -109,6 +112,11 @@ namespace Cerebro
 		public void SetDotSize(float multiplier)
 		{
 			this.dot.transform.localScale = Vector3.one * multiplier;
+		}
+
+		public bool IsValueChanged()
+		{
+			return isValueChanged;
 		}
 	}
 
