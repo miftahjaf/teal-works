@@ -894,6 +894,7 @@ namespace Cerebro
 		}
 
 
+
 		public void DrawArc(Vector2 center,Vector2 point1,Vector2 point2)
 		{
 			center = GraphPosToUIPos(center);
@@ -914,6 +915,21 @@ namespace Cerebro
 			arcObj.GetComponent<RectTransform> ().sizeDelta =  Vector2.one * Vector2.Distance(center,point1) *2f;
 			float endAngle = (Mathf.Atan ((point2.y - center.y) / (point2.x - center.x)) * Mathf.Rad2Deg);
 			float startAngle =  (Mathf.Atan ((point1.y - center.y) / (point1.x - center.x)) * Mathf.Rad2Deg);
+
+			if (point1.x == center.x) {
+				if (point1.y > center.y) {
+					startAngle = 90f;
+				} else {
+					startAngle = 270f;
+				}
+			}
+			if (point2.x == center.x) {
+				if (point2.y > center.y) {
+					endAngle = 90f;
+				} else {
+					endAngle = 270f;
+				}
+			}
 
 			if (point1.x < center.x) {
 				startAngle = 180 + startAngle;
