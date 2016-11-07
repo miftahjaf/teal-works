@@ -118,6 +118,11 @@ namespace Cerebro
 		{
 			return isValueChanged;
 		}
+
+		public void SetIsValueChanged(bool isValueChanged)
+		{
+			this.isValueChanged = isValueChanged;
+		}
 	}
 
 }

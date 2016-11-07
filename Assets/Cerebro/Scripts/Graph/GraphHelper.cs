@@ -514,6 +514,7 @@ namespace Cerebro
 					pointRectTransform.anchoredPosition = oldPos;
 					return;	
 				}
+				currentPlottedPoint.SetIsValueChanged (true);
 				currentPlottedPoint.linePoint.origin = GraphPosToUIPos (graphPoint);
 			}
 		}
@@ -745,23 +746,26 @@ namespace Cerebro
 				if (highLightedQuadrant) {
 					Destroy (highLightedQuadrant);
 				}
+				currentSelectedQuadrant = -1;
 				break;
 
 			case GraphQuesType.HighlightAxis:
 				axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (Color.black, currentSelectedAxis);
+				currentSelectedAxis = -1;
 				break;
 
 			case GraphQuesType.PlotPoint:
 				currentPlottedPoint.dot.color = Color.black;
+				currentPlottedPoint.SetIsValueChanged (false);
 				break;
 
 			case GraphQuesType.PlotLine:
-				currentGraphLine.vectorLine.color = Color.black;
-				break;
-
 			case GraphQuesType.PlotFixedLine:
 				currentGraphLine.vectorLine.color = Color.black;
+				currentGraphLine.point1.SetIsValueChanged (false);
+				currentGraphLine.point2.SetIsValueChanged (false);
 				break;
+	
 			}
 		}
 
