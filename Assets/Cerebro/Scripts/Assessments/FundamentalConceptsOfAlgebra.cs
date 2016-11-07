@@ -1035,7 +1035,7 @@ namespace Cerebro
 						subQuestionText.gameObject.SetActive(false);
 						expression3 = "Difference of \\xalgebra and " + coeff1 + " subtracted from " + coeff1 + "\\yalgebra is equal to " + coeff2;
 		                subQuestionTEX.text = expression3;
-		                Answer = coeff1 + "y-(x-"+coeff1+")="+coeff2;
+		                Answer = coeff1 + "\\yalgebra-(\\xalgebra-"+coeff1+")="+coeff2;
 		            }
 		            if (selector == 4)
 		            {

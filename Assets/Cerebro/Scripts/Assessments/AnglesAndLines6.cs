@@ -924,7 +924,7 @@ namespace Cerebro
 					coeff4 = Random.Range(2,10);
 					while ((40 * (coeff2 - coeff1) % (coeff3 - 1)) != 0 || (coeff2 < (coeff1 + 10)))
 						coeff1 = Random.Range(10, 61);
-					QuestionLatext.text = "A line cuts two parallel lines and two of the corresponding angles measure \n" +coeff4 +"\\xalgebra^{2} + "+ coeff3 + "\\xalgebra + " + coeff1 + MathFunctions.deg + " and "+coeff4 +"\\xalgebra^{2} + \\xalgebra + " + coeff2 + MathFunctions.deg + ". Find \\xalgebra :";
+					QuestionLatext.text = "A line cuts two parallel lines and two of the corresponding angles measure \n" +coeff4 +"\\xalgebra^{2} + "+ coeff3 + "\\xalgebra + " + coeff1 + MathFunctions.deg + " and "+coeff4 +"\\xalgebra^{2} + \\xalgebra + " + coeff2 + MathFunctions.deg + ". Find \\xalgebra.";
 					float ans = (float)(coeff2 - coeff1) / (float)(coeff3 - 1);
 					this.SetAnswerValue(new float[]{ans});
 				}
