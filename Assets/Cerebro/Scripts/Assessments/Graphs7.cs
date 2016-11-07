@@ -363,25 +363,19 @@ namespace Cerebro {
 				{
 					SetNumpadMode();
 
-					Repeat:   //In case Loop Hangs
-
-					xCord = Random.Range (-5, 6);
-					yCord = Random.Range (-5, 6);
-					slope = Random.Range (1, 4);
-					if (Random.Range (1, 3) == 1)
-						slope *= -1;
-					
-					int loopCount = 0;
 					do
-					{	
-						loopCount ++;
+					{
+						xCord = Random.Range (-5, 6);
+						yCord = Random.Range (-5, 6);
+						slope = Random.Range (1, 4);
+						if (Random.Range (1, 3) == 1)
+							slope *= -1;
+					
 						xCord1 = Random.Range (-5, 6);
 						yCord1 = yCord - slope * (xCord - xCord1);
 						xCord2 = Random.Range (-5, 6);
 						yCord2 = yCord - slope * (xCord - xCord2);
-						if (loopCount == 1000)
-							goto Repeat;
-					} while (yCord1 > 5 || yCord1 < -5 || yCord1 == yCord || yCord2 > 5 || yCord2 < -5 || xCord2 == xCord1 || xCord2 == xCord);
+					} while (yCord1 > 5 || yCord1 < -5 || yCord1 == yCord || yCord2 > 5 || yCord2 < -5 || xCord2 == xCord1 || xCord2 == xCord || xCord == xCord1);
 
 					randSelector = Random.Range (0, 2);
 					QuestionText.text = string.Format ("What is the {5} of the point with {6} = {0} on the line connecting ({1}, {2}) and ({3}, {4})?", (randSelector == 0 ? xCord2 : yCord2), xCord, yCord, xCord1, yCord1, (randSelector == 1 ? "abscissa" : "ordinate"), (randSelector == 0 ? "abscissa" : "ordinate"));
