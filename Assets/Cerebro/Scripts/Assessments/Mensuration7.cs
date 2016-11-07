@@ -166,6 +166,8 @@ namespace Cerebro {
 			ShadedRectangle.SetActive (false);
 			TwoRectangles.SetActive (false);
 			TwoRoadsRectangle.SetActive (false);
+			GeneralButton.gameObject.SetActive (true);
+			numPad.SetActive (true);
 
 			level = Queslevel;
 			if (Queslevel > scorestreaklvls.Length) {
