@@ -64,6 +64,7 @@ namespace Cerebro
 		public GameObject GenerateArrow()
 		{
 			GameObject arrow = new GameObject ();
+			arrow.name = "Arrow";
 			arrow.transform.SetParent (vectorLine.rectTransform.transform,false);
 			arrow.AddComponent<RectTransform> ();
 			arrow.GetComponent<RectTransform> ().sizeDelta = new Vector2 (15, 15);

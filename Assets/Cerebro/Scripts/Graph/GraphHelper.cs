@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vectrosity;
 using MaterialUI;
+using UnityEngine.UI.Extensions;
 
 
 namespace Cerebro
@@ -24,6 +25,7 @@ namespace Cerebro
 	{
 		public GameObject vectorObjectPrefab; //Vector line prefab to draw line
 		public GameObject linePointPrefab;   // point prefab to render point 
+		public GameObject arcPrefab;
 		public Sprite arrowSprite;
 		private GameObject pointLineDisplay;   //Display line when change plotted point position
 		private GameObject highLightedQuadrant; // Highlight selected quadrant
@@ -887,6 +889,70 @@ namespace Cerebro
 			vectorLine.Draw ();
 		}
 
+
+		public void DrawArc(Vector2 center,Vector2 point1,Vector2 point2)
+		{
+			center = GraphPosToUIPos(center);
+			point1 = GraphPosToUIPos(point1);
+			point2 = GraphPosToUIPos(point2);
+
+			if(!Vector2.Distance(center,point1).Equals(Vector2.Distance(center,point2)))
+			{
+				Debug.Log("Points " + point1+" and "+point2 +" are not in same arc");
+				return;
+			}
+			GameObject arcObj = GameObject.Instantiate (arcPrefab);
+			arcObj.transform.SetParent (this.transform,false);
+			arcObj.name = "arc";
+
+			UIPolygon uiPolygon = arcObj.GetComponent<UIPolygon> ();
+			arcObj.GetComponent<RectTransform> ().anchoredPosition =  center;
+			arcObj.GetComponent<RectTransform> ().sizeDelta =  Vector2.one * Vector2.Distance(center,point1) *2f;
+			float endAngle = (Mathf.Atan ((point2.y - center.y) / (point2.x - center.x)) * Mathf.Rad2Deg);
+			float startAngle =  (Mathf.Atan ((point1.y - center.y) / (point1.x - center.x)) * Mathf.Rad2Deg);
+
+			if (point1.x < center.x) {
+				startAngle = 180 + startAngle;
+			}
+			if (point2.x < center.x) {
+				endAngle = 180 + endAngle;
+			}
+
+			float diff = 0f; 
+			if (startAngle > endAngle) {
+				endAngle = 360 - endAngle;
+				diff = endAngle - startAngle;
+			} else {
+				diff =  endAngle - startAngle;
+			}
+
+			uiPolygon.fillPercent = Mathf.CeilToInt (100f * (diff) / 360f);
+			uiPolygon.rotation = startAngle+180f;
+			uiPolygon.ReDraw ();
+		}
+
+		public void DrawArc(Vector2 center,float radius,float startAngle,float endAngle)
+		{
+			GameObject arcObj = GameObject.Instantiate (arcPrefab);
+			arcObj.transform.SetParent (this.transform,false);
+			arcObj.name = "arc";
+			center = GraphPosToUIPos(center);
+			UIPolygon uiPolygon = arcObj.GetComponent<UIPolygon> ();
+			arcObj.GetComponent<RectTransform> ().anchoredPosition =  center;
+			arcObj.GetComponent<RectTransform> ().sizeDelta =  Vector2.one * radius * gridOffset *2f;
+
+			float diff = 0 ;
+			if (startAngle > endAngle) {
+				endAngle = 360 - endAngle;
+				diff = endAngle - startAngle;
+			} else {
+				diff =  endAngle - startAngle;
+			}
+				
+			uiPolygon.fillPercent = Mathf.CeilToInt (100f * (diff) / 360f);
+			uiPolygon.rotation = startAngle+180f;
+			uiPolygon.ReDraw ();
+		}
 
 	}
 }
