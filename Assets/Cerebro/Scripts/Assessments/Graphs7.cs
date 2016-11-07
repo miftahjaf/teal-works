@@ -399,7 +399,7 @@ namespace Cerebro {
 					graphHelper.SetGridParameters(new Vector2(20,20),22);
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
-					graphHelper.DrawRandomLine();
+					graphHelper.DrawRandomLine(false);
 					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,0));
 				}
 				else if (selector == 4)
@@ -409,7 +409,7 @@ namespace Cerebro {
 					graphHelper.SetGridParameters(new Vector2(20,20),22);
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
-					graphHelper.DrawRandomLine();
+					graphHelper.DrawRandomLine(false);
 					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,0));
 				}
 				else if (selector == 5)
@@ -444,7 +444,7 @@ namespace Cerebro {
 					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x {1}.", slope == 1? "": "" + slope, (intercept < 0? "- ": "+ ") + Mathf.Abs(intercept));
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
-					graphHelper.DrawRandomLine();
+					graphHelper.DrawRandomLine(false);
 					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,intercept));
 				}
 				else if (selector == 2) 
@@ -454,7 +454,7 @@ namespace Cerebro {
 					QuestionText.text = string.Format ("Plot two points that lie on the line y = {0}x {1}.", slope == -1? "- ": ("- " + -slope), (intercept < 0? "- ": "+ ") + Mathf.Abs(intercept));
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
-					graphHelper.DrawRandomLine();
+					graphHelper.DrawRandomLine(false);
 					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,intercept));
 				}
 				else if (selector == 3) 
