@@ -73,7 +73,7 @@ namespace Cerebro
 			{
 				GameObject.Destroy(child.gameObject);
 			}
-
+			GenerateDiagramParent ();
 			axisOffset = new Vector2 (1, 1);
 			fontMultiPlier = 1f;
 			graphQuesType = GraphQuesType.None;
@@ -1006,7 +1006,7 @@ namespace Cerebro
 
 		public void GenerateDiagramParent()
 		{
-			if (!diagramParentObj) {
+			if (diagramParentObj == null) {
 				diagramParentObj = new GameObject ();
 				diagramParentObj.name = "Diagram Parent";
 				diagramParentObj.transform.SetParent (this.transform,false);
