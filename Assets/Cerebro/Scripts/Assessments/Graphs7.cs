@@ -394,7 +394,7 @@ namespace Cerebro {
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine(false);
-					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,0));
+					graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(slope,-1,0)});
 				}
 				else if (selector == 4)
 				{
@@ -404,7 +404,7 @@ namespace Cerebro {
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine(false);
-					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,0));
+					graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(slope,-1,0)});
 				}
 				else if (selector == 5)
 				{
@@ -413,7 +413,7 @@ namespace Cerebro {
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
-					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,0));
+					graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(slope,-1,0)});
 				}
 				else if (selector == 6)
 				{
@@ -422,7 +422,7 @@ namespace Cerebro {
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
-					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,0));
+					graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(slope,-1,0)});
 
 				}
 			}
@@ -439,7 +439,7 @@ namespace Cerebro {
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine(false);
-					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,intercept));
+					graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(slope,-1,intercept)});
 				}
 				else if (selector == 2) 
 				{
@@ -449,7 +449,7 @@ namespace Cerebro {
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine(false);
-					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,intercept));
+					graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(slope,-1,intercept)});
 				}
 				else if (selector == 3) 
 				{
@@ -459,7 +459,7 @@ namespace Cerebro {
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
-					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,intercept));
+					graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(slope,-1,intercept)});
 				}
 				else if (selector == 4) 
 				{
@@ -469,7 +469,7 @@ namespace Cerebro {
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
-					graphHelper.SetCurrentLineParameters(new Vector3(slope,-1,intercept));
+					graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(slope,-1,intercept)});
 				}
 				else if (selector == 5) 
 				{
@@ -479,7 +479,7 @@ namespace Cerebro {
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
-					graphHelper.SetCurrentLineParameters(new Vector3(random==1?1:0,random==1?0:1,-intercept));
+					graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(random==1?1:0,random==1?0:1,-intercept)});
 				}
 				else if (selector == 6) 
 				{
@@ -490,7 +490,7 @@ namespace Cerebro {
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotLine);
 					graphHelper.DrawGraph();
 					graphHelper.DrawRandomLine();
-					graphHelper.SetCurrentLineParameters(new Vector3(xCord1,yCord1,-intercept));
+					graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(xCord1,yCord1,-intercept)});
 				}
 			}
 			#endregion

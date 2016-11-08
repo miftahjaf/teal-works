@@ -18,6 +18,7 @@ namespace Cerebro
 		PlotLine,
 		PlotFixedLine,
 		PlotPoint,
+		RotateDiagram,
 		None
 
 	}
@@ -31,6 +32,7 @@ namespace Cerebro
 		private GameObject highLightedQuadrant; // Highlight selected quadrant
 		private GameObject touchObj;            // Handle touch position
 		private GameObject axisObj;             // Axis line object
+		private GameObject diagramParentObj;    //Diagram Parent
 
 		private Vector2 gridCoordinateRange;    //Grid cooridnate 
 		private Vector2 graphOrigin;            //Graph origin (Default graph center)
@@ -43,7 +45,7 @@ namespace Cerebro
 		private Vector2 correctPlottedPoint;    //Correct current plotted value used to check answer 
 		private Vector2[] fixedLinePoints;      //Points of line with fixed point
 
-		private Vector3 currentLineParameters;  //Line paramter to check line equation (x = a, y = b, z = c) ax+by+c=0
+		private List<Vector3> currentLineParameters;  //Line paramter to check line equation (x = a, y = b, z = c) ax+by+c=0
 
 		private float gridOffset;               //Grid offset
 		private float fontMultiPlier;           //Font multiplier to make graph font smaller or bigger
@@ -76,7 +78,7 @@ namespace Cerebro
 			fontMultiPlier = 1f;
 			graphQuesType = GraphQuesType.None;
 			currentSelectedQuadrant = -1;
-			currentLineParameters = Vector3.zero;
+			currentLineParameters = new List<Vector3>();
 			currentSelectedAxis = -1;
 			currentCorrectAxis = -1;
 			currentCorrectQuadrant = 0;
@@ -639,7 +641,7 @@ namespace Cerebro
 					break;
 
 				case GraphQuesType.PlotLine:
-					correct = MathFunctions.IsValidLinePoint (currentLineParameters, UIPosToGraphPos (currentGraphLine.point1.linePoint.origin)) && MathFunctions.IsValidLinePoint (currentLineParameters, UIPosToGraphPos (currentGraphLine.point2.linePoint.origin));
+				correct = IsValidCurrenLinePoint(new Vector2[]{UIPosToGraphPos (currentGraphLine.point1.linePoint.origin),UIPosToGraphPos (currentGraphLine.point2.linePoint.origin)});
 					break;
 
 				case GraphQuesType.PlotFixedLine:
@@ -647,6 +649,20 @@ namespace Cerebro
 					break;
 			}
 			return correct;
+		}
+
+		public bool IsValidCurrenLinePoint(Vector2[] points)
+		{
+			if (points.Length < 2) {
+				return false;
+			}
+			foreach (Vector3 lineParameter in currentLineParameters) {
+				if (MathFunctions.IsValidLinePoint (lineParameter, points[0]) &&  MathFunctions.IsValidLinePoint (lineParameter, points[1])) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		//Handle correct answer according to graph question type
@@ -802,7 +818,7 @@ namespace Cerebro
 		}
 
 		//Set current line parameters
-		public void SetCurrentLineParameters(Vector3 _currentLineParameters)
+		public void SetCurrentLineParameters(List<Vector3> _currentLineParameters)
 		{
 			currentLineParameters = _currentLineParameters;
 		}
@@ -824,13 +840,13 @@ namespace Cerebro
 				break;
 			case GraphQuesType.PlotLine:
 				Vector2[] points = new Vector2[4];
-				points [0] = new Vector2 (MathFunctions.GetPointX (currentLineParameters, graphMinValue.y), graphMinValue.y);
-				points [1] = new Vector2 (MathFunctions.GetPointX (currentLineParameters, graphMaxValue.y), graphMaxValue.y);
-				points [2] = new Vector2 (graphMaxValue.x, MathFunctions.GetPointY (currentLineParameters, graphMaxValue.x));
-				points [3] = new Vector2 (graphMinValue.x, MathFunctions.GetPointY (currentLineParameters, graphMinValue.x));
+				points [0] = new Vector2 (MathFunctions.GetPointX (currentLineParameters[0], graphMinValue.y), graphMinValue.y);
+				points [1] = new Vector2 (MathFunctions.GetPointX (currentLineParameters[0], graphMaxValue.y), graphMaxValue.y);
+				points [2] = new Vector2 (graphMaxValue.x, MathFunctions.GetPointY (currentLineParameters[0], graphMaxValue.x));
+				points [3] = new Vector2 (graphMinValue.x, MathFunctions.GetPointY (currentLineParameters[0], graphMinValue.x));
 				int cnt = 0;
 				for (int i = 0; i < points.Length; i++) {
-					if (IsContainInGraph (points [i]) && cnt < 2 && !System.Array.Exists (newPoints, x => x == points [i]) && !(currentLineParameters.x == 0 && points [i].x == 0) && !(currentLineParameters.y == 0 && points [i].y == 0)) {
+					if (IsContainInGraph (points [i]) && cnt < 2 && !System.Array.Exists (newPoints, x => x == points [i]) && !(currentLineParameters[0].x == 0 && points [i].x == 0) && !(currentLineParameters[0].y == 0 && points [i].y == 0)) {
 						newPoints [cnt] = points [i];
 						cnt++;
 					}
@@ -874,8 +890,9 @@ namespace Cerebro
 			
 		public void DrawDiagram(List<Vector2>  graphPoints,LineType linetype,float width = 2)
 		{
+			GenerateDiagramParent ();
 			GameObject diagramObj = GameObject.Instantiate (vectorObjectPrefab);
-			diagramObj.transform.SetParent (this.transform,false);
+			diagramObj.transform.SetParent (diagramParentObj.transform,false);
 			diagramObj.name = "diagram";
 
 			List<Vector2> UIPoints = new List<Vector2> ();
@@ -897,6 +914,7 @@ namespace Cerebro
 
 		public void DrawArc(Vector2 center,Vector2 point1,Vector2 point2)
 		{
+			GenerateDiagramParent ();
 			center = GraphPosToUIPos(center);
 			point1 = GraphPosToUIPos(point1);
 			point2 = GraphPosToUIPos(point2);
@@ -907,7 +925,7 @@ namespace Cerebro
 				return;
 			}
 			GameObject arcObj = GameObject.Instantiate (arcPrefab);
-			arcObj.transform.SetParent (this.transform,false);
+			arcObj.transform.SetParent (diagramParentObj.transform,false);
 			arcObj.name = "arc";
 
 			UIPolygon uiPolygon = arcObj.GetComponent<UIPolygon> ();
@@ -964,8 +982,9 @@ namespace Cerebro
 
 		public void DrawArc(Vector2 center,float radius,float startAngle,float endAngle)
 		{
+			GenerateDiagramParent ();
 			GameObject arcObj = GameObject.Instantiate (arcPrefab);
-			arcObj.transform.SetParent (this.transform,false);
+			arcObj.transform.SetParent (diagramParentObj.transform,false);
 			arcObj.name = "arc";
 			center = GraphPosToUIPos(center);
 			UIPolygon uiPolygon = arcObj.GetComponent<UIPolygon> ();
@@ -983,6 +1002,23 @@ namespace Cerebro
 			uiPolygon.fillPercent = Mathf.CeilToInt (100f * (diff) / 360f);
 			uiPolygon.rotation = startAngle+180f;
 			uiPolygon.ReDraw ();
+		}
+
+		public void GenerateDiagramParent()
+		{
+			if (!diagramParentObj) {
+				diagramParentObj = new GameObject ();
+				diagramParentObj.name = "Diagram Parent";
+				diagramParentObj.transform.SetParent (this.transform,false);
+				diagramParentObj.AddComponent<RectTransform> ();
+				diagramParentObj.GetComponent<RectTransform>().sizeDelta = Vector2.one * gridCoordinateRange.x * gridOffset;
+				if (graphQuesType == GraphQuesType.RotateDiagram) {
+					diagramParentObj.AddComponent<Image> ();
+					diagramParentObj.GetComponent<Image> ().color  =new Color(1f,1f,1f,0f);
+					diagramParentObj.AddComponent<GraphDiagramRotator> ();
+				}
+
+			}
 		}
 
 	}
