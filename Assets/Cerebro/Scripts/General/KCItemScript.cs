@@ -94,8 +94,13 @@ namespace Cerebro
 				mastryImage.GetComponent<FreeModifier> ().Radius = new Vector4 (5f,5f, 5f, 5f);
 			}
 
-			mastryText.text = knowledgeComponent.Mastery + "%";
-			mastrySlider.value =Mathf.Clamp( knowledgeComponent.Mastery / 100f,0f,1f);
+			int mastery = knowledgeComponent.Mastery;
+			if (mastery >= 99) {
+				mastery = 100;
+			}
+
+			mastryText.text = mastery + "%";
+			mastrySlider.value =Mathf.Clamp( mastery / 100f,0f,1f);
 
 			//ChangeMastryStatus (true);
 
