@@ -378,7 +378,7 @@ namespace Cerebro
 			{
 				return;
 			}
-			float oldProficiency = 0f;
+			float oldProficiency = 0.05f;
 
 			if (LaunchList.instance.mKCMastery.ContainsKey (KCID)) 
 			{
