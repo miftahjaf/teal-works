@@ -341,6 +341,7 @@ namespace Cerebro {
 						xCord2 = (xCord + xCord1) / 2;
 						yCord2 = yCord + Random.Range (3, 10 - yCord);
 
+						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
 						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord, yCord)},Vectrosity.LineType.Continuous);
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-xCord2)});
 					}
@@ -356,6 +357,7 @@ namespace Cerebro {
 						xCord3 = xCord;
 						yCord3 = yCord2;
 
+						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
 						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)},Vectrosity.LineType.Continuous);
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-(xCord + side1/2f)),new Vector3(0,1,-(yCord + side1/2f)),new Vector3(1,-1,-(xCord - yCord)),new Vector3(1,1,-(xCord1 + yCord1))});
 					}
@@ -376,6 +378,7 @@ namespace Cerebro {
 						xCord3 = xCord;
 						yCord3 = yCord2;
 
+						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
 						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)},Vectrosity.LineType.Continuous);
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-(xCord + side1/2f)),new Vector3(0,1,-(yCord + side2/2f))});
 					}
@@ -396,6 +399,8 @@ namespace Cerebro {
 						yCord2 = yCord;
 						xCord3 = xCord1;
 
+						graphHelper.SetSnapValue (11);
+						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
 						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)},Vectrosity.LineType.Continuous);
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-xCord1),new Vector3(0,1,-yCord)});
 					}
@@ -418,7 +423,8 @@ namespace Cerebro {
 						yCord = Random.Range (-7, -1);
 						side1 = Random.Range (3, 9);   //lower part
 						side2 = Random.Range (2, 4);   // upper part
-							
+
+						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
 						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord - 1,yCord),new Vector2(xCord + 1, yCord),new Vector2(xCord + 1,yCord + side1),new Vector2(xCord + 1.5f, yCord + side1),new Vector2(xCord, yCord + side1 + side2)},Vectrosity.LineType.Continuous);
 						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord - 1,yCord),new Vector2(xCord - 1,yCord + side1),new Vector2(xCord - 1.5f, yCord + side1),new Vector2(xCord,yCord + side1 + side2)},Vectrosity.LineType.Continuous);
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-xCord)});
@@ -440,6 +446,8 @@ namespace Cerebro {
 						graphHelper.DrawArc (new Vector2 (xCord + side1, yCord + side1), new Vector2 (xCord + side1 - side2, yCord + side1), new Vector2(xCord + side1, yCord + side1 - side2));
 						graphHelper.DrawArc (new Vector2 (xCord, yCord + side1), new Vector2 (xCord, yCord + side1 - side2), new Vector2(xCord + side2, yCord + side1));
 
+						graphHelper.SetSnapValue (11);
+						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-(xCord + side1/2f)),new Vector3(0,1,-(yCord + side1/2f)),new Vector3(1,-1,-(xCord - yCord)),new Vector3(1,1,-(xCord1 + yCord1))});
 					}
 					else if (randSelector == 2) //hexagon
@@ -462,6 +470,7 @@ namespace Cerebro {
 						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord1),new Vector2(xCord3, yCord)},Vectrosity.LineType.Continuous);
 						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord4),new Vector2(xCord2,yCord4),new Vector2(xCord3, yCord)},Vectrosity.LineType.Continuous);
 
+						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-(xCord1 + side1/2f)),new Vector3(0,1,-yCord)});
 					}
 
@@ -707,6 +716,10 @@ namespace Cerebro {
 					yCord = Random.Range (2, 7);
 					xCord1 = Random.Range (2, 7);
 					yCord1 = Random.Range (2, 7);
+
+					while (yCord == yCord1)
+						yCord1 = Random.Range (2, 7);
+					
 					angle = 90 * Random.Range (1, 4);
 					randSelector = Random.Range (1, 3);
 
@@ -717,8 +730,8 @@ namespace Cerebro {
 					angle *= (randSelector == 1? -1: 1) * Mathf.Deg2Rad;   // negative for clockwise
 					xCord2 = Mathf.RoundToInt (xCord * Mathf.Cos (angle) - yCord * Mathf.Sin (angle));
 					yCord2 = Mathf.RoundToInt (xCord * Mathf.Sin (angle) + yCord * Mathf.Cos (angle));
-					xCord3 = Mathf.RoundToInt (xCord * Mathf.Cos (angle) - yCord * Mathf.Sin (angle));
-					yCord3 = Mathf.RoundToInt (xCord * Mathf.Sin (angle) + yCord * Mathf.Cos (angle));
+					xCord3 = Mathf.RoundToInt (xCord1 * Mathf.Cos (angle) - yCord1 * Mathf.Sin (angle));
+					yCord3 = Mathf.RoundToInt (xCord1 * Mathf.Sin (angle) + yCord1 * Mathf.Cos (angle));
 
 					graphHelper.SetGridParameters(new Vector2(20,20),22);
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotFixedLine);
@@ -736,6 +749,9 @@ namespace Cerebro {
 					angle = 90 * Random.Range (1, 4);
 					randSelector = Random.Range (1, 3);
 
+					while (yCord == yCord1)
+						yCord1 = Random.Range (2, 7);
+
 					QuestionText.text = string.Format ("Draw the new position of the given line segment after it is rotated by {0}{1} {2} about O.", angle, MathFunctions.deg, randSelector == 1 ? "clockwise": "anticlockwise");
 
 					// Answer coordinates
@@ -743,12 +759,13 @@ namespace Cerebro {
 					angle *= (randSelector == 1? -1: 1) * Mathf.Deg2Rad;   // negative for clockwise
 					xCord2 = Mathf.RoundToInt (xCord * Mathf.Cos (angle) - yCord * Mathf.Sin (angle));
 					yCord2 = Mathf.RoundToInt (xCord * Mathf.Sin (angle) + yCord * Mathf.Cos (angle));
-					xCord3 = Mathf.RoundToInt (xCord * Mathf.Cos (angle) - yCord * Mathf.Sin (angle));
-					yCord3 = Mathf.RoundToInt (xCord * Mathf.Sin (angle) + yCord * Mathf.Cos (angle));
+					xCord3 = Mathf.RoundToInt (xCord1 * Mathf.Cos (angle) - yCord1 * Mathf.Sin (angle));
+					yCord3 = Mathf.RoundToInt (xCord1 * Mathf.Sin (angle) + yCord1 * Mathf.Cos (angle));
 
 					graphHelper.SetGridParameters(new Vector2(20,20),22);
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotFixedLine);
 					graphHelper.DrawRandomLine (true, true);
+					graphHelper.PlotPoint (Vector2.zero,"O",false);
 					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord), new Vector2 (xCord1, yCord1)}, Vectrosity.LineType.Continuous);
 					graphHelper.SetFixedLinePoints (new Vector2[] {new Vector2 (xCord2,yCord2), new Vector2 (xCord3,yCord3)});
 				}
