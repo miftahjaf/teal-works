@@ -742,30 +742,34 @@ namespace Cerebro {
 				}
 				else if (selector == 4)
 				{
-					xCord = - Random.Range (2, 7);
-					yCord = Random.Range (2, 7);
-					xCord1 = Random.Range (2, 7);
-					yCord1 = Random.Range (2, 7);
+					xCord4 = Random.Range (2, 7);
+					yCord4 = Random.Range (2, 7);
+					xCord = xCord4 - Random.Range (2, 7);
+					yCord = yCord4 + Random.Range (2, 7);
+					xCord1 = xCord4 + Random.Range (2, 7);
+					yCord1 = yCord4 + Random.Range (2, 7);
 					angle = 90 * Random.Range (1, 4);
 					randSelector = Random.Range (1, 3);
 
 					while (yCord == yCord1)
-						yCord1 = Random.Range (2, 7);
+						yCord1 = yCord4 + Random.Range (2, 7);
 
-					QuestionText.text = string.Format ("Draw the new position of the given line segment after it is rotated by {0}{1} {2} about O.", angle, MathFunctions.deg, randSelector == 1 ? "clockwise": "anticlockwise");
+					QuestionText.text = string.Format ("Draw the new position of the given line segment after it is rotated by {0}{1} {2} about A.", angle, MathFunctions.deg, randSelector == 1 ? "clockwise": "anticlockwise");
 
 					// Answer coordinates
 
 					angle *= (randSelector == 1? -1: 1) * Mathf.Deg2Rad;   // negative for clockwise
-					xCord2 = Mathf.RoundToInt (xCord * Mathf.Cos (angle) - yCord * Mathf.Sin (angle));
-					yCord2 = Mathf.RoundToInt (xCord * Mathf.Sin (angle) + yCord * Mathf.Cos (angle));
-					xCord3 = Mathf.RoundToInt (xCord1 * Mathf.Cos (angle) - yCord1 * Mathf.Sin (angle));
-					yCord3 = Mathf.RoundToInt (xCord1 * Mathf.Sin (angle) + yCord1 * Mathf.Cos (angle));
+					xCord2 = xCord4 + Mathf.RoundToInt ((xCord - xCord4) * Mathf.Cos (angle) - (yCord - yCord4) * Mathf.Sin (angle));
+					yCord2 = yCord4 + Mathf.RoundToInt ((xCord - xCord4) * Mathf.Sin (angle) + (yCord - yCord4) * Mathf.Cos (angle));
+					xCord3 = xCord4 + Mathf.RoundToInt ((xCord1 - xCord4) * Mathf.Cos (angle) - (yCord1 - xCord4) * Mathf.Sin (angle));
+					yCord3 = yCord4 + Mathf.RoundToInt ((xCord1 - xCord4) * Mathf.Sin (angle) + (yCord1 - xCord4) * Mathf.Cos (angle));
 
 					graphHelper.SetGridParameters(new Vector2(20,20),22);
+					graphHelper.ShiftGraphOrigin (new Vector2 (-xCord4,-yCord4));
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotFixedLine);
+					graphHelper.DrawGraph ();
 					graphHelper.DrawRandomLine (true, true);
-					graphHelper.PlotPoint (Vector2.zero,"O",false);
+					graphHelper.PlotPoint (new Vector2 (xCord4,yCord4),"A",false);
 					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord), new Vector2 (xCord1, yCord1)}, Vectrosity.LineType.Continuous);
 					graphHelper.SetFixedLinePoints (new Vector2[] {new Vector2 (xCord2,yCord2), new Vector2 (xCord3,yCord3)});
 				}
@@ -818,10 +822,10 @@ namespace Cerebro {
 			}
 			else if (value == 16)
 			{
-				if (checkLastTextFor (new string[1]{ "." })) {
+				if (checkLastTextFor (new string[1]{ "∞" })) {
 					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
 				}
-				userAnswerText.text += ".";
+				userAnswerText.text += "∞";
 			}
 		}
 

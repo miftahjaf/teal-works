@@ -114,8 +114,8 @@ namespace Cerebro
 		//Set graph origin
 		public void ShiftGraphOrigin(Vector2 offset)
 		{
-			graphCenterOffset = offset;
-			graphOrigin = graphCenter - new Vector2 (Mathf.RoundToInt(offset.x  * gridOffset ),Mathf.RoundToInt(offset.y* gridOffset));
+			graphCenterOffset = -offset;
+			graphOrigin = graphCenter - new Vector2 (Mathf.RoundToInt(graphCenterOffset.x  * gridOffset ),Mathf.RoundToInt(graphCenterOffset.y* gridOffset));
 		}
 
 		//Set quetion type
