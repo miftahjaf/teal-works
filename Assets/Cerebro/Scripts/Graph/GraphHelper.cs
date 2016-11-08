@@ -901,7 +901,7 @@ namespace Cerebro
 			point1 = GraphPosToUIPos(point1);
 			point2 = GraphPosToUIPos(point2);
 
-			if(!Vector2.Distance(center,point1).Equals(Vector2.Distance(center,point2)))
+			if(Mathf.Abs (Vector2.Distance(center,point1) - Vector2.Distance(center,point2)) >= 0.0001f)
 			{
 				Debug.Log("Points " + point1+" and "+point2 +" are not in same arc");
 				return;
@@ -913,8 +913,8 @@ namespace Cerebro
 			UIPolygon uiPolygon = arcObj.GetComponent<UIPolygon> ();
 			arcObj.GetComponent<RectTransform> ().anchoredPosition =  center;
 			arcObj.GetComponent<RectTransform> ().sizeDelta =  Vector2.one * Vector2.Distance(center,point1) *2f;
-			float endAngle = (Mathf.Atan ((point2.y - center.y) / (point2.x - center.x)) * Mathf.Rad2Deg);
-			float startAngle =  (Mathf.Atan ((point1.y - center.y) / (point1.x - center.x)) * Mathf.Rad2Deg);
+
+			float endAngle, startAngle;
 
 			if (point1.x == center.x) {
 				if (point1.y > center.y) {
@@ -923,6 +923,12 @@ namespace Cerebro
 					startAngle = 270f;
 				}
 			}
+			else
+				startAngle =  Mathf.Atan ((point1.y - center.y) / (point1.x - center.x)) * Mathf.Rad2Deg;
+
+			if (startAngle < 0)
+				startAngle += 360;
+
 			if (point2.x == center.x) {
 				if (point2.y > center.y) {
 					endAngle = 90f;
@@ -930,6 +936,11 @@ namespace Cerebro
 					endAngle = 270f;
 				}
 			}
+			else
+				endAngle = (Mathf.Atan ((point2.y - center.y) / (point2.x - center.x)) * Mathf.Rad2Deg);
+
+			if (endAngle < 0)
+				endAngle += 360;
 
 			if (point1.x < center.x) {
 				startAngle = 180 + startAngle;
@@ -940,7 +951,7 @@ namespace Cerebro
 
 			float diff = 0f; 
 			if (startAngle > endAngle) {
-				endAngle = 360 - endAngle;
+				endAngle = 360 + endAngle;
 				diff = endAngle - startAngle;
 			} else {
 				diff =  endAngle - startAngle;
