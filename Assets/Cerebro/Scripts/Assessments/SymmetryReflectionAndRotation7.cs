@@ -251,13 +251,13 @@ namespace Cerebro {
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase, 0), 135, false, diagramWidth * Mathf.Sqrt (2)));
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, diagramWidth), 270, false, diagramWidth));
 
-						diagramHelper.AddLinePoint (new LinePoint ("" + lines[0], Vector2.zero, 45, true, diagramWidth,1).SetLineType(LineShapeType.Dotted));
-						diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 225, true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 45, true, diagramWidth,1).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 225, true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted).SetLineText(lines[0].ToString()).SetLineTextDirection(TextDir.Up));
 
-						diagramHelper.AddLinePoint (new LinePoint ("" + lines[1], new Vector2 (diagramWidth, 0), 157.5f, true, diagramWidth * 1.3f,1).SetLineType(LineShapeType.Dotted));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramWidth, 0), 337.5f, true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("" , new Vector2 (diagramWidth, 0), 157.5f, true, diagramWidth * 1.3f,1).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramWidth, 0), 337.5f, true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted).SetLineText(lines[1].ToString()).SetLineTextDirection(TextDir.Down));
 
-						diagramHelper.AddLinePoint (new LinePoint ("" + lines[2], new Vector2 (0, diagramWidth), 112.5f, true, diagramWidth / 5f,1).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("" , new Vector2 (0, diagramWidth), 112.5f, true, diagramWidth / 5f,1).SetLineType(LineShapeType.Dotted).SetLineText(lines[2].ToString()).SetLineTextDirection(TextDir.Left));
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, diagramWidth), 292.5f, true, diagramWidth * 1.3f).SetLineType(LineShapeType.Dotted));
 
 						Answer = lines[0].ToString();
@@ -270,14 +270,14 @@ namespace Cerebro {
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase, 0), 180f - Mathf.Rad2Deg * Mathf.Atan (2f * diagramWidth / diagramBase), false, Mathf.Sqrt (diagramWidth * diagramWidth + diagramBase * diagramBase / 4f)));
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase / 2f, diagramWidth), 180f + Mathf.Rad2Deg * Mathf.Atan (2f * diagramWidth / diagramBase), false, Mathf.Sqrt (diagramWidth * diagramWidth + diagramBase * diagramBase / 4f)));
 
-						diagramHelper.AddLinePoint (new LinePoint ("" + lines[0], Vector2.zero, 30, true, diagramWidth * 1.3f,1).SetLineType(LineShapeType.Dotted));
-						diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 210, true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 30, true, diagramWidth * 1.3f,1).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 210, true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted).SetLineText(lines[0].ToString()).SetLineTextDirection(TextDir.Up));
 
-						diagramHelper.AddLinePoint (new LinePoint ("" + lines[1], new Vector2 (diagramBase, 0), 150, true, diagramWidth * 1.3f,1).SetLineType(LineShapeType.Dotted));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase, 0), 330, true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase, 0), 150, true, diagramWidth * 1.3f,1).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase, 0), 330, true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted).SetLineType(LineShapeType.Dotted).SetLineText(lines[1].ToString()).SetLineTextDirection(TextDir.Up));
 
-						diagramHelper.AddLinePoint (new LinePoint ("" + lines[2], new Vector2 (diagramBase / 2f, diagramWidth), 270, true, diagramWidth * 1.1f,1).SetLineType(LineShapeType.Dotted));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase / 2f, diagramWidth), 90, true, diagramWidth / 10f).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase / 2f, diagramWidth), 270, true, diagramWidth * 1.1f,1).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase / 2f, diagramWidth), 90, true, diagramWidth / 10f).SetLineType(LineShapeType.Dotted).SetLineText(lines[2].ToString()).SetLineTextDirection(TextDir.Left));
 
 						Answer = lines[2].ToString();
 					}
@@ -290,14 +290,14 @@ namespace Cerebro {
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase, diagramWidth), 180, false, diagramBase));
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, diagramWidth), 270, false, diagramWidth));
 
-						diagramHelper.AddLinePoint (new LinePoint ("" + lines[0], Vector2.zero, Mathf.Rad2Deg * Mathf.Atan (diagramWidth / diagramBase), true, 1.1f * Mathf.Sqrt (diagramWidth * diagramWidth + diagramBase * diagramBase),1).SetLineType(LineShapeType.Dotted));
-						diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 180f + Mathf.Rad2Deg * Mathf.Atan (diagramWidth / diagramBase), true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, Mathf.Rad2Deg * Mathf.Atan (diagramWidth / diagramBase), true, 1.1f * Mathf.Sqrt (diagramWidth * diagramWidth + diagramBase * diagramBase),1).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", Vector2.zero, 180f + Mathf.Rad2Deg * Mathf.Atan (diagramWidth / diagramBase), true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted).SetLineText(lines[0].ToString()).SetLineTextDirection(TextDir.Up));
 
-						diagramHelper.AddLinePoint (new LinePoint ("" + lines[1], new Vector2 (diagramBase, 0), 180f - Mathf.Rad2Deg * Mathf.Atan (diagramWidth / diagramBase), true, 1.1f * Mathf.Sqrt (diagramWidth * diagramWidth + diagramBase * diagramBase),1).SetLineType(LineShapeType.Dotted));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase, 0), 360f - Mathf.Rad2Deg * Mathf.Atan (diagramWidth / diagramBase), true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase, 0), 180f - Mathf.Rad2Deg * Mathf.Atan (diagramWidth / diagramBase), true, 1.1f * Mathf.Sqrt (diagramWidth * diagramWidth + diagramBase * diagramBase),1).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (diagramBase, 0), 360f - Mathf.Rad2Deg * Mathf.Atan (diagramWidth / diagramBase), true, diagramWidth / 5f).SetLineType(LineShapeType.Dotted).SetLineText(lines[1].ToString()).SetLineTextDirection(TextDir.Up));
 
-						diagramHelper.AddLinePoint (new LinePoint ("" + lines[2], new Vector2 (0, diagramWidth / 2f), 0, true, 1.2f * diagramBase,1).SetLineType(LineShapeType.Dotted));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, diagramWidth / 2f), 180, true, diagramBase / 5f).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, diagramWidth / 2f), 0, true, 1.2f * diagramBase,1).SetLineType(LineShapeType.Dotted));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, diagramWidth / 2f), 180, true, diagramBase / 5f).SetLineType(LineShapeType.Dotted).SetLineText(lines[2].ToString()).SetLineTextDirection(TextDir.Up));
 
 						Answer = lines[2].ToString();
 					}
@@ -319,16 +319,17 @@ namespace Cerebro {
 					randSelector = Random.Range (0, 5);
 
 					graphHelper.SetGridParameters (new Vector2(20,20),22);
-					graphHelper.SetGraphQuesType (GraphQuesType.PlotFixedLine);
 					graphHelper.DrawGraph();
-					graphHelper.DrawRandomLine();
+					graphHelper.DrawRandomLine(true,false,LineShapeType.Dotted);
 
 					if (randSelector == 0) //circle
 					{
 						xCord = Random.Range (-5, 6);
 						yCord = Random.Range (-5, 6);
 						side1 = Random.Range (2, Mathf.Min (10 - Mathf.Abs (xCord), 10 - Mathf.Abs (yCord))); //radius of the circle
-
+						graphHelper.SetGraphQuesType (GraphQuesType.PointLiesOnLine);
+						graphHelper.SetCorrectPlottedPoint(new Vector2(xCord, yCord));
+						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,1,-xCord-yCord)});
 						graphHelper.DrawArc (new Vector2 (xCord, yCord), side1, 0, 360);
 
 					}
@@ -342,7 +343,7 @@ namespace Cerebro {
 						yCord2 = yCord + Random.Range (3, 10 - yCord);
 
 						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord, yCord)},Vectrosity.LineType.Continuous);
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord, yCord)});
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-xCord2)});
 					}
 					else if (randSelector == 2)//square
@@ -358,7 +359,7 @@ namespace Cerebro {
 						yCord3 = yCord2;
 
 						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)},Vectrosity.LineType.Continuous);
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)});
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-(xCord + side1/2f)),new Vector3(0,1,-(yCord + side1/2f)),new Vector3(1,-1,-(xCord - yCord)),new Vector3(1,1,-(xCord1 + yCord1))});
 					}
 					else if (randSelector == 3)//rectangle
@@ -379,7 +380,7 @@ namespace Cerebro {
 						yCord3 = yCord2;
 
 						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)},Vectrosity.LineType.Continuous);
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)});
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-(xCord + side1/2f)),new Vector3(0,1,-(yCord + side2/2f))});
 					}
 					else if (randSelector == 4) // rhombus
@@ -401,7 +402,7 @@ namespace Cerebro {
 
 						graphHelper.SetSnapValue (11);
 						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)},Vectrosity.LineType.Continuous);
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)});
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-xCord1),new Vector3(0,1,-yCord)});
 					}
 
@@ -412,9 +413,8 @@ namespace Cerebro {
 					randSelector = Random.Range (0, 3);
 
 					graphHelper.SetGridParameters (new Vector2(20,20),22);
-					graphHelper.SetGraphQuesType (GraphQuesType.PlotFixedLine);
 					graphHelper.DrawGraph();
-					graphHelper.DrawRandomLine();
+					graphHelper.DrawRandomLine(true,false,LineShapeType.Dotted);
 
 					if (randSelector == 0) //arrow
 					{
@@ -425,8 +425,8 @@ namespace Cerebro {
 						side2 = Random.Range (2, 4);   // upper part
 
 						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord - 1,yCord),new Vector2(xCord + 1, yCord),new Vector2(xCord + 1,yCord + side1),new Vector2(xCord + 1.5f, yCord + side1),new Vector2(xCord, yCord + side1 + side2)},Vectrosity.LineType.Continuous);
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord - 1,yCord),new Vector2(xCord - 1,yCord + side1),new Vector2(xCord - 1.5f, yCord + side1),new Vector2(xCord,yCord + side1 + side2)},Vectrosity.LineType.Continuous);
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord - 1,yCord),new Vector2(xCord + 1, yCord),new Vector2(xCord + 1,yCord + side1),new Vector2(xCord + 1.5f, yCord + side1),new Vector2(xCord, yCord + side1 + side2)});
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord - 1,yCord),new Vector2(xCord - 1,yCord + side1),new Vector2(xCord - 1.5f, yCord + side1),new Vector2(xCord,yCord + side1 + side2)});
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-xCord)});
 					}
 					else if (randSelector == 1) //square with sides cut into curves
@@ -436,10 +436,10 @@ namespace Cerebro {
 						xCord = Random.Range (-7, 10 - side1);
 						yCord = Random.Range (-7, 10 - side1);
 
-						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord), new Vector2 (xCord + side1 - side2, yCord)},Vectrosity.LineType.Continuous);
-						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord + side1), new Vector2 (xCord + side1 - side2, yCord + side1)},Vectrosity.LineType.Continuous);
-						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord + side2), new Vector2 (xCord, yCord + side1 - side2)},Vectrosity.LineType.Continuous);
-						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side1, yCord + side2), new Vector2 (xCord + side1, yCord + side1 - side2)},Vectrosity.LineType.Continuous);
+						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord), new Vector2 (xCord + side1 - side2, yCord)});
+						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord + side1), new Vector2 (xCord + side1 - side2, yCord + side1)});
+						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord + side2), new Vector2 (xCord, yCord + side1 - side2)});
+						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side1, yCord + side2), new Vector2 (xCord + side1, yCord + side1 - side2)});
 
 						graphHelper.DrawArc (new Vector2 (xCord, yCord), new Vector2(xCord + side2, yCord), new Vector2 (xCord, yCord + side2));
 						graphHelper.DrawArc (new Vector2 (xCord + side1, yCord), new Vector2 (xCord + side1, yCord + side2), new Vector2(xCord + side1 - side2, yCord));
@@ -467,8 +467,8 @@ namespace Cerebro {
 						yCord = yCord4 + side2;
 						yCord1 = yCord4 + 2 * side2;
 
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord1),new Vector2(xCord3, yCord)},Vectrosity.LineType.Continuous);
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord4),new Vector2(xCord2,yCord4),new Vector2(xCord3, yCord)},Vectrosity.LineType.Continuous);
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord1),new Vector2(xCord3, yCord)});
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord4),new Vector2(xCord2,yCord4),new Vector2(xCord3, yCord)});
 
 						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-(xCord1 + side1/2f)),new Vector3(0,1,-yCord)});
@@ -563,10 +563,17 @@ namespace Cerebro {
 
 					randSelector = Random.Range (1, 3);
 					QuestionText.text = string.Format ("Find the image of the given triangle about {0}-axis.", randSelector == 1? "x": "y");
-
-					graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord, yCord)},Vectrosity.LineType.Continuous);
-					graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord3,yCord3),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(xCord3, yCord3)},Vectrosity.LineType.Continuous);
-
+					graphHelper.SetGraphQuesType(GraphQuesType.DiagramImage);
+					graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord, yCord)});
+					graphHelper.DrawMovebleDiagram(new List<Vector2>(){new Vector2(xCord3,yCord3),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(xCord3, yCord3)},LineShapeType.Dotted);
+					if(randSelector ==1)
+					{
+						graphHelper.SetCurrentDiagramPoints(new List<Vector2>(){new Vector2(xCord,-yCord), new Vector2(xCord1,-yCord1), new Vector2(xCord2,-yCord2),new Vector2(xCord,-yCord)});
+					}
+					else
+					{
+						graphHelper.SetCurrentDiagramPoints(new List<Vector2>(){new Vector2(-xCord,yCord), new Vector2(-xCord1,yCord1), new Vector2(-xCord2,yCord2),new Vector2(-xCord,yCord)});
+					}
 					//if randSelector == 1 --> Answer = (x,-y),(x1,-y1),(x2,-y2); else --> Answer = (-x,y),(-x1,y1),(-x2,y2)
 				}
 				else if (selector == 2) //square
@@ -584,10 +591,10 @@ namespace Cerebro {
 					yCord3 = yCord2;
 						
 					QuestionText.text = "Find the image of the given square about origin.";
-
-					graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)},Vectrosity.LineType.Continuous);
-					graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord4,yCord4),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(xCord4, yCord4)},Vectrosity.LineType.Continuous);
-
+					graphHelper.SetGraphQuesType(GraphQuesType.DiagramImage);
+					graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)});
+					graphHelper.DrawMovebleDiagram(new List<Vector2>(){new Vector2(xCord4,yCord4),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(xCord4, yCord4)},LineShapeType.Dotted);
+					graphHelper.SetCurrentDiagramPoints(new List<Vector2>(){new Vector2(-xCord,-yCord), new Vector2(-xCord1,-yCord1), new Vector2(-xCord2,-yCord2), new Vector2(-xCord3,-yCord3),new Vector2(-xCord,-yCord)});
 					// Answer = (-x,-y),(-x1,-y1),(-x2,-y2),(-x3,-y3)
 				}
 				else if (selector == 3) // SEt mirror
@@ -609,10 +616,10 @@ namespace Cerebro {
 						} while (Mathf.Abs (xCord - xCord1) + Mathf.Abs (yCord - yCord1) < 5 || Mathf.Abs (xCord2 - xCord1) + Mathf.Abs (yCord2 - yCord1) < 5 || Mathf.Abs (xCord - xCord2) + Mathf.Abs (yCord - yCord2) < 5 || Mathf.Abs ((xCord - xCord1) * (yCord2 - yCord1) - (yCord - yCord1) * (xCord2 - xCord1)) < 5);
 							
 						QuestionText.text = string.Format ("Find the image of the given figure about the x-axis.");
-
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2)},Vectrosity.LineType.Continuous);
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord3,yCord3),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8))},Vectrosity.LineType.Continuous);
-
+						graphHelper.SetGraphQuesType(GraphQuesType.DiagramImage);
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2)});
+						graphHelper.DrawMovebleDiagram(new List<Vector2>(){new Vector2(xCord3,yCord3),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8))},LineShapeType.Dotted);
+						graphHelper.SetCurrentDiagramPoints(new List<Vector2>(){new Vector2(xCord,-yCord),new Vector2(xCord1,-yCord1),new Vector2(xCord2,-yCord2)});
 					}
 					else if (randSelector == 2)
 					{
@@ -631,10 +638,12 @@ namespace Cerebro {
 						xCord3 = (xCord + xCord1 + xCord2) / 3;
 						yCord3 = (yCord + yCord1 + yCord2) / 3;
 
-						QuestionText.text = string.Format ("Find the image of the given figure about the given axis.");
+						QuestionText.text = string.Format ("Find the image of the given figure about the the y-axis.");
+						graphHelper.SetGraphQuesType(GraphQuesType.DiagramImage);
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3,yCord3),new Vector2(xCord,yCord)});
+						graphHelper.DrawMovebleDiagram(new List<Vector2>(){new Vector2(xCord4,yCord4),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(xCord4,yCord4)},LineShapeType.Dotted);
+						graphHelper.SetCurrentDiagramPoints(new List<Vector2>(){new Vector2(-xCord,yCord),new Vector2(-xCord1,yCord1),new Vector2(-xCord2,yCord2),new Vector2(-xCord3,yCord3),new Vector2(-xCord,yCord)});
 
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3,yCord3),new Vector2(xCord,yCord)},Vectrosity.LineType.Continuous);
-						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord4,yCord4),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(Random.Range (-7, 8),Random.Range (-7, 8)),new Vector2(xCord4,yCord4)},Vectrosity.LineType.Continuous);
 					}
 				}
 				else if (selector == 4) 
@@ -649,10 +658,10 @@ namespace Cerebro {
 
 					QuestionText.text = string.Format ("Rotate the given figure {0}{1} {2} about origin.", angle, MathFunctions.deg, randSelector == 1 ? "clockwise": "anticlockwise");
 
-					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord), new Vector2 (xCord + side1 - side2, yCord)},Vectrosity.LineType.Continuous);
-					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord + side1), new Vector2 (xCord + side1 - side2, yCord + side1)},Vectrosity.LineType.Continuous);
-					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord + side2), new Vector2 (xCord, yCord + side1 - side2)},Vectrosity.LineType.Continuous);
-					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side1, yCord + side2), new Vector2 (xCord + side1, yCord + side1 - side2)},Vectrosity.LineType.Continuous);
+					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord), new Vector2 (xCord + side1 - side2, yCord)});
+					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord + side1), new Vector2 (xCord + side1 - side2, yCord + side1)});
+					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord + side2), new Vector2 (xCord, yCord + side1 - side2)});
+					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side1, yCord + side2), new Vector2 (xCord + side1, yCord + side1 - side2)});
 
 					graphHelper.DrawArc (new Vector2 (xCord, yCord), new Vector2(xCord + side2, yCord), new Vector2 (xCord, yCord + side2));
 					graphHelper.DrawArc (new Vector2 (xCord + side1, yCord), new Vector2 (xCord + side1, yCord + side2), new Vector2(xCord + side1 - side2, yCord));
@@ -737,7 +746,7 @@ namespace Cerebro {
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotFixedLine);
 					graphHelper.DrawGraph ();
 					graphHelper.DrawRandomLine (true, true);
-					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord), new Vector2 (xCord1, yCord1)}, Vectrosity.LineType.Continuous);
+					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord), new Vector2 (xCord1, yCord1)});
 					graphHelper.SetFixedLinePoints (new Vector2[] {new Vector2 (xCord2,yCord2), new Vector2 (xCord3,yCord3)});
 				}
 				else if (selector == 4)
@@ -770,7 +779,7 @@ namespace Cerebro {
 					graphHelper.DrawGraph ();
 					graphHelper.DrawRandomLine (true, true);
 					graphHelper.PlotPoint (new Vector2 (xCord4,yCord4),"A",false);
-					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord), new Vector2 (xCord1, yCord1)}, Vectrosity.LineType.Continuous);
+					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord), new Vector2 (xCord1, yCord1)});
 					graphHelper.SetFixedLinePoints (new Vector2[] {new Vector2 (xCord2,yCord2), new Vector2 (xCord3,yCord3)});
 				}
 			}

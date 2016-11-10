@@ -16,6 +16,7 @@ namespace Cerebro
 		public Text pointName;
 		public UICircle dot;
 		public GraphLine lineObj;
+		public GraphDiagram diagramObj;
 		public Action<GraphPointScript,Vector2> onDragEvent;
 		public Action<GraphPointScript> onDragEndEvent;
 		public LinePoint linePoint;
@@ -76,6 +77,12 @@ namespace Cerebro
 			lineObj = _lineObj;
 		}
 
+		public void SetDigramObject(GraphDiagram _diagramObj)
+		{
+			diagramObj = _diagramObj;
+		}
+
+
 		#region IDragHandler implementation
 
 		public void OnDrag (PointerEventData eventData)
@@ -122,6 +129,13 @@ namespace Cerebro
 		public void SetIsValueChanged(bool isValueChanged)
 		{
 			this.isValueChanged = isValueChanged;
+		}
+
+		public void SetIsDragabble(bool isDragabble =true)
+		{
+			this.dot.raycastTarget = isDragabble;
+			this.arrow.raycastTarget = isDragabble;
+			this.pointName.raycastTarget = isDragabble;
 		}
 	}
 

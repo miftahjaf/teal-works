@@ -19,15 +19,20 @@ namespace Cerebro
 		PlotFixedLine,
 		PlotPoint,
 		RotateDiagram,
+		PointLiesOnLine,
+		DiagramImage,
 		None
 
 	}
 	public class GraphHelper : MonoBehaviour,IPointerClickHandler
 	{
 		public GameObject vectorObjectPrefab; //Vector line prefab to draw line
+		public GameObject vectorDottedObjectPrefab; //Vector line prefab to draw dotted line
 		public GameObject linePointPrefab;   // point prefab to render point 
 		public GameObject arcPrefab;
+
 		public Sprite arrowSprite;
+
 		private GameObject pointLineDisplay;   //Display line when change plotted point position
 		private GameObject highLightedQuadrant; // Highlight selected quadrant
 		private GameObject touchObj;            // Handle touch position
@@ -44,6 +49,7 @@ namespace Cerebro
 		private Vector2 graphMaxValue;          //Graph Max x and y point value
 		private Vector2 correctPlottedPoint;    //Correct current plotted value used to check answer 
 		private Vector2[] fixedLinePoints;      //Points of line with fixed point
+		private List<Vector2> currentDiagramPoints;
 
 		private List<Vector3> currentLineParameters;  //Line paramter to check line equation (x = a, y = b, z = c) ax+by+c=0
 
@@ -60,7 +66,8 @@ namespace Cerebro
 
 		private GraphLine currentGraphLine;            //Current plotted graph line
 		public GraphQuesType graphQuesType;           //Current graph question type
-		 
+		private GraphDiagram currentGraphDiagram;
+
 		private bool canClick;                        //Disable Or Enable Click;
 
 
@@ -73,12 +80,14 @@ namespace Cerebro
 			{
 				GameObject.Destroy(child.gameObject);
 			}
-			GenerateDiagramParent ();
+			diagramParentObj = null;
+			graphCenterOffset = Vector2.zero;
 			axisOffset = new Vector2 (1, 1);
 			fontMultiPlier = 1f;
 			graphQuesType = GraphQuesType.None;
 			currentSelectedQuadrant = -1;
 			currentLineParameters = new List<Vector3>();
+			currentDiagramPoints = new List<Vector2> ();
 			currentSelectedAxis = -1;
 			currentCorrectAxis = -1;
 			currentCorrectQuadrant = 0;
@@ -90,13 +99,13 @@ namespace Cerebro
 		//Set grid parameters
 		public void SetGridParameters (Vector2 _gridCoordinateRange ,float _gridOffset)
 		{
-		     gridCoordinateRange = _gridCoordinateRange;
-			 gridOffset = _gridOffset;
-			 graphCenter = new Vector2 (Mathf.RoundToInt(gridCoordinateRange.x * gridOffset / 2f),Mathf.RoundToInt(gridCoordinateRange.y * gridOffset / 2f));
-			 gridPosition = new Vector2 (-gridCoordinateRange.x * gridOffset/2f , -gridCoordinateRange.y * gridOffset/2f);
-			 graphOrigin = graphCenter;
-			 snapValue = gridOffset;
-			 this.GetComponent<Image> ().GetComponent<RectTransform> ().sizeDelta = Vector2.one * _gridCoordinateRange.x * gridOffset;
+			gridCoordinateRange = _gridCoordinateRange;
+			gridOffset = _gridOffset;
+			graphCenter = new Vector2 (Mathf.RoundToInt(gridCoordinateRange.x * gridOffset / 2f),Mathf.RoundToInt(gridCoordinateRange.y * gridOffset / 2f));
+			gridPosition = new Vector2 (-gridCoordinateRange.x * gridOffset/2f , -gridCoordinateRange.y * gridOffset/2f);
+			graphOrigin = graphCenter;
+			snapValue = gridOffset;
+			this.GetComponent<Image> ().GetComponent<RectTransform> ().sizeDelta = Vector2.one * _gridCoordinateRange.x * gridOffset;
 		}
 
 		//Set snap value
@@ -108,9 +117,9 @@ namespace Cerebro
 		//Set graph parameters
 		public void SetGraphParameters (Vector2 _axisOffset)
 		{
-		  axisOffset = _axisOffset;
+			axisOffset = _axisOffset;
 		}
-			
+
 		//Set graph origin
 		public void ShiftGraphOrigin(Vector2 offset)
 		{
@@ -262,6 +271,7 @@ namespace Cerebro
 				GraphPointScript graphPointScript = GenerateLinePoint (new LinePoint (displayText, GraphPosToUIPos (point), 0f, false,0).SetPointTextOffset(new Vector2(0,-10)));
 				graphPointScript.SetPointColor (Color.blue);
 				graphPointScript.SetDotSize (3f);
+				graphPointScript.SetIsDragabble (canDrag);
 				if (canDrag) 
 				{
 					graphPointScript.onDragEvent += MovePlottedPoint;
@@ -298,7 +308,7 @@ namespace Cerebro
 			return new Vector2 (MathFunctions.GetRounded((position.x - gridPosition.x - graphOrigin.x) * axisOffset.x / gridOffset,1), MathFunctions.GetRounded(((position.y - gridPosition.y - graphOrigin.y) * axisOffset.y / gridOffset),1));
 		}
 
-	    //Set font multiplier
+		//Set font multiplier
 		public void SetFontMultiplier(float _fontMultiplier)
 		{
 			fontMultiPlier = _fontMultiplier;
@@ -325,7 +335,7 @@ namespace Cerebro
 			pointRectTransform.anchoredPosition = GetSnapPosition(pointRectTransform.anchoredPosition);
 			Vector2 pos =pointRectTransform.anchoredPosition;
 			Vector2 graphPoint = UIPosToGraphPos (pos);
-		
+
 			if(!IsContainInGraph(graphPoint))
 			{
 				pointRectTransform.anchoredPosition = oldPos;
@@ -343,7 +353,7 @@ namespace Cerebro
 				pointLineDisplay.GetComponent<RectTransform> ().anchoredPosition = gridPosition;
 				pointLineDisplay.name = "PointDisplayLines";
 			}
-				
+
 			graphPointObj.linePoint.origin = GraphPosToUIPos (graphPoint);
 			if (graphPointObj.lineObj != null && graphPointObj.lineObj.IsLineVisible())
 			{
@@ -357,6 +367,11 @@ namespace Cerebro
 					});
 					graphPointObj.lineObj.Draw (maxBounds);
 				}
+			}
+
+			if(graphPointObj.diagramObj != null)
+			{
+				graphPointObj.diagramObj.Draw ();
 			}
 
 			VectorLine vectorLine = pointLineDisplay.GetComponent<VectorObject2D> ().vectorLine;
@@ -386,8 +401,10 @@ namespace Cerebro
 			}
 		}
 
+
+
 		//Draw line with random points
-		public GraphLine DrawRandomLine(bool isLineVisible = true,bool isLineSegment = false)
+	    public GraphLine DrawRandomLine(bool isLineVisible = true,bool isLineSegment = false,LineShapeType lineShapeType = LineShapeType.Normal)
 		{
 			Vector2 point1 = GetRandomPointInGraph();
 			GraphPointScript graphPointScript1 = PlotPoint (point1,"");
@@ -400,13 +417,13 @@ namespace Cerebro
 			}
 			GraphPointScript graphPointScript2 = PlotPoint (point2,"");
 
-			GameObject lineObj = GameObject.Instantiate (vectorObjectPrefab);
+			GameObject lineObj = GameObject.Instantiate (lineShapeType == LineShapeType.Normal ? vectorObjectPrefab : vectorDottedObjectPrefab);
 			lineObj.transform.SetParent (this.transform);
 			lineObj.transform.localScale = Vector3.one;
 			lineObj.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 
 			VectorLine vectorLine = lineObj.GetComponent<VectorObject2D> ().vectorLine;
-			GraphLine graphLine = new GraphLine (vectorLine, graphPointScript1, graphPointScript2,arrowSprite,isLineSegment,isLineVisible);
+			GraphLine graphLine = new GraphLine (vectorLine, graphPointScript1, graphPointScript2,arrowSprite,isLineSegment,isLineVisible,lineShapeType);
 
 			if (isLineSegment || !isLineVisible)
 			{ 
@@ -424,17 +441,17 @@ namespace Cerebro
 			return graphLine;
 		}
 
-		public GraphLine DrawLineBetweenPoints(Vector2 point1, Vector2 point2,bool isLineVisible = true,bool isLineSegment =false)
+		public GraphLine DrawLineBetweenPoints(Vector2 point1, Vector2 point2,bool isLineVisible = true,bool isLineSegment =false,LineShapeType lineShapeType = LineShapeType.Normal,bool canDrag = true)
 		{
-			GraphPointScript graphPointScript1 = PlotPoint (point1,"");
-			GraphPointScript graphPointScript2 = PlotPoint (point2,"");
-			GameObject lineObj = GameObject.Instantiate (vectorObjectPrefab);
+			GraphPointScript graphPointScript1 = PlotPoint (point1,"",canDrag);
+			GraphPointScript graphPointScript2 = PlotPoint (point2,"",canDrag);
+			GameObject lineObj = GameObject.Instantiate (lineShapeType == LineShapeType.Normal ? vectorObjectPrefab : vectorDottedObjectPrefab);
 			lineObj.transform.SetParent (this.transform);
 			lineObj.transform.localScale = Vector3.one;
 			lineObj.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 
 			VectorLine vectorLine = lineObj.GetComponent<VectorObject2D> ().vectorLine;
-			GraphLine graphLine = new GraphLine (vectorLine, graphPointScript1, graphPointScript2,arrowSprite,isLineSegment,isLineVisible);
+			GraphLine graphLine = new GraphLine (vectorLine, graphPointScript1, graphPointScript2,arrowSprite,isLineSegment,isLineVisible,lineShapeType);
 			if (isLineSegment || !isLineVisible)
 			{
 				graphLine.Draw ();
@@ -463,9 +480,9 @@ namespace Cerebro
 		}
 
 		//Plot random point in grid
-		public void PlotRandomPoint()
+		public void PlotRandomPoint(string text ="A")
 		{
-			currentPlottedPoint = PlotPoint (GetRandomPointInGraph (), "A", true);
+			currentPlottedPoint = PlotPoint (GetRandomPointInGraph (), text, true);
 		}
 
 		#region IPointerClickHandler implementation
@@ -498,13 +515,13 @@ namespace Cerebro
 					axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (Color.blue, currentSelectedAxis);
 					axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (Color.black, 1 - currentSelectedAxis);
 				}
-			
+
 			} else if (graphQuesType == GraphQuesType.PlotPoint)
 			{
 				if (currentPlottedPoint == null) {
 					return;
 				}
-				
+
 				RectTransform pointRectTransform = currentPlottedPoint.GetComponent<RectTransform> ();
 				Vector2 oldPos = pointRectTransform.anchoredPosition;
 				currentPlottedPoint.transform.position = eventData.position;
@@ -599,23 +616,33 @@ namespace Cerebro
 			bool isAnswered = true;
 			switch (graphQuesType)
 			{
-			    case GraphQuesType.HighlightQuadrant:
+			case GraphQuesType.HighlightQuadrant:
 				isAnswered = (currentSelectedQuadrant > -1);
 				break;
 
-				case GraphQuesType.HighlightAxis:
+			case GraphQuesType.HighlightAxis:
 				isAnswered = (currentSelectedAxis > -1);
 				break;
 
-				case GraphQuesType.PlotPoint:
+			case GraphQuesType.PlotPoint:
 				isAnswered = currentPlottedPoint.IsValueChanged ();
 				break;
 
-				case GraphQuesType.PlotLine:
-				case GraphQuesType.PlotFixedLine:
+			case GraphQuesType.PlotLine:
+			case GraphQuesType.PlotFixedLine:
+			case GraphQuesType.PointLiesOnLine:
 				isAnswered = (currentGraphLine.point1.IsValueChanged () || currentGraphLine.point2.IsValueChanged ());
 				break;
-					
+
+			case GraphQuesType.DiagramImage:
+				isAnswered = false;
+				foreach (GraphPointScript graphPoint in currentGraphDiagram.graphPoints) {
+					if (graphPoint.IsValueChanged ()) {
+						isAnswered = true;
+					}
+				}
+				break;
+
 			}
 
 			return isAnswered;
@@ -627,28 +654,56 @@ namespace Cerebro
 			bool correct = false;
 			switch (graphQuesType)
 			{
-				case GraphQuesType.HighlightQuadrant:
-					correct = (currentSelectedQuadrant == currentCorrectQuadrant);
-					break;
+			case GraphQuesType.HighlightQuadrant:
+				correct = (currentSelectedQuadrant == currentCorrectQuadrant);
+				break;
 
-				case GraphQuesType.HighlightAxis:
-					correct = (currentCorrectAxis == currentSelectedAxis);
-					break;
+			case GraphQuesType.HighlightAxis:
+				correct = (currentCorrectAxis == currentSelectedAxis);
+				break;
 
-				case GraphQuesType.PlotPoint:
-					Vector2 graphPoint = UIPosToGraphPos (currentPlottedPoint.linePoint.origin);
-					correct = (correctPlottedPoint.x == graphPoint.x && correctPlottedPoint.y == graphPoint.y);
-					break;
+			case GraphQuesType.PlotPoint:
+				Vector2 graphPoint = UIPosToGraphPos (currentPlottedPoint.linePoint.origin);
+				correct = (correctPlottedPoint.x == graphPoint.x && correctPlottedPoint.y == graphPoint.y);
+				break;
 
-				case GraphQuesType.PlotLine:
+			case GraphQuesType.PlotLine:
 				correct = IsValidCurrenLinePoint(new Vector2[]{UIPosToGraphPos (currentGraphLine.point1.linePoint.origin),UIPosToGraphPos (currentGraphLine.point2.linePoint.origin)});
-					break;
+				break;
 
-				case GraphQuesType.PlotFixedLine:
-					correct = (fixedLinePoints [0] == UIPosToGraphPos (currentGraphLine.point1.linePoint.origin) && fixedLinePoints [1] == UIPosToGraphPos (currentGraphLine.point2.linePoint.origin)) || (fixedLinePoints [1] == UIPosToGraphPos (currentGraphLine.point1.linePoint.origin) && fixedLinePoints [0] == UIPosToGraphPos (currentGraphLine.point2.linePoint.origin));
-					break;
+			case GraphQuesType.PlotFixedLine:
+				correct = (fixedLinePoints [0] == UIPosToGraphPos (currentGraphLine.point1.linePoint.origin) && fixedLinePoints [1] == UIPosToGraphPos (currentGraphLine.point2.linePoint.origin)) || (fixedLinePoints [1] == UIPosToGraphPos (currentGraphLine.point1.linePoint.origin) && fixedLinePoints [0] == UIPosToGraphPos (currentGraphLine.point2.linePoint.origin));
+				break;
+
+			case GraphQuesType.PointLiesOnLine:
+				correct = IsPointOnLine (new Vector2[] {
+					UIPosToGraphPos (currentGraphLine.point1.linePoint.origin),
+					UIPosToGraphPos (currentGraphLine.point2.linePoint.origin)
+				});
+				break;
+
+			case GraphQuesType.DiagramImage:
+				correct = IsValidImageOfCurrentDiagram ();
+				break;
 			}
 			return correct;
+		}
+
+		public bool IsValidImageOfCurrentDiagram()
+		{
+			List<Vector2> currentPlottedPoints = currentGraphDiagram.GetPointList ();
+			List<Vector2> currentCorrectPoints = new List<Vector2>();
+
+			foreach (Vector2 point in currentDiagramPoints) {
+				currentCorrectPoints.Add (GraphPosToUIPos (point));
+			}
+
+			foreach (Vector2 point in currentPlottedPoints)
+			{
+				currentCorrectPoints.RemoveAll (x => x == point);
+			}
+
+			return currentCorrectPoints.Count<=0;
 		}
 
 		public bool IsValidCurrenLinePoint(Vector2[] points)
@@ -665,27 +720,39 @@ namespace Cerebro
 			return false;
 		}
 
+		public bool IsPointOnLine(Vector2[] points)
+		{
+			if (points.Length < 2) {
+				return false;
+			}
+			Vector3 lineParameters = MathFunctions.GetLineParamters (points [0], points [1]);
+
+			return MathFunctions.IsValidLinePoint(lineParameters,correctPlottedPoint);
+		}
+
+
 		//Handle correct answer according to graph question type
 		public void HandleCorrectAnswer()
 		{
 			switch (graphQuesType)
 			{
-				case GraphQuesType.HighlightQuadrant:
-					if (highLightedQuadrant) {
-						highLightedQuadrant.GetComponent<Image> ().color = new Color (MaterialColor.green800.r, MaterialColor.green800.g, MaterialColor.green800.b, 0.5f);
-					}
-					break;
+			case GraphQuesType.HighlightQuadrant:
+				if (highLightedQuadrant) {
+					highLightedQuadrant.GetComponent<Image> ().color = new Color (MaterialColor.green800.r, MaterialColor.green800.g, MaterialColor.green800.b, 0.5f);
+				}
+				break;
 
-				case GraphQuesType.HighlightAxis:
-						axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (MaterialColor.green800, currentSelectedAxis);
-					break;
+			case GraphQuesType.HighlightAxis:
+				axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (MaterialColor.green800, currentSelectedAxis);
+				break;
 
-			   case GraphQuesType.PlotPoint:
-					currentPlottedPoint.dot.color = MaterialColor.green800;
-					break;
+			case GraphQuesType.PlotPoint:
+				currentPlottedPoint.dot.color = MaterialColor.green800;
+				break;
 
 			case GraphQuesType.PlotLine:
 			case GraphQuesType.PlotFixedLine:
+			case GraphQuesType.PointLiesOnLine:
 				RemoveDragEventInGraphPoint (currentGraphLine.point1);
 				RemoveDragEventInGraphPoint (currentGraphLine.point2);
 				if (currentGraphLine.IsLineVisible ()) {
@@ -695,6 +762,14 @@ namespace Cerebro
 					currentGraphLine.point2.dot.color = MaterialColor.green800;
 				}
 				break;
+
+			case GraphQuesType.DiagramImage:
+				foreach (GraphPointScript graphPoint in currentGraphDiagram.graphPoints) {
+					RemoveDragEventInGraphPoint (graphPoint);
+				}
+				currentGraphDiagram.vectorLine.color = MaterialColor.green800;
+				break;
+
 			}
 		}
 
@@ -712,17 +787,17 @@ namespace Cerebro
 					SetQudrantPosition (correctQuadrant, currentCorrectQuadrant);
 					correctQuadrant.GetComponent<Image> ().color = new Color (MaterialColor.green800.r, MaterialColor.green800.g, MaterialColor.green800.b, 0.5f);
 				}
-					if (highLightedQuadrant) {
-						highLightedQuadrant.GetComponent<Image> ().color = new Color (MaterialColor.red800.r, MaterialColor.red800.g, MaterialColor.red800.b, 0.5f);
-					}
-					break;
+				if (highLightedQuadrant) {
+					highLightedQuadrant.GetComponent<Image> ().color = new Color (MaterialColor.red800.r, MaterialColor.red800.g, MaterialColor.red800.b, 0.5f);
+				}
+				break;
 
 			case GraphQuesType.HighlightAxis:
 				axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (MaterialColor.red800, currentSelectedAxis);
 				if (!isRevisited) {
 					axisObj.GetComponent<VectorObject2D> ().vectorLine.SetColor (MaterialColor.green800, currentCorrectAxis);
 				}
-					break;
+				break;
 
 			case GraphQuesType.PlotPoint:
 				currentPlottedPoint.dot.color = MaterialColor.red800;
@@ -731,10 +806,11 @@ namespace Cerebro
 					GraphPointScript plot = PlotPoint (correctPlottedPoint, currentPlottedPoint.linePoint.name, false);
 					plot.dot.color = MaterialColor.green800;
 				}
-					break;
+				break;
 
 			case GraphQuesType.PlotLine:
 			case GraphQuesType.PlotFixedLine:
+			case GraphQuesType.PointLiesOnLine:
 				if (currentGraphLine.IsLineVisible ()) {
 					currentGraphLine.vectorLine.color = MaterialColor.red800;
 				} else {
@@ -745,10 +821,22 @@ namespace Cerebro
 					RemoveDragEventInGraphPoint (currentGraphLine.point1);
 					RemoveDragEventInGraphPoint (currentGraphLine.point2);
 					Vector2[] maxBoundPoints = GetMaxBoundPointsOnCurrentLine ();
-					GraphLine correctLine = DrawLineBetweenPoints (maxBoundPoints [0], maxBoundPoints [1],true,currentGraphLine.IsLineSegment());
+					GraphLine correctLine = DrawLineBetweenPoints (maxBoundPoints [0], maxBoundPoints [1],true,currentGraphLine.IsLineSegment(),currentGraphLine.LineShapeType(),false);
 					correctLine.vectorLine.color = MaterialColor.green800;
-				
+
 				}
+				break;
+			case GraphQuesType.DiagramImage:
+				currentGraphDiagram.vectorLine.color = MaterialColor.red800;
+				currentGraphDiagram.vectorLine.Draw ();
+				if (!isRevisited) {
+					
+					foreach (GraphPointScript graphPoint in currentGraphDiagram.graphPoints) {
+						RemoveDragEventInGraphPoint (graphPoint);
+					}
+					DrawDiagram (currentDiagramPoints, MaterialColor.green800, currentGraphDiagram.LineShapeType ());
+				}
+					
 				break;
 			}
 		}
@@ -777,15 +865,22 @@ namespace Cerebro
 
 			case GraphQuesType.PlotLine:
 			case GraphQuesType.PlotFixedLine:
+			case GraphQuesType.PointLiesOnLine:
 				currentGraphLine.vectorLine.color = Color.black;
 				currentGraphLine.point1.SetIsValueChanged (false);
 				currentGraphLine.point2.SetIsValueChanged (false);
 				break;
-	
+
+			case GraphQuesType.DiagramImage:
+				currentGraphDiagram.vectorLine.color = Color.black;
+				foreach (GraphPointScript graphPoint in currentGraphDiagram.graphPoints) {
+					graphPoint.SetIsValueChanged (false);
+				}
+				break;
+
 			}
 		}
 
-	
 		//Remove drag event to stop dragging
 		public void RemoveDragEventInGraphPoint(GraphPointScript graphPoint)
 		{
@@ -829,6 +924,11 @@ namespace Cerebro
 			fixedLinePoints = _fixedLinePoints;
 		}
 
+		//Set current diagram points
+		public void SetCurrentDiagramPoints(List<Vector2>_currentDiagramPoints)
+		{
+			currentDiagramPoints = _currentDiagramPoints;
+		}
 
 		public Vector2[] GetMaxBoundPointsOnCurrentLine()
 		{
@@ -838,15 +938,18 @@ namespace Cerebro
 			case GraphQuesType.PlotFixedLine:
 				newPoints = fixedLinePoints;
 				break;
+
 			case GraphQuesType.PlotLine:
+			case GraphQuesType.PointLiesOnLine:
+				int randomLineNumber = Random.Range (0, currentLineParameters.Count);
 				Vector2[] points = new Vector2[4];
-				points [0] = new Vector2 (MathFunctions.GetPointX (currentLineParameters[0], graphMinValue.y), graphMinValue.y);
-				points [1] = new Vector2 (MathFunctions.GetPointX (currentLineParameters[0], graphMaxValue.y), graphMaxValue.y);
-				points [2] = new Vector2 (graphMaxValue.x, MathFunctions.GetPointY (currentLineParameters[0], graphMaxValue.x));
-				points [3] = new Vector2 (graphMinValue.x, MathFunctions.GetPointY (currentLineParameters[0], graphMinValue.x));
+				points [0] = new Vector2 (MathFunctions.GetPointX (currentLineParameters[randomLineNumber], graphMinValue.y), graphMinValue.y);
+				points [1] = new Vector2 (MathFunctions.GetPointX (currentLineParameters[randomLineNumber], graphMaxValue.y), graphMaxValue.y);
+				points [2] = new Vector2 (graphMaxValue.x, MathFunctions.GetPointY (currentLineParameters[randomLineNumber], graphMaxValue.x));
+				points [3] = new Vector2 (graphMinValue.x, MathFunctions.GetPointY (currentLineParameters[randomLineNumber], graphMinValue.x));
 				int cnt = 0;
 				for (int i = 0; i < points.Length; i++) {
-					if (IsContainInGraph (points [i]) && cnt < 2 && !System.Array.Exists (newPoints, x => x == points [i]) && !(currentLineParameters[0].x == 0 && points [i].x == 0) && !(currentLineParameters[0].y == 0 && points [i].y == 0)) {
+					if (IsContainInGraph (points [i]) && cnt < 2 && !System.Array.Exists (newPoints, x => x == points [i]) && !(currentLineParameters[randomLineNumber].x == 0 && points [i].x == 0) && !(currentLineParameters[randomLineNumber].y == 0 && points [i].y == 0)) {
 						newPoints [cnt] = points [i];
 						cnt++;
 					}
@@ -868,7 +971,7 @@ namespace Cerebro
 			points [1] = new Vector2 (MathFunctions.GetPointX (lineParameters, graphMaxValue.y), graphMaxValue.y);
 			points [2] = new Vector2 (graphMaxValue.x, MathFunctions.GetPointY (lineParameters, graphMaxValue.x));
 			points [3] = new Vector2 (graphMinValue.x, MathFunctions.GetPointY (lineParameters, graphMinValue.x));
-				
+
 			Vector2[] newPoints = new Vector2[2];
 			int cnt = 0;
 			for (int i = 0; i < points.Length; i++) {
@@ -887,29 +990,70 @@ namespace Cerebro
 			newPoints [1] = GraphPosToUIPos (newPoints [1]);
 			return newPoints;
 		}
-			
-		public void DrawDiagram(List<Vector2>  graphPoints,LineType linetype,float width = 2)
+
+		public void DrawDiagram(List<Vector2>  graphPoints, LineShapeType lineShapeType = LineShapeType.Normal,float width = 2,LineType lineType = LineType.Continuous)
+		{
+			DrawDiagram (graphPoints, Color.black, lineShapeType, width, lineType);
+		}
+
+		public void DrawDiagram(List<Vector2>  graphPoints,Color color, LineShapeType lineShapeType = LineShapeType.Normal,float width = 2,LineType lineType = LineType.Continuous)
 		{
 			GenerateDiagramParent ();
-			GameObject diagramObj = GameObject.Instantiate (vectorObjectPrefab);
+			GameObject diagramObj = GameObject.Instantiate (lineShapeType == LineShapeType.Normal? vectorObjectPrefab : vectorDottedObjectPrefab);
 			diagramObj.transform.SetParent (diagramParentObj.transform,false);
 			diagramObj.name = "diagram";
 
 			List<Vector2> UIPoints = new List<Vector2> ();
 
-			foreach (Vector2 graphPoint in graphPoints) 
-			{
-				UIPoints.Add(GraphPosToUIPos (graphPoint));
+			foreach (Vector2 graphPoint in graphPoints) {
+				UIPoints.Add (GraphPosToUIPos (graphPoint));
 			}
 
 			VectorLine vectorLine = diagramObj.GetComponent<VectorObject2D> ().vectorLine;
 			vectorLine.points2 = UIPoints;
-			vectorLine.SetWidth (width);
-			vectorLine.SetColor (Color.black);
-			vectorLine.lineType = linetype;
+			vectorLine.color = color;
+			vectorLine.lineType = lineType;
+			vectorLine.SetWidth (lineShapeType == LineShapeType.Dotted ?width *4f : width);
 			vectorLine.Draw ();
+
+
 		}
 
+
+		public void DrawMovebleDiagram(List<Vector2>  graphPoints,LineShapeType lineShapeType = LineShapeType.Normal,float width =2f, LineType lineType = LineType.Continuous)
+		{
+
+			GenerateDiagramParent ();
+			GameObject diagramObj = GameObject.Instantiate (lineShapeType == LineShapeType.Normal? vectorObjectPrefab : vectorDottedObjectPrefab);
+			diagramObj.transform.SetParent (diagramParentObj.transform,false);
+			diagramObj.name = "diagram";
+
+			VectorLine vectorLine = diagramObj.GetComponent<VectorObject2D> ().vectorLine;
+			vectorLine.SetWidth (width);
+			vectorLine.color = Color.black;
+			vectorLine.lineType = lineType;
+			vectorLine.SetWidth (lineShapeType == LineShapeType.Dotted ?width *4f : width);
+			currentGraphDiagram = new GraphDiagram (vectorLine,lineShapeType);
+
+			if (graphPoints.Count < 2) {
+				return;
+			}
+
+			currentGraphDiagram.SetIsCloseDiagram (graphPoints[0].Equals(graphPoints [graphPoints.Count - 1]));
+			int cnt = 0;
+			foreach (Vector2 graphPoint in graphPoints) 
+			{
+				if (cnt == graphPoints.Count-1 && graphPoints[0].Equals(graphPoints [graphPoints.Count - 1])) {
+					continue;
+				}
+				GraphPointScript graphPointScript = PlotPoint (graphPoint,"");
+				graphPointScript.SetDigramObject (currentGraphDiagram);
+				currentGraphDiagram.AddGraphPoint (graphPointScript);
+				cnt++;
+			}
+
+			currentGraphDiagram.Draw ();
+		}
 
 
 		public void DrawArc(Vector2 center,Vector2 point1,Vector2 point2)
@@ -998,7 +1142,7 @@ namespace Cerebro
 			} else {
 				diff =  endAngle - startAngle;
 			}
-				
+
 			uiPolygon.fillPercent = Mathf.CeilToInt (100f * (diff) / 360f);
 			uiPolygon.rotation = startAngle+180f;
 			uiPolygon.ReDraw ();

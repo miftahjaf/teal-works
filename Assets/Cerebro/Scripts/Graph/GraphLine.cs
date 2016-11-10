@@ -14,7 +14,8 @@ namespace Cerebro
 		private GameObject arrow1, arrow2;
 		private bool isLineSegment;
 		private bool isLineVisible;
-		public GraphLine(VectorLine vectorLine,GraphPointScript point1,GraphPointScript point2,Sprite arrowSprite,bool isLineSegment =false,bool isLineVisible=true)
+		private LineShapeType lineShapeType;
+		public GraphLine(VectorLine vectorLine,GraphPointScript point1,GraphPointScript point2,Sprite arrowSprite,bool isLineSegment =false,bool isLineVisible=true,LineShapeType lineShapeType = LineShapeType.Normal)
 		{
 			this.vectorLine = vectorLine;
 			this.point1 = point1;
@@ -22,6 +23,7 @@ namespace Cerebro
 			this.arrowSprite = arrowSprite;
 			this.isLineSegment = isLineSegment;
 			this.isLineVisible = isLineVisible;
+			this.lineShapeType = lineShapeType;
 		}
 
 		public void Draw()
@@ -85,5 +87,10 @@ namespace Cerebro
 			return this.isLineVisible;
 		}
 
+
+		public LineShapeType LineShapeType()
+		{
+			return this.lineShapeType;
+		}
 	}
 }
