@@ -61,6 +61,7 @@ namespace Cerebro
 		private int currentCorrectQuadrant;     //Current correct quadrant
 		private int currentSelectedAxis;        //Current selected axis
 		private int currentCorrectAxis;         //Current correct axis
+		private float currentRotationAngle;
 
 		private GraphPointScript currentPlottedPoint; //Current plotted point
 
@@ -90,6 +91,7 @@ namespace Cerebro
 			currentDiagramPoints = new List<Vector2> ();
 			currentSelectedAxis = -1;
 			currentCorrectAxis = -1;
+			currentRotationAngle = 0f;
 			currentCorrectQuadrant = 0;
 			this.ShiftPosition(Vector2.zero);
 			fixedLinePoints = new Vector2[]{ Vector2.zero, Vector2.zero };
@@ -643,6 +645,10 @@ namespace Cerebro
 				}
 				break;
 
+			case GraphQuesType.RotateDiagram:
+				isAnswered = diagramParentObj != null && diagramParentObj.transform.localEulerAngles.z > 0f;
+				break;
+
 			}
 
 			return isAnswered;
@@ -684,6 +690,10 @@ namespace Cerebro
 
 			case GraphQuesType.DiagramImage:
 				correct = IsValidImageOfCurrentDiagram ();
+				break;
+
+			case GraphQuesType.RotateDiagram:
+				correct = diagramParentObj!=null && diagramParentObj.transform.localEulerAngles.z > currentRotationAngle - 3f && diagramParentObj.transform.localEulerAngles.z < currentRotationAngle + 3f; 
 				break;
 			}
 			return correct;
@@ -770,6 +780,25 @@ namespace Cerebro
 				currentGraphDiagram.vectorLine.color = MaterialColor.green800;
 				break;
 
+			case GraphQuesType.RotateDiagram:
+				if (diagramParentObj) 
+				{
+					diagramParentObj.GetComponent<GraphDiagramRotator> ().canRotate = false;
+					SetDiagramColor (diagramParentObj, MaterialColor.green800);
+				}
+				break;
+			}
+		}
+
+		public void SetDiagramColor(GameObject diagramParent, Color color)
+		{
+			foreach (UIPolygon UIpolygon in diagramParent.GetComponentsInChildren<UIPolygon>()) {
+				UIpolygon.color = color;
+				UIpolygon.ReDraw ();
+			}
+
+			foreach (VectorObject2D vectorObject in diagramParent.GetComponentsInChildren<VectorObject2D>()) {
+				vectorObject.vectorLine.color = color;
 			}
 		}
 
@@ -826,6 +855,7 @@ namespace Cerebro
 
 				}
 				break;
+
 			case GraphQuesType.DiagramImage:
 				currentGraphDiagram.vectorLine.color = MaterialColor.red800;
 				currentGraphDiagram.vectorLine.Draw ();
@@ -836,7 +866,19 @@ namespace Cerebro
 					}
 					DrawDiagram (currentDiagramPoints, MaterialColor.green800, currentGraphDiagram.LineShapeType ());
 				}
-					
+				break;
+
+			case GraphQuesType.RotateDiagram:
+				if (diagramParentObj != null) {
+					SetDiagramColor (diagramParentObj, MaterialColor.red800);
+					if (!isRevisited) {
+						diagramParentObj.GetComponent<GraphDiagramRotator> ().canRotate = false;
+						GameObject correctDiagram = GameObject.Instantiate (diagramParentObj);
+						correctDiagram.transform.SetParent (this.transform, false);
+						correctDiagram.transform.eulerAngles = new Vector3 (0f, 0f, currentRotationAngle);
+						SetDiagramColor (correctDiagram, MaterialColor.green800);
+					}
+				}
 				break;
 			}
 		}
@@ -878,6 +920,13 @@ namespace Cerebro
 				}
 				break;
 
+			case GraphQuesType.RotateDiagram:
+				if (diagramParentObj != null) {
+					SetDiagramColor (diagramParentObj, Color.black);
+					diagramParentObj.GetComponent<GraphDiagramRotator> ().canRotate = true;
+				}
+				break;
+
 			}
 		}
 
@@ -910,6 +959,12 @@ namespace Cerebro
 		public void SetCurrentCorrectAxis(int _currentCorrectAxis)
 		{
 			currentCorrectAxis = _currentCorrectAxis;
+		}
+
+		//Set current rotation angle
+		public void SetCurrentRotationAngle(float _currentRotationAngle)
+		{
+			currentRotationAngle = _currentRotationAngle;
 		}
 
 		//Set current line parameters

@@ -658,6 +658,8 @@ namespace Cerebro {
 
 					QuestionText.text = string.Format ("Rotate the given figure {0}{1} {2} about origin.", angle, MathFunctions.deg, randSelector == 1 ? "clockwise": "anticlockwise");
 
+					graphHelper.SetGraphQuesType (GraphQuesType.RotateDiagram);
+					graphHelper.SetCurrentRotationAngle (randSelector == 1 ? angle : 360 - angle);
 					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord), new Vector2 (xCord + side1 - side2, yCord)});
 					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord + side1), new Vector2 (xCord + side1 - side2, yCord + side1)});
 					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord + side2), new Vector2 (xCord, yCord + side1 - side2)});
@@ -667,6 +669,8 @@ namespace Cerebro {
 					graphHelper.DrawArc (new Vector2 (xCord + side1, yCord), new Vector2 (xCord + side1, yCord + side2), new Vector2(xCord + side1 - side2, yCord));
 					graphHelper.DrawArc (new Vector2 (xCord + side1, yCord + side1), new Vector2 (xCord + side1 - side2, yCord + side1), new Vector2(xCord + side1, yCord + side1 - side2));
 					graphHelper.DrawArc (new Vector2 (xCord, yCord + side1), new Vector2 (xCord, yCord + side1 - side2), new Vector2(xCord + side2, yCord + side1));
+
+
 				}
 			}
 			#endregion
