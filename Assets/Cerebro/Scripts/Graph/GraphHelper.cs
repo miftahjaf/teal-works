@@ -799,6 +799,7 @@ namespace Cerebro
 
 			foreach (VectorObject2D vectorObject in diagramParent.GetComponentsInChildren<VectorObject2D>()) {
 				vectorObject.vectorLine.color = color;
+				vectorObject.vectorLine.Draw ();
 			}
 		}
 
@@ -1211,14 +1212,22 @@ namespace Cerebro
 				diagramParentObj.transform.SetParent (this.transform,false);
 				diagramParentObj.AddComponent<RectTransform> ();
 				diagramParentObj.GetComponent<RectTransform>().sizeDelta = Vector2.one * gridCoordinateRange.x * gridOffset;
-				if (graphQuesType == GraphQuesType.RotateDiagram) {
-					diagramParentObj.AddComponent<Image> ();
-					diagramParentObj.GetComponent<Image> ().color  =new Color(1f,1f,1f,0f);
-					diagramParentObj.AddComponent<GraphDiagramRotator> ();
-				}
-
 			}
 		}
+
+		//Generate clone of diagram to show rotation
+		public void DiagramRotateClone()
+		{
+			GameObject rotationObject = GameObject.Instantiate (diagramParentObj);
+			rotationObject.transform.SetParent (this.transform, false);
+			rotationObject.AddComponent<Image> ();
+			rotationObject.GetComponent<Image> ().color  =new Color(1f,1f,1f,0f);
+			rotationObject.AddComponent<GraphDiagramRotator> ();
+			SetDiagramColor (rotationObject, Color.blue);
+			diagramParentObj = rotationObject;
+		}
+
+
 
 	}
 }

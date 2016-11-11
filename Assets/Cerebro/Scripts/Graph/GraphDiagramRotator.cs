@@ -1,21 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
-public class GraphDiagramRotator : MonoBehaviour, IDragHandler {
-
+using System;
+public class GraphDiagramRotator : MonoBehaviour, IDragHandler
+{
 	public bool canRotate = true;
+
 	#region IDragHandler implementation
-	private int direction = 1;
 	public void OnDrag (PointerEventData eventData)
 	{
 		if (!canRotate) 
 		{
 			return;
 		}
-		transform.Rotate (Vector3.forward * Mathf.Sign(eventData.delta.x),eventData.delta.magnitude);
-	}
+		float AngleRad = Mathf.Atan2(Input.mousePosition.y - transform.position.y, Input.mousePosition.x - transform.position.x);
+		float AngleDeg = (180 / Mathf.PI) * AngleRad;
+		this.transform.rotation = Quaternion.Euler(0, 0, AngleDeg);
 
+	}
 	#endregion
+
+
 
 
 

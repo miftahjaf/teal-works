@@ -651,25 +651,67 @@ namespace Cerebro {
 					angle = 90 * Random.Range (1, 4);
 					randSelector = Random.Range (1, 3);
 
-					side1 = Random.Range (4, 9);  // square side
-					side2 = Random.Range (1, 1 + side1 / 3);  //circle radius
-					xCord = Random.Range (-7, 10 - side1);
-					yCord = Random.Range (-7, 10 - side1);
+
 
 					QuestionText.text = string.Format ("Rotate the given figure {0}{1} {2} about origin.", angle, MathFunctions.deg, randSelector == 1 ? "clockwise": "anticlockwise");
 
 					graphHelper.SetGraphQuesType (GraphQuesType.RotateDiagram);
-					graphHelper.SetCurrentRotationAngle (randSelector == 1 ? angle : 360 - angle);
-					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord), new Vector2 (xCord + side1 - side2, yCord)});
-					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord + side1), new Vector2 (xCord + side1 - side2, yCord + side1)});
-					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord + side2), new Vector2 (xCord, yCord + side1 - side2)});
-					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side1, yCord + side2), new Vector2 (xCord + side1, yCord + side1 - side2)});
+					graphHelper.SetCurrentRotationAngle (randSelector == 1 ?  360 - angle :angle);
+					randSelector = Random.Range (1, 4);
+					if (randSelector == 1)
+					{
+						side1 = Random.Range (4, 9);  // square side
+						side2 = Random.Range (1, 1 + side1 / 3);  //circle radius
+						xCord = Random.Range (-7, 10 - side1);
+						yCord = Random.Range (-7, 10 - side1);
+						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord), new Vector2 (xCord + side1 - side2, yCord)});
+						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side2, yCord + side1), new Vector2 (xCord + side1 - side2, yCord + side1)});
+						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord + side2), new Vector2 (xCord, yCord + side1 - side2)});
+						graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord + side1, yCord + side2), new Vector2 (xCord + side1, yCord + side1 - side2)});
 
-					graphHelper.DrawArc (new Vector2 (xCord, yCord), new Vector2(xCord + side2, yCord), new Vector2 (xCord, yCord + side2));
-					graphHelper.DrawArc (new Vector2 (xCord + side1, yCord), new Vector2 (xCord + side1, yCord + side2), new Vector2(xCord + side1 - side2, yCord));
-					graphHelper.DrawArc (new Vector2 (xCord + side1, yCord + side1), new Vector2 (xCord + side1 - side2, yCord + side1), new Vector2(xCord + side1, yCord + side1 - side2));
-					graphHelper.DrawArc (new Vector2 (xCord, yCord + side1), new Vector2 (xCord, yCord + side1 - side2), new Vector2(xCord + side2, yCord + side1));
+						graphHelper.DrawArc (new Vector2 (xCord, yCord), new Vector2(xCord + side2, yCord), new Vector2 (xCord, yCord + side2));
+						graphHelper.DrawArc (new Vector2 (xCord + side1, yCord), new Vector2 (xCord + side1, yCord + side2), new Vector2(xCord + side1 - side2, yCord));
+						graphHelper.DrawArc (new Vector2 (xCord + side1, yCord + side1), new Vector2 (xCord + side1 - side2, yCord + side1), new Vector2(xCord + side1, yCord + side1 - side2));
+						graphHelper.DrawArc (new Vector2 (xCord, yCord + side1), new Vector2 (xCord, yCord + side1 - side2), new Vector2(xCord + side2, yCord + side1));
+					}
+					else if(randSelector == 2)
+					{
+						xCord4 = Random.Range (-7, 8);
+						yCord4 = Random.Range (-7, 8);
+						do{	
+							xCord = Random.Range (-7, 8);
+							xCord1 = Random.Range (-7, 8);
+							xCord2 = Random.Range (-7, 8);
+							yCord = Random.Range (-7, 8);
+							yCord1 = Random.Range (-7, 8);
+							yCord2 = Random.Range (-7, 8);
 
+						} while (Mathf.Abs (xCord - xCord1) + Mathf.Abs (yCord - yCord1) < 5 || Mathf.Abs (xCord2 - xCord1) + Mathf.Abs (yCord2 - yCord1) < 5 || Mathf.Abs (xCord - xCord2) + Mathf.Abs (yCord - yCord2) < 5 || Mathf.Abs ((xCord - xCord1) * (yCord2 - yCord1) - (yCord - yCord1) * (xCord2 - xCord1)) < 5);
+
+						xCord3 = (xCord + xCord1 + xCord2) / 3;
+						yCord3 = (yCord + yCord1 + yCord2) / 3;
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3,yCord3),new Vector2(xCord,yCord)});
+					}
+					else if(randSelector == 3)
+					{
+						do{
+							xCord = Random.Range (-7, 3);
+							yCord3 = Random.Range (-7, 3);
+							side1 = Random.Range (2, 5 - xCord / 2);   // half of diagonal 1
+							side2 = Random.Range (2, 5 - yCord3 / 2);   // half of diagonal 2
+
+						} while (side1 == side2 || xCord == 0 || yCord3 == 0);
+
+						xCord1 = xCord + side1;
+						yCord1 = yCord3 + 2 * side2;
+						xCord2 = xCord + 2 * side1;
+						yCord = yCord3 + side2;
+						yCord2 = yCord;
+						xCord3 = xCord1;
+
+						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)});
+					}
+						graphHelper.DiagramRotateClone();
 
 				}
 			}
