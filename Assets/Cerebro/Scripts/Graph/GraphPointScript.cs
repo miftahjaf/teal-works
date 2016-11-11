@@ -136,6 +136,7 @@ namespace Cerebro
 			this.dot.raycastTarget = isDragabble;
 			this.arrow.raycastTarget = isDragabble;
 			this.pointName.raycastTarget = isDragabble;
+			this.GetComponent<Image> ().raycastTarget = isDragabble;
 		}
 	}
 

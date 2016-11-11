@@ -492,8 +492,8 @@ namespace Cerebro {
 				{
 					graphHelper.SetGridParameters(new Vector2(20,20),22);
 					graphHelper.DrawGraph ();
-					graphHelper.PlotPoint (new Vector2 (xCord, yCord),"", false);
-					graphHelper.PlotRandomPoint ();
+					graphHelper.PlotPoint (new Vector2 (xCord, yCord),"A", false);
+					graphHelper.PlotRandomPoint ("A'");
 					graphHelper.SetGraphQuesType (GraphQuesType.PlotPoint);
 				}
 				else{
@@ -700,7 +700,7 @@ namespace Cerebro {
 					graphHelper.DrawGraph ();
 					graphHelper.SetGraphQuesType (GraphQuesType.PlotPoint);
 					graphHelper.PlotPoint (new Vector2 (xCord, yCord),"A", false);
-					graphHelper.PlotRandomPoint ();
+					graphHelper.PlotRandomPoint ("A'");
 					graphHelper.SetCorrectPlottedPoint(new Vector2(xCord1,yCord1));
 				}
 				else if (selector == 2)
@@ -749,7 +749,7 @@ namespace Cerebro {
 					graphHelper.SetGridParameters(new Vector2(20,20),22);
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotFixedLine);
 					graphHelper.DrawGraph ();
-					graphHelper.DrawRandomLine (true, true);
+					graphHelper.DrawRandomLine (true, true, LineShapeType.Dotted);
 					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord), new Vector2 (xCord1, yCord1)});
 					graphHelper.SetFixedLinePoints (new Vector2[] {new Vector2 (xCord2,yCord2), new Vector2 (xCord3,yCord3)});
 				}
@@ -781,7 +781,7 @@ namespace Cerebro {
 					graphHelper.ShiftGraphOrigin (new Vector2 (-xCord4,-yCord4));
 					graphHelper.SetGraphQuesType(GraphQuesType.PlotFixedLine);
 					graphHelper.DrawGraph ();
-					graphHelper.DrawRandomLine (true, true);
+					graphHelper.DrawRandomLine (true, true, LineShapeType.Dotted);
 					graphHelper.PlotPoint (new Vector2 (xCord4,yCord4),"A",false);
 					graphHelper.DrawDiagram (new List<Vector2> (){new Vector2 (xCord, yCord), new Vector2 (xCord1, yCord1)});
 					graphHelper.SetFixedLinePoints (new Vector2[] {new Vector2 (xCord2,yCord2), new Vector2 (xCord3,yCord3)});
