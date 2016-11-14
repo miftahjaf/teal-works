@@ -358,6 +358,7 @@ namespace Cerebro {
 						xCord3 = xCord;
 						yCord3 = yCord2;
 
+						graphHelper.SetSnapValue (11);
 						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
 						graphHelper.DrawDiagram(new List<Vector2>(){new Vector2(xCord,yCord),new Vector2(xCord1,yCord1),new Vector2(xCord2,yCord2),new Vector2(xCord3, yCord3),new Vector2(xCord, yCord)});
 						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-(xCord + side1/2f)),new Vector3(0,1,-(yCord + side1/2f)),new Vector3(1,-1,-(xCord - yCord)),new Vector3(1,1,-(xCord1 + yCord1))});
