@@ -70,6 +70,157 @@ namespace Cerebro {
 			return string.Join(",", factors.ToArray());
 		}
 
+		public static bool checkAlgebraicExpressions (string CorrectAnswer, string UserAnswer)  // Negi - without braces of any type
+		{
+			int length = UserAnswer.Length;
+			string tempCorrectAnswer = string.Copy (CorrectAnswer);
+			string tempUserAnswer = string.Copy (UserAnswer);
+
+			if (tempUserAnswer [0] != '-' && tempUserAnswer [0] != '+') {
+				tempUserAnswer = tempUserAnswer.Insert (0, "+");
+				length++;
+			}
+
+			for (int i = 1; i < length; i++) {
+				if (tempUserAnswer [i] == '{'){
+					while (tempUserAnswer [i] != '}') {
+						i++;						
+					}
+				}
+				if (tempUserAnswer [i] == '-' || tempUserAnswer [i] == '+') {
+					tempUserAnswer = tempUserAnswer.Insert (i, "_");
+					length++;
+					i++;
+				}
+			}
+			length = tempCorrectAnswer.Length;
+			if (tempCorrectAnswer [0] != '-' && tempCorrectAnswer [0] != '+') {
+				tempCorrectAnswer = tempCorrectAnswer.Insert (0, "+");
+				length++;
+			}
+
+			for (int i = 1; i < length; i++) {
+				if (tempCorrectAnswer [i] == '{'){
+					while (tempCorrectAnswer [i] != '}') {
+						i++;						
+					}
+				}
+				if (tempCorrectAnswer [i] == '-' || tempCorrectAnswer [i] == '+') {
+					tempCorrectAnswer = tempCorrectAnswer.Insert (i, "_");
+					length++;
+					i++;
+				}
+			}
+			var splitUserAnswer = tempUserAnswer.Split (new string[] { "_" }, System.StringSplitOptions.None);
+			var spliCorrectAnswer = tempCorrectAnswer.Split (new string[] { "_" }, System.StringSplitOptions.None);
+
+			return checkAlgebraicTerms (spliCorrectAnswer, splitUserAnswer);
+		}
+
+		public static bool checkAlgebraicTerms (string[] correctTerms, string[] userTerms)
+		{
+			int NumOfUserTerms = userTerms.Length;
+			int NumOfCorrectTerms = correctTerms.Length;
+			if (NumOfCorrectTerms != NumOfUserTerms) {
+				return false;
+			}
+
+			for (int i = 0; i < NumOfCorrectTerms; i++) {
+				for (int j = 0; j < NumOfUserTerms; j++) {
+					if (checkSingleTerm (correctTerms [i], userTerms [j])) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+//		 Negi -  chesckSingleTerm checks for single term with + or - sign at the beginning of each term
+//		 The term may cantain a '/' sign but not a '*' sign 
+		 
+		public static bool checkSingleTerm (string correctTerm, string userTerm)
+		{
+			if (correctTerm.Contains ("/")) {
+				string[] splitUserTerm, splitCorrectTerm;
+				if (userTerm.Contains ("/")) {
+					splitUserTerm = userTerm.Split (new string[] { "/" }, System.StringSplitOptions.None); 
+					if (splitUserTerm [0][0] != '-' && splitUserTerm [0][0] != '+') {  
+						splitUserTerm [0] = splitUserTerm [0].Insert (0, "+");
+					} 
+					if (splitUserTerm [1][0] != '-' && splitUserTerm [1][0] != '+') { 
+						splitUserTerm [1] = splitUserTerm [1].Insert (0, "+");
+					} 
+					if (splitUserTerm [0][0] == '-' && splitUserTerm [1][0] == '-') {
+						splitUserTerm [0] = splitUserTerm [0].Remove (0, 1);
+						splitUserTerm [1] = splitUserTerm [1].Remove (0, 1);
+						splitUserTerm [0] = splitUserTerm [0].Insert (0, "+");
+						splitUserTerm [1] = splitUserTerm [1].Insert (0, "+");
+					} 
+					if (splitUserTerm [0][0] == '+' && splitUserTerm [1][0] == '-'){
+						splitUserTerm [0] = splitUserTerm [0].Remove (0, 1);
+						splitUserTerm [1] = splitUserTerm [1].Remove (0, 1);
+						splitUserTerm [0] = splitUserTerm [0].Insert (0, "-");
+						splitUserTerm [1] = splitUserTerm [1].Insert (0, "+");
+					}
+				} else {
+					return false;
+				}
+				splitCorrectTerm = correctTerm.Split (new string[] { "/" }, System.StringSplitOptions.None);
+				if (splitCorrectTerm [0][0] != '-' && splitCorrectTerm [0][0] != '+') {  
+					splitCorrectTerm [0] = splitCorrectTerm [0].Insert (0, "+");
+				} 
+				if (splitCorrectTerm [1][0] != '-' && splitCorrectTerm [1][0] != '+') { 
+					splitCorrectTerm [1] = splitCorrectTerm [1].Insert (0, "+");
+				}
+
+				if (checkAlgebraicTerms (splitCorrectTerm, splitUserTerm)) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			if (correctTerm.Length != userTerm.Length) {
+				return false;
+			}
+
+			List<string> splitCorrectTermList = new List<string> ();
+			List<string> splitUserTermList = new List<string> ();
+
+			List<int> splitLocationsUserTerm = userTerm.AllIndexesOf ("algebra");
+			List<int> splitLocationsCorrectTerm = correctTerm.AllIndexesOf ("algebra");
+
+			if (splitLocationsUserTerm.Count != splitLocationsCorrectTerm.Count) {  //checks whether number of variables are equal
+				return false;
+			}
+				
+			int numberOfTerms = splitLocationsCorrectTerm.Count + 1;
+			for (int i = 0; i < numberOfTerms - 1; i++)
+			{
+				splitLocationsUserTerm [i] -= 2;
+				splitLocationsCorrectTerm [i] -= 2;
+			}
+						
+			splitCorrectTermList.Add (correctTerm.Substring (0, splitLocationsCorrectTerm [0]));
+			splitUserTermList.Add (userTerm.Substring (0, splitLocationsUserTerm [0]));
+
+			for (int i = 0; i < numberOfTerms - 2; i++) {
+				splitCorrectTermList.Add (correctTerm.Substring (splitLocationsCorrectTerm [i], splitLocationsCorrectTerm [i + 1] - splitLocationsCorrectTerm [i]));
+			}
+			for (int i = 0; i < numberOfTerms - 2; i++) {
+				splitUserTermList.Add (userTerm.Substring (splitLocationsUserTerm [i], splitLocationsUserTerm [i + 1] - splitLocationsUserTerm [i]));
+			}
+			splitCorrectTermList.Add (correctTerm.Substring (splitLocationsCorrectTerm [splitLocationsCorrectTerm.Count - 1]));
+			splitUserTermList.Add (userTerm.Substring (splitLocationsUserTerm [splitLocationsUserTerm.Count - 1]));
+			
+			for (int i = 0; i < numberOfTerms; i++) {
+				if (!splitCorrectTermList.Contains (splitUserTermList[i]) || !splitUserTermList.Contains (splitCorrectTermList[i])) {
+					return false;
+				}
+			}
+			return true;
+		}
+
 		public static bool checkFractions (string[] userAnswers, string[] correctAnswers)
 		{
 			float num1 = -1;

@@ -502,20 +502,20 @@ namespace Cerebro {
 
 				if (selector == 1) 
 				{
-					QuestionText.text = "Find the reflection of the given point about x-axis.";
+					QuestionText.text = "Find the reflection of the point A about x-axis.";
 					Answer = string.Format ("({0},{1})", xCord, - yCord);
 					graphHelper.SetCorrectPlottedPoint (new Vector2 (xCord, - yCord));
 				}
 				else if (selector == 2) 
 				{
-					QuestionText.text = "Find the reflection of the given point about y-axis.";
+					QuestionText.text = "Find the reflection of the point A about y-axis.";
 					Answer = string.Format ("({0},{1})", - xCord, yCord);
 					graphHelper.SetCorrectPlottedPoint (new Vector2 (- xCord, yCord));
 		
 				}
 				else if (selector == 3)
 				{
-					QuestionText.text = "Find the reflection of the given point about origin.";
+					QuestionText.text = "Find the reflection of point A about origin.";
 					Answer = string.Format ("({0},{1})", - xCord, - yCord);
 					graphHelper.SetCorrectPlottedPoint (new Vector2 (- xCord, - yCord));
 
