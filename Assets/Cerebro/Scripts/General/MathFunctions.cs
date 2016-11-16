@@ -286,7 +286,7 @@ namespace Cerebro {
 			return new Vector2(origin.x+radius * Mathf.Cos(Mathf.Deg2Rad * angle), origin.y+radius*Mathf.Sin(Mathf.Deg2Rad*angle));
 		}
 
-		public static string GetAngleValueInString(float ans)
+		public static string GetAngleValueInString(float ans)  //Returns a decimal angle in deg,min,sec form
 		{
 			string answer = "";
 
