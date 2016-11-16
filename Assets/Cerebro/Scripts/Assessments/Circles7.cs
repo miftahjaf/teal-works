@@ -470,8 +470,17 @@ namespace Cerebro {
 				else if (selector == 5) 
 				{
 					SetMCQMode ();
-					diameter = MathFunctions.GetRounded (Random.Range (20, 100), 1);
-					radius = MathFunctions.GetRounded (Random.Range (diameter / 2 - 10,diameter / 2 + 10), 1);
+					diameter = Random.Range (20, 100);   // diameter of the circle
+
+					if (Random.Range (1, 4) == 1) {
+						radius = MathFunctions.GetRounded (diameter / 2f, 1); // radius = distance of the random point from the circle's centre
+					} else {
+						if (Random.Range (1, 3) == 1){
+							radius = MathFunctions.GetRounded (diameter / 2f - Random.Range (diameter / 5f, diameter / 3f), 1);
+						} else {
+							radius = MathFunctions.GetRounded (diameter / 2f + Random.Range (diameter / 5f, diameter / 3f), 1);
+						}
+					}
 
 					QuestionText.text = "A circle has a diameter of " + diameter + Lunit + ". A point 'P' lies at a distance " + radius + Lunit + " from the centre 'O' of the circle.";
 
@@ -480,10 +489,10 @@ namespace Cerebro {
 					MCQ.transform.Find("Option3").Find("Text").GetComponent<Text>().text = "P lies on the circle.";
 					MCQ.transform.Find("Option4").Find("Text").GetComponent<Text>().text = "Cannot be determined.";
 
-					if (Mathf.Abs (diameter / 2f - radius) > 0.0001f)
-						Answer = "P lies in the interior of the circle.";
-					else if (Mathf.Abs (diameter / 2f - radius) < 0.0001f)
+					if (radius - diameter / 2f > 0.0001f)
 						Answer = "P lies in the exterior of the circle.";
+					else if (radius - diameter / 2f < -0.0001f)
+						Answer = "P lies in the interior of the circle.";
 					else
 						Answer = "P lies on the circle.";
 				}

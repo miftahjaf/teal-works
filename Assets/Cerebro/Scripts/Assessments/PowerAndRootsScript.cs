@@ -253,7 +253,7 @@ namespace Cerebro {
 				} else if (selector == 7) {	//power in negative numbers
 					num1 = -1;
 					power1 = Random.Range (1, 100);
-					QuestionLatext.text = num1.ToString () + "^{" + power1.ToString () + "}";
+					QuestionLatext.text = "(" + num1.ToString () + ")^{" + power1.ToString () + "}";
 					GeneralButton.gameObject.SetActive (true);
 					if (power1 % 2 == 0)
 						Answer = "1";
@@ -383,17 +383,17 @@ namespace Cerebro {
 				QuestionText.text = "Find the square of :";
 
 				if (selector == 1) {          // Natural number
-					num1 = Random.Range (1, 14);
+					num1 = Random.Range (2, 10);
 					QuestionLatext.text = num1.ToString ();
 					GeneralButton.gameObject.SetActive (true);
 					Answer = (num1 * num1).ToString ();
 				} else if (selector == 2) {          // Negative number
-					num1 = Random.Range (-1, -13);
+					num1 = Random.Range (-2, -10);
 					QuestionLatext.text = num1.ToString ();
 					GeneralButton.gameObject.SetActive (true);
 					Answer = (num1 * num1).ToString ();
 				} else if (selector == 3) {          // decimal     
-					num1 = Random.Range (1, 17);
+					num1 = Random.Range (1, 10);
 					float number = (float)num1;
 					float square = (number * number) / (float)100;
 					QuestionLatext.text = (number/10).ToString ();
@@ -401,8 +401,10 @@ namespace Cerebro {
 					Answer = square.ToString ();
 				} else if (selector == 4) {          // fraction
 					QuestionText.text += " (in fraction)";
-					num1 = Random.Range (1, 14);
-					num2 = Random.Range (1, 14);
+					do {
+						num1 = Random.Range (2, 14);
+						num2 = Random.Range (2, 14);
+					} while (MathFunctions.GetHCF (num1, num2) > 1);
 					QuestionLatext.text = "\\frac{" + num1.ToString () + "}{" + num2.ToString () + "}";
 					GeneralButton.gameObject.SetActive (true);
 					Answer = getFraction (num1 * num1, num2 * num2);
@@ -416,14 +418,16 @@ namespace Cerebro {
 				QuestionText.text = "Compute :";
 
 				if (selector == 1) {          // Natural number
-					num1 = Random.Range (1, 14);
+					num1 = Random.Range (6, 16);
 					QuestionLatext.text = "\\root{" + (num1 * num1).ToString () + "}";
 					GeneralButton.gameObject.SetActive (true);
 					Answer = num1.ToString ();
 				} else if (selector == 2) {          // fraction
 					QuestionText.text+=" (in fraction)";
-					num1 = Random.Range (1, 14);
-					num2 = Random.Range (1, 14);
+					do { 
+						num1 = Random.Range (2, 14);
+						num2 = Random.Range (2, 14);
+					} while (MathFunctions.GetHCF (num1, num2) > 1);
 					QuestionLatext.text = "\\root{\\frac{" + (num1 * num1).ToString () + "}{"
 					+ (num2 * num2).ToString () + "}}";
 					GeneralButton.gameObject.SetActive (true);
@@ -433,27 +437,35 @@ namespace Cerebro {
 					GeneralButton.gameObject.SetActive (true);
 
 					if (choose == 1) { //Addition 
-						num1 = Random.Range (1, 14);
-						num2 = Random.Range (1, 14);
+						do {
+							num1 = Random.Range (2, 14);
+							num2 = Random.Range (2, 14);
+						} while (MathFunctions.GetHCF (num1, num2) > 1);
 						QuestionLatext.text = "\\root {" + (num1 * num1).ToString () + "} + \\root {" +
 						(num2 * num2).ToString () + "}";
 						Answer = (num1 + num2).ToString ();
 					} else if (choose == 2) { //Subtraction 
-						num1 = Random.Range (1, 14);
-						num2 = Random.Range (1, 14);
+						do {
+							num1 = Random.Range (2, 14);
+							num2 = Random.Range (2, 14);
+						} while (MathFunctions.GetHCF (num1, num2) > 1);
 						QuestionLatext.text = "\\root {" + (num1 * num1).ToString () + "} - \\root {" +
 						(num2 * num2).ToString () + "}";
 						Answer = (num1 - num2).ToString ();
 					} else if (choose == 3) { //Multiplication 
-						num1 = Random.Range (1, 14);
-						num2 = Random.Range (1, 14);
+						do {
+							num1 = Random.Range (2, 14);
+							num2 = Random.Range (2, 14);
+						} while (MathFunctions.GetHCF (num1, num2) > 1);
 						QuestionLatext.text = "\\root {" + (num1 * num1).ToString () + "} \\times \\root {" +
 						(num2 * num2).ToString () + "}";
 						Answer = (num1 * num2).ToString ();
 					} else {                 //division 
 						QuestionText.text+=" (in fraction)";
-						num1 = Random.Range (1, 14);
-						num2 = Random.Range (1, 14);
+						do {
+							num1 = Random.Range (2, 14);
+							num2 = Random.Range (2, 14);
+						} while (MathFunctions.GetHCF (num1, num2) > 1);
 						QuestionLatext.text = "\\root {" + (num1 * num1).ToString () + "} \\div \\root {" +
 						(num2 * num2).ToString () + "}";
 						//Answer = num1.ToString () + "/" + num2.ToString ();
@@ -462,10 +474,14 @@ namespace Cerebro {
 
 				} else if (selector == 4) {          // fraction
 					int choose = Random.Range (1, 5);
-					num1 = Random.Range (1, 14);
-					num2 = Random.Range (1, 14);
-					power1=Random.Range (1, 14);
-					power2 = Random.Range (1, 14);
+					do {
+						num1 = Random.Range (2, 14);
+						num2 = Random.Range (2, 14);
+					} while (MathFunctions.GetHCF (num1, num2) > 1);
+					do {
+						power1 = Random.Range (2, 11);
+						power2 = Random.Range (2, 11);
+					} while (MathFunctions.GetHCF (power1, power2) > 1);
 					GeneralButton.gameObject.SetActive (true);
 					QuestionText.text+=" (in fraction)";
 					if (choose == 1) {
@@ -504,8 +520,8 @@ namespace Cerebro {
 						Answer=getFraction(num1-power1,lcm);
 					}
 				}
-				else {                           //decimal
-					num1 = Random.Range (1, 17);
+				else if (selector == 5) {                           //decimal
+					num1 = Random.Range (11, 20);
 					float number = (float)num1;
 					float square = (number * number) / (float)100;
 					QuestionLatext.text = "\\root{" + square.ToString() + "}";
@@ -520,14 +536,16 @@ namespace Cerebro {
 				QuestionText.text = "Compute :";
 
 				if (selector == 1) {          // Natural number
-					num1 = Random.Range (1, 11);
+					num1 = Random.Range (2, 11);
 					QuestionLatext.text = "\\root[3]{" + (num1*num1*num1).ToString () + "}";
 					GeneralButton.gameObject.SetActive (true);
 					Answer = num1.ToString ();
 				} else if (selector == 2) {
 					QuestionText.text += " (in fraction)";// fraction
-					num1 = Random.Range (1, 11);
-					num2 = Random.Range (1, 11);
+					do {
+						num1 = Random.Range (2, 11);
+						num2 = Random.Range (2, 11);
+					} while (MathFunctions.GetHCF (num1, num2) > 1);
 					QuestionLatext.text = "\\root[3]{\\frac{" + (num1 * num1 * num1).ToString () + "}{"
 						+ (num2 * num2 * num2).ToString() + "}}";
 					GeneralButton.gameObject.SetActive (true);
@@ -537,29 +555,37 @@ namespace Cerebro {
 					int choose = Random.Range (1, 5);
 
 					if (choose == 1) { //Addition 
-						num1 = Random.Range (1, 11);
-						num2 = Random.Range (1, 11);
+						do {
+							num1 = Random.Range (2, 11);
+							num2 = Random.Range (2, 11);
+						} while (MathFunctions.GetHCF (num1, num2) > 1);
 						QuestionLatext.text = "\\root[3]{" + (num1 * num1*num1).ToString () + "} + \\root[3]{" +
 							(num2 * num2*num2).ToString () + "}";
 						GeneralButton.gameObject.SetActive (true);
 						Answer = (num1 + num2).ToString ();
 					} else if (choose == 2) { //Subtraction 
-						num1 = Random.Range (1, 11);
-						num2 = Random.Range (1, 11);
+						do {
+							num1 = Random.Range (2, 11);
+							num2 = Random.Range (2, 11);
+						} while (MathFunctions.GetHCF (num1, num2) > 1);
 						QuestionLatext.text = "\\root[3]{" + (num1 * num1*num1).ToString () + "} - \\root[3]{" +
 							(num2 * num2*num2).ToString () + "}";
 						GeneralButton.gameObject.SetActive (true);
 						Answer = (num1 - num2).ToString ();
 					} else if (choose == 3) { //Multiplication 
-						num1 = Random.Range (1, 11);
-						num2 = Random.Range (1, 11);
+						do {
+							num1 = Random.Range (2, 11);
+							num2 = Random.Range (2, 11);
+						} while (MathFunctions.GetHCF (num1, num2) > 1);
 						QuestionLatext.text = "\\root[3]{" + (num1 * num1*num1).ToString () + "} \\times \\root[3]{" +
 							(num2 * num2*num2).ToString () + "}";
 						GeneralButton.gameObject.SetActive (true);
 						Answer = (num1 * num2).ToString ();
 					} else {                 //division 
-						num1 = Random.Range (1, 11);
-						num2 = Random.Range (1, 11);
+						do {
+							num1 = Random.Range (2, 11);
+							num2 = Random.Range (2, 11);
+						} while (MathFunctions.GetHCF (num1, num2) > 1);
 						QuestionLatext.text = "\\root[3]{" + (num1 * num1*num1).ToString () + "} \\div \\root[3]{" +
 							(num2 * num2*num2).ToString () + "}";
 						GeneralButton.gameObject.SetActive (true);
@@ -569,10 +595,14 @@ namespace Cerebro {
 
 				} else if (selector == 4) {          // fraction
 					int choose = Random.Range (1, 5);
-					num1 = Random.Range (1, 11);
-					num2 = Random.Range (1, 11);
-					power1=Random.Range (1, 11);
-					power2=Random.Range (1, 11);
+					do {
+						num1 = Random.Range (2, 11);
+						num2 = Random.Range (2, 11);
+					} while (MathFunctions.GetHCF (num1, num2) > 1);
+					do {
+						power1 = Random.Range (2, 11);
+						power2 = Random.Range (2, 11);
+					} while (MathFunctions.GetHCF (power1, power2) > 1);
 					QuestionText.text += " (in fraction)";
 					if (choose == 1) {
 						QuestionLatext.text = "\\frac{ \\root[3]{" + (num1 * num1*num1).ToString () + "} + " +
@@ -626,12 +656,12 @@ namespace Cerebro {
 					GeneralButton.gameObject.SetActive (true);
 					Answer = (num1 * num1 * num1).ToString ();
 				} else if (selector == 2) {          // Negative number
-					num1 = Random.Range (-1, -10);
+					num1 = Random.Range (-2, -10);
 					QuestionLatext.text = num1.ToString ();
 					GeneralButton.gameObject.SetActive (true);
 					Answer = (num1 * num1 * num1).ToString ();
 				} else if (selector == 3) {          // decimal
-					num1 = Random.Range (1, 17);
+					num1 = Random.Range (2, 16);
 					float number = (float)num1;
 					float cube = (num1 * num1 * num1) / (float)1000;
 					QuestionLatext.text = (number / 10).ToString ();
@@ -639,8 +669,10 @@ namespace Cerebro {
 					Answer = cube.ToString ();
 				} else if (selector == 4) {          //  fraction
 					QuestionText.text+= " (in fraction)";
-					num1 = Random.Range (1, 11);
-					num2 = Random.Range (1, 11);
+					do {
+						num1 = Random.Range (2, 11);
+						num2 = Random.Range (2, 11);
+					} while (MathFunctions.GetHCF (num1, num2) > 1);
 					QuestionLatext.text = "\\frac{" + num1.ToString () + "}{" + num2.ToString () + "}";
 					GeneralButton.gameObject.SetActive (true);
 					Answer = getFraction (num1 * num1 * num1, num2 * num2 * num2);
