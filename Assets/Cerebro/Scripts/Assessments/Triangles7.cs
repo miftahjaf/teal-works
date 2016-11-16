@@ -496,11 +496,11 @@ namespace Cerebro
 							coeff2 = Random.Range (2, 10);
 						} while (MathFunctions.GetHCF (coeff1, coeff2) > 1);
 
-						coeff3 = Random.Range (10, 180 / (coeff1 + coeff2)); // common ratio = x
+						coeff3 = Random.Range (5, 180 / (coeff1 + coeff2)); // common ratio = x
+						Debug.Log ("coeff3 = " + coeff3 + ", upper limit = " + 180/(coeff1 + coeff2));
 						angle1 = 180 - (coeff1 + coeff2) * coeff3; 
-					} while (angle1 < 30);
-
-					angle2 = coeff1 * coeff3;
+						angle2 = coeff1 * coeff3;
+					} while (angle1 < 30 || angle2 < 30 || angle1 + angle2 > 130 || angle2 == 90);
 
 					QuestionLatext.text = "Find \\xalgebra :";
 					Answer = string.Format ("{0}{1}", coeff3, MathFunctions.deg);
@@ -531,7 +531,7 @@ namespace Cerebro
 						angle2 = 180 - (coeff1 + coeff2) * coeff3; 
 						angle1 = coeff1 * coeff3;
 
-					} while (angle1 < 30f || angle2 < 30f);  // to maintain reasonable aspect ratio of the figure
+					} while (angle1 < 30f || angle2 < 30f || angle1 == 90 || angle1 + angle2 > 140);  // to maintain reasonable aspect ratio of the figure
 
 					QuestionLatext.text = "Find \\xalgebra :";
 					Answer = string.Format ("{0}{1}", coeff3, MathFunctions.deg);
@@ -642,7 +642,8 @@ namespace Cerebro
 					lengthForDiagram = breadthForDiagram * (2f / Mathf.Tan (angle1 * Mathf.Deg2Rad));
 					origin = new Vector2 (lengthForDiagram / 2f, breadthForDiagram / 2f);
 
-					diagramHelper.AddLinePoint (new LinePoint ("C", Vector2.zero, 0, false, 1.5f * lengthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("C", Vector2.zero, 0, false, lengthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, 0), 0, false, 40));
 					diagramHelper.AddLinePoint (new LinePoint ("A", new Vector2 (lengthForDiagram, 0), 180f - angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)));
 					diagramHelper.AddLinePoint (new LinePoint ("B", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)));
 
@@ -694,10 +695,11 @@ namespace Cerebro
 					lengthForDiagram = breadthForDiagram * (2f / Mathf.Tan (angle1 * Mathf.Deg2Rad));
 					origin = new Vector2 (lengthForDiagram / 2f, breadthForDiagram / 2f);
 
-					diagramHelper.AddLinePoint (new LinePoint ("B", Vector2.zero, 0, true, 1.5f * lengthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("B", Vector2.zero, 0, false, lengthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, 0), 0, true, 40));
 					diagramHelper.AddLinePoint (new LinePoint ("E", new Vector2 (lengthForDiagram, 0), 180f - angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)));
 					diagramHelper.AddLinePoint (new LinePoint ("A", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)));
-					diagramHelper.AddLinePoint (new LinePoint ("D", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 0, true, lengthForDiagram));
+					diagramHelper.AddLinePoint (new LinePoint ("D", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 0, true, 40 + lengthForDiagram / 2f));
 					diagramHelper.AddLinePoint (new LinePoint ("C", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180f, false, 0.5f * lengthForDiagram));
 
 					diagramHelper.AddAngleArc (new AngleArc ("" + angle1 + MathFunctions.deg, MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 360f - angle1, 360f));
