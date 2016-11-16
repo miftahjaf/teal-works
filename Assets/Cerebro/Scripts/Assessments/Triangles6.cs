@@ -459,7 +459,7 @@ namespace Cerebro
 
 				if(selector == 1)
 				{
-					angle1 = Random.Range (40, 70); 
+					angle1 = Random.Range (35, 60); 
 					angle2 = Random.Range (20, 50);
 					coeff1 = Random.Range (3, 10);
 
@@ -482,13 +482,16 @@ namespace Cerebro
 				}
 				else if (selector == 2)
 				{
-					coeff1 = Random.Range (2, 10);
-					do{
-						coeff2 = Random.Range (2, 10);
-					} while (MathFunctions.GetHCF (coeff1, coeff2) > 1);
+					do {
+						coeff1 = Random.Range (2, 10);
+						do{
+							coeff2 = Random.Range (2, 10);
+						} while (MathFunctions.GetHCF (coeff1, coeff2) > 1);
 
-					coeff3 = Random.Range (10, 180 / (coeff1 + coeff2)); // common ratio = x
-					angle1 = 180 - (coeff1 + coeff2) * coeff3; 
+						coeff3 = Random.Range (10, 180 / (coeff1 + coeff2)); // common ratio = x
+						angle1 = 180 - (coeff1 + coeff2) * coeff3; 
+					} while (angle1 < 30);
+
 					angle2 = coeff1 * coeff3;
 
 					QuestionLatext.text = "Find \\xalgebra :";
@@ -541,7 +544,7 @@ namespace Cerebro
 				}
 				else if (selector == 4)
 				{
-					angle1 = Random.Range (40, 70); 
+					angle1 = Random.Range (35, 60); 
 					angle2 = Random.Range (20, 50);
 					coeff1 = Random.Range (3, 10);
 
@@ -611,7 +614,7 @@ namespace Cerebro
 				}
 				else if (selector == 2)
 				{
-					angle1 = Random.Range (30, 70);
+					angle1 = Random.Range (40, 70);
 
 					QuestionLatext.text = string.Format ("Find \\xalgebra, if AB = AC.");
 					Answer = string.Format ("{0}{1}", 180 - 2 * angle1, MathFunctions.deg);
@@ -687,6 +690,7 @@ namespace Cerebro
 
 			userAnswerLaText = answerButton.gameObject.GetChildByName<TEXDraw>("Text");
 			userAnswerLaText.text = "";
+			Debug.Log ("" + Answer);
 		}
 
 		public override void numPadButtonPressed(int value)
