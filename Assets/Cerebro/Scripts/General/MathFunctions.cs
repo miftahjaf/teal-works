@@ -17,6 +17,11 @@ namespace Cerebro {
 			return b == 0 ? a : GetHCF(b, a % b);
 		}
 
+		public static int GetHCF(int a, int b, int c) 
+		{
+			return GetHCF (GetHCF (a, b), c);
+		}
+
 		public static int GetLCM(int a, int b, int c) {
 			int lcm1 = GetLCM (a, b);
 			int lcmFinal = GetLCM (lcm1, c);
