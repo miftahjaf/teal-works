@@ -201,17 +201,17 @@ namespace Cerebro {
 		private Vector2 GetQuadrants(float angle)
 		{
 			int xSign = 1,ySign =1;
-			if (angle >= 0 && angle <= 90f) {
+			if (angle >= 0 && angle < 90f) {
 				xSign = 1;
 				ySign = 1;
-			} else if (angle > 90 && angle <= 180f) {
+			} else if (angle >= 90 && angle < 180f) {
 				xSign = -1;
 				ySign = 1;
-			} else if (angle > 180f && angle <= 270f) 
+			} else if (angle >= 180f && angle < 270f) 
 			{
 				xSign = -1;
 				ySign = -1;
-			} else if (angle > 270f && angle <= 360f) 
+			} else if (angle >= 270f && angle < 360f) 
 			{
 				xSign = 1;
 				ySign = -1;
