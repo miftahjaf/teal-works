@@ -20,8 +20,6 @@ namespace Cerebro
 		private int coeff2;
 		private int coeff3;
 		private int coeff4;
-		private int coeff5;
-		private int coeff6;
 		private float lengthForDiagram;
 		private const float breadthForDiagram = 120f;
 		float angle1, angle2;
