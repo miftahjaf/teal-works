@@ -19,7 +19,7 @@ namespace Cerebro {
 			//Disable or enbale arrow
 			this.arrow.enabled = linePoint.shouldShowArrow;
 
-			this.dot.enabled = !string.IsNullOrEmpty (linePoint.name);
+			this.dot.enabled = !string.IsNullOrEmpty (linePoint.name) && linePoint.shouldShowDot;
 
 			//Set arrow position
 			this.arrow.GetComponent<RectTransform> ().anchoredPosition = position;
@@ -37,7 +37,7 @@ namespace Cerebro {
 			this.dot.GetComponent<RectTransform> ().anchoredPosition = position;
 
 
-		if (linePoint.textOffset == Vector2.zero) {
+			if (linePoint.pointTextOffset == Vector2.zero) {
 			//Get point position 15 angle up down 
 			float newAngle = linePoint.textDirection == 0 ? (linePoint.angle < 180 ? linePoint.angle - 15 : linePoint.angle + 15) : linePoint.angle + (15 * linePoint.textDirection);
 			if (linePoint.radius > 0 || linePoint.radius < 0) {
@@ -46,9 +46,9 @@ namespace Cerebro {
 				position = position + new Vector2 (linePoint.textDirection == 0 ? 0f : 15f * linePoint.textDirection, linePoint.textDirection == 0 ? -20f : 0);
 			}
 				
-		} else {
-			position = position + linePoint.textOffset;
-		}
+			} else {
+				position = position + linePoint.pointTextOffset;
+			}
 			this.pointName.GetComponent<RectTransform> ().anchoredPosition =  position ;
 
 			//Set point label

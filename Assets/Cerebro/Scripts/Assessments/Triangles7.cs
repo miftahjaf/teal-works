@@ -477,10 +477,10 @@ namespace Cerebro
 					lengthForDiagram = breadthForDiagram * (2f / Mathf.Tan (angle1 * Mathf.Deg2Rad));
 					origin = new Vector2 (lengthForDiagram / 2f, breadthForDiagram / 2f);
 
-					diagramHelper.AddLinePoint (new LinePoint ("R", Vector2.zero, 0, false, lengthForDiagram).SetTextOffset(new Vector2(0,-20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("P", new Vector2 (lengthForDiagram, 0), 180f - angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineText(coeff1 + " cm").SetLineTextDirection(TextDir.Right).SetTextOffset(new Vector2(0,20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("Q", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineText(coeff1 + " cm").SetLineTextDirection(TextDir.Left).SetTextOffset(new Vector2(0,-20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("S", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1 + angle2, false, breadthForDiagram / Mathf.Sin ((angle1 + angle2) * Mathf.Deg2Rad)).SetTextOffset(new Vector2(0,-20f)));
+					diagramHelper.AddLinePoint (new LinePoint ("R", Vector2.zero, 0, false, lengthForDiagram).SetPointTextOffset(new Vector2(0,-20f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("P", new Vector2 (lengthForDiagram, 0), 180f - angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineText(coeff1 + " cm").SetLineTextDirection(TextDir.Right).SetPointTextOffset(new Vector2(0,20f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("Q", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineText(coeff1 + " cm").SetLineTextDirection(TextDir.Left).SetPointTextOffset(new Vector2(0,-20f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("S", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1 + angle2, false, breadthForDiagram / Mathf.Sin ((angle1 + angle2) * Mathf.Deg2Rad)).SetPointTextOffset(new Vector2(0,-20f)).SetShouldShowDot(false));
 
 					diagramHelper.AddAngleArc (new AngleArc ("" + angle1 + MathFunctions.deg, Vector2.zero, 0f, angle1));
 					diagramHelper.AddAngleArc (new AngleArc ("" + angle2 + MathFunctions.deg, MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180f + angle1, 180f + angle1 + angle2, 0, false, false));
@@ -562,10 +562,10 @@ namespace Cerebro
 					lengthForDiagram = breadthForDiagram * (2f / Mathf.Tan (angle1 * Mathf.Deg2Rad));
 					origin = new Vector2 (lengthForDiagram / 2f, breadthForDiagram / 2f);
 
-					diagramHelper.AddLinePoint (new LinePoint ("R", Vector2.zero, 0, false, lengthForDiagram).SetTextOffset(new Vector2(0,-20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("P", new Vector2 (lengthForDiagram, 0), 180f - angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineText(coeff1 + " cm").SetLineTextDirection(TextDir.Right).SetTextOffset(new Vector2(0,20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("Q", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineText(coeff1 + " cm").SetLineTextDirection(TextDir.Left).SetTextOffset(new Vector2(0,-20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("S", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1 + angle2, false, breadthForDiagram / Mathf.Sin ((angle1 + angle2) * Mathf.Deg2Rad)).SetTextOffset(new Vector2(0,-20f)));
+					diagramHelper.AddLinePoint (new LinePoint ("R", Vector2.zero, 0, false, lengthForDiagram).SetPointTextOffset(new Vector2(0,-20f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("P", new Vector2 (lengthForDiagram, 0), 180f - angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineText(coeff1 + " cm").SetLineTextDirection(TextDir.Right).SetPointTextOffset(new Vector2(0,20f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("Q", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineText(coeff1 + " cm").SetLineTextDirection(TextDir.Left).SetPointTextOffset(new Vector2(0,-20f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("S", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1 + angle2, false, breadthForDiagram / Mathf.Sin ((angle1 + angle2) * Mathf.Deg2Rad)).SetPointTextOffset(new Vector2(0,-20f)).SetShouldShowDot(false));
 
 					diagramHelper.AddAngleArc (new AngleArc ("" + angle1 + MathFunctions.deg, Vector2.zero, 0f, angle1));
 					diagramHelper.AddAngleArc (new AngleArc ("" + angle2 + MathFunctions.deg, MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180f + angle1, 180f + angle1 + angle2, 0, false, false));
@@ -642,10 +642,10 @@ namespace Cerebro
 					lengthForDiagram = breadthForDiagram * (2f / Mathf.Tan (angle1 * Mathf.Deg2Rad));
 					origin = new Vector2 (lengthForDiagram / 2f, breadthForDiagram / 2f);
 
-					diagramHelper.AddLinePoint (new LinePoint ("C", Vector2.zero, 0, false, lengthForDiagram).SetTextOffset(new Vector2(0,-20f)));
+					diagramHelper.AddLinePoint (new LinePoint ("C", Vector2.zero, 0, false, lengthForDiagram).SetPointTextOffset(new Vector2(0,-20f)).SetShouldShowDot(false));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, 0), 0, false, 40));
-					diagramHelper.AddLinePoint (new LinePoint ("A", new Vector2 (lengthForDiagram, 0), 180f - angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetTextOffset(new Vector2(0,20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("B", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetTextOffset(new Vector2(0,-20f)));
+					diagramHelper.AddLinePoint (new LinePoint ("A", new Vector2 (lengthForDiagram, 0), 180f - angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetPointTextOffset(new Vector2(0,20f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("B", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetPointTextOffset(new Vector2(0,-20f)).SetShouldShowDot(false));
 
 					diagramHelper.AddAngleArc (new AngleArc ("" + (180 - angle1) + MathFunctions.deg, new Vector2 (lengthForDiagram, 0), 0f, 180f - angle1));
 					diagramHelper.AddAngleArc (new AngleArc ("\\xalgebra", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180f + angle1, 360f - angle1, 0 , false, false));
@@ -695,12 +695,12 @@ namespace Cerebro
 					lengthForDiagram = breadthForDiagram * (2f / Mathf.Tan (angle1 * Mathf.Deg2Rad));
 					origin = new Vector2 (lengthForDiagram / 2f, breadthForDiagram / 2f);
 
-					diagramHelper.AddLinePoint (new LinePoint ("B", Vector2.zero, 0, false, lengthForDiagram).SetTextOffset(new Vector2(0,-20f)));
+					diagramHelper.AddLinePoint (new LinePoint ("B", Vector2.zero, 0, false, lengthForDiagram).SetPointTextOffset(new Vector2(0,-20f)).SetShouldShowDot(false));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (lengthForDiagram, 0), 0, true, 40));
-					diagramHelper.AddLinePoint (new LinePoint ("E", new Vector2 (lengthForDiagram, 0), 180f - angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetTextOffset(new Vector2(0,20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("A", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetTextOffset(new Vector2(0,-20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("D", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 0, true, 40 + lengthForDiagram / 2f).SetTextOffset(new Vector2(0,20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("C", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180f, false, 0.5f * lengthForDiagram).SetTextOffset(new Vector2(0,20f)));
+					diagramHelper.AddLinePoint (new LinePoint ("E", new Vector2 (lengthForDiagram, 0), 180f - angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetPointTextOffset(new Vector2(0,20f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("A", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetPointTextOffset(new Vector2(0,-20f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("D", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 0, true, 40 + lengthForDiagram / 2f).SetPointTextOffset(new Vector2(0,20f)));
+					diagramHelper.AddLinePoint (new LinePoint ("C", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180f, false, 0.5f * lengthForDiagram).SetPointTextOffset(new Vector2(0,20f)));
 
 					diagramHelper.AddAngleArc (new AngleArc ("" + angle1 + MathFunctions.deg, MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 360f - angle1, 360f));
 
@@ -720,16 +720,16 @@ namespace Cerebro
 					lengthForDiagram = breadthForDiagram / Mathf.Tan (angle1 * Mathf.Deg2Rad);
 					origin = new Vector2 (lengthForDiagram / 2f, breadthForDiagram / 2f);
 
-					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, 0, false, lengthForDiagram).SetTextOffset(new Vector2(20,0f)));
-					diagramHelper.AddLinePoint (new LinePoint ("C", new Vector2 (lengthForDiagram, 0), 90, false, breadthForDiagram).SetTextOffset(new Vector2(20f,0f)));
-					diagramHelper.AddLinePoint (new LinePoint ("B", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineType (LineShapeType.Dotted).SetTextOffset(new Vector2(-20f,0f)));
-					diagramHelper.AddLinePoint (new LinePoint ("A", Vector2.zero, angle1 + angle2, false, breadthForDiagram / (2 * Mathf.Cos (angle2 * Mathf.Deg2Rad) * Mathf.Sin (angle1 * Mathf.Deg2Rad))).SetTextOffset(new Vector2(-20f,0f)));
-					diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1 - angle2, false, breadthForDiagram / (2 * Mathf.Cos (angle2 * Mathf.Deg2Rad) * Mathf.Sin (angle1 * Mathf.Deg2Rad))));
+					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, 0, false, lengthForDiagram).SetPointTextOffset(new Vector2(20,0f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("C", new Vector2 (lengthForDiagram, 0), 90, false, breadthForDiagram).SetPointTextOffset(new Vector2(20f,0f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("B", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineType (LineShapeType.Dotted).SetPointTextOffset(new Vector2(-20f,0f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("A", Vector2.zero, angle1 + angle2, false, breadthForDiagram / (2 * Mathf.Cos (angle2 * Mathf.Deg2Rad) * Mathf.Sin (angle1 * Mathf.Deg2Rad))).SetPointTextOffset(new Vector2(-20f,0f)).SetShouldShowDot(false));
+					diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1 - angle2, false, breadthForDiagram / (2 * Mathf.Cos (angle2 * Mathf.Deg2Rad) * Mathf.Sin (angle1 * Mathf.Deg2Rad))).SetShouldShowDot(false));
 
 					diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (lengthForDiagram, 0), 90, 180));
 					diagramHelper.AddAngleArc (new AngleArc ("" + angle1 + MathFunctions.deg, Vector2.zero, 0, angle1));
 					diagramHelper.AddAngleArc (new AngleArc ("" + angle2 + MathFunctions.deg, Vector2.zero, angle1, angle1 + angle2));
-					diagramHelper.AddAngleArc (new AngleArc ("" + (180 - 2 * angle2) + MathFunctions.deg, MathFunctions.PointAtDirection (Vector2.zero, angle1 + angle2, breadthForDiagram / (2 * Mathf.Cos (angle2 * Mathf.Deg2Rad) * Mathf.Sin (angle1 * Mathf.Deg2Rad))), 180 + angle1 + angle2, 360 + angle1 - angle2));
+					diagramHelper.AddAngleArc (new AngleArc ("" + (180 - 2 * angle2) + MathFunctions.deg, MathFunctions.PointAtDirection (Vector2.zero, angle1 + angle2, breadthForDiagram / (2 * Mathf.Cos (angle2 * Mathf.Deg2Rad) * Mathf.Sin (angle1 * Mathf.Deg2Rad))), 180 + angle1 + angle2, 360 + angle1 - angle2,50f));
 
 					diagramHelper.Draw ();
 					diagramHelper.ShiftPosition (- origin);

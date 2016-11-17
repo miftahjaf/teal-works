@@ -22,8 +22,8 @@ namespace Cerebro
 		public float angle;
 		public float radius;
 		public bool shouldShowArrow;
+		public bool shouldShowDot;
 		public int textDirection;
-		public Vector2 textOffset;
 		public LineShapeType lineType;
 		public string lineText;
 		public TextDir lineTextDirection;
@@ -36,8 +36,9 @@ namespace Cerebro
 			this.angle = 0;
 			this.radius = 0;
 			this.shouldShowArrow = false;
+			this.shouldShowDot = true;
 			this.textDirection = 0;
-			this.textOffset = Vector2.zero;
+			this.pointTextOffset = Vector2.zero;
 			this.lineType = LineShapeType.Normal;
 			this.lineText = "";
 			this.lineTextDirection = TextDir.None;
@@ -57,14 +58,14 @@ namespace Cerebro
 		}
 
 
-		public LinePoint(string name,Vector2 origin,float angle,bool shouldShowArrow,Vector2 textOffset,float radius =100f):this()
+		public LinePoint(string name,Vector2 origin,float angle,bool shouldShowArrow,Vector2 pointTextOffset,float radius =100f):this()
 		{
 			this.name = name;
 			this.origin = origin;
 			this.angle = angle;
 			this.radius = radius;
 			this.shouldShowArrow = shouldShowArrow;
-			this.textOffset = textOffset;
+			this.pointTextOffset = pointTextOffset;
 		}
 
 		public LinePoint SetName(string name)
@@ -98,20 +99,19 @@ namespace Cerebro
 			return this;
 		}
 
+		public LinePoint SetShouldShowDot(bool shouldShowDot)
+		{
+			this.shouldShowDot = shouldShowDot;
+			return this;
+		}
+
 		public LinePoint SetTextDirection(int textDirection)
 		{
 			this.textDirection = textDirection;
 			return this;
 		}
-
-		public LinePoint SetTextOffset(Vector2 textOffset)
-		{
-			this.textOffset = textOffset;
-			return this;
-		}
-
 			
-		public LinePoint SetLineType(LineShapeType lineType)
+    	public LinePoint SetLineType(LineShapeType lineType)
 		{
 			this.lineType = lineType;
 			return this;
