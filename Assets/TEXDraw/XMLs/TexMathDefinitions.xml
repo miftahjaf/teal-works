@@ -94,6 +94,18 @@
 		<C15E hash="350" name="smile" nameAlt="" typeId="1"/>
 		<C15F hash="351" name="frown" nameAlt="" typeId="1"/>
 		<C160 hash="352" name="ell" nameAlt="" typeId="0"/>
+		<C161 hash="353" name="aalgebra" nameAlt="" typeId="0"/>
+		<C162 hash="354" name="balgebra" nameAlt="" typeId="0"/>
+		<C163 hash="355" name="calgebra" nameAlt="" typeId="0"/>
+		<C164 hash="356" name="dalgebra" nameAlt="" typeId="0"/>
+		<C16D hash="365" name="malgebra" nameAlt="" typeId="0"/>
+		<C16E hash="366" name="nalgebra" nameAlt="" typeId="0"/>
+		<C170 hash="368" name="palgebra" nameAlt="" typeId="0"/>
+		<C171 hash="369" name="qalgebra" nameAlt="" typeId="0"/>
+		<C172 hash="370" name="ralgebra" nameAlt="" typeId="0"/>
+		<C178 hash="376" name="xalgebra" nameAlt="" typeId="0"/>
+		<C179 hash="377" name="yalgebra" nameAlt="" typeId="0"/>
+		<C17A hash="378" name="zalgebra" nameAlt="" typeId="0"/>
 		<C17B hash="379" name="imath" nameAlt="" typeId="0"/>
 		<C17C hash="380" name="jmath" nameAlt="" typeId="0"/>
 		<C17D hash="381" name="wp" nameAlt="" typeId="0"/>
@@ -328,6 +340,7 @@
 		<C455 hash="1109" name="yen" nameAlt="" typeId="0"/>
 		<C456 hash="1110" name="Rrightarrow" nameAlt="" typeId="4"/>
 		<C457 hash="1111" name="Lleftarrow" nameAlt="" typeId="4"/>
+		<C45C hash="1116" name="angle" nameAlt="" typeId="0"/>
 		<C45D hash="1117" name="measuredangle" nameAlt="" typeId="1"/>
 		<C45E hash="1118" name="sphericalangle" nameAlt="" typeId="1"/>
 		<C45F hash="1119" name="varpropto" nameAlt="" typeId="3"/>

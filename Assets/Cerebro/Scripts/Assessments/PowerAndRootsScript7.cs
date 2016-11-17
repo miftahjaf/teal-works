@@ -369,7 +369,7 @@ namespace Cerebro {
                         power2 = temp;
                     }
                     QuestionText.text = "Compute the power : ";
-                    QuestionLatext.text = num1.ToString() + "^{" + power1.ToString() + "}\\div"
+                    QuestionLatext.text = num1.ToString() + "^{" + power1.ToString() + "}\\div "
                     + num1.ToString() + "^{" + power2.ToString() + "} = " + num1.ToString() + "^? ";
                     GeneralButton.gameObject.SetActive(true);
                     Answer = (power1 - power2).ToString();
@@ -379,7 +379,7 @@ namespace Cerebro {
                     num1 = -1;
                     power1 = Random.Range(1, 100);
                     QuestionText.text = "Compute the power : ";
-                    QuestionLatext.text = num1.ToString() + "^{" + power1.ToString() + "}";
+					QuestionLatext.text = "{(" + num1.ToString() + ")}^{" + power1.ToString() + "}";
                     GeneralButton.gameObject.SetActive(true);
                     if (power1 % 2 == 0)
                         Answer = "1";
@@ -407,8 +407,8 @@ namespace Cerebro {
                     QuestionText.text = "Compute the power : ";
                                 
                         QuestionLatext.text = num1.ToString() + "^{" + power1.ToString() + "}\\cdot"
-                        + num2.ToString() + "^{" + power1.ToString() + "} = (" + num1.ToString() + "\\cdot" +
-                        num2.ToString() + ")^? ";
+						+ num2.ToString() + "^{" + power1.ToString() + "} = {(" + num1.ToString() + "\\cdot" +
+						num2.ToString() + ")}^? ";
                         Answer = power1.ToString();
                    
                 }
@@ -418,7 +418,7 @@ namespace Cerebro {
                     power1 = Random.Range(2, 4);
                     power2 = Random.Range(2, 4);
                     QuestionText.text = "Compute the power : ";
-                    QuestionLatext.text = "(" + num1.ToString() + "^" + power1.ToString() + ")^" + power2.ToString();
+					QuestionLatext.text = "{(" + num1.ToString() + "^" + power1.ToString() + ")}^" + power2.ToString();
                     GeneralButton.gameObject.SetActive(true);
                     Answer = Mathf.Ceil(Mathf.Pow(num1, (power1 * power2))).ToString();
                 }
@@ -439,7 +439,7 @@ namespace Cerebro {
 
                     int n7 = Random.Range(9, 50);
                     QuestionText.text = "Simplify (correct to 2 decimal places):";
-                    QuestionLatext.text = n1 + "^" + p1 + "\\div (" + (-n2) + ")^" + p2 + " \\times ( \\frac{ " + n4 + "}{ " + n5 + "} )^ " + p3 + " \\div " + n6 + "^{" + p4 + "}";
+					QuestionLatext.text = n1 + "^" + p1 + "\\div {(" + (-n2) + ")}^" + p2 + " \\times {(\\frac{" + n4 + "}{" + n5 + "})}^ " + p3 + " \\div " + n6 + "^{" + p4 + "}";
                     float ans1 = Mathf.Pow(n1, p1) / Mathf.Pow((-(float)n2), p2);
                     CerebroHelper.DebugLog(ans1 + "ans1 ");
 
@@ -467,7 +467,7 @@ namespace Cerebro {
                         n5 = 1;
                     int p3 = Random.Range(-2, 3);
                     QuestionText.text = "Simplify (correct to 2 decimal places):";
-                    QuestionLatext.text = n1 + "^" + p1 + "\\times" + n2 + "^{" + p3 + "} \\div ( \\frac{" + n3 + "}{" + n4 + "} )^{" + pow + "} \\times (" + n5 + ")^{" + p3 + "}";
+					QuestionLatext.text = n1 + "^" + p1 + "\\times" + n2 + "^{" + p3 + "} \\div {(\\frac{" + n3 + "}{" + n4 + "})}^{" + pow + "} \\times {(" + n5 + ")}^{" + p3 + "}";
                     Answer = (((Mathf.Pow(n1, p1) * Mathf.Pow(n2, p3)) / Mathf.Pow(((float)n3 / (float)n4), pow)) * Mathf.Pow(n5, p3)).ToString("F2");
 
                     GeneralButton.gameObject.SetActive(true);
@@ -606,7 +606,7 @@ namespace Cerebro {
                     if (r4 > 0)
                         QuestionLatext.text = "\\frac{" + r1 + "^" + pow1 + "\\times" + r2 + "^" + pow2 + "}{" + r4 + "^" + pow4 + "\\times " + r3 + "^" + pow3 + "}";
                     else
-                        QuestionLatext.text = "\\frac{" + r1 + "^" + pow1 + "\\times" + r2 + "^" + pow2 + "}{" + r3 + "^" + pow3 + "\\times (" + r4 + ")^" + pow4 + "}";
+						QuestionLatext.text = "\\frac{" + r1 + "^" + pow1 + "\\times" + r2 + "^" + pow2 + "}{" + r3 + "^" + pow3 + "\\times {(" + r4 + ")}^" + pow4 + "}";
 
                     int ans1 = (int)(Mathf.Pow(r1, pow1) * Mathf.Pow(r2, pow2));
                     int ans2 = (int)(Mathf.Pow(r3, pow3) * Mathf.Pow(r4, pow4));
@@ -732,8 +732,8 @@ namespace Cerebro {
                 {
                     int r1 = Random.Range(5, 50);
                     int r2 = Random.Range(11, 30);
-                    QuestionText.text = "Find the value of x:";
-                    QuestionLatext.text = "\\root{ x + " + r1 + "} = " + r2;
+                    QuestionText.text = "Find the value of x :";
+					QuestionLatext.text = "\\root{ \\xalgebra + " + r1 + "} = " + r2;
                     int ans = (int)Mathf.Pow(r2, 2) - r1;
                     Answer = ans.ToString();
                     GeneralButton.gameObject.SetActive(true);
@@ -778,8 +778,8 @@ namespace Cerebro {
                     
                     int y = p1 * x / p2;
                     int tot = x + y;
-                    QuestionText.text = "Find the value of x - y:";
-                    QuestionLatext.text = "(" + Mathf.Pow(r1, p1) + ")^x = (" + Mathf.Pow(r1, p2) + ")^y and x + y = " + tot ;
+                    QuestionText.text = "Find the value of x - y :";
+					QuestionLatext.text = "" + Mathf.Pow(r1, p1) + "^{\\xalgebra} = " + Mathf.Pow(r1, p2) + "^{\\yalgebra} and \\xalgebra + \\yalgebra = " + tot ;
                     Answer = (x - y).ToString();
                     GeneralButton.gameObject.SetActive (true);
 				} 
