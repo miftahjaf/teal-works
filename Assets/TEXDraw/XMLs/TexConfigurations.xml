@@ -15,10 +15,10 @@
 		<Param MatrixMargin="0.4"/>
 		<Param OverUnderMargin="0.09"/>
 		<Param FractionMargin="0.2"/>
-		<Param NumeratorShift="0.143"/>
+		<Param NumeratorShift="0.3"/>
 		<Param NumeratorShiftNoLine="0.211"/>
 		<Param NumeratorNarrow="0.11"/>
-		<Param DenominatorShift="0.613"/>
+		<Param DenominatorShift="1.03"/>
 		<Param DenominatorNarrow="0.099"/>
 		<Param SupDrop="0.135"/>
 		<Param SubDrop="0.25"/>
@@ -34,11 +34,11 @@
 		<Param BigOpLowerGap="0.16"/>
 	</Parameters>
 	<DefaultTypefaces>
-		<MapStyle code="0" fontId="2"/>
-		<MapStyle code="1" fontId="1"/>
-		<MapStyle code="2" fontId="1"/>
-		<MapStyle code="3" fontId="2"/>
-		<MapStyle code="4" fontId="2"/>
+		<MapStyle code="0" fontId="15"/>
+		<MapStyle code="1" fontId="15"/>
+		<MapStyle code="2" fontId="15"/>
+		<MapStyle code="3" fontId="15"/>
+		<MapStyle code="4" fontId="15"/>
 		<MapStyle code="5" fontId="0"/>
 	</DefaultTypefaces>
 	<GlueTable>

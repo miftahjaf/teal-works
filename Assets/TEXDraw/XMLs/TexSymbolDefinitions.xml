@@ -9,42 +9,47 @@
      <Font index="12" id="cmtt"/>
      <Font index="13" id="eufm"/>
      <Font index="14" id="eurm"/>
-     <Font index="15" id="opens"/>
-     <Font index="16" id="iconic" xLength="8" yLength="4" scale="1" lineOffset="-0.2" detectAlpha="0" alphaOnly="1"/>
+     <Font index="15" id="gothamssm-light 1"/>
+     <Font index="16" id="opens"/>
+     <Font index="17" id="iconic" xLength="8" yLength="4" scale="1" lineOffset="-0.2" detectAlpha="0" alphaOnly="1"/>
  </FontIDs>
     <SymbolMap>
-		<C1000 hash="4096" name="play" nameAlt="" typeId="0"/>
-		<C1001 hash="4097" name="pause" nameAlt="" typeId="0"/>
-		<C1002 hash="4098" name="stop" nameAlt="" typeId="0"/>
-		<C1003 hash="4099" name="step" nameAlt="" typeId="0"/>
-		<C1004 hash="4100" name="electric" nameAlt="" typeId="0"/>
-		<C1005 hash="4101" name="sunshine" nameAlt="" typeId="0"/>
-		<C1006 hash="4102" name="moon" nameAlt="" typeId="0"/>
-		<C1007 hash="4103" name="cloud" nameAlt="" typeId="0"/>
-		<C1008 hash="4104" name="lock" nameAlt="" typeId="0"/>
-		<C1009 hash="4105" name="finger" nameAlt="" typeId="0"/>
-		<C100A hash="4106" name="convexstar" nameAlt="" typeId="0"/>
-		<C100B hash="4107" name="time" nameAlt="" typeId="0"/>
-		<C100C hash="4108" name="rocket" nameAlt="" typeId="0"/>
-		<C100D hash="4109" name="flight" nameAlt="" typeId="0"/>
-		<C100E hash="4110" name="placemark" nameAlt="" typeId="0"/>
-		<C100F hash="4111" name="speed" nameAlt="" typeId="0"/>
-		<C1010 hash="4112" name="reset" nameAlt="" typeId="0"/>
-		<C1011 hash="4113" name="wrench" nameAlt="" typeId="0"/>
-		<C1012 hash="4114" name="dumpbin" nameAlt="" typeId="0"/>
-		<C1013 hash="4115" name="stack" nameAlt="" typeId="0"/>
-		<C1014 hash="4116" name="call" nameAlt="" typeId="0"/>
-		<C1015 hash="4117" name="heart" nameAlt="" typeId="0"/>
-		<C1016 hash="4118" name="wrongmark" nameAlt="" typeId="0"/>
-		<C1017 hash="4119" name="checkmark" nameAlt="" typeId="0"/>
-		<C1018 hash="4120" name="cross" nameAlt="" typeId="0"/>
-		<C1019 hash="4121" name="speedup" nameAlt="" typeId="0"/>
-		<C101A hash="4122" name="levelup" nameAlt="" typeId="0"/>
-		<C101B hash="4123" name="chat" nameAlt="" typeId="0"/>
-		<C101C hash="4124" name="idea" nameAlt="" typeId="0"/>
-		<C101D hash="4125" name="lookup" nameAlt="" typeId="0"/>
-		<C101E hash="4126" name="key" nameAlt="" typeId="0"/>
-		<C101F hash="4127" name="gift" nameAlt="" typeId="0"/>
+		<CA61 hash="2657" name="a" nameAlt="" typeId="0"/>
+		<CA78 hash="2680" name="x" nameAlt="" typeId="0"/>
+		<CA79 hash="2681" name="y" nameAlt="" typeId="0"/>
+		<CA7A hash="2682" name="z" nameAlt="" typeId="0"/>
+		<C1100 hash="4352" name="play" nameAlt="" typeId="0"/>
+		<C1101 hash="4353" name="pause" nameAlt="" typeId="0"/>
+		<C1102 hash="4354" name="stop" nameAlt="" typeId="0"/>
+		<C1103 hash="4355" name="step" nameAlt="" typeId="0"/>
+		<C1104 hash="4356" name="electric" nameAlt="" typeId="0"/>
+		<C1105 hash="4357" name="sunshine" nameAlt="" typeId="0"/>
+		<C1106 hash="4358" name="moon" nameAlt="" typeId="0"/>
+		<C1107 hash="4359" name="cloud" nameAlt="" typeId="0"/>
+		<C1108 hash="4360" name="lock" nameAlt="" typeId="0"/>
+		<C1109 hash="4361" name="finger" nameAlt="" typeId="0"/>
+		<C110A hash="4362" name="convexstar" nameAlt="" typeId="0"/>
+		<C110B hash="4363" name="time" nameAlt="" typeId="0"/>
+		<C110C hash="4364" name="rocket" nameAlt="" typeId="0"/>
+		<C110D hash="4365" name="flight" nameAlt="" typeId="0"/>
+		<C110E hash="4366" name="placemark" nameAlt="" typeId="0"/>
+		<C110F hash="4367" name="speed" nameAlt="" typeId="0"/>
+		<C1110 hash="4368" name="reset" nameAlt="" typeId="0"/>
+		<C1111 hash="4369" name="wrench" nameAlt="" typeId="0"/>
+		<C1112 hash="4370" name="dumpbin" nameAlt="" typeId="0"/>
+		<C1113 hash="4371" name="stack" nameAlt="" typeId="0"/>
+		<C1114 hash="4372" name="call" nameAlt="" typeId="0"/>
+		<C1115 hash="4373" name="heart" nameAlt="" typeId="0"/>
+		<C1116 hash="4374" name="wrongmark" nameAlt="" typeId="0"/>
+		<C1117 hash="4375" name="checkmark" nameAlt="" typeId="0"/>
+		<C1118 hash="4376" name="cross" nameAlt="" typeId="0"/>
+		<C1119 hash="4377" name="speedup" nameAlt="" typeId="0"/>
+		<C111A hash="4378" name="levelup" nameAlt="" typeId="0"/>
+		<C111B hash="4379" name="chat" nameAlt="" typeId="0"/>
+		<C111C hash="4380" name="idea" nameAlt="" typeId="0"/>
+		<C111D hash="4381" name="lookup" nameAlt="" typeId="0"/>
+		<C111E hash="4382" name="key" nameAlt="" typeId="0"/>
+		<C111F hash="4383" name="gift" nameAlt="" typeId="0"/>
  </SymbolMap>
     <LargerMap>
  </LargerMap>

@@ -344,11 +344,11 @@ namespace Cerebro {
 					power1 = Random.Range (2, 50);
 					power2 = Random.Range (2, 50);
 					var power3 = Random.Range (2, 50);
-					QuestionLatext.text = "\\frac{a^{" + num1.ToString () + "}\\cdot b^{" +
-					num2.ToString () + "}\\cdot c^{" + num3.ToString () + "}}{a^{" +
-					power1.ToString () + "}\\cdot b^{" +
-					power2.ToString () + "}\\cdot c^{" + power3.ToString () + "}} = " +
-					"a^?\\cdot b^?\\cdot c^?"; 
+					QuestionLatext.text = "\\frac{\\aalgebra^{" + num1.ToString () + "}\\cdot \\balgebra^{" +
+						num2.ToString () + "}\\cdot \\calgebra^{" + num3.ToString () + "}}{\\aalgebra^{" +
+						power1.ToString () + "}\\cdot \\balgebra^{" +
+						power2.ToString () + "}\\cdot \\calgebra^{" + power3.ToString () + "}} = " +
+						"\\aalgebra^?\\cdot \\balgebra^?\\cdot \\calgebra^?"; 
 					GeneralButton.gameObject.SetActive (true);
 					Answer = (num1 - power1).ToString () + "," + (num2 - power2).ToString () + "," +
 					(num3 - power3).ToString ();
@@ -356,11 +356,11 @@ namespace Cerebro {
 					num1 = Random.Range (2, 50);
 					num2 = Random.Range (2, 50);
 					power1 = Random.Range (2, 50);
-					QuestionLatext.text = "a^{-" + num1.ToString () + "}\\cdot b^{" +
-					num2.ToString () + "}\\cdot c^{" + power1.ToString () + "}\\cdot a^{" +
-					(num1 + 1).ToString () + "}\\cdot b^{" +
-					(num2 - 1).ToString () + "}\\cdot c^{-" + power1.ToString () + "} = " +
-					"a^?\\cdot b^?\\cdot c^?"; 
+					QuestionLatext.text = "\\aalgebra^{-" + num1.ToString () + "}\\cdot \\balgebra^{" +
+						num2.ToString () + "}\\cdot \\calgebra^{" + power1.ToString () + "}\\cdot \\aalgebra^{" +
+						(num1 + 1).ToString () + "}\\cdot \\balgebra^{" +
+						(num2 - 1).ToString () + "}\\cdot \\calgebra^{-" + power1.ToString () + "} = " +
+						"\\aalgebra^?\\cdot \\balgebra^?\\cdot \\calgebra^?"; 
 					GeneralButton.gameObject.SetActive (true);
 					Answer = "1," + (2 * num2 - 1).ToString () + ",0";
 				} else {
@@ -370,8 +370,8 @@ namespace Cerebro {
 					power2 = Random.Range (2, 6);
 					num1 = Random.Range (1, 6);
 					num2 = Random.Range (1, 6);
-					QuestionLatext.text = coeff.ToString () + "x^" + power1.ToString () + "y^" + power2.ToString ()
-					+ " for x= " + num1.ToString () + ", y= " + num2.ToString () + ".";
+					QuestionLatext.text = coeff.ToString () + "\\xalgebra^" + power1.ToString () + "\\yalgebra^" + power2.ToString ()
+						+ " for \\xalgebra= " + num1.ToString () + ", \\yalgebra= " + num2.ToString () + ".";
 					GeneralButton.gameObject.SetActive (true);
 					Answer = Mathf.Ceil (coeff * Mathf.Pow (num1, power1) * Mathf.Pow (num2, power2)).ToString ();
 				} 
