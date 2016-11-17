@@ -720,10 +720,10 @@ namespace Cerebro
 					lengthForDiagram = breadthForDiagram / Mathf.Tan (angle1 * Mathf.Deg2Rad);
 					origin = new Vector2 (lengthForDiagram / 2f, breadthForDiagram / 2f);
 
-					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, 0, false, lengthForDiagram).SetTextOffset(new Vector2(0,-20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("C", new Vector2 (lengthForDiagram, 0), 90, false, breadthForDiagram).SetTextOffset(new Vector2(0,20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("B", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineType (LineShapeType.Dotted).SetTextOffset(new Vector2(0,-20f)));
-					diagramHelper.AddLinePoint (new LinePoint ("A", Vector2.zero, angle1 + angle2, false, breadthForDiagram / (2 * Mathf.Cos (angle2 * Mathf.Deg2Rad) * Mathf.Sin (angle1 * Mathf.Deg2Rad))).SetTextOffset(new Vector2(0,20f)));
+					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, 0, false, lengthForDiagram).SetTextOffset(new Vector2(20,0f)));
+					diagramHelper.AddLinePoint (new LinePoint ("C", new Vector2 (lengthForDiagram, 0), 90, false, breadthForDiagram).SetTextOffset(new Vector2(20f,0f)));
+					diagramHelper.AddLinePoint (new LinePoint ("B", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1, false, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)).SetLineType (LineShapeType.Dotted).SetTextOffset(new Vector2(-20f,0f)));
+					diagramHelper.AddLinePoint (new LinePoint ("A", Vector2.zero, angle1 + angle2, false, breadthForDiagram / (2 * Mathf.Cos (angle2 * Mathf.Deg2Rad) * Mathf.Sin (angle1 * Mathf.Deg2Rad))).SetTextOffset(new Vector2(-20f,0f)));
 					diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (Vector2.zero, angle1, breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad)), 180 + angle1 - angle2, false, breadthForDiagram / (2 * Mathf.Cos (angle2 * Mathf.Deg2Rad) * Mathf.Sin (angle1 * Mathf.Deg2Rad))));
 
 					diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (lengthForDiagram, 0), 90, 180));
