@@ -292,6 +292,8 @@ namespace Cerebro
 
 		public void LeaderboardButtonClicked()
 		{
+			if (IsAvatarSelectionOpen)
+				return;
 			IsLerpLeaderboardStarted = true;
 			LerpValue = 0;
 			LerpStartTime = Time.time;
