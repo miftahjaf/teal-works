@@ -20,11 +20,17 @@ namespace Cerebro
 		public delegate void CancelClicked();
 		public CancelClicked OnCancelClicked;
 
-		public void InitializePopup(string title, int coins, string BabaId, string groupId, CaptureClicked CaptureFunction, Vector3 cellPosition, CancelClicked CancelFunction, bool IsEnoughCoins = true)
+		private int CurrBodyId, CurrHeadId, CurrHairID, CurrHatID, CurrGogglesID, CurrBadgeID;
+		private bool IsBoy;
+
+		public void InitializePopup(string title, int coins, string BabaId, int HatID, int GoggleID, int BadgeID, string groupId, CaptureClicked CaptureFunction, Vector3 cellPosition, CancelClicked CancelFunction, bool IsEnoughCoins = true)
 		{
 			OnCaptureClicked = CaptureFunction;
 			OnCancelClicked = CancelFunction;
 			IsPopupEnabled = true;
+			CurrHatID = HatID;
+			CurrGogglesID = GoggleID;
+			CurrBadgeID = BadgeID;
 			if (BabaId == "") {
 				DefaultAvatar.SetActive (true);
 				AvatartGameobject.SetActive (false);
@@ -98,10 +104,10 @@ namespace Cerebro
 
 		public void InitializeAvatar(string BabaId, string groupID)
 		{
-			int CurrHairID = int.Parse (BabaId [0].ToString());
-			int CurrHeadId = int.Parse (BabaId [1].ToString());
-			int CurrBodyId = int.Parse (BabaId [2].ToString());
-			bool IsBoy = false;
+			CurrHairID = int.Parse (BabaId [0].ToString());
+			CurrHeadId = int.Parse (BabaId [1].ToString());
+			CurrBodyId = int.Parse (BabaId [2].ToString());
+			IsBoy = false;
 			if (CurrBodyId > 4) {
 				IsBoy = false;
 				CurrBodyId -= 4;
@@ -113,8 +119,37 @@ namespace Cerebro
 
 			Debug.Log ("pop up "+BabaId+" "+IsBoy+" "+CurrHairID+" "+CurrHeadId+" "+CurrBodyId);
 			DisableAllComponents ();
+			EnableBasicAvatar (groupID);
+			if(CurrHatID > 0)
+			EnableHats (groupID);
+			if(CurrGogglesID > 0)
+			EnableGoggles (groupID);
+			if(CurrBadgeID > 0)
+			EnableBadges (groupID);
+		}
+
+		void DisableAllComponents()
+		{
+			AvatartGameobject.transform.FindChild ("boy_body").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("boy_head").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("boy_hair").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("boy_head_withuout_eyes").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("boy_goggles").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("boy_hats").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("boy_badges").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("girl_body").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("girl_head").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("girl_hair_back").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("girl_hair_front").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("girl_head_without_eyes").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("girl_goggles").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("girl_hats").gameObject.SetActive (false);
+			AvatartGameobject.transform.FindChild ("girl_badges").gameObject.SetActive (false);
+		}
+
+		void EnableBasicAvatar(string groupID)
+		{
 			if (IsBoy) {
-				Debug.Log ("opening boy");
 				AvatartGameobject.transform.FindChild ("boy_body").gameObject.SetActive (true);
 				AvatartGameobject.transform.FindChild ("boy_body").GetComponent<AvatarComponentList>().Initialize(CurrBodyId, groupID);
 				AvatartGameobject.transform.FindChild ("boy_head").gameObject.SetActive (true);
@@ -122,7 +157,6 @@ namespace Cerebro
 				AvatartGameobject.transform.FindChild ("boy_hair").gameObject.SetActive (true);
 				AvatartGameobject.transform.FindChild ("boy_hair").GetComponent<AvatarComponentList>().Initialize(CurrHairID, groupID);
 			} else {
-				Debug.Log ("opening girl");
 				AvatartGameobject.transform.FindChild ("girl_body").gameObject.SetActive (true);
 				AvatartGameobject.transform.FindChild ("girl_body").GetComponent<AvatarComponentList>().Initialize(CurrBodyId, groupID);
 				AvatartGameobject.transform.FindChild ("girl_head").gameObject.SetActive (true);
@@ -134,16 +168,46 @@ namespace Cerebro
 			}
 		}
 
-		void DisableAllComponents()
+		void EnableHats(string groupID)
 		{
-			AvatartGameobject.transform.FindChild ("boy_body").gameObject.SetActive (false);
-			AvatartGameobject.transform.FindChild ("boy_head").gameObject.SetActive (false);
-			AvatartGameobject.transform.FindChild ("boy_hair").gameObject.SetActive (false);
-			AvatartGameobject.transform.FindChild ("girl_body").gameObject.SetActive (false);
-			AvatartGameobject.transform.FindChild ("girl_head").gameObject.SetActive (false);
-			AvatartGameobject.transform.FindChild ("girl_hair_back").gameObject.SetActive (false);
-			AvatartGameobject.transform.FindChild ("girl_hair_front").gameObject.SetActive (false);
+			if (IsBoy) {
+				AvatartGameobject.transform.FindChild ("boy_hair").gameObject.SetActive (false);
+				AvatartGameobject.transform.FindChild ("boy_hats").gameObject.SetActive (true);
+				AvatartGameobject.transform.FindChild ("boy_hats").GetComponent<AvatarComponentList> ().Initialize (CurrHatID, groupID);
+			} else {
+				AvatartGameobject.transform.FindChild ("girl_hair_back").gameObject.SetActive (false);
+				AvatartGameobject.transform.FindChild ("girl_hair_front").gameObject.SetActive (false);
+				AvatartGameobject.transform.FindChild ("girl_hats").gameObject.SetActive (true);
+				AvatartGameobject.transform.FindChild ("girl_hats").GetComponent<AvatarComponentList>().Initialize(CurrHatID, groupID);
+			}
 		}
 
+		void EnableGoggles(string groupID)
+		{
+			if (IsBoy) {
+				AvatartGameobject.transform.FindChild ("boy_head").gameObject.SetActive (false);
+				AvatartGameobject.transform.FindChild ("boy_head_withuout_eyes").gameObject.SetActive (true);
+				AvatartGameobject.transform.FindChild ("boy_head_withuout_eyes").GetComponent<AvatarComponentList>().Initialize(CurrHeadId, groupID);
+				AvatartGameobject.transform.FindChild ("boy_goggles").gameObject.SetActive (true);
+				AvatartGameobject.transform.FindChild ("boy_goggles").GetComponent<AvatarComponentList>().Initialize(CurrGogglesID, groupID);
+			} else {
+				AvatartGameobject.transform.FindChild ("girl_head").gameObject.SetActive (false);
+				AvatartGameobject.transform.FindChild ("girl_head_without_eyes").gameObject.SetActive (true);
+				AvatartGameobject.transform.FindChild ("girl_head_without_eyes").GetComponent<AvatarComponentList>().Initialize(CurrHeadId, groupID);
+				AvatartGameobject.transform.FindChild ("girl_goggles").gameObject.SetActive (true);
+				AvatartGameobject.transform.FindChild ("girl_goggles").GetComponent<AvatarComponentList>().Initialize(CurrGogglesID, groupID);
+			}
+		}
+
+		void EnableBadges(string groupID)
+		{
+			if (IsBoy) {
+				AvatartGameobject.transform.FindChild ("boy_badges").gameObject.SetActive (true);
+				AvatartGameobject.transform.FindChild ("boy_badges").GetComponent<AvatarComponentList>().Initialize(CurrBadgeID, groupID);
+			} else {
+				AvatartGameobject.transform.FindChild ("girl_badges").gameObject.SetActive (true);
+				AvatartGameobject.transform.FindChild ("girl_badges").GetComponent<AvatarComponentList>().Initialize(CurrBadgeID, groupID);
+			}
+		}
 	}
 }

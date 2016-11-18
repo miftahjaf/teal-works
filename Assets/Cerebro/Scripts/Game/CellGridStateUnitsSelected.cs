@@ -71,9 +71,9 @@ namespace Cerebro {
 					}
 					Debug.Log ("baba id "+BabaId);
 					if (_cellGrid.GetCoins () >= cell.MovementCost) {
-						cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ().InitializePopup ("Capture", cell.MovementCost, BabaId, cell.groupID, OnCaptureButtonPressed, cell.transform.position, OnCancelButtonPressed);
+						cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ().InitializePopup ("Capture", cell.MovementCost, BabaId, cell.BabaHatId, cell.BabaGogglesId, cell.BabaBadgeId, cell.groupID, OnCaptureButtonPressed, cell.transform.position, OnCancelButtonPressed);
 					} else {
-						cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ().InitializePopup ("Capture", cell.MovementCost, BabaId, cell.groupID, OnCaptureButtonPressed, cell.transform.position, OnCancelButtonPressed, false);
+						cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ().InitializePopup ("Capture", cell.MovementCost, BabaId, cell.BabaHatId, cell.BabaGogglesId, cell.BabaBadgeId, cell.groupID, OnCaptureButtonPressed, cell.transform.position, OnCancelButtonPressed, false);
 					}
 					cell.transform.parent.GetComponent<CellGrid> ().pointsTray.GetComponent<MaterialUI.EasyTween> ().Tween("BounceOut");
 					currUnit = fromUnit;
@@ -137,9 +137,9 @@ namespace Cerebro {
 					}
 					Debug.Log ("Unit baba id "+BabaId);
 					if (_cellGrid.GetCoins () >= unit.Cell.MovementCost) {
-						unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position, OnCancelButtonPressed);
+						unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.BabaHatId, unit.Cell.BabaGogglesId, unit.Cell.BabaBadgeId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position, OnCancelButtonPressed);
 					} else {
-						unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position, OnCancelButtonPressed, false);
+						unit.Cell.transform.parent.GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup>().InitializePopup ("Capture", unit.Cell.MovementCost, BabaId, unit.Cell.BabaHatId, unit.Cell.BabaGogglesId, unit.Cell.BabaBadgeId, unit.Cell.groupID, OnCaptureUnitButtonPressed, unit.Cell.transform.position, OnCancelButtonPressed, false);
 					}
 					unit.Cell.transform.parent.GetComponent<CellGrid> ().pointsTray.GetComponent<MaterialUI.EasyTween> ().Tween("BounceOut");
 
