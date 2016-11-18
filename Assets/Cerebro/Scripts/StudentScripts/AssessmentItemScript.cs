@@ -55,7 +55,7 @@ namespace Cerebro
 		public void UpdateAccordionIcon()
 		{
 			this.accordionIcon.sprite =	practiceItems.isKCViewOpened ? minus : plus;
-			this.bgModifier.Radius = practiceItems.isKCViewOpened ? new Vector4 (4f, 4f, 0, 0) : Vector4.one * 4f;
+			//this.bgModifier.Radius = practiceItems.isKCViewOpened ? new Vector4 (4f, 4f, 0, 0) : Vector4.one * 4f;
 		}
 			
 		private void RefreshStats()
@@ -146,7 +146,7 @@ namespace Cerebro
 		{
 			if (mastery == 0)
 				return 1;
-			if (mastery >= 99f)
+			if (mastery >= 95f)
 				return 3;
 
 			return 2;

@@ -61,10 +61,11 @@ namespace Cerebro
 			m_OptionDataList =new List<AssessmentItem>();
 			List<PracticeItems> practiceItems = assessments;
 			int cnt = 0;
-			foreach (PracticeItems praticeItem in practiceItems)
+			foreach (PracticeItems practiceItem in practiceItems)
 			{
-				praticeItem.stripColor =CerebroHelper.HexToRGB (stripColors [cnt % stripColors.Length]);
-				m_OptionDataList.Add (praticeItem);
+				practiceItem.stripColor =CerebroHelper.HexToRGB (stripColors [cnt % stripColors.Length]);
+				practiceItem.isKCViewOpened = false;
+				m_OptionDataList.Add (practiceItem);
 				cnt++;
 			}
 			enhanceScroller.ReloadData ();

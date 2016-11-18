@@ -81,17 +81,17 @@ namespace Cerebro
 			if (level == 1) 
 			{
 				mastryImage.color = CerebroHelper.HexToRGB ("9A9AA4");
-				mastryImage.GetComponent<FreeModifier> ().Radius = new Vector4 (5f, 0f, 0f, 5f);
+				//mastryImage.GetComponent<FreeModifier> ().Radius = new Vector4 (5f, 0f, 0f, 5f);
 			} 
 			else if (level == 2) 
 			{
 				mastryImage.color = CerebroHelper.HexToRGB ("FDD000");
-				mastryImage.GetComponent<FreeModifier> ().Radius = new Vector4 (5f, 0f, 0f, 5f);
+				//mastryImage.GetComponent<FreeModifier> ().Radius = new Vector4 (5f, 0f, 0f, 5f);
 			}
 			else
 			{
 				mastryImage.color = CerebroHelper.HexToRGB ("24C8A6");
-				mastryImage.GetComponent<FreeModifier> ().Radius = new Vector4 (5f,5f, 5f, 5f);
+				//mastryImage.GetComponent<FreeModifier> ().Radius = new Vector4 (5f,5f, 5f, 5f);
 			}
 
 			int mastery = knowledgeComponent.Mastery;
@@ -110,7 +110,7 @@ namespace Cerebro
 		{
 			if (knowledgeComponent.Mastery == 0)
 				return 1;
-			if (knowledgeComponent.Mastery >= 99f)
+			if (knowledgeComponent.Mastery >= 95f)
 				return 3;
 
 			return 2;
