@@ -363,13 +363,13 @@ namespace Cerebro
 		public void OpenAvatarCustomization()
 		{
 			UICamera.GetComponent<Blur> ().iterations = (int)(Mathf.Lerp (0, 5, LerpValue));
-			CurrAvatar.GetComponent<RectTransform> ().localScale = Vector2.Lerp (new Vector2(0.4f, 0.4f), new Vector2(0.55f, 0.55f), LerpValue);
+			CurrAvatar.GetComponent<RectTransform> ().localScale = Vector2.Lerp (new Vector2(0.4f, 0.4f), new Vector2(0.5f, 0.5f), LerpValue);
 		}
 
 		public void CloseAvatarCustomization()
 		{
 			UICamera.GetComponent<Blur> ().iterations = (int)(Mathf.Lerp (5, 0, LerpValue));
-			CurrAvatar.GetComponent<RectTransform> ().localScale = Vector2.Lerp (new Vector2(0.55f, 0.55f), new Vector2(0.4f, 0.4f), LerpValue);
+			CurrAvatar.GetComponent<RectTransform> ().localScale = Vector2.Lerp (new Vector2(0.5f, 0.5f), new Vector2(0.4f, 0.4f), LerpValue);
 		}
 
 		public void BackOnScreen(bool fromFocus) {

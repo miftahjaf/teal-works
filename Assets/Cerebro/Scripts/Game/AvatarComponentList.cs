@@ -11,6 +11,8 @@ namespace Cerebro
 		public GameObject[] ChildComponents;
 		public int NoOfChildren = 4;
 		public Vector2[] InitialPosition;
+		public bool IsOffsetCounted = false;
+		public bool IsColorStatic = false;
 
 		private bool IsLerpStarted;
 		private float LerpStartTime, LerpValue;
@@ -34,7 +36,7 @@ namespace Cerebro
 			InitialTeamColor = new Color[NoOfChildren];
 			parentAvatar = transform.parent.GetComponent<CustomizeAvatar> ();
 
-			int offset = transform.name.Contains("girl") ? 4 : 0;
+			int offset = IsOffsetCounted ? 4 : 0;
 			for (int i = 0; i < NoOfChildren; i++) 
 			{
 				ChildComponents [i] = transform.FindChild (prefix+(i+1+offset)).gameObject;
@@ -50,10 +52,10 @@ namespace Cerebro
 			if (InitialTeamColor == null || InitialTeamColor.Length <= 0) {
 				Awake ();
 			}
-			if (!transform.name.Contains ("head")) {
+			if (!IsColorStatic) {
 				var teamColor = new Color (0, 0, 0);
 				if (groupID == "") {
-					groupID = PlayerPrefs.GetString (PlayerPrefKeys.GOTGameTeamID, "1");
+					groupID = LaunchList.instance.mAvatar.ColorId;
 				}
 				Debug.Log ("curr "+groupID);
 				if (groupID == GroupMapping.Group1) {
@@ -79,6 +81,7 @@ namespace Cerebro
 				ChildComponents [i].GetComponent<RectTransform> ().anchoredPosition = StartPosition [i];
 				ChildComponents [i].SetActive (false);
 			}
+			Debug.Log ("my id "+CurrID+" name "+gameObject.name);
 			ChildComponents [CurrID - 1].SetActive (true);
 		}
 

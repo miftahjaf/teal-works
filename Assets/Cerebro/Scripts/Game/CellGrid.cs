@@ -319,8 +319,11 @@ namespace Cerebro
 				cell.BabaHairId = Cerebro.LaunchList.instance.mWorld [i].BabaHairId;
 				cell.BabaFaceId = Cerebro.LaunchList.instance.mWorld [i].BabaFaceId;
 				cell.BabaBodyId = Cerebro.LaunchList.instance.mWorld [i].BabaBodyId;
-				if (cell.cellIndex == 0) {
-					Debug.Log ("Set cells hair "+cell.BabaHairId+" face "+cell.BabaFaceId+" body "+cell.BabaBodyId);
+				cell.BabaHatId = Cerebro.LaunchList.instance.mWorld [i].BabaHatId;
+				cell.BabaGogglesId = Cerebro.LaunchList.instance.mWorld [i].BabaGogglesId;
+				cell.BabaBadgeId = Cerebro.LaunchList.instance.mWorld [i].BabaBadgeId;
+				if (cell.cellIndex == 88) {
+					Debug.Log ("Set cells hat "+cell.BabaHatId+" goggle "+cell.BabaGogglesId+" badge "+cell.BabaBadgeId);
 				}
 
 				cell.OffsetCoord = new Vector2 (index % 8, Mathf.Floor (index / 8f));
@@ -371,9 +374,9 @@ namespace Cerebro
 								createCell = true;
 							} else if (unit.isWaiting) {
 								unit.MarkAsReady ();
-								customGenerator.ChooseUnit (cellData.GroupID, unit, cellData.BabaHairId, cellData.BabaFaceId, cellData.BabaBodyId);
+								customGenerator.ChooseUnit (cellData.GroupID, unit, cellData.BabaHairId, cellData.BabaFaceId, cellData.BabaBodyId, cellData.BabaHatId, cellData.BabaGogglesId, cellData.BabaBadgeId);
 							} else {
-								customGenerator.ChooseUnit (cellData.GroupID, unit, cellData.BabaHairId, cellData.BabaFaceId, cellData.BabaBodyId);
+								customGenerator.ChooseUnit (cellData.GroupID, unit, cellData.BabaHairId, cellData.BabaFaceId, cellData.BabaBodyId, cellData.BabaHatId, cellData.BabaGogglesId, cellData.BabaBadgeId);
 							}
 						}
 					}
@@ -381,7 +384,7 @@ namespace Cerebro
 						if (index == 0) {
 							Debug.Log ("from cell hair " + cellData.BabaHairId + " face " + cellData.BabaFaceId + " body " + cellData.BabaBodyId);
 						}
-						var unit = customGenerator.AddNewUnit (cell, cellData.GroupID, cellData.BabaHairId, cellData.BabaFaceId, cellData.BabaBodyId);
+						var unit = customGenerator.AddNewUnit (cell, cellData.GroupID, cellData.BabaHairId, cellData.BabaFaceId, cellData.BabaBodyId, cellData.BabaHatId, cellData.BabaGogglesId, cellData.BabaBadgeId);
 						unit.UnitClicked += OnUnitClicked;
 						unit.UnitDestroyed += OnUnitDestroyed;
 					}
@@ -392,6 +395,11 @@ namespace Cerebro
 				CurrentPlayerNumber = customGenerator.currentGroupNumber;
 				StartGame ();
 			}
+		}
+
+		public void OnDestroy()
+		{
+			LaunchList.instance.WorldChanged -= GameWorldChanged;
 		}
 
 		private void GameWorldChanged (object sender, System.EventArgs e)

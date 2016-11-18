@@ -300,6 +300,18 @@ namespace Cerebro
 							{
 								newRecord.BabaBodyId = jsonResponse["World"][i]["BabaData"]["body"].AsInt;
 							}
+							if(jsonResponse["World"][i]["BabaData"]["hat"] != null)
+							{
+								newRecord.BabaHatId = jsonResponse["World"][i]["BabaData"]["hat"].AsInt;
+							}
+							if(jsonResponse["World"][i]["BabaData"]["goggle"] != null)
+							{
+								newRecord.BabaGogglesId = jsonResponse["World"][i]["BabaData"]["goggle"].AsInt;
+							}
+							if(jsonResponse["World"][i]["BabaData"]["badge"] != null)
+							{
+								newRecord.BabaBadgeId = jsonResponse["World"][i]["BabaData"]["badge"].AsInt;
+							}
 						}
 
 						if (!worldExists) {
@@ -314,6 +326,9 @@ namespace Cerebro
 								LaunchList.instance.mWorld [cellID].BabaHairId = newRecord.BabaHairId;
 								LaunchList.instance.mWorld [cellID].BabaFaceId = newRecord.BabaFaceId;
 								LaunchList.instance.mWorld [cellID].BabaBodyId = newRecord.BabaBodyId;
+								LaunchList.instance.mWorld [cellID].BabaHatId = newRecord.BabaHatId;
+								LaunchList.instance.mWorld [cellID].BabaGogglesId = newRecord.BabaGogglesId;
+								LaunchList.instance.mWorld [cellID].BabaBadgeId = newRecord.BabaBadgeId;
 							} else {
 								CerebroHelper.DebugLog ("Couldn't update cuz cell id not foudn " + newRecord.CellID);
 							}
@@ -471,6 +486,7 @@ namespace Cerebro
 		public void GetStudentData (string studentID, string gradeID)
 		{
 			// XXX Change this when Database changes
+			LaunchList.instance.ReadAvatar();
 			gradeID = gradeID.ToLower ();
 			CerebroHelper.DebugLog ("FETCH STUDENT DATA FOR " + studentID);
 			WWWForm form = new WWWForm ();
@@ -498,10 +514,18 @@ namespace Cerebro
 					BabaId += jsonResponse ["baba_data"] ["face"].Value;
 					BabaId += jsonResponse ["baba_data"] ["body"].Value;
 					PlayerPrefs.SetString(PlayerPrefKeys.BabaID, BabaId);
+					LaunchList.instance.mAvatar.HairID = jsonResponse ["baba_data"] ["head"].AsInt;
+					LaunchList.instance.mAvatar.HeadID = jsonResponse ["baba_data"] ["face"].AsInt;
+					LaunchList.instance.mAvatar.BodyID = jsonResponse ["baba_data"] ["body"].AsInt;
+					LaunchList.instance.mAvatar.HatID = jsonResponse ["baba_data"] ["hat"].AsInt;
+					LaunchList.instance.mAvatar.GogglesID = jsonResponse ["baba_data"] ["goggle"].AsInt;
+					LaunchList.instance.mAvatar.BadgeID = jsonResponse ["baba_data"] ["badge"].AsInt;
 					if(jsonResponse ["baba_data"] ["color"] != null)
 					{
+						LaunchList.instance.mAvatar.ColorId = jsonResponse ["baba_data"] ["color"].Value;
 						PlayerPrefs.SetString(PlayerPrefKeys.GOTGameTeamID, jsonResponse ["baba_data"] ["color"].Value);
 					}
+					LaunchList.instance.WriteAvatar(LaunchList.instance.mAvatar);
 
 					if(jsonResponse["student_proficiency_constants"] !=null)
 					{
@@ -1166,7 +1190,7 @@ namespace Cerebro
 		// PUT Requests
 		//
 
-		public void SendAvatarSet(string BabaId, Action<bool> callback)
+		public void SendAvatarSet(string BabaId, int HatId, int GogglesId, int BadgeId, Action<bool> callback)
 		{
 			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
@@ -1174,7 +1198,10 @@ namespace Cerebro
 			N ["myData"] ["baba_data"]["head"] = BabaId[0].ToString();
 			N ["myData"] ["baba_data"]["face"] = BabaId[1].ToString();
 			N ["myData"] ["baba_data"]["body"] = BabaId[2].ToString();
-			N ["myData"] ["baba_data"]["color"] = PlayerPrefs.GetString(PlayerPrefKeys.GOTGameTeamID, "1");
+			N ["myData"] ["baba_data"]["hat"] = HatId.ToString();
+			N ["myData"] ["baba_data"]["goggle"] = GogglesId.ToString();
+			N ["myData"] ["baba_data"]["badge"] = BadgeId.ToString();
+			N ["myData"] ["baba_data"]["color"] = LaunchList.instance.mAvatar.ColorId;
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
 			CreatePostRequestByteArray (SERVER_URL + "student/baba/set", formData, (jsonResponse) => {

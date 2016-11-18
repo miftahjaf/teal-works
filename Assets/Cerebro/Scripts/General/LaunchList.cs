@@ -63,6 +63,7 @@ namespace Cerebro
 		public Dictionary<string,int> mKCMastery =new Dictionary<string, int>();
 		public ProficiencyConstants proficiencyConstants;
 		public bool IsVersionUptoDate, CheckingForVersion;
+		public Avatar mAvatar;
 		public Daily CurrDaily;
 
 		public bool mUpdateTimer = false;
@@ -4206,6 +4207,78 @@ namespace Cerebro
 			return false;
 		}
 
+		public void WriteAvatar(Avatar avt)
+		{
+			string fileName = Application.persistentDataPath + "/AvatarIDs.txt";
+			JSONNode N = JSONClass.Parse ("{\"Data\"}");
+			N ["Data"] ["Avatar"] ["BodyID"] = avt.BodyID.ToString();
+			N ["Data"] ["Avatar"] ["HeadID"] = avt.HeadID.ToString();
+			N ["Data"] ["Avatar"] ["HairID"] = avt.HairID.ToString();
+			N ["Data"] ["Avatar"] ["HatID"] = avt.HatID.ToString();
+			N ["Data"] ["Avatar"] ["GogglesID"] = avt.GogglesID.ToString();
+			N ["Data"] ["Avatar"] ["BadgeID"] = avt.BadgeID.ToString();
+			N ["Data"] ["Avatar"] ["ColorId"] = avt.ColorId;
+			N ["Data"] ["Avatar"] ["IsBoy"] = avt.IsBoy.ToString();
+			for (int i = 0; i < avt.PurchasedHats.Count; i++) {
+				N ["Data"] ["Avatar"] ["PurchasedHats"] [i] = avt.PurchasedHats [i].ToString ();
+			}
+			for (int i = 0; i < avt.PurchasedGoggles.Count; i++) {
+				N ["Data"] ["Avatar"] ["PurchasedGoggles"] [i] = avt.PurchasedGoggles [i].ToString ();
+			}
+			for (int i = 0; i < avt.PurchasedBadges.Count; i++) {
+				N ["Data"] ["Avatar"] ["PurchasedBadges"] [i] = avt.PurchasedBadges [i].ToString ();
+			}
+			File.WriteAllText (fileName, N.ToString());
+		}
+
+		public void ReadAvatar()
+		{
+			string fileName = Application.persistentDataPath + "/AvatarIDs.txt";
+			if (!File.Exists (fileName)) {
+				string BabaId = PlayerPrefs.GetString (PlayerPrefKeys.BabaID, "111");
+				mAvatar = new Avatar ();
+				mAvatar.HairID = int.Parse (BabaId [0].ToString ());
+				mAvatar.HeadID = int.Parse (BabaId [1].ToString ());
+				mAvatar.BodyID = int.Parse (BabaId [2].ToString ());
+				mAvatar.HatID = -1;
+				mAvatar.GogglesID = -1;
+				mAvatar.BadgeID = -1;
+				mAvatar.ColorId = PlayerPrefs.GetString(PlayerPrefKeys.GOTGameTeamID, "1");
+				if (mAvatar.BodyID > 4) {
+					mAvatar.IsBoy = false;
+				} else {
+					mAvatar.IsBoy = true;
+				}
+				mAvatar.PurchasedHats = new List<int> ();
+				mAvatar.PurchasedGoggles = new List<int> ();
+				mAvatar.PurchasedBadges = new List<int> ();
+			} else {
+				string data = File.ReadAllText (fileName);
+				JSONNode N = JSONClass.Parse (data);
+				mAvatar = new Avatar ();
+				mAvatar.HairID = N ["Data"] ["Avatar"] ["HairID"].AsInt;
+				mAvatar.BodyID = N ["Data"] ["Avatar"] ["BodyID"].AsInt;
+				mAvatar.HeadID = N ["Data"] ["Avatar"] ["HeadID"].AsInt;
+				mAvatar.HatID = N ["Data"] ["Avatar"] ["HatID"].AsInt;
+				mAvatar.GogglesID = N ["Data"] ["Avatar"] ["GogglesID"].AsInt;
+				mAvatar.BadgeID = N ["Data"] ["Avatar"] ["BadgeID"].AsInt;
+				mAvatar.ColorId = N ["Data"] ["Avatar"] ["ColorId"].Value;
+				mAvatar.IsBoy = N ["Data"] ["Avatar"] ["IsBoy"].AsBool;
+				mAvatar.PurchasedHats = new List<int> ();
+				for (int i = 0; i < N ["Data"] ["Avatar"] ["PurchasedHats"].Count; i++) {
+					mAvatar.PurchasedHats.Add (N ["Data"] ["Avatar"] ["PurchasedHats"] [i].AsInt);
+				}
+				mAvatar.PurchasedGoggles = new List<int> ();
+				for (int i = 0; i < N ["Data"] ["Avatar"] ["PurchasedGoggles"].Count; i++) {
+					mAvatar.PurchasedGoggles.Add (N ["Data"] ["Avatar"] ["PurchasedGoggles"] [i].AsInt);
+				}
+				mAvatar.PurchasedBadges = new List<int> ();
+				for (int i = 0; i < N ["Data"] ["Avatar"] ["PurchasedBadges"].Count; i++) {
+					mAvatar.PurchasedBadges.Add (N ["Data"] ["Avatar"] ["PurchasedBadges"] [i].AsInt);
+				}
+			}
+		}
+
 		[DllImport ("__Internal")]
 		private static extern void _DeleteLocalVideo (
 			string path);
@@ -4329,6 +4402,9 @@ namespace Cerebro
 		public int BabaHairId{ get; set; }
 		public int BabaFaceId{ get; set; }
 		public int BabaBodyId{ get; set; }
+		public int BabaHatId{ get; set; }
+		public int BabaGogglesId{ get; set; }
+		public int BabaBadgeId{ get; set; }
 	}
 
 	public class CellGame

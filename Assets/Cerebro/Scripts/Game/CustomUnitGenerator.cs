@@ -68,27 +68,36 @@ namespace Cerebro {
 			}
 			unit.gameObject.SetActive (true);
 			unit.transform.FindChild ("Marker").gameObject.SetActive (true);
+//			childs = unit.transform.FindChild ("baba_head_without_eyes").GetComponentsInChildren<SpriteRenderer> ();
+//			for (int i = 0; childs != null && i < childs.Length; i++) {
+//				childs [i].gameObject.SetActive (false);
+//			}
+			unit.transform.FindChild ("baba_head_without_eyes").gameObject.SetActive (true);
+//			childs = unit.transform.FindChild ("baba_hats").GetComponentsInChildren<SpriteRenderer> ();
+//			for (int i = 0; childs != null && i < childs.Length; i++) {
+//				childs [i].gameObject.SetActive (false);
+//			}
+			unit.transform.FindChild ("baba_hats").gameObject.SetActive (true);
+//			childs = unit.transform.FindChild ("baba_badges").GetComponentsInChildren<SpriteRenderer> ();
+//			for (int i = 0; childs != null && i < childs.Length; i++) {
+//				childs [i].gameObject.SetActive (false);
+//			}
+			unit.transform.FindChild ("baba_badges").gameObject.SetActive (true);
+//			childs = unit.transform.FindChild ("baba_goggles").GetComponentsInChildren<SpriteRenderer> ();
+//			for (int i = 0; childs != null && i < childs.Length; i++) {
+//				childs [i].gameObject.SetActive (false);
+//			}
+			unit.transform.FindChild ("baba_goggles").gameObject.SetActive (true);
 		}
 
-		public void ChooseUnit(string groupID, Unit unit, int hairID = 1, int faceID = 1, int bodyID = 1)
+		public void ChooseUnit(string groupID, Unit unit, int hairID = 1, int faceID = 1, int bodyID = 1, int hatID = 0, int gogglesID = 0, int badgesID = 0)
 		{
-			/*int borg = UnityEngine.Random.Range (1, 4);
-			if (borg > 2) {
-				hairID = UnityEngine.Random.Range (1, 4);
-				faceID = UnityEngine.Random.Range (1, 4);
-				bodyID = UnityEngine.Random.Range (1, 4);
-			} else {
-				hairID = UnityEngine.Random.Range (5, 8);
-				faceID = UnityEngine.Random.Range (5, 8);
-				bodyID = UnityEngine.Random.Range (5, 8);
-			}*/
-
 			DisableAllComponents (unit);
-
+			Debug.Log ("here "+unit.Cell.cellIndex+" hat "+hatID+" badge "+badgesID);
 			hairID = Mathf.Clamp (hairID, 1, 8);
 			faceID = Mathf.Clamp (faceID, 1, 8);
 			bodyID = Mathf.Clamp (bodyID, 1, 8);
-//			Debug.Log ("HAIR " + hairID + " FACE  " + faceID + " BODY " + bodyID);
+
 			var hairString = "baba_hair_1";
 			var hairString2 = "";
 			var bodyString = "baba_body_1";
@@ -117,43 +126,65 @@ namespace Cerebro {
 
 			bodyString = "baba_body_" + bodyID.ToString();
 			faceString = "baba_head_" + faceID.ToString();
-/*
 
-			if (groupID == GroupMapping.Group2) {	
-				hairString = "baba_hair_2";
-				bodyString = "baba_body_2";
-				faceString = "baba_head_2";
-			} else if (groupID == GroupMapping.Group3) {
-				hairString = "baba_hair_3";
-				bodyString = "baba_body_3";
-				faceString = "baba_head_3";
-			} else if (groupID == GroupMapping.Group4) {
-				hairString = "baba_hair_4";
-				bodyString = "baba_body_4";
-				faceString = "baba_head_4";
-			} else {
-				Debug.Log ("INVALUD GROUP ID IN CHOOSE UNIT : " + groupID);
-			}
-		*/
 			var body = unit.transform.Find (bodyString);
-			var hair = unit.transform.Find (hairString);
-			Transform hair2 = null;
-			SpriteRenderer hair2Rndr = null;
-			if (hairString != "") {
-				hair2 = unit.transform.Find (hairString2);
-			}
-			var face = unit.transform.Find (faceString);
 
-			face.gameObject.SetActive (true);
+			bool IsBoy = faceID > 4 ? false : true;
+
+			if (gogglesID > 0) {
+				var face = unit.transform.FindChild("baba_head_without_eyes").transform.Find (faceString);
+				face.gameObject.SetActive (true);
+				string goggleString = "";
+				if (IsBoy) {
+					goggleString = "boy_goggles_" + gogglesID;
+				} else {
+					goggleString = "girl_goggles_" + gogglesID;
+				}
+				var goggle = unit.transform.FindChild("baba_goggles").transform.Find (goggleString);
+				goggle.gameObject.SetActive (true);
+			} else {
+				var face = unit.transform.Find (faceString);
+				face.gameObject.SetActive (true);
+			}
+
 			body.gameObject.SetActive (true);
-			hair.gameObject.SetActive (true);
-			if(hair2)
-			{
-				hair2.gameObject.SetActive (true);
-				hair2Rndr = hair2.GetComponent<SpriteRenderer> ();
+
+			Transform hair = null;
+			SpriteRenderer hair2Rndr = null;
+			SpriteRenderer hairRndr = null;
+			if (hatID > 0) {
+				string hatString = "";
+				if (IsBoy) {
+					hatString = "boy_hats_" + hatID;
+				} else {
+					hatString = "girl_hats_" + hatID;
+				}
+				var hat = unit.transform.FindChild("baba_hats").transform.Find (hatString);
+				hat.gameObject.SetActive (true);
+			} else {
+				hair = unit.transform.Find (hairString);
+				Transform hair2 = null;
+				if (hairString != "") {
+					hair2 = unit.transform.Find (hairString2);
+				}
+				hair.gameObject.SetActive (true);
+				if (hair2) {
+					hair2.gameObject.SetActive (true);
+					hair2Rndr = hair2.GetComponent<SpriteRenderer> ();
+				}
+				hairRndr =  hair.GetComponent<SpriteRenderer> ();
 			}
 			var bodyRndr = body.GetComponent<SpriteRenderer> ();
-			var hairRndr =  hair.GetComponent<SpriteRenderer> ();
+			if (badgesID > 0) {
+				string badgeString = "";
+				if (IsBoy) {
+					badgeString = "boy_badges_" + badgesID;
+				} else {
+					badgeString = "girl_badges_" + badgesID;
+				}
+				var badge = unit.transform.FindChild("baba_badges").transform.Find (badgeString);
+				badge.gameObject.SetActive (true);
+			}
 
 			var teamColor = new Color (0, 0, 0);
 			if (groupID == GroupMapping.Group1) {
@@ -165,8 +196,10 @@ namespace Cerebro {
 			} else if (groupID == GroupMapping.Group4) {
 				teamColor = GroupMapping.Color4;
 			}
+			if(hair2Rndr)
 			hair2Rndr.color = teamColor;
 			bodyRndr.color = teamColor;
+			if(hairRndr)
 			hairRndr.color = teamColor;
 		}
 
@@ -204,7 +237,7 @@ namespace Cerebro {
 					unit.transform.position = cell.transform.position;
 					unit.Initialize ();
 					Debug.Log ("spawn hair "+cell.BabaHairId+" face "+cell.BabaFaceId+" body "+cell.BabaBodyId);
-					ChooseUnit (cell.groupID, unit, cell.BabaHairId, cell.BabaFaceId, cell.BabaBodyId);
+					ChooseUnit (cell.groupID, unit, cell.BabaHairId, cell.BabaFaceId, cell.BabaBodyId, cell.BabaHatId, cell.BabaGogglesId, cell.BabaBadgeId);
 
 					ret.Add (unit);
 					mCurrentGameObject = unit.gameObject;
@@ -235,7 +268,7 @@ namespace Cerebro {
 			return ret;
 		}
 
-		public Unit AddNewUnit(Cell cell, string groupID, int HairId = 1, int FaceId = 1, int BodyId = 1) {
+		public Unit AddNewUnit(Cell cell, string groupID, int HairId = 1, int FaceId = 1, int BodyId = 1, int HatId = 0, int GogglesId = 0, int BadgeId = 0) {
 			Unit unit = null;
 
 			if (groupID == GroupMapping.Group1) {
@@ -262,7 +295,7 @@ namespace Cerebro {
 				unit.gameObject.transform.localScale = new Vector3 (0.15f, 0.15f, 1);  // SET SCALE HERE
 				unit.Cell = cell;
 				unit.transform.position = cell.transform.position;
-				ChooseUnit (groupID, unit, HairId, FaceId, BodyId);
+				ChooseUnit (groupID, unit, HairId, FaceId, BodyId, HatId, GogglesId, BadgeId);
 				unit.Initialize ();
 			}
 			return unit;

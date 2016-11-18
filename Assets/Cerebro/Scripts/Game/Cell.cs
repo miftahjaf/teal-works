@@ -26,6 +26,9 @@ public abstract class Cell : MonoBehaviour, IGraphNode
 	public int BabaHairId = -1;
 	public int BabaFaceId = -1;
 	public int BabaBodyId = -1;
+	public int BabaHatId = -1;
+	public int BabaGogglesId = -1;
+	public int BabaBadgeId = -1;
 
     /// <summary>
     /// CellClicked event is invoked when user clicks the unit. It requires a collider on the cell game object to work.

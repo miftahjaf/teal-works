@@ -37,7 +37,7 @@ namespace Cerebro
 			if (popup.IsPopupEnabled) {
 				transform.FindChild ("CellGrid").GetComponent<CellGrid> ().CapturePopup.GetComponent<CapturePopup> ().BackPressed ();
 			} else {
-				LaunchList.instance.WorldChanged += null;
+//				LaunchList.instance.WorldChanged += null;
 				Destroy (gameObject);
 				parent.BackOnScreen (fromFocus);
 			}
