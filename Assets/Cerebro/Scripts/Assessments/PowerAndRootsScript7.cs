@@ -333,14 +333,14 @@ namespace Cerebro {
                     power1 = Random.Range(3, 7);
                     QuestionLatext.text = num1.ToString() + "^" + power1.ToString();
                     GeneralButton.gameObject.SetActive(true);
-                    QuestionText.text = "Compute the power : ";
+                    QuestionText.text = "Solve : ";
                     Answer = Mathf.Ceil(Mathf.Pow(num1, power1)).ToString();
                 }
                 else if (selector == 2)
                 {   //power is 0
                     num1 = Random.Range(1, 401);
                     power1 = 0;
-                    QuestionText.text = "Compute the power : ";
+                    QuestionText.text = "Solve : ";
                     QuestionLatext.text = num1.ToString() + "^" + power1.ToString();
                     GeneralButton.gameObject.SetActive(true);
                     Answer = "1";
@@ -350,8 +350,8 @@ namespace Cerebro {
                     num1 = Random.Range(2, 101);
                     power1 = Random.Range(2, 50);
                     power2 = Random.Range(2, 50);
-                    QuestionText.text = "Compute the power : ";
-                    QuestionLatext.text = num1.ToString() + "^{" + power1.ToString() + "}\\cdot"
+                    QuestionText.text = "Solve : ";
+                    QuestionLatext.text = num1.ToString() + "^{" + power1.ToString() + "}\\times"
                     + num1.ToString() + "^{" + power2.ToString() + "} = " + num1.ToString() + "^? ";
                     GeneralButton.gameObject.SetActive(true);
                     Answer = (power1 + power2).ToString();
@@ -368,7 +368,7 @@ namespace Cerebro {
                         power1 = power2;
                         power2 = temp;
                     }
-                    QuestionText.text = "Compute the power : ";
+                    QuestionText.text = "Solve : ";
                     QuestionLatext.text = num1.ToString() + "^{" + power1.ToString() + "}\\div "
                     + num1.ToString() + "^{" + power2.ToString() + "} = " + num1.ToString() + "^? ";
                     GeneralButton.gameObject.SetActive(true);
@@ -378,7 +378,7 @@ namespace Cerebro {
                 {   //power in negative numbers
                     num1 = -1;
                     power1 = Random.Range(1, 100);
-                    QuestionText.text = "Compute the power : ";
+                    QuestionText.text = "Solve : ";
 					QuestionLatext.text = "{(" + num1.ToString() + ")}^{" + power1.ToString() + "}";
                     GeneralButton.gameObject.SetActive(true);
                     if (power1 % 2 == 0)
@@ -404,10 +404,10 @@ namespace Cerebro {
                     num2 = Random.Range(2, 21);
                     power1 = Random.Range(1, 101);
                     GeneralButton.gameObject.SetActive(true);
-                    QuestionText.text = "Compute the power : ";
+                    QuestionText.text = "Solve : ";
                                 
-                        QuestionLatext.text = num1.ToString() + "^{" + power1.ToString() + "}\\cdot"
-						+ num2.ToString() + "^{" + power1.ToString() + "} = {(" + num1.ToString() + "\\cdot" +
+                        QuestionLatext.text = num1.ToString() + "^{" + power1.ToString() + "}\\times"
+						+ num2.ToString() + "^{" + power1.ToString() + "} = {(" + num1.ToString() + "\\times" +
 						num2.ToString() + ")}^? ";
                         Answer = power1.ToString();
                    
@@ -417,7 +417,7 @@ namespace Cerebro {
                     num1 = Random.Range(2, 6);
                     power1 = Random.Range(2, 4);
                     power2 = Random.Range(2, 4);
-                    QuestionText.text = "Compute the power : ";
+                    QuestionText.text = "Solve : ";
 					QuestionLatext.text = "{(" + num1.ToString() + "^" + power1.ToString() + ")}^" + power2.ToString();
                     GeneralButton.gameObject.SetActive(true);
                     Answer = Mathf.Ceil(Mathf.Pow(num1, (power1 * power2))).ToString();

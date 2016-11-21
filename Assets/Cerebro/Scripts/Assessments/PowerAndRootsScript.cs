@@ -194,7 +194,7 @@ namespace Cerebro {
 			//level 1:powers
 			if (level == 1) {
 				selector = GetRandomSelector (1, 12);
-				QuestionText.text = "Compute the power : ";
+				QuestionText.text = "Solve : ";
 
 				if (selector == 1) {												//compute the powers
 					num1 = Random.Range (2, 6);
@@ -218,7 +218,7 @@ namespace Cerebro {
 					num1 = Random.Range (2, 101);
 					power1 = Random.Range (2, 50);
 					power2 = Random.Range (2, 50);
-					QuestionLatext.text = num1.ToString () + "^{" + power1.ToString () + "}\\cdot"
+					QuestionLatext.text = num1.ToString () + "^{" + power1.ToString () + "}\\times"
 					+ num1.ToString () + "^{" + power2.ToString () + "} = " + num1.ToString () + "^? "; 
 					GeneralButton.gameObject.SetActive (true);
 					Answer = (power1 + power2).ToString ();
@@ -227,7 +227,7 @@ namespace Cerebro {
 					num1 = Random.Range (2, 6);
 					power1 = Random.Range (1, 4);
 					power2 = Random.Range (1, 4);
-					QuestionLatext.text = num1.ToString () + "^{" + power1.ToString () + "}\\cdot"
+					QuestionLatext.text = num1.ToString () + "^{" + power1.ToString () + "}\\times"
 						+ num1.ToString () + "^{" + power2.ToString () + "} \\square "
 					+ num1.ToString () + "^{" + power1.ToString () + "}+"
 					+ num1.ToString () + "^{" + power2.ToString () + "} ";
@@ -266,13 +266,13 @@ namespace Cerebro {
 					power1 = Random.Range (1, 101);
 					GeneralButton.gameObject.SetActive (true);
 					if (choose == 1) {
-						QuestionLatext.text = num1.ToString () + "^{" + power1.ToString () + "}\\cdot"
-						+ num2.ToString () + "^{" + power1.ToString () + "} = (" + num1.ToString () + "\\cdot" +
+						QuestionLatext.text = num1.ToString () + "^{" + power1.ToString () + "}\\times"
+						+ num2.ToString () + "^{" + power1.ToString () + "} = (" + num1.ToString () + "\\times" +
 						num2.ToString () + ")^? "; 
 						Answer = power1.ToString ();
 					} else {
-						QuestionLatext.text = "(" + num1.ToString () + "\\cdot" + num2.ToString () + ")^{" +
-						power1.ToString () + "} = " + num1.ToString () + "^? \\cdot" + num2.ToString () + "^? ";
+						QuestionLatext.text = "(" + num1.ToString () + "\\times" + num2.ToString () + ")^{" +
+						power1.ToString () + "} = " + num1.ToString () + "^? \\times" + num2.ToString () + "^? ";
 						Answer = power1.ToString () + "," + power1.ToString ();
 					}  
 				} else if (selector == 9) {	     // powers of negative numbers
@@ -304,14 +304,14 @@ namespace Cerebro {
 			//level 2: powers
 			else if (level == 2) {
 				selector = GetRandomSelector (1, 7);
-				QuestionText.text = "Compute the power :";
+				QuestionText.text = "Solve :";
 
 				if (selector == 1) {
 					num1 = Random.Range (1, 51);
 					num2 = Random.Range (1, 51);
 					power1 = Random.Range (1, 51);
 
-					QuestionLatext.text =num1.ToString()+"^0"+" \\cdot "+num2.ToString()+ "^0"+" \\cdot "+
+					QuestionLatext.text =num1.ToString()+"^0"+" \\times "+num2.ToString()+ "^0"+" \\times "+
 						power1.ToString()+"^0 = ";
 					GeneralButton.gameObject.SetActive (true);
 					Answer = "1";
@@ -320,8 +320,8 @@ namespace Cerebro {
 					num2 = Random.Range (1, 100);
 					power1 = Random.Range (2, 50);
 					power2 = Random.Range (2, 50);
-					QuestionLatext.text = num1.ToString () +"\\cdot"+ power1.ToString () + "^0 + " +
-						num2.ToString () +"\\cdot"+ power2.ToString () + "^0 = ";
+					QuestionLatext.text = num1.ToString () +"\\times"+ power1.ToString () + "^0 + " +
+						num2.ToString () +"\\times"+ power2.ToString () + "^0 = ";
 					GeneralButton.gameObject.SetActive (true);
 					Answer = (num1+ num2).ToString ();
 				} else if (selector == 3) {
@@ -344,11 +344,11 @@ namespace Cerebro {
 					power1 = Random.Range (2, 50);
 					power2 = Random.Range (2, 50);
 					var power3 = Random.Range (2, 50);
-					QuestionLatext.text = "\\frac{\\aalgebra^{" + num1.ToString () + "}\\cdot \\balgebra^{" +
-						num2.ToString () + "}\\cdot \\calgebra^{" + num3.ToString () + "}}{\\aalgebra^{" +
-						power1.ToString () + "}\\cdot \\balgebra^{" +
-						power2.ToString () + "}\\cdot \\calgebra^{" + power3.ToString () + "}} = " +
-						"\\aalgebra^?\\cdot \\balgebra^?\\cdot \\calgebra^?"; 
+					QuestionLatext.text = "\\frac{\\aalgebra^{" + num1.ToString () + "}\\times \\balgebra^{" +
+						num2.ToString () + "}\\times \\calgebra^{" + num3.ToString () + "}}{\\aalgebra^{" +
+						power1.ToString () + "}\\times \\balgebra^{" +
+						power2.ToString () + "}\\times \\calgebra^{" + power3.ToString () + "}} = " +
+						"\\aalgebra^?\\times \\balgebra^?\\times \\calgebra^?"; 
 					GeneralButton.gameObject.SetActive (true);
 					Answer = (num1 - power1).ToString () + "," + (num2 - power2).ToString () + "," +
 					(num3 - power3).ToString ();
@@ -356,11 +356,11 @@ namespace Cerebro {
 					num1 = Random.Range (2, 50);
 					num2 = Random.Range (2, 50);
 					power1 = Random.Range (2, 50);
-					QuestionLatext.text = "\\aalgebra^{-" + num1.ToString () + "}\\cdot \\balgebra^{" +
-						num2.ToString () + "}\\cdot \\calgebra^{" + power1.ToString () + "}\\cdot \\aalgebra^{" +
-						(num1 + 1).ToString () + "}\\cdot \\balgebra^{" +
-						(num2 - 1).ToString () + "}\\cdot \\calgebra^{-" + power1.ToString () + "} = " +
-						"\\aalgebra^?\\cdot \\balgebra^?\\cdot \\calgebra^?"; 
+					QuestionLatext.text = "\\aalgebra^{-" + num1.ToString () + "}\\times \\balgebra^{" +
+						num2.ToString () + "}\\times \\calgebra^{" + power1.ToString () + "}\\times \\aalgebra^{" +
+						(num1 + 1).ToString () + "}\\times \\balgebra^{" +
+						(num2 - 1).ToString () + "}\\times \\calgebra^{-" + power1.ToString () + "} = " +
+						"\\aalgebra^?\\times \\balgebra^?\\times \\calgebra^?"; 
 					GeneralButton.gameObject.SetActive (true);
 					Answer = "1," + (2 * num2 - 1).ToString () + ",0";
 				} else {
@@ -415,7 +415,7 @@ namespace Cerebro {
 			//level 4: square root of a number
 			else if (level == 4) {
 				selector = GetRandomSelector (1, 6);
-				QuestionText.text = "Compute :";
+				QuestionText.text = "Solve :";
 
 				if (selector == 1) {          // Natural number
 					num1 = Random.Range (6, 16);
@@ -533,7 +533,7 @@ namespace Cerebro {
 			//level 5:cube root
 			else if (level == 5) {
 				selector = GetRandomSelector (1, 5);
-				QuestionText.text = "Compute :";
+				QuestionText.text = "Solve :";
 
 				if (selector == 1) {          // Natural number
 					num1 = Random.Range (2, 11);
