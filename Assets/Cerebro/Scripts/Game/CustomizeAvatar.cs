@@ -357,9 +357,9 @@ namespace Cerebro
 				BabaId += CurrHeadId + (IsBoy?0:4);
 				BabaId += CurrBodyId + (IsBoy?0:4);
 				PlayerPrefs.SetString (PlayerPrefKeys.BabaID, BabaId);
-				LaunchList.instance.mAvatar.HairID = CurrHairID;
-				LaunchList.instance.mAvatar.HeadID = CurrHeadId;
-				LaunchList.instance.mAvatar.BodyID = CurrBodyId;
+				LaunchList.instance.mAvatar.HairID = CurrHairID + (IsBoy?0:4);
+				LaunchList.instance.mAvatar.HeadID = CurrHeadId + (IsBoy?0:4);
+				LaunchList.instance.mAvatar.BodyID = CurrBodyId + (IsBoy?0:4);
 				LaunchList.instance.mAvatar.HatID = CurrHatID;
 				LaunchList.instance.mAvatar.GogglesID = CurrGogglesID;
 				LaunchList.instance.mAvatar.BadgeID = CurrBadgeID;
@@ -387,10 +387,10 @@ namespace Cerebro
 				}
 				NextPrevButtons [0].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 1f);
 				NextPrevButtons [1].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 1f);
-				if (CurrBodyId == 4 || CurrHatID != -1) {
+				if (CurrBodyId == 4) {
 					NextPrevButtons [0].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
 				}
-				if (CurrBodyId == 1 || CurrHatID != -1) {
+				if (CurrBodyId == 1) {
 					NextPrevButtons [1].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
 				}
 
@@ -405,13 +405,13 @@ namespace Cerebro
 
 				NextPrevButtons [4].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 1f);
 				NextPrevButtons [5].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 1f);
-				if (IsBoy && CurrHairID == 3) {
+				if ((IsBoy && CurrHairID == 3) || CurrHatID != -1) {
 					NextPrevButtons [4].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
 				}
-				if (!IsBoy && CurrHairID == 4) {
+				if ((!IsBoy && CurrHairID == 4) || CurrHatID != -1) {
 					NextPrevButtons [4].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
 				}
-				if (CurrHairID == 1) {
+				if (CurrHairID == 1 || CurrHatID != -1) {
 					NextPrevButtons [5].transform.FindChild ("Image").GetComponent<Image> ().color = new Color (1f, 1f, 1f, 0.3f);
 				}
 			} else if (CurrTab == Tabs.Hats) {
