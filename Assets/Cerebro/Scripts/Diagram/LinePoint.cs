@@ -18,17 +18,24 @@ namespace Cerebro
 	public class LinePoint 
 	{
 		public string name;
-		public Vector2 origin;
+	
 		public float angle;
 		public float radius;
+
 		public bool shouldShowArrow;
 		public bool shouldShowDot;
-		public int textDirection;
-		public LineShapeType lineType;
+
 		public string lineText;
-		public TextDir lineTextDirection;
+
+		public Vector2 origin;
 		public Vector2 pointTextOffset;
 		public Vector2 nextPoint;
+
+		public int numberOfSticks;
+		public int textDirection;
+
+		public LineShapeType lineType;
+		public TextDir lineTextDirection;
 
 		public LinePoint()
 		{
@@ -44,6 +51,7 @@ namespace Cerebro
 			this.lineText = "";
 			this.lineTextDirection = TextDir.None;
 			this.nextPoint = Vector2.zero;
+			this.numberOfSticks = 0;
 		}
 
 
@@ -147,7 +155,12 @@ namespace Cerebro
 			this.pointTextOffset = pointTextOffset;
 			return this;
 		}
-
+			
+		public LinePoint SetNumberOfSticks(int numberOfSticks)
+		{
+			this.numberOfSticks = numberOfSticks;
+			return this;
+		}
 
 			
 	}

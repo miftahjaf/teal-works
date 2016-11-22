@@ -82,7 +82,10 @@ namespace Cerebro {
 					}
 					if (counter % 2 != 0)
 						lineValues.Add (lastPoint);
+					
 				}
+
+			
 					
 				//Instantiate point prefab to show point, point name and arrow
 				GameObject endPoint = GameObject.Instantiate (pointPrefab);
@@ -95,6 +98,15 @@ namespace Cerebro {
 				if (!string.IsNullOrEmpty (linePoint.lineText)) 
 				{
 					AddTextInLine (linePoint.lineText, linePoint.origin, newPoint,linePoint.lineTextDirection);
+				}
+
+				if (linePoint.numberOfSticks > 0) {
+					GameObject sticks = GameObject.Instantiate (lineTextPrefab);
+					sticks.transform.SetParent (this.transform, false);
+					sticks.name = "sticks";
+					sticks.GetComponent<Text>().text =  new System.String('|', linePoint.numberOfSticks);
+					sticks.GetComponent<RectTransform>().anchoredPosition =new Vector2((linePoint.origin.x+newPoint.x)/2f,(linePoint.origin.y+newPoint.y)/2f);
+					sticks.GetComponent<RectTransform>().eulerAngles =new Vector3(0f,0f,Mathf.Atan((newPoint.y-linePoint.origin.y)/ (newPoint.x-linePoint.origin.x))*Mathf.Rad2Deg);
 				}
 
 			}
