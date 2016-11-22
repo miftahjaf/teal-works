@@ -278,6 +278,7 @@ namespace Cerebro
 		}
 
 		public void BackPressed() {
+			if(!IsAvatarSelectionOpen)
 			UnityEngine.SceneManagement.SceneManager.LoadScene ("CerebroScene");
 		}
 
@@ -324,6 +325,8 @@ namespace Cerebro
 
 		public void ChangeButtonClicked()
 		{
+			if (IsAvatarSelectionOpen)
+				return;
 			IsLerpStarted = true;
 			LerpValue = 0;
 			LerpStartTime = Time.time;
