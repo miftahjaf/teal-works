@@ -28,6 +28,7 @@ namespace Cerebro
 		public string lineText;
 		public TextDir lineTextDirection;
 		public Vector2 pointTextOffset;
+		public Vector2 nextPoint;
 
 		public LinePoint()
 		{
@@ -42,6 +43,7 @@ namespace Cerebro
 			this.lineType = LineShapeType.Normal;
 			this.lineText = "";
 			this.lineTextDirection = TextDir.None;
+			this.nextPoint = Vector2.zero;
 		}
 
 
@@ -54,7 +56,7 @@ namespace Cerebro
 			this.radius = radius;
 			this.shouldShowArrow = shouldShowArrow;
 			this.textDirection = textDirection;
-		
+			this.nextPoint = this.origin;
 		}
 
 
@@ -64,6 +66,16 @@ namespace Cerebro
 			this.origin = origin;
 			this.angle = angle;
 			this.radius = radius;
+			this.shouldShowArrow = shouldShowArrow;
+			this.pointTextOffset = pointTextOffset;
+			this.nextPoint = this.origin;
+		}
+
+		public LinePoint(string name,Vector2 origin,Vector2 nextPoint,bool shouldShowArrow = false):this()
+		{
+			this.name = name;
+			this.origin = origin;
+			this.nextPoint = nextPoint;
 			this.shouldShowArrow = shouldShowArrow;
 			this.pointTextOffset = pointTextOffset;
 		}
@@ -135,5 +147,8 @@ namespace Cerebro
 			this.pointTextOffset = pointTextOffset;
 			return this;
 		}
+
+
+			
 	}
 }

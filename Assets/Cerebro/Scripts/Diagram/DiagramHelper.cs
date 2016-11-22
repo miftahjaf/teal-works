@@ -38,8 +38,14 @@ namespace Cerebro {
 			//Add pairs of point to generate disrete line
 			List <Vector2> lineValues = new List <Vector2> ();
 			foreach (LinePoint linePoint in linePoints) {
+				
 				//Calculate ending point using angle and given radius
-				Vector2 newPoint = MathFunctions.PointAtDirection (linePoint.origin, linePoint.angle, linePoint.radius);
+				Vector2 newPoint;
+				if (linePoint.nextPoint.Equals (linePoint.origin)) {
+					newPoint = MathFunctions.PointAtDirection (linePoint.origin, linePoint.angle, linePoint.radius);
+				} else {
+					newPoint = linePoint.nextPoint;
+				}
 
 				if (linePoint.lineType == LineShapeType.Normal) {
 					lineValues.Add (linePoint.origin);
