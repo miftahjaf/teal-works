@@ -8,7 +8,7 @@ namespace Cerebro {
 			//C37C6-604D6 Production
 			//37FBC-E7935 Development
 			//BD3DB-D495C Enterprise Production
-			Pushwoosh.ApplicationCode = "7AA0B-E46AF";
+			Pushwoosh.ApplicationCode = "BD3DB-D495C";
 	//		Pushwoosh.GcmProjectNumber = "ENTER_GOOGLE_PROJECT_NUMBER_HERE";
 			Pushwoosh.Instance.OnRegisteredForPushNotifications += OnRegisteredForPushNotifications;
 			Pushwoosh.Instance.OnFailedToRegisteredForPushNotifications += OnFailedToRegisteredForPushNotifications;
