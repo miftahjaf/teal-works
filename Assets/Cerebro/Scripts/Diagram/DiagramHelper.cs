@@ -100,13 +100,17 @@ namespace Cerebro {
 					AddTextInLine (linePoint.lineText, linePoint.origin, newPoint,linePoint.lineTextDirection);
 				}
 
-				if (linePoint.numberOfSticks > 0) {
-					GameObject sticks = GameObject.Instantiate (lineTextPrefab);
-					sticks.transform.SetParent (this.transform, false);
-					sticks.name = "sticks";
-					sticks.GetComponent<Text>().text =  new System.String('|', linePoint.numberOfSticks);
-					sticks.GetComponent<RectTransform>().anchoredPosition =new Vector2((linePoint.origin.x+newPoint.x)/2f,(linePoint.origin.y+newPoint.y)/2f);
-					sticks.GetComponent<RectTransform>().eulerAngles =new Vector3(0f,0f,Mathf.Atan((newPoint.y-linePoint.origin.y)/ (newPoint.x-linePoint.origin.x))*Mathf.Rad2Deg);
+				int sticksLength = linePoint.sticks.Count;
+				if ( sticksLength > 0) {
+					foreach (Stick stick in linePoint.sticks) {
+						GameObject sticks = GameObject.Instantiate (lineTextPrefab);
+						sticks.transform.SetParent (this.transform, false);
+						sticks.name = "sticks";
+						sticks.GetComponent<Text> ().fontSize = 12;
+						sticks.GetComponent<Text> ().text = new System.String ('|', stick.numberOfSticks);
+						sticks.GetComponent<RectTransform> ().anchoredPosition = ((1 - stick.fractionLength) * linePoint.origin) + (stick.fractionLength * newPoint); 
+						sticks.GetComponent<RectTransform> ().eulerAngles = new Vector3 (0f, 0f, Mathf.Atan ((newPoint.y - linePoint.origin.y) / (newPoint.x - linePoint.origin.x)) * Mathf.Rad2Deg);
+					}
 				}
 
 			}

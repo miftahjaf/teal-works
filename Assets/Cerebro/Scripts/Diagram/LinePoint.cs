@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using System.Collections.Generic;
 namespace Cerebro 
 {
 	public enum LineShapeType
@@ -14,6 +14,16 @@ namespace Cerebro
 		Left,
 		Right,
 		None
+	}
+	public class Stick
+	{
+		public int numberOfSticks;
+		public float fractionLength;
+		public Stick(int numberOfSticks,float fractionLength)
+		{
+			this.numberOfSticks = numberOfSticks;
+			this.fractionLength = fractionLength;
+		}
 	}
 	public class LinePoint 
 	{
@@ -31,7 +41,7 @@ namespace Cerebro
 		public Vector2 pointTextOffset;
 		public Vector2 nextPoint;
 
-		public int numberOfSticks;
+		public List<Stick> sticks;
 		public int textDirection;
 
 		public LineShapeType lineType;
@@ -51,7 +61,7 @@ namespace Cerebro
 			this.lineText = "";
 			this.lineTextDirection = TextDir.None;
 			this.nextPoint = Vector2.zero;
-			this.numberOfSticks = 0;
+			this.sticks = new List<Stick> ();
 		}
 
 
@@ -156,9 +166,9 @@ namespace Cerebro
 			return this;
 		}
 			
-		public LinePoint SetNumberOfSticks(int numberOfSticks)
+		public LinePoint SetNumberOfSticks(List<Stick> sticks)
 		{
-			this.numberOfSticks = numberOfSticks;
+			this.sticks = sticks;
 			return this;
 		}
 
