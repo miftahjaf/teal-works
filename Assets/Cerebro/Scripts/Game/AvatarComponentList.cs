@@ -13,6 +13,7 @@ namespace Cerebro
 		public Vector2[] InitialPosition;
 		public bool IsOffsetCounted = false;
 		public bool IsColorStatic = false;
+		public bool IsMovingHidden = false;
 
 		private bool IsLerpStarted;
 		private float LerpStartTime, LerpValue;
@@ -118,6 +119,7 @@ namespace Cerebro
 			for (int i = 0; i < NoOfChildren; i++) 
 			{
 				EndPosition[i] = new Vector2 (StartPosition[i].x - OffsetPosition, StartPosition[i].y);
+				if(!IsMovingHidden)
 				ChildComponents [i].SetActive (true);
 			}
 		}
@@ -131,6 +133,7 @@ namespace Cerebro
 			for (int i = 0; i < NoOfChildren; i++) 
 			{
 				EndPosition[i] = new Vector2 (StartPosition[i].x + OffsetPosition, StartPosition[i].y);
+				if(!IsMovingHidden)
 				ChildComponents [i].SetActive (true);
 			}
 		}
