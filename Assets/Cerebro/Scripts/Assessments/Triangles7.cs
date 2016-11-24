@@ -304,7 +304,7 @@ namespace Cerebro
 				{
 					SetMCQMode (3);
 
-					QuestionLatext.text = "Identify :";
+					QuestionLatext.text = "Identify the type of triangle in the image given below :";
 					options.Add ("Acute angled");
 					options.Add ("Right angled");
 					options.Add ("Obtuse angled");
@@ -347,7 +347,7 @@ namespace Cerebro
 				{
 					SetMCQMode (3);
 
-					QuestionLatext.text = "Identify :";
+					QuestionLatext.text = "Identify the type of triangle in the image given below :";
 					options.Add ("Scalene");
 					options.Add ("Isosceles");
 					options.Add ("Equilateral");
