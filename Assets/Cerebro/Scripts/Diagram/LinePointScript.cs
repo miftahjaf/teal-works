@@ -13,8 +13,17 @@ namespace Cerebro {
 
 		public void SetPoint( LinePoint linePoint)
 		{
+			float angle = linePoint.angle;
+			float radius = linePoint.radius;
+
+			if(!linePoint.origin.Equals(linePoint.nextPoint))
+			{
+				angle = Mathf.Atan ((linePoint.origin.y - linePoint.nextPoint.y) / (linePoint.origin.x - linePoint.nextPoint.x)) * Mathf.Rad2Deg;
+				radius = Vector2.Distance (linePoint.origin, linePoint.nextPoint);
+			}
+
 			//Calculate arrow positin
-			Vector2 position = MathFunctions.PointAtDirection(linePoint.origin,linePoint.angle, linePoint.radius * 0.98f);
+			Vector2 position = MathFunctions.PointAtDirection(linePoint.origin,angle, radius * 0.98f);
 
 			//Disable or enbale arrow
 			this.arrow.enabled = linePoint.shouldShowArrow;
@@ -24,13 +33,14 @@ namespace Cerebro {
 			//Set arrow position
 			this.arrow.GetComponent<RectTransform> ().anchoredPosition = position;
 
+
 			//Set arrow angle
-			this.arrow.GetComponent<RectTransform> ().localEulerAngles = new Vector3 (0f, 0f, 180 + linePoint.angle);
+			this.arrow.GetComponent<RectTransform> ().localEulerAngles = new Vector3 (0f, 0f, 180 + angle);
 
 			//Calculate dot postion
-			if ((linePoint.radius > 0 || linePoint.radius < 0 ) && linePoint.shouldShowArrow) 
+			if ((radius > 0 ||radius < 0 ) && linePoint.shouldShowArrow) 
 			{
-				position = MathFunctions.PointAtDirection(linePoint.origin,linePoint.angle, linePoint.radius * 0.75f);
+				position = MathFunctions.PointAtDirection(linePoint.origin,angle, radius * 0.75f);
 			}
 
 			//Set dot position
@@ -39,9 +49,9 @@ namespace Cerebro {
 
 			if (linePoint.pointTextOffset == Vector2.zero) {
 			//Get point position 15 angle up down 
-			float newAngle = linePoint.textDirection == 0 ? (linePoint.angle < 180 ? linePoint.angle - 15 : linePoint.angle + 15) : linePoint.angle + (15 * linePoint.textDirection);
-			if (linePoint.radius > 0 || linePoint.radius < 0) {
-					position = MathFunctions.PointAtDirection(linePoint.origin, newAngle, linePoint.radius * 0.75f);
+				float newAngle = linePoint.textDirection == 0 ? (angle < 180 ? angle - 15 : angle + 15) : angle + (15 * linePoint.textDirection);
+				if (radius > 0 || radius < 0) {
+					position = MathFunctions.PointAtDirection(linePoint.origin, newAngle, radius * 0.75f);
 			} else {
 				position = position + new Vector2 (linePoint.textDirection == 0 ? 0f : 15f * linePoint.textDirection, linePoint.textDirection == 0 ? -20f : 0);
 			}

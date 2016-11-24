@@ -166,7 +166,7 @@ namespace Cerebro
 			return this;
 		}
 			
-		public LinePoint SetNumberOfSticks(List<Stick> sticks)
+		public LinePoint SetSticks(List<Stick> sticks)
 		{
 			this.sticks = sticks;
 			return this;
