@@ -1154,22 +1154,37 @@ namespace Cerebro
 					}
 					else 
 					{
-						randSelector1 = Random.Range (1, 3);
+						randSelector1 = Random.Range (1, 5);
 
 						if (randSelector1 == 1)
 						{
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram, breadthForDiagram), 270 - angle1, true, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram, breadthForDiagram), 270 - angle2, false, breadthForDiagram / Mathf.Cos (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (1, 0.25f), new Stick (1, 0.75f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- breadthForDiagram, 0), 90 - angle1, true, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram, breadthForDiagram), 270 - angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)), MathFunctions.PointAtDirection (new Vector2 (- breadthForDiagram, 0), 90 - angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad))).SetSticks (new List<Stick>(){new Stick (2, 0.25f), new Stick (2, 0.75f)}));
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram, breadthForDiagram), 270 - angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)), MathFunctions.PointAtDirection (new Vector2 (- breadthForDiagram, 0), 90 - angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad))));
 						}
-						else 
+						else if (randSelector1 == 2)
 						{
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram, 0), 90 + angle1, true, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram, 0), 90 + angle2, false, breadthForDiagram / Mathf.Cos (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (1, 0.25f), new Stick (1, 0.75f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- breadthForDiagram, breadthForDiagram), 270 + angle1, true, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram, 0), 90 + angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)), MathFunctions.PointAtDirection (new Vector2 (- breadthForDiagram, breadthForDiagram), 270 + angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad))).SetSticks (new List<Stick>(){new Stick (2, 0.25f), new Stick (2, 0.75f)}));
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram, 0), 90 + angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)), MathFunctions.PointAtDirection (new Vector2 (- breadthForDiagram, breadthForDiagram), 270 + angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad))));
 						}
+						else if (randSelector1 == 3)
+						{
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram, breadthForDiagram), 270 - angle1, true, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram, breadthForDiagram), 270 - angle2, false, breadthForDiagram / Mathf.Cos (angle2 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- breadthForDiagram, 0), 90 - angle1, true, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram, breadthForDiagram), 270 - angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)), MathFunctions.PointAtDirection (new Vector2 (- breadthForDiagram, 0), 90 - angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad))).SetSticks (new List<Stick>(){new Stick (1, 0.25f), new Stick (1, 0.75f)}));
+						}
+						else if (randSelector1 == 4)
+						{
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram, 0), 90 + angle1, true, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram, 0), 90 + angle2, false, breadthForDiagram / Mathf.Cos (angle2 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- breadthForDiagram, breadthForDiagram), 270 + angle1, true, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram, 0), 90 + angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)), MathFunctions.PointAtDirection (new Vector2 (- breadthForDiagram, breadthForDiagram), 270 + angle1, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad))).SetSticks (new List<Stick>(){new Stick (1, 0.25f), new Stick (1, 0.75f)}));
+						}
+
 					}
 					diagramHelper.Draw ();
 					diagramHelper.ShiftPosition (- origin);
