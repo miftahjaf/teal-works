@@ -462,15 +462,16 @@ namespace Cerebro
 				{
 					SetMCQMode ();
 
-					QuestionLatext.text = "Pick the correct option :";
+					QuestionLatext.text = "Pick the correct option about the given triangles :";
 					options.Add ("Congruent by SSS");
 					options.Add ("Congruent by SAS");
 					options.Add ("Congruent by ASA");
 					options.Add ("Not Congruent");
 
-					Answer = options [0];
 					FillMCQOptions (options);
 					randSelector = Random.Range (0, 4);
+					randSelector1 = Random.Range (0, 2);
+
 					do {
 						angle1 = Random.Range (0, 40);
 						angle2 = 90 - Random.Range (0, 40);
@@ -480,37 +481,64 @@ namespace Cerebro
 
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (1, 0.5f)}));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (2, 0.5f)}));
-					diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 360 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))).SetSticks (new List<Stick>(){new Stick (3, 0.5f)}));
-				
+
+					if (randSelector1 == 0){
+						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 360 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))).SetSticks (new List<Stick>(){new Stick (3, 0.5f)}));
+						Answer = options [0];
+					}
+					else{
+						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 360 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
+						Answer = options [3];
+					}
+
 					if (randSelector == 0)  //mirror image
 					{
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (1, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (2, 0.5f)}));
-						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))).SetSticks (new List<Stick>(){new Stick (3, 0.5f)}));
 
+						if (randSelector1 == 0){
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))).SetSticks (new List<Stick>(){new Stick (3, 0.5f)}));
+						}
+						else{
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
+						}
 					}
 					else if (randSelector == 1) // rotated anticlockwise by 90
 					{
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (1, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (2, 0.5f)}));
-						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 90 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))).SetSticks (new List<Stick>(){new Stick (3, 0.5f)}));
 
+						if (randSelector1 == 0){
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 90 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))).SetSticks (new List<Stick>(){new Stick (3, 0.5f)}));
+						}
+						else{
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 90 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
+						}
 					}
 					else if (randSelector == 2) // rotated by 180
 					{
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (1, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (2, 0.5f)}));
-						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))).SetSticks (new List<Stick>(){new Stick (3, 0.5f)}));
 
+						if (randSelector1 == 0){
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))).SetSticks (new List<Stick>(){new Stick (3, 0.5f)}));
+						}
+						else{
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
+						}
 					}
 					else if (randSelector == 3) // rotated by 270
 					{
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (1, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick>(){new Stick (2, 0.5f)}));
-						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 270 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))).SetSticks (new List<Stick>(){new Stick (3, 0.5f)}));
 
+						if (randSelector1 == 0){
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 270 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))).SetSticks (new List<Stick>(){new Stick (3, 0.5f)}));
+						}
+						else{
+							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 270 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
+						}
 					}
-					// sticks to be added to lines	2 (!congruent) or 3 (congruent)
 
 					origin = new Vector2 (0, breadthForDiagram / 2f);
 
@@ -521,7 +549,7 @@ namespace Cerebro
 				{
 					SetMCQMode ();
 
-					QuestionLatext.text = "Pick the correct option :";
+					QuestionLatext.text = "Pick the correct option about the given triangles :";
 					options.Add ("Congruent by SSS");
 					options.Add ("Congruent by SAS");
 					options.Add ("Congruent by ASA");
@@ -536,8 +564,8 @@ namespace Cerebro
 
 					angle3 = Mathf.Rad2Deg * Mathf.Atan (((1 - Mathf.Tan (angle1 * Mathf.Deg2Rad)) * Mathf.Tan (angle2 * Mathf.Deg2Rad)) / (Mathf.Tan (angle2 * Mathf.Deg2Rad) - 1));
 
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (2, 0.5f)}));
 					diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 360 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 					randSelector1 = Random.Range (0, 3);
@@ -545,8 +573,8 @@ namespace Cerebro
 
 					if (randSelector == 0)  //mirror image
 					{
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (2, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 						if (randSelector1 == 0)
@@ -570,8 +598,8 @@ namespace Cerebro
 					}
 					else if (randSelector == 1) // rotated anticlockwise by 90
 					{
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (2, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 90 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 						if (randSelector1 == 0)
@@ -595,8 +623,8 @@ namespace Cerebro
 					}
 					else if (randSelector == 2) // rotated by 180
 					{
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (2, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 						if (randSelector1 == 0)
@@ -620,8 +648,8 @@ namespace Cerebro
 					}
 					else if (randSelector == 3) // rotated by 270
 					{
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (2, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 270 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 						if (randSelector1 == 0)
@@ -654,7 +682,7 @@ namespace Cerebro
 				{
 					SetMCQMode ();
 
-					QuestionLatext.text = "Pick the correct option :";
+					QuestionLatext.text = "Pick the correct option about the given triangles :";
 					options.Add ("Congruent by SSS");
 					options.Add ("Congruent by SAS");
 					options.Add ("Congruent by ASA");
@@ -670,10 +698,10 @@ namespace Cerebro
 						} while (angle2 - angle1 < 30);
 
 						angle3 = Mathf.Rad2Deg * Mathf.Atan (((1 - Mathf.Tan (angle1 * Mathf.Deg2Rad)) * Mathf.Tan (angle2 * Mathf.Deg2Rad)) / (Mathf.Tan (angle2 * Mathf.Deg2Rad) - 1));
-					} while (angle2 - angle1 == (180 - angle2 - (int)angle3) || angle2 - angle1 == (int)angle3 + angle1 || (int)angle3 + angle1 == (int)(180 - angle2 -angle3) || angle1 + angle2 + 2 * angle3 >= 180);
+					} while (angle2 - angle1 == (180 - angle2 - (int)angle3) || angle2 - angle1 == (int)angle3 + angle1 || (int)angle3 + angle1 == 180 - angle2 - (int) angle3 || angle1 + angle2 + 2 * angle3 >= 180);
 
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 					diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 360 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 					diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle1, angle2, arcRadius));
@@ -687,7 +715,7 @@ namespace Cerebro
 						if (randSelector1 == 0)
 						{
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 							diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (4f * breadthForDiagram / 3f, 0), 180 - angle2, 180 - angle1, arcRadius));
@@ -697,7 +725,7 @@ namespace Cerebro
 						else if (randSelector1 == 1)  // angles not equal
 						{
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 							diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (4f * breadthForDiagram / 3f, 0), 180 - angle2, 180 - angle1, arcRadius));
@@ -710,7 +738,7 @@ namespace Cerebro
 							float scaledBreadthForDiagram = breadthForDiagram * scaleFactor;
 							Debug.Log ("scaleFactor = " + scaleFactor);
 
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, (breadthForDiagram - scaledBreadthForDiagram) / 2f), 180 - angle1, false, scaledBreadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, (breadthForDiagram - scaledBreadthForDiagram) / 2f), 180 - angle1, false, scaledBreadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, (breadthForDiagram - scaledBreadthForDiagram) / 2f), 180 - angle2, false, scaledBreadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, (breadthForDiagram - scaledBreadthForDiagram) / 2f), 180 - angle2, scaledBreadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle3, false, scaledBreadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
@@ -724,7 +752,7 @@ namespace Cerebro
 						if (randSelector1 == 0)
 						{
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 90 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 							diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (4f * breadthForDiagram / 3f, 0), 90 + angle1, 90 + angle2, arcRadius));
@@ -734,7 +762,7 @@ namespace Cerebro
 						else if (randSelector1 == 1)  // angles not equal
 						{
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 90 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 							diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (4f * breadthForDiagram / 3f, 0), 90 + angle1, 90 + angle2, arcRadius));
@@ -746,7 +774,7 @@ namespace Cerebro
 							float scaleFactor = Mathf.Sin (Mathf.Deg2Rad * (angle3 + angle1)) / Mathf.Sin (Mathf.Deg2Rad * (180 - angle2 - angle3)); //scalefactor < 1 always (checked above)
 							float scaledBreadthForDiagram = breadthForDiagram * scaleFactor;
 
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, (breadthForDiagram - scaledBreadthForDiagram) / 2f), 90 + angle1, false, scaledBreadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, (breadthForDiagram - scaledBreadthForDiagram) / 2f), 90 + angle1, false, scaledBreadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, (breadthForDiagram - scaledBreadthForDiagram) / 2f), 90 + angle2, false, scaledBreadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, (breadthForDiagram - scaledBreadthForDiagram) / 2f), 90 + angle2, scaledBreadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 90 - angle3, false, scaledBreadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
@@ -760,7 +788,7 @@ namespace Cerebro
 						if (randSelector1 == 0)
 						{
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 							diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (4f * breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, 180 + angle2, arcRadius));
@@ -770,7 +798,7 @@ namespace Cerebro
 						else if (randSelector1 == 1)  // angles not equal
 						{
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 							diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (4f * breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, 180 + angle2, arcRadius));
@@ -782,7 +810,7 @@ namespace Cerebro
 							float scaleFactor = Mathf.Sin (Mathf.Deg2Rad * (angle3 + angle1)) / Mathf.Sin (Mathf.Deg2Rad * (180 - angle2 - angle3)); //scalefactor < 1 always (checked above)
 							float scaledBreadthForDiagram = breadthForDiagram * scaleFactor;
 
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, scaledBreadthForDiagram + (breadthForDiagram - scaledBreadthForDiagram) / 2f), 180 + angle1, false, scaledBreadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, scaledBreadthForDiagram + (breadthForDiagram - scaledBreadthForDiagram) / 2f), 180 + angle1, false, scaledBreadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, scaledBreadthForDiagram + (breadthForDiagram - scaledBreadthForDiagram) / 2f), 180 + angle2, false, scaledBreadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, scaledBreadthForDiagram + (breadthForDiagram - scaledBreadthForDiagram) / 2f), 180 + angle2, scaledBreadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 - angle3, false, scaledBreadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
@@ -796,7 +824,7 @@ namespace Cerebro
 						if (randSelector1 == 0)
 						{
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 270 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 							diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, 270 + angle2, arcRadius));
@@ -806,7 +834,7 @@ namespace Cerebro
 						else if (randSelector1 == 1)  // angles not equal
 						{
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 270 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 							diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, 270 + angle2, arcRadius));
@@ -818,7 +846,7 @@ namespace Cerebro
 							float scaleFactor = Mathf.Sin (Mathf.Deg2Rad * (angle3 + angle1)) / Mathf.Sin (Mathf.Deg2Rad * (180 - angle2 - angle3)); //scalefactor < 1 always (checked above)
 							float scaledBreadthForDiagram = breadthForDiagram * scaleFactor;
 
-							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, scaledBreadthForDiagram + (breadthForDiagram - scaledBreadthForDiagram) / 2f), 270 + angle1, false, scaledBreadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
+							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, scaledBreadthForDiagram + (breadthForDiagram - scaledBreadthForDiagram) / 2f), 270 + angle1, false, scaledBreadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, scaledBreadthForDiagram + (breadthForDiagram - scaledBreadthForDiagram) / 2f), 270 + angle2, false, scaledBreadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
 							diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram / 3f, scaledBreadthForDiagram + (breadthForDiagram - scaledBreadthForDiagram) / 2f), 270 + angle2, scaledBreadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 270 - angle3, false, scaledBreadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
@@ -827,7 +855,6 @@ namespace Cerebro
 							Answer = options [3];
 						}
 					}
-					// sticks to be added to lines	
 
 					origin = new Vector2 (0, breadthForDiagram / 2f);
 
@@ -838,7 +865,7 @@ namespace Cerebro
 				{
 					SetMCQMode ();
 
-					QuestionLatext.text = "Pick the correct option :";
+					QuestionLatext.text = "Pick the correct option about the given triangles :";
 					options.Add ("Congruent by SSS");
 					options.Add ("Congruent by SAS");
 					options.Add ("Congruent by ASA");
@@ -854,10 +881,10 @@ namespace Cerebro
 						} while (angle2 - angle1 < 30);
 
 						angle3 = Mathf.Rad2Deg * Mathf.Atan (((1 - Mathf.Tan (angle1 * Mathf.Deg2Rad)) * Mathf.Tan (angle2 * Mathf.Deg2Rad)) / (Mathf.Tan (angle2 * Mathf.Deg2Rad) - 1));
-					} while (angle2 - angle1 == (180 - angle2 - (int)angle3) || angle2 - angle1 == (int)angle3 + angle1 || (int)angle3 + angle1 == (int)(180 - angle2 -angle3));
+					} while (angle2 - angle1 == (180 - angle2 - (int)angle3) || angle2 - angle1 == (int)angle3 + angle1 || (int)angle3 + angle1 == 180 - angle2 - (int) angle3);
 						
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 					diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 360 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 					diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle1, angle2, arcRadius));
@@ -869,7 +896,7 @@ namespace Cerebro
 					if (randSelector == 0)  //mirror image
 					{
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 						diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (4f * breadthForDiagram / 3f, 0), 180 - angle2, 180 - angle1, arcRadius));
@@ -888,7 +915,7 @@ namespace Cerebro
 					else if (randSelector == 1) // rotated anticlockwise by 90
 					{
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 90 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 						diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (4f * breadthForDiagram / 3f, 0), 90 + angle1, 90 + angle2, arcRadius));
@@ -907,7 +934,7 @@ namespace Cerebro
 					else if (randSelector == 2) // rotated by 180
 					{
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 						diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (4f * breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, 180 + angle2, arcRadius));
@@ -926,7 +953,7 @@ namespace Cerebro
 					else if (randSelector == 3) // rotated by 270
 					{
 						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)));
-						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
+						diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 						diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 270 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 						diagramHelper.AddAngleArc (new AngleArc ("" + (angle2 - angle1) + MathFunctions.deg, new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, 270 + angle2, arcRadius));
@@ -942,7 +969,6 @@ namespace Cerebro
 							Answer = options [3];
 						}
 					}
-					// sticks to be added to lines	
 
 					origin = new Vector2 (0, breadthForDiagram / 2f);
 
@@ -959,8 +985,8 @@ namespace Cerebro
 					stringXYZ.Shuffle ();
 
 					randSelector = Random.Range (1, 3);  // 1 for side and 2 for vertex
-					randSelector = 1;  //remove
-					QuestionLatext.text = string.Format ("Given that \\Delta{{ABC}} and \\Delta{{XYZ}} are congruent, find the {0} corresponding to {1} in \\Delta{{XYZ}}.", randSelector == 1? "side": "vertex", randSelector == 1? stringABC[0] + stringABC[1]: stringABC [2]);
+		
+					QuestionLatext.text = string.Format ("Given that \\Delta{{ABC}} and \\Delta{{XYZ}} are congruent, find the {0} corresponding to {1}\n in \\Delta{{XYZ}}.", randSelector == 1? "side": "vertex", randSelector == 1? stringABC[0] + stringABC[1]: stringABC [2]);
 					Answer = randSelector == 1? stringXYZ[0] + stringXYZ[1]: stringXYZ [2];
 
 					options.Add (Answer);
@@ -977,17 +1003,19 @@ namespace Cerebro
 
 					diagramHelper.AddLinePoint (new LinePoint (stringABC[0], new Vector2 (- 4f * breadthForDiagram / 3f, 0), 0, false, 0).SetPointTextOffset (new Vector2 (-20f, 0)).SetShouldShowDot (false));
 					diagramHelper.AddLinePoint (new LinePoint (stringABC[1], new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle1, false, breadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetPointTextOffset (new Vector2 (20f, 0)).SetShouldShowDot (false));
-					diagramHelper.AddLinePoint (new LinePoint (stringABC[2], new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetPointTextOffset (new Vector2 (15f, 15f)).SetShouldShowDot (false));
 					diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 360 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 					if (randSelector == 1)
 					{
-						diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0),angle1, angle2, arcRadius));
+						diagramHelper.AddLinePoint (new LinePoint (stringABC[2], new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetPointTextOffset (new Vector2 (15f, 15f)).SetShouldShowDot (false));
+						diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle1, angle2, arcRadius));
+						diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle1, angle2, arcRadius * 1.2f));
 						diagramHelper.AddAngleArc (new AngleArc ("", MathFunctions.PointAtDirection (new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle2, 360 - angle3, arcRadius));
 					}
 					else
 					{
-						// sticks to be added to lines to ABC
+						diagramHelper.AddLinePoint (new LinePoint (stringABC[2], new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetPointTextOffset (new Vector2 (15f, 15f)).SetShouldShowDot (false).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
+						diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle1, angle2, arcRadius));
 					}
 
 					randSelector1 = Random.Range (0, 4);
@@ -1001,12 +1029,15 @@ namespace Cerebro
 
 						if (randSelector == 1)
 						{
+							diagramHelper.AddLinePoint (new LinePoint (stringXYZ[2], new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetShouldShowDot (false).SetPointTextOffset (new Vector2 (15f, 15f)));
 							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (4f * breadthForDiagram / 3f, 0), 180 - angle2, 180 - angle1, arcRadius));
+							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (4f * breadthForDiagram / 3f, 0), 180 - angle2, 180 - angle1, arcRadius * 1.2f));
 							diagramHelper.AddAngleArc (new AngleArc ("", MathFunctions.PointAtDirection (new Vector2 (4f * breadthForDiagram / 3f, 0), 180 - angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle3, 360 - angle2, arcRadius));
 						}
 						else
 						{
-							// sticks to be added to lines to XYZ
+							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (4f * breadthForDiagram / 3f, 0), 180 - angle2, 180 - angle1, arcRadius));
+							diagramHelper.AddLinePoint (new LinePoint (stringXYZ[2], new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 180 - angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetShouldShowDot (false).SetPointTextOffset (new Vector2 (15f, 15f)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 						}
 					}
 					else if (randSelector1 == 1) // rotated anticlockwise by 90
@@ -1018,12 +1049,15 @@ namespace Cerebro
 
 						if (randSelector == 1)
 						{
+							diagramHelper.AddLinePoint (new LinePoint (stringXYZ[2], new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetShouldShowDot (false).SetPointTextOffset (new Vector2 (-20f, 0)));
 							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (4f * breadthForDiagram / 3f, 0), 90 + angle1, 90 + angle2, arcRadius));
+							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (4f * breadthForDiagram / 3f, 0), 90 + angle1, 90 + angle2, arcRadius * 1.2f));
 							diagramHelper.AddAngleArc (new AngleArc ("", MathFunctions.PointAtDirection (new Vector2 (4f * breadthForDiagram / 3f, 0), 90 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 270 + angle2, 360 + 90 - angle3, arcRadius));
 						}
 						else
 						{
-							// sticks to be added to lines to XYZ
+							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (4f * breadthForDiagram / 3f, 0), 90 + angle1, 90 + angle2, arcRadius));
+							diagramHelper.AddLinePoint (new LinePoint (stringXYZ[2], new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 90 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetShouldShowDot (false).SetPointTextOffset (new Vector2 (-20f, 0)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 						}
 					}
 					else if (randSelector1 == 2) // rotated by 180
@@ -1035,12 +1069,15 @@ namespace Cerebro
 
 						if (randSelector == 1)
 						{
+							diagramHelper.AddLinePoint (new LinePoint (stringXYZ[2], new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetShouldShowDot (false).SetPointTextOffset (new Vector2 (20f, 0)));
 							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (4f * breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, 180 + angle2, arcRadius));
+							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (4f * breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, 180 + angle2, arcRadius * 1.2f));
 							diagramHelper.AddAngleArc (new AngleArc ("", MathFunctions.PointAtDirection (new Vector2 (4f * breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), angle2, 180 - angle3, arcRadius));
 						}
 						else
 						{
-							// sticks to be added to lines to XYZ
+							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (4f * breadthForDiagram / 3f, breadthForDiagram), 180 + angle1, 180 + angle2, arcRadius));
+							diagramHelper.AddLinePoint (new LinePoint (stringXYZ[2], new Vector2 (breadthForDiagram + breadthForDiagram / 3f, breadthForDiagram), 180 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetShouldShowDot (false).SetPointTextOffset (new Vector2 (20f, 0)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 						}
 					}
 					else if (randSelector1 == 3) // rotated by 270
@@ -1052,12 +1089,15 @@ namespace Cerebro
 
 						if (randSelector == 1)
 						{
+							diagramHelper.AddLinePoint (new LinePoint (stringXYZ[2], new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetShouldShowDot (false).SetPointTextOffset (new Vector2 (0, 20f)));
 							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, 270 + angle2, arcRadius));
+							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, 270 + angle2, arcRadius * 1.2f));
 							diagramHelper.AddAngleArc (new AngleArc ("", MathFunctions.PointAtDirection (new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 90 + angle2, 270 - angle3, arcRadius));
 						}
 						else
 						{
-							// sticks to be added to lines to XYZ
+							diagramHelper.AddAngleArc (new AngleArc ("", new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle1, 270 + angle2, arcRadius));
+							diagramHelper.AddLinePoint (new LinePoint (stringXYZ[2], new Vector2 (breadthForDiagram / 3f, breadthForDiagram), 270 + angle2, false, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)).SetShouldShowDot (false).SetPointTextOffset (new Vector2 (0, 20f)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 						}
 					}
 
@@ -1078,7 +1118,7 @@ namespace Cerebro
 				{
 					SetMCQMode ();
 
-					QuestionLatext.text = "Pick the correct option :";
+					QuestionLatext.text = "Pick the correct option about the given triangles :";
 					options.Add ("Congruent by SSS");
 					options.Add ("Congruent by SAS");
 					options.Add ("Congruent by ASA");
@@ -1142,7 +1182,7 @@ namespace Cerebro
 						lengthForDiagram = (1f / Mathf.Tan (angle1 * Mathf.Deg2Rad) + 1f / Mathf.Tan (angle2 * Mathf.Deg2Rad)) * breadthForDiagram;
 					} while (lengthForDiagram / breadthForDiagram > 2f || lengthForDiagram / breadthForDiagram < 0.9f);
 
-					QuestionLatext.text = "Given : \\Delta{ABC}  \\Delta{ABD}. Find \\angle{ABC}.";
+					QuestionLatext.text = "Given : \\Delta{ABC} is congruent to \\Delta{ABD}. Find \\angle{ABC}.";
 					Answer = string.Format ("{1}{0},{2}{0}", MathFunctions.deg, angle1, (180 - angle1 - angle2) / 2);
 
 					origin = new Vector2 (lengthForDiagram, breadthForDiagram) / 2f;
@@ -1293,7 +1333,7 @@ namespace Cerebro
 					sideScaleFactor = Random.Range (2, 10);
 					side1 = sideScaleFactor * Random.Range (5, 11);
 
-					QuestionLatext.text = "Given : \\angle{ACB} = \\angle{DCB}. Find \\xalgebra and \\yalgebra.";
+					QuestionLatext.text = "Given : \\angle{ACB} is congruent to \\angle{DCB}. Find \\xalgebra and \\yalgebra.";
 					Answer = string.Format ("{0},{1}{2}", side1 / sideScaleFactor, angle1 - (int) angle2, MathFunctions.deg);
 
 					diagramHelper.AddLinePoint (new LinePoint ("B", Vector2.zero, new Vector2 (lengthForDiagram, breadthForDiagram / 2f)).SetShouldShowDot (false).SetPointTextOffset (new Vector2 (20f, 0)).SetLineText ("" + side1).SetLineTextDirection (TextDir.Right));

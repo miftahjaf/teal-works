@@ -16,6 +16,7 @@ namespace Cerebro {
 		public GameObject pointPrefab;
 		public GameObject arcPrefab;
 		public GameObject lineTextPrefab;
+		public GameObject lineLatexPrefab;
 
 		public void Awake()
 		{
@@ -106,8 +107,13 @@ namespace Cerebro {
 						GameObject sticks = GameObject.Instantiate (lineTextPrefab);
 						sticks.transform.SetParent (this.transform, false);
 						sticks.name = "sticks";
-						sticks.GetComponent<Text> ().fontSize = 12;
-						sticks.GetComponent<Text> ().text = new System.String ('|', stick.numberOfSticks);
+						if (sticks.GetComponent<TEXDraw> ()) {
+							sticks.GetComponent<TEXDraw> ().size = 12;
+							sticks.GetComponent<TEXDraw> ().text = new System.String ('|', stick.numberOfSticks);
+						} else {
+							sticks.GetComponent<Text> ().fontSize = 12;
+							sticks.GetComponent<Text> ().text = new System.String ('|', stick.numberOfSticks);
+						}
 						sticks.GetComponent<RectTransform> ().anchoredPosition = ((1 - stick.fractionLength) * linePoint.origin) + (stick.fractionLength * newPoint); 
 						sticks.GetComponent<RectTransform> ().eulerAngles = new Vector3 (0f, 0f, Mathf.Atan ((newPoint.y - linePoint.origin.y) / (newPoint.x - linePoint.origin.x)) * Mathf.Rad2Deg);
 					}
@@ -197,27 +203,51 @@ namespace Cerebro {
 			else if(textDirection == TextDir.Right)
 				midPoint.x += 60f;
 			
-			GameObject lineTextObj = GameObject.Instantiate (lineTextPrefab);
+			GameObject lineTextObj = GameObject.Instantiate (lineLatexPrefab ==null?lineTextPrefab : lineLatexPrefab);
 			lineTextObj.transform.SetParent (this.transform, false);
 			lineTextObj.GetComponent<RectTransform> ().anchoredPosition = midPoint;
-			Text  lineTextComponent =lineTextObj.GetComponent<Text> ();
-			lineTextComponent.text = lineText;
 
+			TextAnchor textAnchor = TextAnchor.MiddleCenter;
 			float distance = Vector2.Distance (point1, point2);
 			if (textDirection == TextDir.Left) 
 			{
-				lineTextComponent.alignment = TextAnchor.MiddleRight;
+				textAnchor = TextAnchor.MiddleRight;
 				lineTextObj.GetComponent<RectTransform> ().sizeDelta = new Vector2 (100f, distance <30 ?30f:distance );
 			} 
 			else if (textDirection == TextDir.Right) 
 			{
-				lineTextComponent.alignment = TextAnchor.MiddleLeft;
+				textAnchor = TextAnchor.MiddleLeft;
 				lineTextObj.GetComponent<RectTransform> ().sizeDelta = new Vector2 (100f, distance <30 ?30f:distance );
 			} 
 			else {
-				lineTextComponent.alignment = TextAnchor.MiddleCenter;
+				textAnchor =TextAnchor.MiddleCenter;
 				lineTextObj.GetComponent<RectTransform> ().sizeDelta = new Vector2 (distance>100?distance:100f,40f);
 			}
+
+			if (lineTextObj.GetComponent<TEXDraw> ()) {
+				TEXDraw lineLatexComponent = lineTextObj.GetComponent<TEXDraw> ();
+				lineLatexComponent.text = lineText;
+				lineLatexComponent.alignment = AnchorToPosition(textAnchor);
+			} else {
+				Text lineTextComponent = lineTextObj.GetComponent<Text> ();
+				lineTextComponent.text = lineText;
+				lineTextComponent.alignment = textAnchor;
+			}
+		}
+
+		public Vector2 AnchorToPosition(TextAnchor textAnchor)
+		{
+			Vector2 position = new Vector2 (0.5f, 0.5f);
+			switch (textAnchor)
+			{
+			case TextAnchor.MiddleRight:
+				return new Vector2 (1f, 0.5f);
+
+			case TextAnchor.MiddleLeft:
+				return  new Vector2 (0f, 0.5f);
+			}
+
+			return position;
 		}
 			
 		private Vector2 GetQuadrants(float angle)
