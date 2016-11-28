@@ -49,6 +49,7 @@ namespace Cerebro
 		public List<MissionAnswer> answers;
 		public string startTime;
 		public string endTime;
+		public string missionJson;
 		public Mission()
 		{
 			KCID = "";
@@ -60,6 +61,7 @@ namespace Cerebro
 			answers = new List<MissionAnswer> ();
 			startTime = "";
 			endTime = "";
+			missionJson = "";
 		}
 
 		public Mission GetMission(string json)
@@ -75,6 +77,7 @@ namespace Cerebro
 			if (jsonNode == null) {
 				return this;
 			}
+			missionJson = jsonNode.ToString ();
 			KCID = jsonNode["kc_id"].Value;
 			completionCondition = jsonNode["completion_condition"].Value;
 			completionQuestionsCorrectLimit = jsonNode["completion_questions_correct_limit"].AsInt;

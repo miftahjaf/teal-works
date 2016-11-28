@@ -32,7 +32,8 @@ namespace Cerebro
 		//		private string SERVER_URL = "http://192.168.1.28:3000/";
 		private string SERVER_URL = "https://teal-server.herokuapp.com/";
 //		private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
-		private string SERVER_NEW_URL ="http://apis.aischool.net/";
+		//private string SERVER_NEW_URL ="http://apis.aischool.net/";
+		private string SERVER_NEW_URL ="http://10.0.4.237:3000/";
 		public event EventHandler MoveValidated;
 		public event EventHandler DescribeImageResponseSubmitted;
 
@@ -1224,7 +1225,8 @@ namespace Cerebro
 			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["request_data"]["studentId"] = studentID;
-			N ["myData"] ["request_data"] ["missionJson"] ["kc_id"] = mission.KCID.ToString ();
+			JSONNode missionJson = JSONNode.Parse (mission.missionJson);
+		/*	N ["myData"] ["request_data"] ["missionJson"] ["kc_id"] = mission.KCID.ToString ();
 			N ["myData"] ["request_data"] ["missionJson"] ["completion_condition"] = mission.completionCondition.ToString ();
 			N ["myData"] ["request_data"] ["missionJson"] ["completion_questions_limit"] = mission.completionQuestionsLimit.ToString ();
 			N ["myData"] ["request_data"] ["missionJson"] ["completion_questions_correct_limit"] = mission.completionQuestionsCorrectLimit.ToString ();
@@ -1235,8 +1237,9 @@ namespace Cerebro
 				N ["myData"] ["request_data"] ["missionJson"] ["question_types"] [i] ["practice_item_name"] = mission.questions [i].practiceName.ToString();
 				N ["myData"] ["request_data"] ["missionJson"] ["question_types"] [i] ["difficulity"] = mission.questions [i].difficulty.ToString();
 				N ["myData"] ["request_data"] ["missionJson"] ["question_types"] [i] ["sub_level"] = mission.questions [i].subLevel.ToString();
-			}
-			count = mission.answers.Count;
+			}*/
+			N ["myData"] ["request_data"] ["missionJson"] = missionJson;
+			int count = mission.answers.Count;
 			for (int i = 0; i < count; i++) {
 				N ["myData"] ["request_data"]  ["missionQuestionData"] [i] ["practice_item_id"] = mission.answers [i].practiceItemID.ToString();
 				N ["myData"] ["request_data"]  ["missionQuestionData"] [i] ["seed"] = mission.answers [i].seed.ToString();
