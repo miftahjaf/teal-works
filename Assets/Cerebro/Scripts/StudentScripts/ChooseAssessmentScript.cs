@@ -221,12 +221,16 @@ namespace Cerebro
 			//ss.ShowHeading ();
 		}
 
-		private void OpenAssessment (string type, string title, MissionItemData missionItemData,string practiceId="",string KCId ="")
+		private void OpenAssessment (string type, string title, Mission mission,string practiceId="",string KCId ="")
 		{
 			
 			GameObject assessmentgameobject = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Assessments, gameObject.transform.parent.transform);
 			assessmentgameobject.transform.SetAsLastSibling ();
-			assessmentgameobject.GetComponent<AssessmentScript> ().Initialize (type, title, gameObject, missionItemData, testModeActive,practiceId,KCId);
+			if (mission == null) {
+				assessmentgameobject.GetComponent<AssessmentScript> ().Initialize (type, title, gameObject, testModeActive, practiceId, KCId);
+			} else {
+				assessmentgameobject.GetComponent<AssessmentScript> ().Initialize (gameObject, mission);
+			}
 
 			gameObject.SetActive (false);
 		}
@@ -239,17 +243,20 @@ namespace Cerebro
 			Destroy (gameObject);
 		}
 
-		public override void ForceOpenScreen (string[] screen, int index, MissionItemData missionItemData)
+		public override void ForceOpenScreen (string[] screen, int index, Mission mission)
 		{
 			Initialise ();
 			string nextScreen = null;
 			if (index < screen.Length - 1) {
 				nextScreen = screen [index + 1];
 			}
-			OpenScreen (screen [index], missionItemData);
+			OpenScreen (screen [index], mission);
 			if (nextScreen != null) {
 				// Go one step deeper here.
 			}
+		}
+		public override void ForceOpenScreen (string[] screen, int index, MissionItemData missionItemData)
+		{
 		}
 
 		public override string[] GetOptions ()
@@ -257,11 +264,11 @@ namespace Cerebro
 			return new string[]{ };
 		}
 
-		public void OpenScreen (string assessmentName, MissionItemData missionItemData)
+		public void OpenScreen (string assessmentName, Mission mission)
 		{
 			
 			string prefabName = assessmentName.Replace (" ", "");
-			OpenAssessment ("Assessments/" + prefabName, assessmentName, missionItemData);
+			OpenAssessment ("Assessments/" + prefabName, assessmentName, mission);
 		}
 
 	}

@@ -47,7 +47,7 @@ namespace Cerebro
 		public List<Moves> mMoves = new List<Moves> ();
 		public List<QuizData> mQuizQuestions = new List<QuizData> ();
 		public List<QuizAnalytics> mQuizAnalytics = new List<QuizAnalytics> ();
-		public Missions mMission = new Missions ();
+		public Missions mMission = new Missions ();   //Old Mission
 		public Dictionary<string, PracticeItems> mPracticeItems = new Dictionary<string, PracticeItems> ();
 		public DescribeImage mDescribeImage;
 		public Verbalize mVerbalize;
@@ -65,6 +65,9 @@ namespace Cerebro
 		public bool IsVersionUptoDate, CheckingForVersion;
 		public Avatar mAvatar;
 		public Daily CurrDaily;
+
+		[NonSerialized]
+		public MissionData missionData = new MissionData();
 
 		public bool mUpdateTimer = false;
 		public System.TimeSpan mTimer;
@@ -171,7 +174,7 @@ namespace Cerebro
 			AllLocalFiles = new string[2];
 			AllLocalFiles [0] = "DescribeImageSubmitted";
 			AllLocalFiles [1] = "Missions";
-
+			missionData.LoadData ();
 			ChangeMpfsCounterVisibility ();
 		}
 
@@ -1292,7 +1295,7 @@ namespace Cerebro
 			} 
 		}
 
-		public void GetMission (string missionID)
+		public void GetMission (string missionID) //Old Mission
 		{
 			if (CheckLocalMissionCompleteJSON ()) {
 				return;
@@ -1308,9 +1311,45 @@ namespace Cerebro
 					HTTPRequestHelper.instance.GetMissionQuestions (missionID);
 				} 
 			}
-		}			
+		}	
 			
-		public void GotMissions ()
+
+		public void GetMission()
+		{
+			
+			if (missionData.GetNotCompletedMissionCount () > 0) {
+				GotMission ();
+			} else if (missionData.dataList.Count > 0) {
+				UploadCompletedMission ();
+			}
+			else
+			{
+				if (mHitServer) {
+					HTTPRequestHelper.instance.GetMission ();
+				} 
+			}
+		}
+
+		public void UploadCompletedMission()
+		{
+			for (int i = 0; i < missionData.dataList.Count; i++) {
+				if (!string.IsNullOrEmpty (missionData.dataList [i].endTime)) {
+					HTTPRequestHelper.instance.SubmitCompletedMission (missionData.dataList [i]);
+				}
+			}
+		}
+
+		public void GotMission()
+		{
+			if (m_Instance.MissionLoaded != null) {
+				m_Instance.MissionLoaded.Invoke (this, null);
+			} else {
+				CerebroHelper.DebugLog ("NO HANDLE Mission Loaded");
+			}
+		}
+
+	
+		public void GotMissions () //Old Mission
 		{
 			WriteMissionToFileJSON ();
 			if (m_Instance.MissionLoaded != null) {
@@ -1709,6 +1748,26 @@ namespace Cerebro
 			}
 
 			return toReturn;
+		}
+
+		bool CheckMissionCompleteJSON ()
+		{
+			bool toReturn = false;
+			string fileName = Application.persistentDataPath + "/MissionJSON.txt";
+			if (!File.Exists (fileName)) {
+				return false;
+			}
+			string data = File.ReadAllText (fileName);
+			if (!IsJsonValidDirtyCheck (data)) {
+				return false;
+			}
+			JSONNode N = JSONClass.Parse (data);
+			if (N ["Data"] ["UploadBool"] != null && N ["Data"] ["UploadBool"].Value == "false") {
+				
+			}
+
+			return toReturn;
+
 		}
 
 		void CheckIfMissionComplete ()
@@ -2850,7 +2909,8 @@ namespace Cerebro
 
 		void InternetBack ()
 		{
-			CheckLocalMissionCompleteJSON ();
+			//CheckLocalMissionCompleteJSON ();
+			UploadCompletedMission();
 			ScanTables ();
 		}
 
@@ -4531,7 +4591,7 @@ namespace Cerebro
 		public string PropertyValue{ get; set; }
 	}
 
-	public class Missions
+	public class Missions //Old Mission
 	{
 		public string MissionID { get; set; }
 		public string MissionName{ get; set; }
@@ -4540,7 +4600,7 @@ namespace Cerebro
 		public SortedDictionary<string, MissionItemData> Questions { get; set; }
 	}
 
-	public class MissionItemData
+	public class MissionItemData  //Old Mission
 	{
 		public string QuestionID { get; set; }
 		public string QuestionLevel { get; set; }
@@ -4559,7 +4619,7 @@ namespace Cerebro
 		public string TotalAttempts { get; set; }
 		public string CorrectAttempts { get; set; }
 	}
-
+		
 
 	public class DescribeImage
 	{

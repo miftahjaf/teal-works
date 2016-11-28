@@ -177,6 +177,8 @@ namespace Cerebro {
 				subScreen.GetComponent<CerebroTestScript> ().ForceOpenScreen (screen, index + 1, missionItemData); 	//to open any assessment directly
 			}
 		}
+		public override void ForceOpenScreen (string[] screen, int index, Mission mission) {
+		}
 
 		public override string[] GetOptions ()
 		{

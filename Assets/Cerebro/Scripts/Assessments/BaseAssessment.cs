@@ -58,7 +58,7 @@ namespace Cerebro {
 		public bool isRevisitedQuestion = false;
 		public Dictionary<string, string> revisitedQuestionData;
 
-		public MissionItemData missionItemData;
+		//public MissionItemData missionItemData; //Old Mission
 		protected int forceSelector;
 
 		private int currentQuestionDifficulty;
@@ -80,6 +80,10 @@ namespace Cerebro {
 
 		private bool isQuestionStarted;
 		public string currentQuestionMapping;
+
+		public bool isMissionQuestion;
+		public Dictionary<string, string> missionQuestionData;
+
 
 		protected void Initialise(string subjectID, string topicID, string subTopicID, string assessmentID) {
 			parentAssessmentScript = gameObject.transform.parent.GetComponent<AssessmentScript> ();
@@ -228,8 +232,10 @@ namespace Cerebro {
 				forceSelector = int.Parse (revisitedQuestionData ["sublevel"]);
 				randomSeed = int.Parse (revisitedQuestionData ["seed"]);
 				Random.seed = randomSeed;
-			} else if (missionItemData != null) {
-				int randomIndex = -1;
+			} else if (isMissionQuestion && missionQuestionData != null) {
+				Queslevel = int.Parse (missionQuestionData ["difficulty"]);
+				forceSelector = int.Parse (missionQuestionData ["sublevel"]);
+				/*int randomIndex = -1;
 
 				if (missionItemData.QuestionLevel.Contains ("@")) {
 					string[] options = missionItemData.QuestionLevel.Split ("@" [0]);
@@ -260,7 +266,7 @@ namespace Cerebro {
 					if (missionItemData.SubLevel != "-1") {
 						forceSelector = int.Parse (missionItemData.SubLevel);
 					}
-				}
+				}*/
 				if ((WelcomeScript.instance.autoTestMissionMix || WelcomeScript.instance.autoTestMissionCorrect) && CerebroHelper.isTestUser ())
 					StartCoroutine (autoCorrectMission ());
 			} else if (KCMappings.Count > 0) {
@@ -431,10 +437,19 @@ namespace Cerebro {
 		protected void showNextQuestion() {
 			if (revisitScript != null) {
 				revisitScript.ShowFlagButton ();
-			} else {
+			} else if (isMissionQuestion) {
+				parentAssessmentScript.UpdateNextQuestion ();
+			}
+			else {
 				GenerateQuestion ();
 				StartCoroutine(StartAnimation());
 			}
+		}
+
+		public void ShowNextMissionAssessmentQuestion()
+		{
+			GenerateQuestion ();
+			StartCoroutine(StartAnimation());
 		}
 
 		protected void LevelUp() {

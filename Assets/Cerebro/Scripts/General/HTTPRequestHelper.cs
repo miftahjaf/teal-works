@@ -32,7 +32,7 @@ namespace Cerebro
 		//		private string SERVER_URL = "http://192.168.1.28:3000/";
 		private string SERVER_URL = "https://teal-server.herokuapp.com/";
 //		private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
-
+		private string SERVER_NEW_URL ="http://apis.aischool.net/";
 		public event EventHandler MoveValidated;
 		public event EventHandler DescribeImageResponseSubmitted;
 
@@ -951,7 +951,7 @@ namespace Cerebro
 			});
 		}
 
-		public void GetMissionQuestions (string missionID)
+		public void GetMissionQuestions (string missionID)  //Old Mission
 		{
 			//missionID = "MISMFRA0604R";
 			CerebroHelper.DebugLog ("getting ques " + missionID);
@@ -987,6 +987,29 @@ namespace Cerebro
 						LaunchList.instance.mMission.Questions.Add (m.QuestionID, m);
 					}
 					LaunchList.instance.GotMissions ();
+				} else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+				}
+			});
+		}
+
+
+		public void GetMission()
+		{
+			CerebroHelper.DebugLog ("Getting mission ");
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
+			N ["myData"] ["request_data"] ["student_id"] = studentID;
+	
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArraySimpleJSON (SERVER_NEW_URL + "missions/user/student/mission/get", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString()!= "") {
+					if(jsonResponse["response"]["mission_data"]["question_types"].Count>0)
+					{
+						LaunchList.instance.missionData.Add(new Mission().GetMission(jsonResponse["response"]["mission_data"]));
+					}
+					LaunchList.instance.GotMission();
 				} else {
 					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
 				}
@@ -1195,6 +1218,48 @@ namespace Cerebro
 		//
 		// PUT Requests
 		//
+
+		public void SubmitCompletedMission(Mission mission)
+		{
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			N ["myData"] ["request_data"]["studentId"] = studentID;
+			N ["myData"] ["request_data"] ["missionJson"] ["kc_id"] = mission.KCID.ToString ();
+			N ["myData"] ["request_data"] ["missionJson"] ["completion_condition"] = mission.completionCondition.ToString ();
+			N ["myData"] ["request_data"] ["missionJson"] ["completion_questions_limit"] = mission.completionQuestionsLimit.ToString ();
+			N ["myData"] ["request_data"] ["missionJson"] ["completion_questions_correct_limit"] = mission.completionQuestionsCorrectLimit.ToString ();
+			N ["myData"] ["request_data"] ["missionJson"] ["mission_text"] = mission.missionText.ToString ();
+			int count = mission.questions.Count;
+			for (int i = 0; i < count; i++) {
+				N ["myData"] ["request_data"] ["missionJson"] ["question_types"] [i] ["practice_item_id"] = mission.questions [i].practiceItemID.ToString();
+				N ["myData"] ["request_data"] ["missionJson"] ["question_types"] [i] ["practice_item_name"] = mission.questions [i].practiceName.ToString();
+				N ["myData"] ["request_data"] ["missionJson"] ["question_types"] [i] ["difficulity"] = mission.questions [i].difficulty.ToString();
+				N ["myData"] ["request_data"] ["missionJson"] ["question_types"] [i] ["sub_level"] = mission.questions [i].subLevel.ToString();
+			}
+			count = mission.answers.Count;
+			for (int i = 0; i < count; i++) {
+				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["practice_item_id"] = mission.answers [i].practiceItemID.ToString();
+				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["seed"] = mission.answers [i].seed.ToString();
+				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["difficulity"] = mission.answers [i].difficulty.ToString();
+				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["sub_level"] = mission.answers [i].subLevel.ToString();
+				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["ans"] = mission.answers [i].ans.ToString();
+				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["correct"] = mission.answers [i].correct ?"1":"0";
+			}
+			N ["myData"] ["request_data"] ["missionJson"] ["startTime"] = mission.startTime.ToString();
+			N ["myData"] ["request_data"] ["missionJson"] ["endTime"] = mission.endTime.ToString ();
+
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArray (SERVER_NEW_URL + "missions/mission/analytics/add", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
+					CerebroHelper.DebugLog ("Added mission analytics");
+					LaunchList.instance.missionData.Remove(mission);
+					WelcomeScript.instance.UpdateMission ();
+				} else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+				}
+			});
+		}
 
 		public void SendAvatarSet(string BabaId, int HatId, int GogglesId, int BadgeId, Action<bool> callback)
 		{
@@ -1444,7 +1509,7 @@ namespace Cerebro
 			});
 		}
 
-		public void PushMissionComplete (string missionID, string day, string timeStarted, string timeEnded, float accuracy)
+		public void PushMissionComplete (string missionID, string day, string timeStarted, string timeEnded, float accuracy) //Old Mission
 		{
 			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 
@@ -1473,6 +1538,10 @@ namespace Cerebro
 				}
 			});
 		}
+
+
+
+
 
 		public void uploadProfilePic (string FileName, Texture2D tex)
 		{

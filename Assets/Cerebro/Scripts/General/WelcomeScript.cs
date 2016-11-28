@@ -619,7 +619,7 @@ namespace Cerebro
 			//StartCoroutine (OpenMultipleScreens ());
 		}
 
-		public void OpenScreen (string screens, MissionItemData missionItemData = null)
+		public void OpenScreen (string screens, Mission mission = null)
 		{
 			CerebroHelper.DebugLog ("opening");	
 			// screens string is a comma-separated string of the path to follow to get to the final string. e.g. - to get to Sets Assessment, the string should be "Practice,Sets"
@@ -635,12 +635,12 @@ namespace Cerebro
 			if (screenArr [0] == "Practice") {
 				childrenView = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.ChooseAssessments, BaseScreen.transform);
 				if (screenArr.Length > 1) {
-					childrenView.GetComponent<CerebroTestScript> ().ForceOpenScreen (screenArr, 1, missionItemData);
+					childrenView.GetComponent<CerebroTestScript> ().ForceOpenScreen (screenArr, 1, mission);
 				}
 			} else if (screenArr [0] == "Watch") {
 				childrenView = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.StudentPlaylistContainer, BaseScreen.transform);
 				if (screenArr.Length > 1) {
-					childrenView.GetComponent<CerebroTestScript> ().ForceOpenScreen (screenArr, 1, missionItemData);
+					childrenView.GetComponent<CerebroTestScript> ().ForceOpenScreen (screenArr, 1, mission);
 				}
 			} else if (screenArr [0] == "Revisit") {
 				childrenView = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Revisit, BaseScreen.transform);

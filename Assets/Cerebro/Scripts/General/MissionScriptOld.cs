@@ -38,7 +38,7 @@ namespace Cerebro
 		}
 
 		public void ShowScreen() {
-			ProgressCircle.SetActive (false);
+			/*ProgressCircle.SetActive (false);
 
 			if (MissionTexts == null) {
 				MissionTexts = new List<GameObject> ();
@@ -99,10 +99,10 @@ namespace Cerebro
 			gameObject.SetActive (true);
 			transform.SetAsLastSibling ();
 			FG.transform.localPosition = new Vector2 (FG.transform.localPosition.x, -768);
-			StartCoroutine (AnimateShow ());
+			StartCoroutine (AnimateShow ());*/
 		}
 
-		void MissionClicked(Button b) {
+	/*	void MissionClicked(Button b) {
 			WelcomeScript.instance.RemoveScreens ();
 
 			HideScreen (false);
@@ -127,7 +127,7 @@ namespace Cerebro
 			} else {
 				CerebroHelper.DebugLog ("Unsupported Type");
 			}
-		}
+		}*/
 
 		void Start() {
 			GetComponent<RectTransform> ().sizeDelta = new Vector2 (0f, 0f);

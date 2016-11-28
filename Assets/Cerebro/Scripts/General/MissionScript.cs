@@ -19,10 +19,14 @@ namespace Cerebro
 
 		private List<GameObject> MissionTexts;
 
-		public void ShowScreen(string animateMissionItem = null) {
-			if (LaunchList.instance.mMission == null || LaunchList.instance.mMission.Questions == null)
-				return;
+		public void ShowScreen(string animateMissionItem = null) 
+		{
 			ProgressCircle.SetActive (false);
+			//if (LaunchList.instance.mMission == null || LaunchList.instance.mMission.Questions == null) //Old Mission
+			//	return;
+			if (LaunchList.instance.missionData.dataList == null || LaunchList.instance.missionData.Count() <= 0) {
+				return;
+			}
 
 			if (MissionTexts == null) {
 				MissionTexts = new List<GameObject> ();
@@ -33,16 +37,45 @@ namespace Cerebro
 				MissionTexts.Clear ();
 			}
 
-			Title.GetComponent<Text> ().text = LaunchList.instance.mMission.MissionName;
+			//Title.GetComponent<Text> ().text = LaunchList.instance.mMission.xMissionName; //Old Mission
+			Title.GetComponent<Text> ().text ="";
 			float startY = 110f;
 			int i = 0;
 
 			gameObject.SetActive (true);
 			transform.SetAsLastSibling ();
 
-			if (LaunchList.instance.mMission == null) {
-				return;
+			int cnt = 0;
+			foreach (Mission mission in LaunchList.instance.missionData.dataList) {
+				GameObject missionText = Instantiate (MissionTextPrefab);
+				missionText.transform.SetParent (transform, false);
+				missionText.transform.localPosition = new Vector2 (0f, startY - (66*i));
+				missionText.gameObject.GetChildByName<Text> ("Text").text = mission.missionText; 
+				Button btn = missionText.GetComponent<Button> ();
+				btn.name = i.ToString();
+				int index = i;
+				if (!string.IsNullOrEmpty (mission.endTime)) {
+					missionText.transform.Find ("Incomplete").gameObject.SetActive (false);
+					missionText.transform.Find ("Complete").gameObject.SetActive (true);
+					missionText.transform.Find("Complete").GetComponent<Image>().color = mission.IsSucceed()? MaterialColor.green800:MaterialColor.red800;
+				} else {
+					missionText.transform.Find ("Incomplete").gameObject.SetActive (true);
+					missionText.transform.Find ("Complete").gameObject.SetActive (false);
+					btn.onClick.AddListener(() => MissionClicked(index));
+				}
+				if (animateMissionItem == mission.missionText) {
+					StartCoroutine (AnimateMissionItemCompletion (missionText.gameObject));
+					Invoke ("UpdateMission", 2f);
+				}
+				MissionTexts.Add (missionText);
+				i++;
 			}
+
+			//if (LaunchList.instance.mMission == null) {  //Old Mission
+			//	return;
+			//}
+
+		/*	i = 0;
 			foreach(var item in LaunchList.instance.mMission.Questions) {
 				GameObject missionText = Instantiate (MissionTextPrefab);
 				missionText.transform.SetParent (transform, false);
@@ -90,7 +123,9 @@ namespace Cerebro
 				}
 				MissionTexts.Add (missionText);
 
-			}
+			} */
+
+
 //			FG.transform.localPosition = new Vector2 (FG.transform.localPosition.x, -768);
 //			StartCoroutine (AnimateShow ());
 		}
@@ -108,7 +143,7 @@ namespace Cerebro
 			}
 		}
 
-		void MissionClicked(Button b) {
+		/*void MissionClicked(Button b) { //Old Mission
 
 			WelcomeScript.instance.RemoveScreens ();
 
@@ -129,6 +164,17 @@ namespace Cerebro
 				WelcomeScript.instance.OpenScreen ("Watch,Video", mid);
 			} else if (mid.Type == "Googly") {
 				WelcomeScript.instance.OpenGoogly (mid);
+			} else {
+				CerebroHelper.DebugLog ("Unsupported Type");
+			}
+		}*/
+
+		void MissionClicked(int index)
+		{
+			WelcomeScript.instance.RemoveScreens ();
+			Mission missionData = LaunchList.instance.missionData.ElementAt(index);
+			if (missionData.completionCondition == "Attempt" || missionData.completionCondition == "Streak" || missionData.completionCondition == "Correct") {
+				WelcomeScript.instance.OpenScreen ("Practice,Assessment", missionData);
 			} else {
 				CerebroHelper.DebugLog ("Unsupported Type");
 			}
@@ -156,11 +202,14 @@ namespace Cerebro
 
 			LaunchList.instance.MissionLoaded -= MisionLoadedHandler;
 			LaunchList.instance.MissionLoaded += MisionLoadedHandler;
-			string missionId = "";
-			if (PlayerPrefs.HasKey (PlayerPrefKeys.MissionID)) {
-				missionId = PlayerPrefs.GetString (PlayerPrefKeys.MissionID);
-			}
-			LaunchList.instance.GetMission (missionId);
+			/*	string missionId = "";                                   //Old Mission
+				if (PlayerPrefs.HasKey (PlayerPrefKeys.MissionID)) {              //Old Mission
+					missionId = PlayerPrefs.GetString (PlayerPrefKeys.MissionID); //Old Mission
+				}
+				LaunchList.instance.GetMission (missionId);                      //Old Mission 
+			*/
+			LaunchList.instance.GetMission ();
+
 		}
 
 		void MisionLoadedHandler (object sender, EventArgs e)

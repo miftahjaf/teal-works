@@ -27,12 +27,16 @@ namespace Cerebro {
 			Destroy (gameObject);
 		}
 
-		public override void ForceOpenScreen (string[] screen, int index, MissionItemData missionItemData)
+		public override void ForceOpenScreen (string[] screen, int index, MissionItemData missionData)
 		{
-			mItemData = missionItemData;
+			mItemData = missionData;
 			if (playlist != null) {
-				playlist.OpenMissionVideo (missionItemData);
+				playlist.OpenMissionVideo (missionData);
 			}
+		}
+
+		public override void ForceOpenScreen (string[] screen, int index, Mission mission)
+		{
 		}
 
 		public override string[] GetOptions ()

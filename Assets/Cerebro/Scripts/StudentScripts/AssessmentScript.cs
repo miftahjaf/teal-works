@@ -44,12 +44,13 @@ namespace Cerebro
 		public BaseAssessment baseAssessment;
 
 		private int incrementBy = 1;
-
-
-
 		public Text testingText;
 		public Button regenButton;
 		public bool shouldRegenQuestion;
+
+		private Mission mission;
+		private string currentAssessmentType;
+		private Dictionary<string, string> missionQuestionData;
 
 		private string currentQuestionMapping ="1t1";
 
@@ -79,9 +80,10 @@ namespace Cerebro
 			} else {
 				coinsText.gameObject.SetActive (false);
 			}
+			currentAssessmentType = "";
 		}
 
-		public void Initialize (string assessmentType, string _title, GameObject _chooseAssessment, MissionItemData missionItemData = null, bool testMode = false,string practiceId="", string KCID ="")
+		public void Initialize (string assessmentType, string _title, GameObject _chooseAssessment, bool testMode = false,string practiceId="", string KCID ="")
 		{
 			GetComponent<RectTransform> ().sizeDelta = new Vector2 (0f, 0f);
 			chooseAssessment = _chooseAssessment;
@@ -96,7 +98,8 @@ namespace Cerebro
 			gameobject.GetComponent<RectTransform> ().position = new Vector3 (0, 0);
 			baseAssessment = gameobject.GetComponent<BaseAssessment> ();
 			baseAssessment.assessmentName = _title.Replace (" ", "");
-			baseAssessment.missionItemData = missionItemData;
+			baseAssessment.isMissionQuestion = (mission!=null);
+			baseAssessment.missionQuestionData = missionQuestionData;
 			baseAssessment.practiceID = practiceId;
 			baseAssessment.KCID = KCID;
 			baseAssessment.testMode = testMode;
@@ -111,8 +114,51 @@ namespace Cerebro
 			if (WelcomeScript.instance && WelcomeScript.instance.testingAllScreens) {
 				StartCoroutine (startChapters ());
 			}
+			currentAssessmentType = assessmentType;
 		}
 
+		public void Initialize(GameObject _chooseAssessment,Mission _missionData)
+		{
+			mission = _missionData;
+			chooseAssessment = _chooseAssessment;
+			UpdateNextQuestion ();
+
+		}
+
+		public void UpdateNextQuestion()
+		{
+			if (mission == null) {
+				return;
+			}
+			if (mission.IsMissionCompleted ()) {
+				LaunchList.instance.missionData.SaveData ();
+				WelcomeScript.instance.ShowScreen (true, mission.missionText);
+				return;
+			}
+			MissionQuestion missionNextQuestion = mission.GetNextQuestion ();
+			missionQuestionData = new Dictionary<string, string> ();
+			missionQuestionData.Add ("difficulty", missionNextQuestion.difficulty.ToString());
+			missionQuestionData.Add ("sublevel", missionNextQuestion.subLevel.ToString());
+			string prefabName = missionNextQuestion.practiceName.Replace (" ", "");
+			string assessmentType = "Assessments/" +prefabName;
+
+			if (baseAssessment != null && currentAssessmentType.Equals (assessmentType)) {
+				baseAssessment.isMissionQuestion = (mission!=null);
+				baseAssessment.missionQuestionData = missionQuestionData;
+				baseAssessment.practiceID = missionNextQuestion.practiceItemID;
+				baseAssessment.ShowNextMissionAssessmentQuestion ();
+			} else {
+				if (baseAssessment != null) {
+					Debug.Log ("Current Assessment Type :"+currentAssessmentType);
+					baseAssessment.isDestroyed = true;
+					Destroy (baseAssessment.gameObject);
+				}
+				Initialize (assessmentType, missionNextQuestion.practiceName, chooseAssessment,false,missionNextQuestion.practiceItemID);
+			}
+
+			currentAssessmentType = assessmentType;
+		}
+			
 		public void QuestionStarted ()
 		{
 			timeini = Time.realtimeSinceStartup;
@@ -126,18 +172,19 @@ namespace Cerebro
 			timetaken = timeend - timeini;
 			string day = System.DateTime.Now.ToUniversalTime().ToString ("yyyyMMdd");
 
-			string practiceID = mPracticeID;
+			//string practiceID = mPracticeID;
+			string practiceItemID = baseAssessment.GetPracticeItemID ();
 
 			if (LaunchList.instance.mUseJSON) {
-				PracticeData.UpdateLocalFileJSON (practiceID, isCorrect);
+				PracticeData.UpdateLocalFileJSON (practiceItemID, isCorrect);
 			} else {
-				PracticeData.UpdateLocalFile (practiceID, isCorrect);
+				PracticeData.UpdateLocalFile (practiceItemID, isCorrect);
 			}
-			List<string> missionQuestionIds = CheckMissions (isCorrect, difficulty, sublevel, practiceID);
+			//List<string> missionQuestionIds = CheckMissions (isCorrect, difficulty, sublevel, practiceID);  //Old Mission
 
 			int increment = 0;
 			string KCID = baseAssessment.GetCurrentKCID ();
-			string practiceItemID = baseAssessment.GetPracticeItemID ();
+
 			if (isCorrect) {
 				if (rightSound != null) {
 					audioSource.PlayOneShot (rightSound);
@@ -182,21 +229,26 @@ namespace Cerebro
 //				incrementBy = Mathf.FloorToInt(increment / 5);
 //				LaunchList.instance.SetCoins (groupID, studentID, increment);
 			}
+			//Old Mission
+			//if (missionQuestionIds.Count != 0) { 
+			//	string missionString = LaunchList.instance.mMission.MissionID; 
+			//	foreach (var str in missionQuestionIds) {  
+			//		missionString = missionString + "@" + str;
+			//	}
+			//	Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, missionString, UserAnswer, increment);  
+			//} else {
 
-			if (missionQuestionIds.Count != 0) {
-				string missionString = LaunchList.instance.mMission.MissionID;
-				foreach (var str in missionQuestionIds) {
-					missionString = missionString + "@" + str;
-				}
-				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, missionString, UserAnswer, increment);  
-			} else {
-				Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, " ", UserAnswer, increment);  
-			}
+				
+			//}
 
+			Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, " ", UserAnswer, increment);  
 			UpdateKCMastery (practiceItemID, KCID, isCorrect);
+
+			LaunchList.instance.missionData.CheckAndUpdateMissionData (practiceItemID, difficulty, sublevel, isCorrect, randomSeed, UserAnswer);
 		}
 
-		List<string> CheckMissions (bool isCorrect, int level, int sublevel, string practiceID)
+		//Old Mission
+		/*List<string> CheckMissions (bool isCorrect, int level, int sublevel, string practiceID)
 		{
 			List<string> missionQuestionIDs = new List<string> ();
 
@@ -234,7 +286,7 @@ namespace Cerebro
 				}
 			}
 			return missionQuestionIDs;
-		}
+		}*/
 
 		int increaseStreak ()
 		{
@@ -413,7 +465,7 @@ namespace Cerebro
 				LaunchList.instance.mKCMastery.Add (KCID,newProficiency);
 		
 			}
-			if (LaunchList.instance.mPracticeItems.ContainsKey (mPracticeID) &&  LaunchList.instance.mPracticeItems [practiceID].KnowledgeComponents.ContainsKey(KCID))
+			if (LaunchList.instance.mPracticeItems.ContainsKey (practiceID) &&  LaunchList.instance.mPracticeItems [practiceID].KnowledgeComponents.ContainsKey(KCID))
 			{
 				KnowledgeComponent KC = LaunchList.instance.mPracticeItems [practiceID].KnowledgeComponents[KCID];
 				KC.Mastery = newProficiency;
@@ -599,6 +651,6 @@ namespace Cerebro
 //				StartCoroutine (startChapters ());
 //			}
 		}
-
+			
 	}
 }

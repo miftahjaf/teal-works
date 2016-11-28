@@ -76,5 +76,13 @@ namespace Cerebro {
 		{
 			return "\\" + symbol + "algebra";
 		}
+
+		public static bool IsValidJSON(this string str)
+		{
+			if (str.Length > 1 && str [0] == '{' && str [str.Length - 1] == '}') {
+				return true;
+			}
+			return false;
+		}
 	}
 }
