@@ -1238,15 +1238,15 @@ namespace Cerebro
 			}
 			count = mission.answers.Count;
 			for (int i = 0; i < count; i++) {
-				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["practice_item_id"] = mission.answers [i].practiceItemID.ToString();
-				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["seed"] = mission.answers [i].seed.ToString();
-				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["difficulity"] = mission.answers [i].difficulty.ToString();
-				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["sub_level"] = mission.answers [i].subLevel.ToString();
-				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["ans"] = mission.answers [i].ans.ToString();
-				N ["myData"] ["request_data"] ["missionJson"] ["missionQuestionData"] [i] ["correct"] = mission.answers [i].correct ?"1":"0";
+				N ["myData"] ["request_data"]  ["missionQuestionData"] [i] ["practice_item_id"] = mission.answers [i].practiceItemID.ToString();
+				N ["myData"] ["request_data"]  ["missionQuestionData"] [i] ["seed"] = mission.answers [i].seed.ToString();
+				N ["myData"] ["request_data"]  ["missionQuestionData"] [i] ["difficulity"] = mission.answers [i].difficulty.ToString();
+				N ["myData"] ["request_data"]  ["missionQuestionData"] [i] ["sub_level"] = mission.answers [i].subLevel.ToString();
+				N ["myData"] ["request_data"]  ["missionQuestionData"] [i] ["ans"] = mission.answers [i].ans.ToString();
+				N ["myData"] ["request_data"]  ["missionQuestionData"] [i] ["correct"] = mission.answers [i].correct ?"1":"0";
 			}
-			N ["myData"] ["request_data"] ["missionJson"] ["startTime"] = mission.startTime.ToString();
-			N ["myData"] ["request_data"] ["missionJson"] ["endTime"] = mission.endTime.ToString ();
+			N ["myData"] ["request_data"]  ["startTime"] = mission.startTime.ToString();
+			N ["myData"] ["request_data"]  ["endTime"] = mission.endTime.ToString ();
 
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
