@@ -18,7 +18,8 @@ namespace Cerebro {
 
 			if(!linePoint.origin.Equals(linePoint.nextPoint))
 			{
-				angle = Mathf.Atan ((linePoint.origin.y - linePoint.nextPoint.y) / (linePoint.origin.x - linePoint.nextPoint.x)) * Mathf.Rad2Deg;
+				angle = MathFunctions.GetangleBetweenPoints (linePoint.origin, linePoint.nextPoint);
+				Debug.Log ("angle = " + angle);
 				radius = Vector2.Distance (linePoint.origin, linePoint.nextPoint);
 			}
 

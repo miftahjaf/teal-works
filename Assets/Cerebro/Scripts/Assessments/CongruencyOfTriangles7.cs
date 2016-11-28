@@ -1342,8 +1342,8 @@ namespace Cerebro
 					diagramHelper.AddLinePoint (new LinePoint ("A", new Vector2 (lengthForDiagram, breadthForDiagram / 2f), new Vector2 (0, breadthForDiagram)).SetShouldShowDot (false).SetPointTextOffset (new Vector2 (-20f, 0)).SetLineText (sideScaleFactor + "\\xalgebra").SetLineTextDirection (TextDir.Right));
 					diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (0, breadthForDiagram), new Vector2 (lengthForDiagram - side, breadthForDiagram / 2f)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 
-					diagramHelper.AddAngleArc (new AngleArc ("" + (angle1 - (int) angle2) + MathFunctions.deg, Vector2.zero, angle2, angle1, arcRadius));
-					diagramHelper.AddAngleArc (new AngleArc ("\\yalgebra", new Vector2 (0, breadthForDiagram), 360 - angle1, 360 - angle2, arcRadius));
+					diagramHelper.AddAngleArc (new AngleArc ("" + (angle1 - (int) angle2) + MathFunctions.deg, Vector2.zero, angle2, angle1, arcRadius * 1.5f));
+					diagramHelper.AddAngleArc (new AngleArc ("\\yalgebra", new Vector2 (0, breadthForDiagram), 360 - angle1, 360 - angle2, arcRadius * 1.5f));
 
 					diagramHelper.Draw ();
 					diagramHelper.ShiftPosition (- origin);

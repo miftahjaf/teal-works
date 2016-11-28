@@ -286,6 +286,25 @@ namespace Cerebro {
 			return new Vector2(origin.x+radius * Mathf.Cos(Mathf.Deg2Rad * angle), origin.y+radius*Mathf.Sin(Mathf.Deg2Rad*angle));
 		}
 
+		public static float GetangleBetweenPoints (Vector2 point1, Vector2 point2)
+		{
+			float angle = 0;
+			if (point1.x == point2.x) {
+				if (point1.y == point2.y) {
+					angle = 0f;
+				} else if (point1.y < point2.y) {
+					angle = 90f;
+				} else {
+					angle = 270f;
+				}
+			} else if (point1.x < point2.x) {
+				angle = Mathf.Atan ((point1.y - point2.y) / (point1.x - point2.x)) * Mathf.Rad2Deg;
+			} else {
+				angle = 180 + Mathf.Atan ((point1.y - point2.y) / (point1.x - point2.x)) * Mathf.Rad2Deg;
+			}
+			return angle;
+		}
+
 		public static string GetAngleValueInString(float ans)  //Returns a decimal angle in deg,min,sec form
 		{
 			string answer = "";
