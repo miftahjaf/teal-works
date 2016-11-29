@@ -54,6 +54,8 @@ namespace Cerebro
 
 		private string currentQuestionMapping ="1t1";
 
+		public bool isMissionCompleted = false;
+
 		// Use this for initialization
 		void Start ()
 		{
@@ -131,8 +133,7 @@ namespace Cerebro
 				return;
 			}
 			if (mission.IsMissionCompleted ()) {
-				LaunchList.instance.missionData.SaveData ();
-				WelcomeScript.instance.ShowScreen (true, mission.missionText);
+				OnMissionCompletion ();
 				return;
 			}
 			MissionQuestion missionNextQuestion = mission.GetNextQuestion ();
@@ -157,6 +158,18 @@ namespace Cerebro
 			}
 
 			currentAssessmentType = assessmentType;
+		}
+
+		public void OnMissionCompletion()
+		{
+			if (mission == null) {
+				mission = LaunchList.instance.missionData.GetLastCompletedMission ();
+			}
+			if (mission == null) {
+				return;
+			}
+			LaunchList.instance.missionData.SaveData ();
+			WelcomeScript.instance.ShowScreen (true, mission.missionText);
 		}
 			
 		public void QuestionStarted ()
@@ -244,7 +257,7 @@ namespace Cerebro
 			Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, " ", UserAnswer, increment);  
 			UpdateKCMastery (practiceItemID, KCID, isCorrect);
 
-			LaunchList.instance.missionData.CheckAndUpdateMissionData (practiceItemID, difficulty, sublevel, isCorrect, randomSeed, UserAnswer);
+			isMissionCompleted = LaunchList.instance.missionData.CheckAndUpdateMissionData (practiceItemID, difficulty, sublevel, isCorrect, randomSeed, UserAnswer);
 		}
 
 		//Old Mission

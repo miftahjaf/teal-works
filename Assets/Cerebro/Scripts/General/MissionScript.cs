@@ -67,6 +67,16 @@ namespace Cerebro
 					StartCoroutine (AnimateMissionItemCompletion (missionText.gameObject));
 					Invoke ("UpdateMission", 2f);
 				}
+				if (CerebroHelper.isTestUser ()) {
+					Button streakButton = missionText.transform.Find ("TestButton").Find("Streak").GetComponent<Button> ();
+					streakButton.onClick.AddListener (() => StreakClicked (index));
+					Button attemptButton = missionText.transform.Find ("TestButton").Find("Attempt").GetComponent<Button> ();
+					attemptButton.onClick.AddListener (() => AttemptClicked (index));
+					missionText.transform.Find ("TestButton").gameObject.SetActive (true);
+				} else {
+					missionText.transform.Find ("TestButton").gameObject.SetActive (false);
+				}
+
 				MissionTexts.Add (missionText);
 				i++;
 			}
@@ -178,6 +188,22 @@ namespace Cerebro
 			} else {
 				CerebroHelper.DebugLog ("Unsupported Type");
 			}
+		}
+
+		void StreakClicked(int index)
+		{
+			Mission mission = LaunchList.instance.missionData.ElementAt(index);
+			mission.AutoUpdateMission (true);
+			LaunchList.instance.missionData.SaveData ();
+			UpdateMission ();
+		}
+
+		void AttemptClicked(int index)
+		{
+			Mission mission = LaunchList.instance.missionData.ElementAt(index);
+			mission.AutoUpdateMission (false);
+			LaunchList.instance.missionData.SaveData ();
+			UpdateMission ();
 		}
 
 		void Start() {

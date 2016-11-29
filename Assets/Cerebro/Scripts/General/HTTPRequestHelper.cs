@@ -1006,7 +1006,7 @@ namespace Cerebro
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
 			CreatePostRequestByteArraySimpleJSON (SERVER_NEW_URL + "missions/user/student/mission/get", formData, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString()!= "") {
-					if(jsonResponse["response"]["mission_data"]["question_types"].Count>0)
+					if(jsonResponse["response"]["mission_data"]["question_types"]!=null && jsonResponse["response"]["mission_data"]["question_types"].Count>0)
 					{
 						LaunchList.instance.missionData.Add(new Mission().GetMission(jsonResponse["response"]["mission_data"]));
 					}

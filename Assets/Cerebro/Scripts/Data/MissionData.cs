@@ -14,19 +14,25 @@ namespace Cerebro
 		{
 		}
 
-		public void CheckAndUpdateMissionData(string practiceItemID,int difficulty,int sublevel,bool isCorrect,int seed,string answer)
+		public bool CheckAndUpdateMissionData(string practiceItemID,int difficulty,int sublevel,bool isCorrect,int seed,string answer)
 		{
-			Debug.Log ("Practice Id "+ practiceItemID+" difficulty" + difficulty +" sublevel" + sublevel);
+			bool isCompleted =false;
+			bool isChanged = false;
 			int count = dataList.Count;
 			for (int i = 0; i < count ; i++) {
 				if (!dataList [i].IsMissionCompleted ()) {
 					if (dataList [i].questions.Exists (x => x.practiceItemID == practiceItemID && x.difficulty == difficulty && x.subLevel == sublevel)) {
 						dataList [i].answers.Add (new MissionAnswer (practiceItemID, seed, answer, isCorrect,difficulty,sublevel));
 						//dataList [i].UpdateQuestion (practiceItemID, difficulty, sublevel);
+						isCompleted = dataList [i].IsMissionCompleted ();
+						isChanged = true;
 					}
 				}
 			}
-			SaveData ();
+			if (isChanged) {
+				SaveData ();
+			}
+			return isCompleted;
 		}
 
 		public int GetNotCompletedMissionCount()
@@ -34,7 +40,16 @@ namespace Cerebro
 			return dataList.FindAll (x => x.endTime == "").Count;
 		}
 
-
+		public Mission GetLastCompletedMission()
+		{
+			int count = dataList.Count;
+			for (int i = 0; i < count; i++) {
+				if (dataList [i].IsMissionCompleted ()) {
+					return dataList [i];
+				}
+			}
+			return null;
+		}
 	}
 
 	[System.Serializable]
@@ -179,6 +194,21 @@ namespace Cerebro
 					question.numberOfQuestions--;
 				}
 			}
+		}
+
+		public void AutoUpdateMission(bool streak)
+		{
+			int questionsCount = questions.Count;
+			this.answers = new List<MissionAnswer> ();
+			for (int i = 0; i < completionQuestionsLimit; i++) {
+				MissionQuestion question = questions [Random.Range (0, questions.Count)]; 
+				if (streak && i > completionQuestionsLimit - completionQuestionsCorrectLimit-1) {
+					answers.Add (new MissionAnswer (question.practiceItemID, 0, "autoTest", true, question.difficulty, question.subLevel));
+				} else {
+					answers.Add (new MissionAnswer (question.practiceItemID, 0, "autoTest", false, question.difficulty, question.subLevel));
+				}
+			}
+			endTime = System.DateTime.Now.ToUniversalTime().ToString ("yyyy-MM-ddTHH:mm:ss");
 		}
 
 	}

@@ -434,7 +434,12 @@ namespace Cerebro {
 		
 		}
 
-		protected void showNextQuestion() {
+		protected void showNextQuestion() 
+		{
+			if (parentAssessmentScript != null && parentAssessmentScript.isMissionCompleted) {
+				parentAssessmentScript.OnMissionCompletion ();
+				return;
+			}
 			if (revisitScript != null) {
 				revisitScript.ShowFlagButton ();
 			} else if (isMissionQuestion) {
