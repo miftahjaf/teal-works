@@ -6,7 +6,7 @@ using MaterialUI;
 
 namespace Cerebro
 {
-	public class FundamentalConceptsOfGeometry7 : BaseAssessment
+	public class FundamentalConceptsOfGeometry6 : BaseAssessment
 	{
 		public Text subQuestionText;
 		public GameObject MCQ;
@@ -21,7 +21,7 @@ namespace Cerebro
 
 
 			StartCoroutine(StartAnimation());
-			base.Initialise("M", "FCG07", "S01", "A01");
+			base.Initialise("M", "FCG06", "S01", "A01");
 
 			scorestreaklvls = new int[1];
 			for (var i = 0; i < scorestreaklvls.Length; i++)
@@ -269,7 +269,7 @@ namespace Cerebro
 			#region level1
 			if (level == 1)
 			{
-				selector = GetRandomSelector(1, 8);
+				selector = GetRandomSelector(1, 7);
 
 				if (selector == 1)
 				{
@@ -315,7 +315,7 @@ namespace Cerebro
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (65, 0), 130, true, 60));
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (65, 0), 310, true, 60));
 					}
-
+			
 					else if (randSelector == 2)
 					{
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 30, true, 60));
@@ -330,7 +330,7 @@ namespace Cerebro
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 240, true, 60));
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 300, true, 60));
 					}
-
+				
 					else if (randSelector == 4)
 					{
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 35, true, 60));
@@ -369,32 +369,31 @@ namespace Cerebro
 
 					QuestionText.text = "State True or False :";
 					expressions = new string[] {"FA ray has a finite length.",
-						"TThere are infinitely many lines on a plane.",
-						"FA line has two end points.",
-						"FThe lines in a plane always intersect.",
-						"TA point has no length and no width.",
-						"FA point has thickness.",
-						"TAn infinite number of points lie on a circle.",
-						"TA ray has one end point",
-						"FThe length of a line can be measured.",
-						"TThe length of a line can not be measured.",
-						"FThe length of a line segment can not be measured.",
-						"TThe length of a line segment can be measured.",
-						"FA ray extends indefinitely on both sides.",
-						"FFinite number of rays can be drawn from a point.",
-						"TInfinite number of rays can be drawn from a point.",
-						"FThe number of points on a line segment can be counted.",
-						"TThe number of points on a line segment can not be counted.",
-						"FThe number of points on a line can be counted.",
-						"TThe top of a matchbox is an example of a plane.",
-						"FInfinite number of lines can be drawn through two points A and B which lie on the same plane.",
-						"TOnly one line can be drawn through two points A and B which lie on the same plane.",
-						"TParallel lines never intersect.",
-						"FTwo planes intersect in a line segment.",
-						"TTwo planes intersect in a line.",
-						"FConcurrent lines can be parallel to each other.",
-						"FCollinear points can lie on concurrent lines."};
-
+												"TThere are infinitely many lines on a plane.",
+												"FA line has two end points.",
+												"FThe lines in a plane always intersect.",
+												"TA point has no length and no width.",
+												"FA point has thickness.",
+												"TAn infinite number of points lie on a circle.",
+												"TA ray has one end point",
+												"FThe length of a line can be measured.",
+												"TThe length of a line can not be measured.",
+												"FThe length of a line segment can not be measured.",
+												"TThe length of a line segment can be measured.",
+												"FA ray extends indefinitely on both sides.",
+												"FFinite number of rays can be drawn from a point.",
+												"TInfinite number of rays can be drawn from a point.",
+												"FThe number of points on a line segment can be counted.",
+												"TThe number of points on a line segment can not be counted.",
+												"FThe number of points on a line can be counted.",
+												"TThe top of a matchbox is an example of a plane.",
+												"FInfinite number of lines can be drawn through two points A and B which lie on the same plane.",
+												"TOnly one line can be drawn through two points A and B which lie on the same plane.",
+												"TParallel lines never intersect.",
+												"FTwo planes intersect in a line segment.",
+												"TTwo planes intersect in a line.",
+												"FConcurrent lines can be parallel to each other."};
+					
 					randSelector = Random.Range (0, expressions.Length);
 					subQuestionText.text = expressions[randSelector].Substring (1);
 					Answer = expressions[randSelector][0] == 'T'? "True": "False";
@@ -406,8 +405,7 @@ namespace Cerebro
 				{
 					randSelector = Random.Range (1, 3);
 					expressions = new string[] {"∞How many lines can be drawn through a point?",
-						"1How many lines can be drawn through two fixed points?",
-						"3How many lines can be drawn through three non-collinear points?"};
+												"1How many lines can be drawn through two fixed points?"};
 
 					randSelector = Random.Range (0, expressions.Length);
 					QuestionText.text = expressions[randSelector].Substring (1);
@@ -416,21 +414,13 @@ namespace Cerebro
 				else if (selector == 5)
 				{
 					expressions = new string[] {string.Format ("∞A line segment AB has length {0} cm. How many points are there on this line segment", Random.Range (2, 10)),
-						string.Format ("{0}How many {1} points of intersection can three lines have?", randSelector == 1? 3 : 0, randSelector == 1? "maximum" : "minimum"),
-						string.Format ("8Mark any five points A, B, C, D and E such that A, B and D are collinear and rest are not collinear. How many lines can be drawn through these points?")};
+												string.Format ("{0}How many {1} points of intersection can three lines have?", randSelector == 1? 3 : 0, randSelector == 1? "maximum" : "minimum")};
 
 					randSelector = Random.Range (0, expressions.Length);
 					QuestionText.text = expressions[randSelector].Substring (1);
 					Answer = expressions[randSelector][0].ToString();
 				}
 				else if (selector == 6)
-				{
-					randSelector = Random.Range (4, 7);
-
-					QuestionText.text = string.Format ("How many line segments can be drawn through {0} non-collinear points?", randSelector);
-					Answer = "" + randSelector * (randSelector - 1) / 2;
-				}
-				else if (selector == 7)
 				{
 					SetMCQMode (2);
 					randSelector = Random.Range (4, 7);
