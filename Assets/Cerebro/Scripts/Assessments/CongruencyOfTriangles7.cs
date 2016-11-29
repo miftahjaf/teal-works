@@ -316,9 +316,7 @@ namespace Cerebro
 					randSelector = Random.Range (0, 3);
 					Answer = options [randSelector];
 					FillMCQOptions (options);
-
 					randSelector1 = Random.Range (0, 3);
-					Debug.Log ("RS = " + randSelector + " , RS1 = " + randSelector1);
 
 					if (randSelector == 0)  // Congruent
 					{
@@ -569,7 +567,6 @@ namespace Cerebro
 					diagramHelper.AddLinePoint (new LinePoint ("", MathFunctions.PointAtDirection (new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 360 - angle3, false, breadthForDiagram * Mathf.Sqrt (Mathf.Pow (1 - Mathf.Tan (angle1 * Mathf.Deg2Rad), 2) + Mathf.Pow (1 - 1 / Mathf.Tan (angle2 * Mathf.Deg2Rad), 2))));
 
 					randSelector1 = Random.Range (0, 3);
-					Debug.Log ("randSelector = " + randSelector + ", randSelector1 = " + randSelector1);
 
 					if (randSelector == 0)  //mirror image
 					{
@@ -708,7 +705,6 @@ namespace Cerebro
 					diagramHelper.AddAngleArc (new AngleArc ("" + (180 - angle2 - (int)angle3) + MathFunctions.deg, MathFunctions.PointAtDirection (new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle2, 360 - angle3, arcRadius));
 
 					randSelector1 = Random.Range (0, 3);
-					Debug.Log ("randSelector = " + randSelector + ", randSelector1 = " + randSelector1);
 
 					if (randSelector == 0)  //mirror image
 					{
@@ -736,7 +732,6 @@ namespace Cerebro
 						{
 							float scaleFactor = Mathf.Sin (Mathf.Deg2Rad * (angle3 + angle1)) / Mathf.Sin (Mathf.Deg2Rad * (180 - angle2 - angle3)); //scalefactor < 1 always (checked above)
 							float scaledBreadthForDiagram = breadthForDiagram * scaleFactor;
-							Debug.Log ("scaleFactor = " + scaleFactor);
 
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, (breadthForDiagram - scaledBreadthForDiagram) / 2f), 180 - angle1, false, scaledBreadthForDiagram / Mathf.Cos (angle1 * Mathf.Deg2Rad)).SetSticks (new List<Stick> (){new Stick (1, 0.5f)}));
 							diagramHelper.AddLinePoint (new LinePoint ("", new Vector2 (scaledBreadthForDiagram + breadthForDiagram / 3f, (breadthForDiagram - scaledBreadthForDiagram) / 2f), 180 - angle2, false, scaledBreadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)));
@@ -891,7 +886,6 @@ namespace Cerebro
 					diagramHelper.AddAngleArc (new AngleArc ("" + (180 - angle2 - (int)angle3) + MathFunctions.deg, MathFunctions.PointAtDirection (new Vector2 (- 4f * breadthForDiagram / 3f, 0), angle2, breadthForDiagram / Mathf.Sin (angle2 * Mathf.Deg2Rad)), 180 + angle2, 360 - angle3, arcRadius));
 
 					randSelector1 = Random.Range (0, 2);
-					Debug.Log ("randSelector = " + randSelector + ", randSelector1 = " + randSelector1);
 
 					if (randSelector == 0)  //mirror image
 					{
@@ -1019,7 +1013,6 @@ namespace Cerebro
 					}
 
 					randSelector1 = Random.Range (0, 4);
-					Debug.Log ("randSelector = " + randSelector + ", randSelector1 = " + randSelector1);
 					if (randSelector1 == 0)  //mirror image
 					{
 						diagramHelper.AddLinePoint (new LinePoint (stringXYZ[0], new Vector2 (breadthForDiagram + breadthForDiagram / 3f, 0), 0, false, 0).SetShouldShowDot (false).SetPointTextOffset (new Vector2 (20f, 0)));

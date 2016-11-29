@@ -136,10 +136,10 @@ namespace Cerebro
 		}
 
 		//Draw graph and grid according to parameters
-		public void DrawGraph()
+		public void DrawGraph(bool showAxis = true)
 		{
 			DrawGrid ();
-			DrawAxis ();
+			DrawAxis (showAxis);
 		}
 
 		//Draw grid
@@ -173,7 +173,7 @@ namespace Cerebro
 		}
 
 		//Draw axis and plot points on axis
-		public void DrawAxis()
+		public void DrawAxis(bool showAxis = true)
 		{
 			GameObject axisParent = new GameObject ();
 			axisParent.transform.SetParent (this.transform, false);
@@ -241,6 +241,7 @@ namespace Cerebro
 			{
 				GenerateLinePoint (new LinePoint ("-"+(i * axisOffset.y).ToString(), GraphPosToUIPos (new Vector2 (0, -i * axisOffset.y)), 0f, false, 0).SetPointTextOffset(new Vector2(-10,0)),axisParent);
 			}
+			axisParent.gameObject.SetActive (showAxis);
 		}
 
 		//Generate line point 

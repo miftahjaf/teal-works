@@ -449,7 +449,7 @@ namespace Cerebro {
 
 						graphHelper.SetSnapValue (11);
 						graphHelper.SetGraphQuesType (GraphQuesType.PlotLine);
-						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-(xCord + side1/2f)),new Vector3(0,1,-(yCord + side1/2f)),new Vector3(1,-1,-(xCord - yCord)),new Vector3(1,1,-(xCord1 + yCord1))});
+						graphHelper.SetCurrentLineParameters(new List<Vector3>(){new Vector3(1,0,-(xCord + side1/2f)),new Vector3(0,1,-(yCord + side1/2f)),new Vector3(1,-1,-(xCord - yCord)),new Vector3(1,1,-(xCord + yCord + side1))});
 					}
 					else if (randSelector == 2) //hexagon
 					{
