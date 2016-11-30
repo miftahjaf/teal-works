@@ -1220,7 +1220,7 @@ namespace Cerebro
 					for (int i = 0; i < 2; i++)
 						coeff.Add (Random.Range (2, 10));
 
-					QuestionTEX.text = string.Format ("{0}{2}^{{2}} - {0}{2}({2} - {1})", coeff[0], coeff[1], "x".Algebra ());
+					QuestionTEX.text = string.Format ("{0}{2}{3} - {0}{2}({3} - {1})", coeff[0], coeff[1], "x".Algebra (), "y".Algebra ());
 					Answer = string.Format ("{0}{1}", coeff[0] * coeff[1], "x".Algebra ());
 				}
 				else if (selector == 3)  // c1x - [c2y - {c3x - (c4y - c5x)}]
@@ -1228,7 +1228,7 @@ namespace Cerebro
 					for (int i = 0; i < 5; i++)
 						coeff.Add (Random.Range (2, 10));
 
-					QuestionTEX.text = string.Format ("{0}{5} - [{1}{6} - \\lbrace{{{2}{5} - ({3}{6} - {4}{5})}}\\rbrace]", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], "x".Algebra (), "y".Algebra ());
+					QuestionTEX.text = string.Format ("{0}{5} - [{{{1}{6} - \\lbrace{{{2}{5} - ({{{3}{6} - {4}{5}}})}}\\rbrace}}]", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], "x".Algebra (), "y".Algebra ());
 					Answer = string.Format ("{0}{2}-{1}{3}", coeff[0] + coeff[2] + coeff[4], coeff[1] + coeff[3], "x".Algebra (), "y".Algebra ());
 				}
 				else if (selector == 4)  // c1y - [c2y + x - {c3x + (c4x - c5y + y)}]
@@ -1238,8 +1238,8 @@ namespace Cerebro
 
 					coeff1 = coeff[0] - coeff[1] - coeff[4] + 1;
 
-					QuestionTEX.text = string.Format ("{0}{6} - [{{{1}{6} + {5} - \\lbrace{{{{{2}{5} + ({{{3}{5} - {4}{6} + {6}}})}}}}\\rbrace}}]", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], "x".Algebra (), "y".Algebra ());
-					Answer = string.Format ("{0}{1}", coeff[3] + coeff[2] - 1, "x".Algebra (), AlgebraicDisplayForm (coeff1, "y".Algebra ()));
+					QuestionTEX.text = string.Format ("{0}{6} - [{{{1}{6} + {5} - \\lbrace{{{2}{5} + ({{{3}{5} - {4}{6} + {6}}})}}\\rbrace}}]", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], "x".Algebra (), "y".Algebra ());
+					Answer = string.Format ("{0}{1}{2}", coeff[3] + coeff[2] - 1, "x".Algebra (), AlgebraicDisplayForm (coeff1, "y".Algebra ()));
 				}
 				else if (selector == 5)  // c1x(c2x2 - c3x + c4) - c5x(c6x2 - c7x - c8) - c9x(x2 - c10x + c11)
 				{
@@ -1250,8 +1250,8 @@ namespace Cerebro
 					coeff2 = -coeff[0] * coeff[2] + coeff[4] * coeff[6] + coeff[8] * coeff[9];
 					coeff3 = coeff[0] * coeff[3] + coeff[4] * coeff[7] - coeff[8] * coeff[10];	
 
-					QuestionTEX.text = string.Format ("{0}{11}({1}{11}^{{2}} - {2}{11} + {3}) - {4}{11}({5}{11}^{{2}} - {6}{11} + {7}) - {8}{11}({11}^{{2}} - {9}{11} + {10})", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], coeff[5], coeff[6], coeff[7], coeff[8], coeff[9], coeff[10], "x".Algebra ());
-					Answer = string.Format ("{0}{1}{2}", AlgebraicDisplayForm (coeff1, "x".Algebra () + "^{3}", true), AlgebraicDisplayForm (coeff2, "x".Algebra () + "^{2}"), AlgebraicDisplayForm (coeff3, "x".Algebra ()));
+					QuestionTEX.text = string.Format ("{0}{11}({1}{12}{13} - {2}{12} + {3}) - {4}{11}({5}{12}{13} - {6}{12} + {7}) - {8}{11}({12}{13} - {9}{13} + {10})", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], coeff[5], coeff[6], coeff[7], coeff[8], coeff[9], coeff[10], "x".Algebra (), "y".Algebra (), "z".Algebra ());
+					Answer = string.Format ("{0}{1}{2}", AlgebraicDisplayForm (coeff1, "x".Algebra () + "y".Algebra () + "z".Algebra (), true), AlgebraicDisplayForm (coeff2, "x".Algebra () + "z".Algebra ()), AlgebraicDisplayForm (coeff3, "x".Algebra ()));
 				}
 				else if (selector == 6)  // c1x - c2y - [c3x - c4y - {c5x - y - (x + c6y)}]
 				{
@@ -1261,7 +1261,7 @@ namespace Cerebro
 					coeff1 = coeff[0] - coeff[2] + coeff[4] -1;
 					coeff2 = -coeff[1] + coeff[3] - coeff[5] - 1;
 
-					QuestionTEX.text = string.Format ("{0}{6} - {1}{7} - [{{{2}{6} - {3}{7} - \\lbrace{{{{{4}{6} - {7} - ({{{6} + {5}{7}}})}}}}\\rbrace}}]", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], coeff[5], "x".Algebra (), "y".Algebra ());
+					QuestionTEX.text = string.Format ("{0}{6} - {1}{7} - [{{{2}{6} - {3}{7} - \\lbrace{{{4}{6} - {7} - ({{{6} + {5}{7}}})}}\\rbrace}}]", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], coeff[5], "x".Algebra (), "y".Algebra ());
 					Answer = string.Format ("{0}{1}", AlgebraicDisplayForm (coeff1, "x".Algebra (), true), AlgebraicDisplayForm (coeff2, "y".Algebra ()));
 				}
 			}
@@ -1394,6 +1394,14 @@ namespace Cerebro
 					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
 				}
 				userAnswerLaText.text += "\\zalgebra";
+			}
+			else if (value == 18)
+			{   // :
+				if (checkLastTextFor(new string[1] { "+" }))
+				{
+					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
+				}
+				userAnswerLaText.text += "+";
 			}
         }
     }
