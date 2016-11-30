@@ -22,6 +22,7 @@ namespace Cerebro
         private string expression1;
         private string expression2;
         private string expression3;
+		private bool multiplePossibleAnswers;
 
         void Start()
         {
@@ -29,7 +30,7 @@ namespace Cerebro
             StartCoroutine(StartAnimation());
             base.Initialise("M", "SAF06", "S01", "A01");
                                     
-            scorestreaklvls = new int[3];
+            scorestreaklvls = new int[4];
             for (var i = 0; i < scorestreaklvls.Length; i++)
             {
                 scorestreaklvls[i] = 0;
@@ -46,7 +47,7 @@ namespace Cerebro
 
         public override void SubmitClick()
         {
-            if (ignoreTouches || userAnswerText.text == " ")
+            if (ignoreTouches || userAnswerLaText.text == "")
             {
                 return;
             }
@@ -59,9 +60,13 @@ namespace Cerebro
             questionsAttempted++;
             updateQuestionsAttempted();
 
-			if (Answer.Contains ("/")) {
+			if (multiplePossibleAnswers)
+			{
+				correct = MathFunctions.checkAlgebraicExpressions (Answer, userAnswerLaText.text);
+			}
+			else if (Answer.Contains ("/")) {
 				var answerSplits = Answer.Split (new string[] { "/" }, System.StringSplitOptions.None);
-				var userAnswerSplits = userAnswerText.text.Split (new string[] { "/" }, System.StringSplitOptions.None);
+				var userAnswerSplits = userAnswerLaText.text.Split (new string[] { "/" }, System.StringSplitOptions.None);
 				correct = MathFunctions.checkFractions (userAnswerSplits, answerSplits);
 			} else {
 				float answer = 0;
@@ -73,15 +78,15 @@ namespace Cerebro
 					directCheck = true;
 				}
 
-				if (float.TryParse (userAnswerText.text, out userAnswer)) {
-					userAnswer = float.Parse (userAnswerText.text);
+				if (float.TryParse (userAnswerLaText.text, out userAnswer)) {
+					userAnswer = float.Parse (userAnswerLaText.text);
 				} else {
 					directCheck = true;
 				}
 
 
 				if (directCheck) {
-					if (userAnswerText.text == Answer) {
+					if (userAnswerLaText.text == Answer) {
 						correct = true;
 					} else {
 						correct = false;
@@ -108,6 +113,10 @@ namespace Cerebro
                 {
                     increment = 15;
                 }
+				else if (Queslevel == 5)
+				{
+					increment = 15;
+				}
 
 
                 UpdateStreak(8, 12);
@@ -127,48 +136,48 @@ namespace Cerebro
 
         }
 
-        protected override IEnumerator ShowWrongAnimation()
-        {
-            userAnswerText.color = MaterialColor.red800;
-			Go.to(userAnswerText.gameObject.transform, 0.5f, new GoTweenConfig().shake(new Vector3(0, 0, 20), GoShakeType.Eulers));
-            yield return new WaitForSeconds(0.5f);
-            if (isRevisitedQuestion)
-            {
-                userAnswerText.text = " ";
-                userAnswerText.color = MaterialColor.textDark;
-                ignoreTouches = false;
-            }
-            else {
-                userAnswerText.text = Answer.ToString();
-                userAnswerText.color = MaterialColor.green800;
-            }
-            ShowContinueButton();
-        }
+		protected override IEnumerator ShowWrongAnimation()
+		{
+			userAnswerLaText.color = MaterialColor.red800;
+			Go.to(userAnswerLaText.gameObject.transform, 0.5f, new GoTweenConfig().shake(new Vector3(0, 0, 20), GoShakeType.Eulers));
+			yield return new WaitForSeconds(0.5f);
+			if (isRevisitedQuestion)
+			{
+				userAnswerLaText.text = "";
+				userAnswerLaText.color = MaterialColor.textDark;
+				ignoreTouches = false;
+			}
+			else {
+				userAnswerLaText.text = Answer;
+				userAnswerLaText.color = MaterialColor.green800;
+			}
+			ShowContinueButton();
+		}
 
-        protected override IEnumerator ShowCorrectAnimation()
-        {
-            userAnswerText.color = MaterialColor.green800;
-            var config = new GoTweenConfig()
-                .scale(new Vector3(1.1f, 1.1f, 1f))
-                .setIterations(2, GoLoopType.PingPong);
-            var flow = new GoTweenFlow(new GoTweenCollectionConfig().setIterations(1));
-			var tween = new GoTween(userAnswerText.gameObject.transform, 0.2f, config);
-            flow.insert(0f, tween);
-            flow.play();
-            yield return new WaitForSeconds(1f);
-            userAnswerText.color = MaterialColor.textDark;
+		protected override IEnumerator ShowCorrectAnimation()
+		{
+			userAnswerLaText.color = MaterialColor.green800;
+			var config = new GoTweenConfig()
+				.scale(new Vector3(1.1f, 1.1f, 1f))
+				.setIterations(2, GoLoopType.PingPong);
+			var flow = new GoTweenFlow(new GoTweenCollectionConfig().setIterations(1));     
+			var tween = new GoTween(userAnswerLaText.gameObject.transform, 0.2f, config);
+			flow.insert(0f, tween);
+			flow.play();
+			yield return new WaitForSeconds(1f);
+			userAnswerLaText.color = MaterialColor.textDark;
 
-            showNextQuestion();
+			showNextQuestion();
 
-            if (levelUp)
-            {
-                StartCoroutine(HideAnimation());
-                base.LevelUp();
-                yield return new WaitForSeconds(1.5f);
-                StartCoroutine(StartAnimation());
-            }
+			if (levelUp)
+			{
+				StartCoroutine(HideAnimation());
+				base.LevelUp();
+				yield return new WaitForSeconds(1.5f);
+				StartCoroutine(StartAnimation());
+			}
 
-        }
+		}
 
         protected override void GenerateQuestion()
         {
@@ -177,9 +186,12 @@ namespace Cerebro
             // Generating the parameters
 
             level = Queslevel;
+			multiplePossibleAnswers = false;
+			answerButton = GeneralButton;
 
-            answerButton = GeneralButton;
-
+			GeneralButton.gameObject.SetActive(true);
+			QuestionText.gameObject.SetActive(true);
+			numPad.SetActive (true);
 
 			if (Queslevel > scorestreaklvls.Length) {
 				level = UnityEngine.Random.Range (1, scorestreaklvls.Length + 1);
@@ -527,19 +539,19 @@ namespace Cerebro
                 else if (selector == 3)
                 {
                     // coeff4, coeff5 , coeff 6 are denominators
-                    coeff4 = Random.Range(2, 10);
-                    coeff5 = Random.Range(1, 10);
-                    coeff6 = Random.Range(1, 10);
-                    a = Random.Range(2, 10);
-                    b = Random.Range(1, 10);
-                    c = Random.Range(1, 10);
+                    coeff4 = Random.Range(2, 6);
+                    coeff5 = Random.Range(1, 6);
+                    coeff6 = Random.Range(1, 6);
+                    a = Random.Range(2, 6);
+                    b = Random.Range(1, 6);
+                    c = Random.Range(1, 6);
 
 					while ((a * b * c) % coeff4 != 0 || Mathf.Abs (coeff1) == coeff4)
-                        coeff4 = Random.Range(2, 10);
+                        coeff4 = Random.Range(2, 6);
 					while ((a * b * c) % coeff5 != 0 || Mathf.Abs (coeff2) == coeff5)
-						coeff5 = Random.Range(1, 10);
+						coeff5 = Random.Range(1, 6);
 					while ((a * b * c) % coeff6 != 0 || Mathf.Abs (coeff3) == coeff6)
-                        coeff6 = Random.Range(1, 10);
+                        coeff6 = Random.Range(1, 6);
 
                    
 
@@ -717,16 +729,21 @@ namespace Cerebro
 
                         int tempAns = (coeff1 * a * a + coeff2 * b * b + coeff3 * c * c);
                         int tempAns2 = (coeff4 * b * b + coeff5 * a * a + coeff6 * c * c);
-						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns) + "/" + Mathf.Abs (tempAns2);
+						int hcf = MathFunctions.GetHCF (Mathf.Abs (tempAns), Mathf.Abs (tempAns2));
+						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf) + "/" + Mathf.Abs (tempAns2/hcf);
                       
 
                     }
 					else if (randSelector == 2)
                     {
-                        coeff1 = Random.Range(-3, 3);
-                        coeff2 = Random.Range(-3, 3);
-                        coeff3 = Random.Range(-3, 4);
+                        coeff1 = Random.Range(-5, 5);
+                        coeff2 = Random.Range(-5, 5);
+                        coeff3 = Random.Range(-5, 5);
                        
+						while (coeff1 == 0)
+						{
+							coeff1 = Random.Range(-5, 5);
+						}
                         while (coeff3 == 0)
                         {
                             coeff3 = Random.Range(-5, 5);
@@ -745,9 +762,7 @@ namespace Cerebro
                         }
                         
                         //expression1 = numerator
-                        if (coeff1 == 0)
-                            expression1 = "0";
-                        else if (coeff1 == 1)
+                       if (coeff1 == 1)
                             expression1 = "\\aalgebra\\balgebra\\calgebra";
                         else if (coeff1 == -1)
                             expression1 = "- \\aalgebra\\balgebra\\calgebra";
@@ -775,7 +790,8 @@ namespace Cerebro
 
                         int tempAns = ((coeff1 * a * b * c) + (coeff2 * a * a * b));
                         int tempAns2 = (coeff3 * 2 * a * c);
-						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns) + "/" + Mathf.Abs (tempAns2);                        
+						int hcf = MathFunctions.GetHCF (Mathf.Abs (tempAns), Mathf.Abs (tempAns2));
+						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf) + "/" + Mathf.Abs (tempAns2/hcf);                        
                     }              
 					else if (randSelector == 3)
                     {
@@ -870,7 +886,8 @@ namespace Cerebro
 						                       
                         int tempAns = (coeff1 * a * a + coeff2 * b * c + coeff3 * c * c);
                         int tempAns2  = ((coeff4 * a * b) + (coeff5 * c * a) + (coeff6 * b * c));
-						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns) + "/" + Mathf.Abs (tempAns2);
+						int hcf = MathFunctions.GetHCF (Mathf.Abs (tempAns), Mathf.Abs (tempAns2));
+						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf) + "/" + Mathf.Abs (tempAns2/hcf);
                     }
 					QuestionText.text = "Solve for a = " + a + ", b = " + b + ", c = " + c + ".\n(Answer in fraction.)" ;
                 }
@@ -951,116 +968,100 @@ namespace Cerebro
 					Debug.Log ("randSelector = " + randSelector);
 					if (randSelector == 1) // (x3y2 + y2)- (x3y2 - y2)
                     {
-                        coeff1 = Random.Range(-5, 5);
-                        coeff2 = Random.Range(-5, 5);
-                        coeff3 = Random.Range(-5, 5);
-                        coeff4 = Random.Range(-5, 5);
-                        coeff5 = Random.Range(-5, 5);
-                        coeff6 = Random.Range(-5, 5);
+						coeff1 = GenerateRandomIntegerExcluding0 (-5, 5);
+						coeff2 = GenerateRandomIntegerExcluding0 (-5, 5);
+						coeff3 = GenerateRandomIntegerExcluding0 (-5, 5);
+						coeff4 = GenerateRandomIntegerExcluding0 (-5, 5);
+						coeff5 = GenerateRandomIntegerExcluding0 (-5, 5);
+						coeff6 = GenerateRandomIntegerExcluding0 (-5, 5);
                         x = Random.Range(-3, 4);
-                        y = Random.Range(-3, 4);
-                        if (coeff1 == 0 && coeff4 == 0)
-                        {
-                            while (coeff1 == 0 && coeff4 == 0)
-                            {
-                                coeff4 = Random.Range(-5, 5);
-                                coeff6 = Random.Range(-5, 5);
-                            }
-                        }
+                        y = Random.Range(-3, 4);                                      
 
-                        //first term
-                        if (coeff1 == 0)
-                            expression1 = "";
                         if (coeff2 == 1)
                         {
-                            if (coeff3 == 0)
-                                expression1 = "\\xalgebra^3\\yalgebra^2";
-                            else if (coeff3 == 1)
+                            if (coeff3 == 1)
                                 expression1 = "\\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
                             else if (coeff3 == -1)
                                 expression1 = "\\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
                             else if (coeff3 > 1)
                                 expression1 = "\\xalgebra^3\\yalgebra^2 +" + coeff3 + " \\yalgebra^2";
-                            else expression1 = "\\xalgebra^3\\yalgebra^2 " + coeff3 + " \\yalgebra^2";
+                            else 
+								expression1 = "\\xalgebra^3\\yalgebra^2 " + coeff3 + " \\yalgebra^2";
                         }
                         else if (coeff2 == -1)
                         {
-                            if (coeff3 == 0)
-                                expression1 = "- \\xalgebra^3\\yalgebra^2";
-                            else if (coeff3 == 1)
+                            if (coeff3 == 1)
                                 expression1 = "- \\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
                             else if (coeff3 == -1)
                                 expression1 = "- \\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
                             else if (coeff3 > 1)
                                 expression1 = "- \\xalgebra^3\\yalgebra^2 +" + coeff3 + " \\yalgebra^2";
-                            else expression1 = "- \\xalgebra^3\\yalgebra^2 " + coeff3 + " \\yalgebra^2";
+                            else 
+								expression1 = "- \\xalgebra^3\\yalgebra^2 " + coeff3 + " \\yalgebra^2";
                         }
                         else
                         {
-                            if (coeff3 == 0)
-                                expression1 = coeff2 + "\\xalgebra^3\\yalgebra^2";
-                            else if (coeff3 == 1)
+                            if (coeff3 == 1)
                                 expression1 = coeff2 + "\\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
                             else if (coeff3 == -1)
                                 expression1 = coeff2 + "\\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
                             else if (coeff3 > 1)
                                 expression1 = coeff2 + "\\xalgebra^3\\yalgebra^2 +" + coeff3 + " \\yalgebra^2";
-                            else expression1 = coeff2 + "\\xalgebra^3\\yalgebra^2 " + coeff3 + " \\yalgebra^2";
+                            else 
+								expression1 = coeff2 + "\\xalgebra^3\\yalgebra^2 " + coeff3 + " \\yalgebra^2";
                         }
 
                         if (coeff1 == 1)
                             expression1 = "(" + expression1 + ")";
                         else if (coeff1 == -1)
                             expression1 = "-(" + expression1 + ")";
-                        else expression1 = coeff1 + "(" + expression1 + ")";
+                        else 
+							expression1 = coeff1 + "(" + expression1 + ")";
 
                         // second term
-                        if (coeff4 == 0)
-                            expression2 = " ";
+                        
                         if (coeff5 == 1)
                         {
-                            if (coeff6 == 0)
-                                expression2 = "\\xalgebra^3\\yalgebra^2";
-                            else if (coeff6 == 1)
+                            if (coeff6 == 1)
                                 expression2 = "\\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
                             else if (coeff6 == -1)
                                 expression2 = "\\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
                             else if (coeff6 > 1)
                                 expression2 = "\\xalgebra^3\\yalgebra^2 +" + coeff6 + " \\yalgebra^2";
-                            else expression2 = "\\xalgebra^3\\yalgebra^2 " + coeff6 + " \\yalgebra^2";
+                            else 
+								expression2 = "\\xalgebra^3\\yalgebra^2 " + coeff6 + " \\yalgebra^2";
                         }
                         else if (coeff5 == -1)
                         {
-                            if (coeff6 == 0)
-                                expression2 = "- \\xalgebra^3\\yalgebra^2";
-                            else if (coeff6 == 1)
+                            if (coeff6 == 1)
                                 expression2 = "- \\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
                             else if (coeff6 == -1)
                                 expression2 = "- \\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
                             else if (coeff6 > 1)
                                 expression2 = "- \\xalgebra^3\\yalgebra^2 +" + coeff6 + " \\yalgebra^2";
-                            else expression2 = "- \\xalgebra^3\\yalgebra^2 " + coeff6 + " \\yalgebra^2";
+                            else 
+								expression2 = "- \\xalgebra^3\\yalgebra^2 " + coeff6 + " \\yalgebra^2";
                         }
                         else
                         {
-                            if (coeff6 == 0)
-                                expression2 = coeff5 + "\\xalgebra^3\\yalgebra^2";
-                            else if (coeff6 == 1)
+                            if (coeff6 == 1)
                                 expression2 = coeff5 + "\\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
                             else if (coeff6 == -1)
                                 expression2 = coeff5 + "\\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
                             else if (coeff6 > 1)
                                 expression2 = coeff5 + "\\xalgebra^3\\yalgebra^2 +" + coeff6 + " \\yalgebra^2";
-                            else expression2 = coeff5 + "\\xalgebra^3\\yalgebra^2 " + coeff6 + " \\yalgebra^2";
+                            else 
+								expression2 = coeff5 + "\\xalgebra^3\\yalgebra^2 " + coeff6 + " \\yalgebra^2";
                         }
 
                         if (coeff4 == 1)
                             expression2 = "+ (" + expression2 + ")";
                         else if (coeff4 == -1)
-                            expression2 = "-(" + expression2 + ")";
+                            expression2 = "- (" + expression2 + ")";
                         else if (coeff4 >= 0)
                             expression2 = " + " + coeff4 + "(" + expression2 + ")";
-                        else expression2 = coeff4 + "(" + expression2 + ")";
+                        else 
+							expression2 = coeff4 + "(" + expression2 + ")";
 
                         expression3 = expression1 + expression2;
 
@@ -1074,57 +1075,46 @@ namespace Cerebro
                     }
 					else if (randSelector == 2)                //x-[y-{z2-(x+y)0}]
                     {
-                        coeff1 = Random.Range(-5, 5);
-                        coeff2 = Random.Range(-5, 5);
-                        coeff3 = Random.Range(-5, 5);
-                        coeff4 = Random.Range(-5, 5);
-                        coeff5 = Random.Range(-5, 5);
+						coeff1 = GenerateRandomIntegerExcluding0 (-5, 5);
+						coeff2 = GenerateRandomIntegerExcluding0 (-5, 5);
+						coeff3 = GenerateRandomIntegerExcluding0 (-5, 5);
+						coeff4 = GenerateRandomIntegerExcluding0 (-5, 5);
+						coeff5 = GenerateRandomIntegerExcluding0 (-5, 5);
+
                         x = Random.Range(-5, 5);
                         y = Random.Range(-5, 5);
                         z = Random.Range(-3, 4);
-                       
-                        
-                        while (coeff2 == 0 || coeff1 == 0)
-                        {
-                          coeff1 = Random.Range(-7, 7);
-                          coeff2 = Random.Range(-7, 7);
-                        }
+             
+                        int pow1 = Random.Range(0, 3);
 
-                        int pow1 = Random.Range(0, 2);
+                        if (coeff5 == 1)
+                            expression1 = "+ \\yalgebra";
+                        else if (coeff5 == -1)
+                            expression1 = "- \\yalgebra";
+                        else if (coeff5 < -1)
+                            expression1 = coeff5 + "\\yalgebra";
+                        else if (coeff5 > 1)
+                            expression1 = " + " + coeff5 + "\\yalgebra";
 
-                        expression1 = "";
-                        if (coeff3 != 0)
-                        {
-                            if (coeff5 == 1)
-                                expression1 = "+ \\yalgebra";
-                            else if (coeff5 == -1)
-                                expression1 = "- \\yalgebra";
-                            else if (coeff5 < -1)
-                                expression1 = coeff5 + "\\yalgebra";
-                            else if (coeff5 > 1)
-                                expression1 = " + " + coeff5 + "\\yalgebra";
-
-                            if (coeff4 == 1)
-                                expression1 = "+ x" + expression1;
-                            else if (coeff4 == -1)
-                                expression1 = "-x" + expression1;
-                            else expression1 = coeff4 + "\\xalgebra" + expression1;
+                        if (coeff4 == 1)
+                            expression1 = "x" + expression1;
+                        else if (coeff4 == -1)
+                            expression1 = "-x" + expression1;
+                        else 
+							expression1 = coeff4 + "\\xalgebra" + expression1;
 
 
-							expression1 = "{(" + expression1 + ")}^" + pow1;
+						expression1 = "{(" + expression1 + ")}^" + pow1;
 
-                            if (coeff3 == 1)
-                                expression1 = " + " + expression1;
-                            else if (coeff3 == -1)
-                                expression1 = " - " + expression1;
-                            else if (coeff3 > 1)
-                                expression1 = " + " + coeff3 + expression1;
-                            else expression1 = coeff3 + expression1;
-                        }
-                        else
-                        {
-                            expression1 = "";
-                        }
+                        if (coeff3 == 1)
+                            expression1 = " + " + expression1;
+                        else if (coeff3 == -1)
+                            expression1 = " - " + expression1;
+                        else if (coeff3 > 1)
+                            expression1 = " + " + coeff3 + expression1;
+                        else 
+							expression1 = coeff3 + expression1;
+                    
 
 						expression1 = "\\lbrace{\\zalgebra^2 " + expression1 + "}\\rbrace";
 
@@ -1167,19 +1157,19 @@ namespace Cerebro
 					Debug.Log ("randSelector = " + randSelector);
 					if (randSelector == 1)
 					{
-                        x = Random.Range(-25, 25);   // v
-                        y = Random.Range(-25, 25);   // u
-                        z = Random.Range(-25, 25);   // t
-                        int v = x;
-                        int u = y;
-                        int t = z;
+						int v = Random.Range(-25, 25);   // v
+						int u = Random.Range(-25, 25);   // u
+						int t = Random.Range(-25, 25);   // t
 
+						while ((v - u) % t != 0 || v == u || Mathf.Abs (v - u) == t)
+						{
+							u = Random.Range(-25, 25);   
+							t = Random.Range(-25, 25);
+						}
 						QuestionText.text = "Using first equation of motion : v = u + at, determine the value of a.\nGiven : v = " + v + ", u = " + u + ", t = " + t + ".";
-                        expression3 = " ";
-                        int tempAns = (v - u);
-                        Answer = tempAns.ToString() + " / " + t.ToString();
-                        if (tempAns % t == 0)
-                            Answer = (tempAns / t).ToString();
+                        expression3 = "";
+                        
+						Answer = ((v - u) / t).ToString();
                     }
 					else if (randSelector == 2)
                     {
@@ -1187,26 +1177,99 @@ namespace Cerebro
                         y = Random.Range(-25, 25);
 
 						QuestionText.text = "The equation of a circle with radius \'r\' is given below. Find the value of r,\nif x = " + x + ", y = " + y + " (round to two decimal places).";
-                        expression3 = "\\xalgebra^2 + \\yalgebra^2 = r^2";
+                        expression3 = "\\xalgebra^2 + \\yalgebra^2 = \\ralgebra^2";
 						float tempAns = MathFunctions.GetRounded (Mathf.Sqrt(x * x + y * y), 2);
                         Answer = tempAns.ToString();
-                        
-
                     }
-                    
-
                 }
 
                 QuestionTEX.text = expression3;
 
             }
             #endregion level3
+			#region level4
+			else if (level == 4)
+			{
+				selector = GetRandomSelector(1, 7);
+				multiplePossibleAnswers = true;
+				List<int> coeff = new List<int>();
+				QuestionText.text = "Simplify :";
 
-            Debug.Log (Answer);
-            userAnswerText = answerButton.gameObject.GetChildByName<Text>("Text");
-            userAnswerText.text = " ";
-            
-        }
+				if (selector == 1)  
+				{
+					if (Random.Range (1, 3) == 1)    // x + y - (x - c1y) + (c1x - y)
+					{
+						coeff.Add (Random.Range (2, 10));
+
+						QuestionTEX.text = string.Format ("{1} + {2} - ({1} - {0}{2}) + ({0}{1} - {2})", coeff[0], "x".Algebra (), "y".Algebra ());
+						Answer = string.Format ("{0}{1}+{0}{2}", coeff[0], "x".Algebra (), "y".Algebra ());
+					}
+					else     // (x + y + z) + c1(x + y + z) - c2(x + y + z)
+					{
+						coeff.Add (Random.Range (2, 10));
+						coeff.Add (Random.Range (2, 10));
+
+						coeff1 = 1 + coeff[0] - coeff[1];
+
+						QuestionTEX.text = string.Format ("({2} + {3} + {4}) + {0}({2} + {3} + {4}) - {1}({2} + {3} + {4})", coeff[0], coeff[1], "x".Algebra (), "y".Algebra (), "z".Algebra ());
+						Answer = string.Format ("{0}{1}{2}", AlgebraicDisplayForm (coeff1, "x".Algebra (), true), AlgebraicDisplayForm (coeff1, "y".Algebra ()), AlgebraicDisplayForm (coeff1, "z".Algebra ()));
+					}
+				}
+				else if (selector == 2)  // c1x2 - c1x(x - c2)
+				{
+					for (int i = 0; i < 2; i++)
+						coeff.Add (Random.Range (2, 10));
+
+					QuestionTEX.text = string.Format ("{0}{2}^{{2}} - {0}{2}({2} - {1})", coeff[0], coeff[1], "x".Algebra ());
+					Answer = string.Format ("{0}{1}", coeff[0] * coeff[1], "x".Algebra ());
+				}
+				else if (selector == 3)  // c1x - [c2y - {c3x - (c4y - c5x)}]
+				{
+					for (int i = 0; i < 5; i++)
+						coeff.Add (Random.Range (2, 10));
+
+					QuestionTEX.text = string.Format ("{0}{5} - [{1}{6} - \\lbrace{{{2}{5} - ({3}{6} - {4}{5})}}\\rbrace]", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], "x".Algebra (), "y".Algebra ());
+					Answer = string.Format ("{0}{2}-{1}{3}", coeff[0] + coeff[2] + coeff[4], coeff[1] + coeff[3], "x".Algebra (), "y".Algebra ());
+				}
+				else if (selector == 4)  // c1y - [c2y + x - {c3x + (c4x - c5y + y)}]
+				{
+					for (int i = 0; i < 5; i++)
+						coeff.Add (Random.Range (2, 10));
+
+					coeff1 = coeff[0] - coeff[1] - coeff[4] + 1;
+
+					QuestionTEX.text = string.Format ("{0}{6} - [{{{1}{6} + {5} - \\lbrace{{{{{2}{5} + ({{{3}{5} - {4}{6} + {6}}})}}}}\\rbrace}}]", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], "x".Algebra (), "y".Algebra ());
+					Answer = string.Format ("{0}{1}", coeff[3] + coeff[2] - 1, "x".Algebra (), AlgebraicDisplayForm (coeff1, "y".Algebra ()));
+				}
+				else if (selector == 5)  // c1x(c2x2 - c3x + c4) - c5x(c6x2 - c7x - c8) - c9x(x2 - c10x + c11)
+				{
+					for (int i = 0; i < 11; i++)
+						coeff.Add (Random.Range (2, 10));
+
+					coeff1 = coeff[0] * coeff[1] - coeff[4] * coeff[5] - coeff[9];
+					coeff2 = -coeff[0] * coeff[2] + coeff[4] * coeff[6] + coeff[8] * coeff[9];
+					coeff3 = coeff[0] * coeff[3] + coeff[4] * coeff[7] - coeff[8] * coeff[10];	
+
+					QuestionTEX.text = string.Format ("{0}{11}({1}{11}^{{2}} - {2}{11} + {3}) - {4}{11}({5}{11}^{{2}} - {6}{11} + {7}) - {8}{11}({11}^{{2}} - {9}{11} + {10})", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], coeff[5], coeff[6], coeff[7], coeff[8], coeff[9], coeff[10], "x".Algebra ());
+					Answer = string.Format ("{0}{1}{2}", AlgebraicDisplayForm (coeff1, "x".Algebra () + "^{3}", true), AlgebraicDisplayForm (coeff2, "x".Algebra () + "^{2}"), AlgebraicDisplayForm (coeff3, "x".Algebra ()));
+				}
+				else if (selector == 6)  // c1x - c2y - [c3x - c4y - {c5x - y - (x + c6y)}]
+				{
+					for (int i = 0; i < 6; i++)
+						coeff.Add (Random.Range (2, 10));
+
+					coeff1 = coeff[0] - coeff[2] + coeff[4] -1;
+					coeff2 = -coeff[1] + coeff[3] - coeff[5] - 1;
+
+					QuestionTEX.text = string.Format ("{0}{6} - {1}{7} - [{{{2}{6} - {3}{7} - \\lbrace{{{{{4}{6} - {7} - ({{{6} + {5}{7}}})}}}}\\rbrace}}]", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], coeff[5], "x".Algebra (), "y".Algebra ());
+					Answer = string.Format ("{0}{1}", AlgebraicDisplayForm (coeff1, "x".Algebra (), true), AlgebraicDisplayForm (coeff2, "y".Algebra ()));
+				}
+			}
+			#endregion
+			userAnswerLaText = answerButton.gameObject.GetChildByName<TEXDraw>("Text");
+            userAnswerLaText.text = "";
+			Debug.Log (Answer);
+		}
 
 		public int GenerateRandomIntegerExcluding01 (int minRange, int maxRange)
 		{
@@ -1217,14 +1280,49 @@ namespace Cerebro
 			return randNumber;
 		}
 
-		public string Sign (float number)
+		public int GenerateRandomIntegerExcluding0 (int minRange, int maxRange)
+		{
+			int randNumber = Random.Range (minRange, maxRange);
+			while (randNumber == 0) {
+				randNumber = Random.Range (minRange, maxRange);
+			}
+			return randNumber;
+		}
+
+		public string Sign (float number) //returns sign (both + and -)
 		{
 			return number < 0 ? "-" : "+";
 		}
 
-		public string NegativeSign (float number)
+		public string NegativeSign (float number) // returns sign only for negative number
 		{
 			return number < 0 ? "-" : "";
+		}
+
+		public string AlgebraicDisplayForm (int constant, string variable, bool isFirstTerm = false)
+		{
+			string str;
+			if (constant == 0) {
+				return "";
+			} else if (constant > 0) {
+				if (constant == 1){
+					str = "+";
+				} else {
+					str = "+" + constant;
+				}
+			} else {
+				if (constant == -1){
+					str = "-";
+				} else {
+					str = "-" + (-constant);
+				}
+			}
+			str += variable;
+			if (isFirstTerm && constant > 0) {
+				return str.Substring (1);
+			} else {
+				return str;	
+			}
 		}
 
         public override void numPadButtonPressed(int value)
@@ -1235,44 +1333,68 @@ namespace Cerebro
             }
             if (value <= 9)
             {
-                userAnswerText.text += value.ToString();
+                userAnswerLaText.text += value.ToString();
             }
             else if (value == 10)
             {    //Back
-                if (userAnswerText.text.Length > 0)
+                if (userAnswerLaText.text.Length > 0)
                 {
-                    userAnswerText.text = userAnswerText.text.Substring(0, userAnswerText.text.Length - 1);
+                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
                 }
             }
             else if (value == 11)
             {   // /
                 if (checkLastTextFor(new string[1] { "/" }))
                 {
-                    userAnswerText.text = userAnswerText.text.Substring(0, userAnswerText.text.Length - 1);
+                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
                 }
-                userAnswerText.text += "/";
+                userAnswerLaText.text += "/";
             }
             else if (value == 12)
             {   // :
                 if (checkLastTextFor(new string[1] { "-" }))
                 {
-                    userAnswerText.text = userAnswerText.text.Substring(0, userAnswerText.text.Length - 1);
+                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
                 }
-                userAnswerText.text += "-";
+                userAnswerLaText.text += "-";
             }
             else if (value == 13)
             {   // .
                 if (checkLastTextFor(new string[1] { "." }))
                 {
-                    userAnswerText.text = userAnswerText.text.Substring(0, userAnswerText.text.Length - 1);
+                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
                 }
-                userAnswerText.text += ".";
+                userAnswerLaText.text += ".";
             }
             else if (value == 14)
             {   // All Clear
               
-                userAnswerText.text = "";
+                userAnswerLaText.text = "";
             }
+			else if (value == 15)
+			{   // :
+				if (checkLastTextFor(new string[1] { "\\xalgebra" }))
+				{
+					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
+				}
+				userAnswerLaText.text += "\\xalgebra";
+			}
+			else if (value == 16)
+			{   // :
+				if (checkLastTextFor(new string[1] { "\\yalgebra" }))
+				{
+					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
+				}
+				userAnswerLaText.text += "\\yalgebra";
+			}
+			else if (value == 17)
+			{   // :
+				if (checkLastTextFor(new string[1] { "\\zalgebra" }))
+				{
+					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
+				}
+				userAnswerLaText.text += "\\zalgebra";
+			}
         }
     }
 }
