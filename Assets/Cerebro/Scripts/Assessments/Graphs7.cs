@@ -46,10 +46,10 @@ namespace Cerebro {
 			//Checking if the response was correct and computing question level
 			var correct = false;
 
+			questionsAttempted++;
+			updateQuestionsAttempted ();
+
 			if (graphHelper.graphQuesType == GraphQuesType.None) {
-				
-				questionsAttempted++;
-				updateQuestionsAttempted ();
 
 				if (MCQ.activeSelf) {
 					if (Answer == userAnswerText.text) {
