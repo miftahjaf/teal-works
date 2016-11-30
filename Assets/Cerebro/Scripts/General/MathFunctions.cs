@@ -226,7 +226,7 @@ namespace Cerebro {
 			return true;
 		}
 
-		public static bool checkFractions (string[] userAnswers, string[] correctAnswers)  //checks exact 
+		public static bool checkFractions (string[] userAnswers, string[] correctAnswers)  //checks all forms 
 		{
 			float num1 = -1;
 			if (float.TryParse (userAnswers [0], out num1)) {
@@ -255,7 +255,7 @@ namespace Cerebro {
 			return false;
 		}
 
-		public static bool checkFractionsSimplestForm (string[] userAnswers, string[] correctAnswers)  // checks all forms
+		public static bool checkFractionsSimplestForm (string[] userAnswers, string[] correctAnswers)  // checks exact fractions
 		{
 			if (userAnswers.Length != correctAnswers.Length)
 				return false;
