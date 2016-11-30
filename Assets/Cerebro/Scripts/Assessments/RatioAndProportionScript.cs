@@ -184,10 +184,10 @@ namespace Cerebro {
 					subQuestionText.gameObject.SetActive (false);
 					var rand1 = Random.Range (0, arr1.Length);
 					if (Random.Range (0, 2) == 0) {
-						QuestionText.text = "A " + arr1 [rand1] + " costs Rs. " + n1.ToString () + "\nA " + arr2 [rand1] + " costs Rs. " + n2.ToString () + "\nFind the ratio of the costs of " + arr1 [rand1] + " and " + arr2 [rand1];
+						QuestionText.text = "A " + arr1 [rand1] + " costs Rs. " + n1.ToString () + ".\nA " + arr2 [rand1] + " costs Rs. " + n2.ToString () + ".\nFind the ratio of the costs of " + arr1 [rand1] + " and " + arr2 [rand1] + ".";
 						Answer = num1.ToString () + ":" + num2.ToString ();
 					} else {
-						QuestionText.text = "A " + arr1 [rand1] + " costs Rs. " + n1.ToString () + "\nA " + arr2 [rand1] + " costs Rs. " + n2.ToString () + "\nFind the ratio of the costs of " + arr2 [rand1] + " and " + arr1 [rand1];
+						QuestionText.text = "A " + arr1 [rand1] + " costs Rs. " + n1.ToString () + ".\nA " + arr2 [rand1] + " costs Rs. " + n2.ToString () + ".\nFind the ratio of the costs of " + arr2 [rand1] + " and " + arr1 [rand1] + ".";
 						Answer = num2.ToString () + ":" + num1.ToString ();
 					}
 				}
@@ -199,7 +199,7 @@ namespace Cerebro {
 				if (selector == 1) {    										// Word Problems, given nx:ny:nz, find x:y:z
 					subQuestionText.gameObject.SetActive (false);
 					string[] arr1 = new string[3]{ "Kohli", "Dhoni", "Dravid" };
-					string[] arr2 = new string[3]{ "Gilchrist", "Mcculum", "Amla" };
+					string[] arr2 = new string[3]{ "Gilchrist", "McCullum", "Amla" };
 					string[] arr3 = new string[3]{ "Root", "Sangakkara", "Ponting" };
 					var num3 = Random.Range (2, 10);
 					var n3 = num3 * multiplier;
@@ -207,14 +207,14 @@ namespace Cerebro {
 					var rand2 = Random.Range (0, arr2.Length);
 					var rand3 = Random.Range (0, arr3.Length);
 
-					QuestionText.text = arr1 [rand1] + " scored " + n1.ToString () + " runs in a match, " + arr2 [rand2] + " scored " + n2.ToString () + " runs and " + arr3 [rand3] + " scored " + n3.ToString () + " runs. What is the ratio of the runs scored by " + arr1 [rand1] + ", " + arr2 [rand2] + " and " + arr3 [rand3];
+					QuestionText.text = arr1 [rand1] + " scored " + n1.ToString () + " runs in a match, " + arr2 [rand2] + " scored " + n2.ToString () + " runs and " + arr3 [rand3] + " scored " + n3.ToString () + " runs. What is the ratio of the runs scored by " + arr1 [rand1] + ", " + arr2 [rand2] + " and " + arr3 [rand3] + "?";
 					Answer = num1.ToString () + ":" + num2.ToString () + ":" + num3.ToString ();
 				} else if (selector == 2) {											//ratio given, x given, find y
 					string[] arr1 = new string[3]{ "copper", "gold", "platinum" };
 					string[] arr2 = new string[3]{ "silver", "zinc", "aluminium" };
 					var rand1 = Random.Range (0, arr1.Length);
 					var rand2 = Random.Range (0, arr2.Length);
-					QuestionText.text = "If the ratio of " + arr1 [rand1] + " to " + arr2 [rand2] + " in an alloy is " + num1.ToString () + " : " + num2.ToString () + ". If the weight of " + arr1 [rand1] + " is " + n1.ToString () + " g. Find the weight of " + arr2 [rand2];  
+					QuestionText.text = "If the ratio of " + arr1 [rand1] + " to " + arr2 [rand2] + " in an alloy is " + num1.ToString () + " : " + num2.ToString () + ". If the weight of " + arr1 [rand1] + " is " + n1.ToString () + " g. Find the weight (in g) of " + arr2 [rand2] + " in the alloy.";  
 					Answer = n2.ToString ();
 				} else if (selector == 3) {    										// x:y:z given, total given, find z
 					subQuestionText.gameObject.SetActive (false);
@@ -291,7 +291,7 @@ namespace Cerebro {
 					var n3 = num1 * multiplier2;
 					var n4 = num2 * multiplier2;
 					subQuestionText.gameObject.SetActive (true);
-					QuestionText.text = "Find the missing term";
+					QuestionText.text = "Find the missing term: ";
 					var qrnd = Random.Range (0, 4);
 					if (qrnd == 0) {
 						subQuestionText.text = " ? : " + n2.ToString () + " :: " + n3.ToString () + " : " + n4.ToString ();
@@ -325,21 +325,21 @@ namespace Cerebro {
 					var rand1 = Random.Range (0, arr1.Length);
 					var rand2 = Random.Range (0, arr2.Length);
 					if (Random.Range (0, 2) == 0) {
-						QuestionText.text = arr1 [rand1] + " and " + arr2 [rand2] + " worked for " + num1.ToString () + " and " + num2.ToString () + " hours respectively. They received Rs. " + total.ToString () + " in total for their work. How much money should " + arr1 [rand1] + " receive ? ";
+						QuestionText.text = arr1 [rand1] + " and " + arr2 [rand2] + " worked for " + num1.ToString () + " and " + num2.ToString () + " hours respectively. They received Rs. " + total.ToString () + " in total for their work. How much money (in Rs.) should " + arr1 [rand1] + " receive ? ";
 						Answer = n1.ToString ();
 					} else {
-						QuestionText.text = arr1 [rand1] + " and " + arr2 [rand2] + " worked for " + num1.ToString () + " and " + num2.ToString () + " hours respectively. They received Rs. " + total.ToString () + " in total for their work. How much money should " + arr2 [rand2] + " receive ? ";
+						QuestionText.text = arr1 [rand1] + " and " + arr2 [rand2] + " worked for " + num1.ToString () + " and " + num2.ToString () + " hours respectively. They received Rs. " + total.ToString () + " in total for their work. How much money (in Rs.) should " + arr2 [rand2] + " receive ? ";
 						Answer = n2.ToString ();
 					}
 				} else if (selector == 4) {											//ratio given, x given, find y
 					string[] arr1 = new string[3]{ "height", "weight", "earnings" };
 					var rand1 = Random.Range (0, arr1.Length);
 					if (rand1 == 0) {
-						QuestionText.text = "The ratio of Raj and Ram's " + arr1 [rand1] + " is " + num1.ToString () + " : " + num2.ToString () + ". If Raj is " + n1.ToString () + " cm tall. Find the " + arr1 [rand1] + " of Ram";  
+						QuestionText.text = "The ratio of Raj and Ram's " + arr1 [rand1] + " is " + num1.ToString () + " : " + num2.ToString () + ". If Raj is " + n1.ToString () + " cm tall, find the " + arr1 [rand1] + " of Ram.";  
 					} else if (rand1 == 1) {
-						QuestionText.text = "The ratio of Raj and Ram's " + arr1 [rand1] + " is " + num1.ToString () + " : " + num2.ToString () + ". If Raj weighs " + n1.ToString () + " Kgs. Find the " + arr1 [rand1] + " of Ram";  
+						QuestionText.text = "The ratio of Raj and Ram's " + arr1 [rand1] + " is " + num1.ToString () + " : " + num2.ToString () + ". If Raj weighs " + n1.ToString () + " kgs, find the " + arr1 [rand1] + " of Ram.";  
 					} else if (rand1 == 2) {
-						QuestionText.text = "The ratio of Raj and Ram's " + arr1 [rand1] + " is " + num1.ToString () + " : " + num2.ToString () + ". If Raj earns Rs. " + n1.ToString () + ". Find the " + arr1 [rand1] + " of Ram";  
+						QuestionText.text = "The ratio of Raj and Ram's " + arr1 [rand1] + " is " + num1.ToString () + " : " + num2.ToString () + ". If Raj earns Rs. " + n1.ToString () + ", find the " + arr1 [rand1] + " of Ram.";  
 					}
 					Answer = n2.ToString ();
 				} 
@@ -351,17 +351,17 @@ namespace Cerebro {
 				if (selector == 1) {											//l:b of rectangle given, perimeter given, find l or b
 					var perimeter = (n1 + n2) * 2;
 					if (Random.Range (0, 2) == 0) {
-						QuestionText.text = "The length and breadth of a rectangle are in the ratio of " + num1.ToString () + " : " + num2.ToString () + ". If the perimeter is " + perimeter.ToString () + ". Find the length";
+						QuestionText.text = "The length and breadth of a rectangle are in the ratio of " + num1.ToString () + " : " + num2.ToString () + ". If the perimeter is " + perimeter.ToString () + ", find its length.";
 						Answer = n1.ToString ();
 					} else {
-						QuestionText.text = "The length and breadth of a rectangle are in the ratio of " + num1.ToString () + " : " + num2.ToString () + ". If the perimeter is " + perimeter.ToString () + ". Find the breadth";
+						QuestionText.text = "The length and breadth of a rectangle are in the ratio of " + num1.ToString () + " : " + num2.ToString () + ". If the perimeter is " + perimeter.ToString () + ", find its breadth.";
 						Answer = n2.ToString ();
 					}
 				} else if (selector == 2) {    										//distance given, time in ratio given, find speed in ratio
 					int lcm = MathFunctions.GetLCM (num1, num2);
 					var multip = Random.Range (2, 6);
 					var distance = multip * lcm;
-					QuestionText.text = "Two cars complete " + distance.ToString () + " km race in " + num1.ToString () + " hrs and " + num2.ToString () + " hrs. Find the ratio of their speeds";
+					QuestionText.text = "Two cars complete " + distance.ToString () + " km race in " + num1.ToString () + " hrs and " + num2.ToString () + " hrs. Find the ratio of their speeds.";
 					var s1 = distance / num1;
 					var s2 = distance / num2;
 					var cf = MathFunctions.GetHCF (s1, s2);
@@ -377,13 +377,13 @@ namespace Cerebro {
 					var total = (num1 + num2 + num3) * ansmult;
 					var qrnd = Random.Range (0, 3);
 					if (qrnd == 0) {
-						QuestionText.text = "Sonali Mam distributes " + total.ToString () + " coins between teal, black and blue teams. teal team gets " + mul1.ToString () + " times the black team and the blue team gets " + (mul2).ToString () + " times the teal team. How many did the black team get?";
+						QuestionText.text = "Sonali Mam distributes " + total.ToString () + " coins between teal, black and blue teams. Teal team gets " + mul1.ToString () + " times the black team and the blue team gets " + (mul2).ToString () + " times the teal team. How many did the black team get?";
 						Answer = (num1 * ansmult).ToString ();
 					} else if (qrnd == 1) {
-						QuestionText.text = "Sonali Mam distributes " + total.ToString () + " coins between teal, black and blue teams. teal team gets " + mul1.ToString () + " times the black team and the blue team gets " + (mul2).ToString () + " times the teal team. How many did the teal team get?";
+						QuestionText.text = "Sonali Mam distributes " + total.ToString () + " coins between teal, black and blue teams. Teal team gets " + mul1.ToString () + " times the black team and the blue team gets " + (mul2).ToString () + " times the teal team. How many did the teal team get?";
 						Answer = (num2 * ansmult).ToString ();
 					} else if (qrnd == 2) {
-						QuestionText.text = "Sonali Mam distributes " + total.ToString () + " coins between teal, black and blue teams. teal team gets " + mul1.ToString () + " times the black team and the blue team gets " + (mul2).ToString () + " times the teal team. How many did the blue team get?";
+						QuestionText.text = "Sonali Mam distributes " + total.ToString () + " coins between teal, black and blue teams. Teal team gets " + mul1.ToString () + " times the black team and the blue team gets " + (mul2).ToString () + " times the teal team. How many did the blue team get?";
 						Answer = (num3 * ansmult).ToString ();
 					}
 				} else if (selector == 4) {									//a gms coffee costs x , b gms tea costs y, find cost of coffee:tea
@@ -394,10 +394,10 @@ namespace Cerebro {
 					subQuestionText.gameObject.SetActive (false);
 					var qrnd = Random.Range (0, 2);
 					if (qrnd == 0) {
-						QuestionText.text = "The cost of " + mult1.ToString () + " gms coffee is Rs. " + cost1.ToString () + "\nThe cost of " + mult2.ToString () + " gms tea is Rs. " + cost2.ToString () + "\nFind the ratio of the cost of coffee : tea";
+						QuestionText.text = "The cost of " + mult1.ToString () + " gms coffee is Rs. " + cost1.ToString () + ".\nThe cost of " + mult2.ToString () + " gms tea is Rs. " + cost2.ToString () + ".\nFind the ratio of the cost of coffee : tea.";
 						Answer = num1.ToString () + ":" + num2.ToString ();
 					} else {
-						QuestionText.text = "The cost of " + mult1.ToString () + " gms coffee is Rs. " + cost1.ToString () + "\nThe cost of " + mult2.ToString () + " gms tea is Rs. " + cost2.ToString () + "\nFind the ratio of the cost of tea : coffee";
+						QuestionText.text = "The cost of " + mult1.ToString () + " gms coffee is Rs. " + cost1.ToString () + ".\nThe cost of " + mult2.ToString () + " gms tea is Rs. " + cost2.ToString () + ".\nFind the ratio of the cost of tea : coffee.";
 						Answer = num2.ToString () + ":" + num1.ToString ();
 					}
 				} 
