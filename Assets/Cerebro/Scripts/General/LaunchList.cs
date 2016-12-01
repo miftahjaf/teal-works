@@ -3200,6 +3200,7 @@ namespace Cerebro
 		{
 			string fileName = Application.persistentDataPath + "/KCsMasteryUpdated.txt";
 			proficiencyConstants = new ProficiencyConstants ();
+
 			if (File.Exists (fileName)) 
 			{
 				mKCMastery.Clear ();
@@ -3209,11 +3210,10 @@ namespace Cerebro
 				if (jsonNode != null) {
 					
 					if (jsonNode ["Data"] ["Mastery"] != null) {
-						jsonNode = jsonNode ["Data"] ["Mastery"];
-						int length = jsonNode.Count;
+						int length = jsonNode ["Data"] ["Mastery"].Count;
 						for (int i = 0; i < length; i++) {
-							string KCID = jsonNode [i] ["id"];
-							int mastery = jsonNode [i] ["mastery"].AsInt;
+							string KCID = jsonNode ["Data"] ["Mastery"] [i] ["id"];
+							int mastery = jsonNode ["Data"] ["Mastery"] [i] ["mastery"].AsInt;
 							if (mKCMastery.ContainsKey (KCID)) {
 								mKCMastery [KCID] = mastery;
 							} else {
@@ -3222,13 +3222,12 @@ namespace Cerebro
 						}
 					}
 
-					if (jsonNode ["Data"] ["student_proficiency_constants"] != null) {
-						jsonNode = jsonNode ["Data"] ["student_proficiency_constants"];
 
-						proficiencyConstants.slipUp = jsonNode ["slip_up"].AsFloat;
-						proficiencyConstants.guess = jsonNode ["guess"].AsFloat;
-						proficiencyConstants.initial = jsonNode ["initial"].AsFloat;
-						proficiencyConstants.learntWhileSolving = jsonNode ["learnt_while_solving"].AsFloat;
+					if (jsonNode ["Data"] ["student_proficiency_constants"] != null) {
+						proficiencyConstants.slipUp = jsonNode ["Data"] ["student_proficiency_constants"] ["slip_up"].AsFloat;
+						proficiencyConstants.guess = jsonNode ["Data"] ["student_proficiency_constants"] ["guess"].AsFloat;
+						proficiencyConstants.initial = jsonNode ["Data"] ["student_proficiency_constants"] ["initial"].AsFloat;
+						proficiencyConstants.learntWhileSolving = jsonNode ["Data"] ["student_proficiency_constants"] ["learnt_while_solving"].AsFloat;
 					}
 				}
 			}
