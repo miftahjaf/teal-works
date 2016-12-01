@@ -205,8 +205,8 @@ namespace Cerebro
 				if (selector == 1)
                 {
 					coeff1 = GenerateRandomIntegerExcluding0 (-5, 6);
-					coeff2 = Random.Range (-5, 6);
-					coeff3 = Random.Range (-5, 6);
+					coeff2 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff3 = GenerateRandomIntegerExcluding0 (-5, 6);
 					x = Random.Range (-5, 6);
 					y = Random.Range (-5, 6);
 					z = Random.Range (-5, 6);
