@@ -199,410 +199,101 @@ namespace Cerebro
            
             #region level1
             if (level == 1)
-            {
-
-                x = Random.Range(-10, 11);
-                y = Random.Range(-10, 11);
-                z = Random.Range(-10, 11);
-                coeff1 = Random.Range(-5, 5);
-                coeff2 = Random.Range(-5, 5);
-                coeff3 = Random.Range(-5, 5);
-
-                
-                while (coeff1 == 0)
-               	{
-        	        coeff1 = Random.Range(-9, 9);
-    		   	}
-				while (coeff2 == 0)
-				{
-					coeff2 = Random.Range(-9, 9);
-				}     
-                
-                selector = GetRandomSelector (1, 4);
-               
-                expression3 = "";
-               
-                if (selector == 1)
+            {				     
+                selector = GetRandomSelector (1, 6);
+             
+				if (selector == 1)
                 {
-					int randSelector = Random.Range(0, 2);
+					coeff1 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff2 = Random.Range (-5, 6);
+					coeff3 = Random.Range (-5, 6);
+					x = Random.Range (-5, 6);
+					y = Random.Range (-5, 6);
+					z = Random.Range (-5, 6);
 
-                    if (randSelector == 1)
-                    {
-                        if (coeff1 == 0)
-                        {
-                            expression1 = "";
-                        }
-                        else if (coeff1 == 1)
-                        {
-                            expression1 = "\\xalgebra";
-                        }
-                        else if (coeff1 == -1)
-                        {
-                            expression1 = "- x";
-                        }
-                        else
-                        {
-                            expression1 = coeff1 + "\\xalgebra";
-                        }
+					expression3 = AlgebraicDisplayForm (coeff1, "\\xalgebra", true);
+					expression3 += AlgebraicDisplayForm (coeff2, "\\yalgebra");
+					expression3 += AlgebraicDisplayForm (coeff3, "\\zalgebra");
+                    
+					QuestionText.text = "Solve for x = " + x + ", y = " + y + ", z = " + z + ".";
+                    int tempAns = coeff1 * x + coeff2 * y + coeff3 * z;
+                    Answer = tempAns.ToString();
+                }
+				else if (selector == 2)
+                {
+					coeff1 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff2 = Random.Range (-5, 6);
+					coeff3 = Random.Range (-5, 6);
+					x = GenerateRandomIntegerExcluding0 (-5, 6);
+					y = GenerateRandomIntegerExcluding0 (-5, 6);
+					z = GenerateRandomIntegerExcluding0 (-5, 6);
 
-
-                        if (coeff2 == 0)
-                        {
-                            expression2 = expression1;
-                        }
-                        else if (coeff2 == 1)
-                        {
-                            expression2 = expression1 + " + \\yalgebra";
-                        }
-                        else if (coeff2 == -1)
-                        {
-                            expression2 = expression1 + " - \\yalgebra";
-                        }
-                        else
-                        {
-                            if (coeff2 < -1)
-                            {
-								expression2 = expression1 + " - " + (-coeff2) + "\\yalgebra";
-                            }
-                            else
-                            {
-                                expression2 = expression1 + " + " + coeff2 + "\\yalgebra";
-                            }
-                        }
-
-
-                        if (coeff3 == 0)
-                        {
-                            expression3 = expression2;
-                        }
-                        else if (coeff3 == 1)
-                        {
-                            expression3 = expression2 + " + \\zalgebra";
-                        }
-                        else if (coeff3 == -1)
-                        {
-                            expression3 = expression2 + " - \\zalgebra";
-                        }
-                        else
-                        {
-                            if (coeff3 < -1)
-                            {
-								expression3 = expression2 + " - " + (-coeff3) + "\\zalgebra";
-                            }
-                            else
-                            {
-                                expression3 = expression2 + " + " + coeff3 + "\\zalgebra";
-                            }
-                        }
-
-                        
-                        int tempAns = coeff1 * x + coeff2 * y + coeff3 * z;
-                        Answer = tempAns.ToString();
-
-                    }
-                   
-                    else
-                    {
-                        if (coeff1 == 0)
-                        {
-                            expression1 = "";
-                        }
-                        else if (coeff1 == 1)
-                        {
-                            expression1 = "\\xalgebra\\yalgebra";
-                        }
-                        else if (coeff1 == -1)
-                        {
-                            expression1 = "- \\xalgebra\\yalgebra";
-                        }
-                        else
-                        {
-                            expression1 = coeff1 + "\\xalgebra\\yalgebra";
-                        }
-
-
-                        if (coeff2 == 0)
-                        {
-                            expression2 = expression1;
-                        }
-                        else if (expression1 != "")
-                        {
-                            if (coeff2 == 1)
-                                expression2 = expression1 + " + \\yalgebra\\zalgebra";
-                            else if (coeff2 == -1)
-                                expression2 = expression1 + " - \\yalgebra\\zalgebra ";
-                            else
-                            {
-                                if (coeff2 < -1)
-                                {
-									expression2 = expression1 + " - " + (-coeff2) + "\\yalgebra\\zalgebra";
-                                }
-                                else
-                                {
-                                    expression2 = expression1 + " + " + coeff2 + "\\yalgebra\\zalgebra";
-                                }
-                            }
-
-                        }
-                       
-
-                        if (coeff3 == 0)
-                        {
-                            expression3 = expression2;
-                        }
-                        else if (coeff3 == 1 && expression2 != "")
-                        {
-                            expression3 = expression2 + " + \\xalgebra\\zalgebra";
-                        }
-                        else if (coeff3 == 1 && expression2 == "")
-                        {
-                            expression3 = expression2 + " \\xalgebra\\zalgebra";
-                        }
-                        else if (coeff3 == -1)
-                        {
-                            expression3 = expression2 + " - \\xalgebra\\zalgebra";
-                        }
-                        else
-                        {
-                            if (coeff3 < -1)
-                            {
-								expression3 = expression2 + " - " + (-coeff3) + "\\xalgebra\\zalgebra";
-                            }
-                            else
-                            {
-                                expression3 = expression2 + " + " + coeff3 + "\\xalgebra\\zalgebra";
-                            }
-                        }
-
-                        int tempAns = coeff1 * x * y + coeff2 * y * z + coeff3 * z * x;
-                        Answer = tempAns.ToString();
-
-                    }
+					expression3 = AlgebraicDisplayForm (coeff1, "\\xalgebra\\yalgebra", true);
+					expression3 += AlgebraicDisplayForm (coeff2, "\\yalgebra\\zalgebra");
+					expression3 += AlgebraicDisplayForm (coeff3, "\\zalgebra\\xalgebra");
 
 					QuestionText.text = "Solve for x = " + x + ", y = " + y + ", z = " + z + ".";
-
+                    int tempAns = coeff1 * x * y + coeff2 * y * z + coeff3 * z * x;
+                    Answer = tempAns.ToString();
                 }
-                else if (selector == 2)
+				else if (selector == 3)
                 {
-					int randSelector = Random.Range(1, 3);
+					coeff1 = GenerateRandomIntegerExcluding01 (-5, 6);
+					coeff2 = Random.Range (-5, 6);
+					coeff3 = Random.Range (-5, 6);
+					coeff4 = Random.Range (-5, 6);
+					coeff5 = Random.Range (-5, 6);               
+					x = GenerateRandomIntegerExcluding0 (-5, 6);
 
-                    if (randSelector == 1)
-                    {
-						coeff1 = GenerateRandomIntegerExcluding01 (-5, 6);
-						coeff2 = GenerateRandomIntegerExcluding01 (-5, 6);
-						coeff3 = GenerateRandomIntegerExcluding01 (-5, 6);
-						coeff4 = GenerateRandomIntegerExcluding01 (-5, 6);
-                        coeff5 = Random.Range(-5, 6);
-                        x = Random.Range(-2, 3);
-                        y = Random.Range(-2, 3);
-                        z = Random.Range(-2, 3);
+					expression3 = AlgebraicDisplayForm (coeff1, "\\xalgebra^4", true);
+					expression3 += AlgebraicDisplayForm (coeff2, "\\xalgebra^3");
+					expression3 += AlgebraicDisplayForm (coeff3, "\\xalgebra^2");
+					expression3 += AlgebraicDisplayForm (coeff4, "\\xalgebra");
+					expression3 += AlgebraicDisplayForm (coeff5, "");
 
-                        if (coeff2 > 0)
-                            expression3 = coeff1 + "\\xalgebra^4" + " + " + coeff2 + "\\xalgebra^3";
-                        else if (coeff2 < 0)
-                            expression3 = coeff1 + "\\xalgebra^4" + " " + coeff2 + "\\xalgebra^3";
-
-                        if (coeff3 > 0)
-                            expression3 = expression3 + " + " + coeff3 + "\\xalgebra^2";
-                        else if (coeff3 < 0)
-                            expression3 = expression3 + " " + coeff3 + "\\xalgebra^2";
-
-                        if (coeff4 > 0)
-                            expression3 = expression3 + " + " + coeff4 + "\\xalgebra";
-                        else if (coeff4 < 0)
-                            expression3 = expression3 + " " + coeff4 + "\\xalgebra";
-
-                        if (coeff5 > 0)
-                            expression3 = expression3 + " + " + coeff5;
-                        else if (coeff5 < 0)
-                            expression3 = expression3 + " " + coeff5;
-
-
-                        int tempAns = (coeff1 * x * x * x * x) + (coeff2 * x * x * x) + (coeff3 * x * x) + (coeff4 * x) + coeff5;
-                        Answer = tempAns.ToString();
-						QuestionText.text = "Solve for x = " + x + ".";
-                    }
-                    else
-                    {
-						coeff1 = GenerateRandomIntegerExcluding01 (-5, 6);
-                        coeff4 = Random.Range(-5, 5);
-                        coeff5 = Random.Range(-5, 5);
-                        coeff6 = Random.Range(-5, 5);
-                        
-
-                        if (coeff4 == 1)
-                        {
-                            expression1 = "(\\yalgebra + \\zalgebra)";
-                        }
-                        else if (coeff4 == -1)
-                        {
-                            expression1 = "(\\yalgebra - \\zalgebra)";
-                        }
-                        else if (coeff4 < -1)
-                        {
-                            expression1 = "(\\yalgebra " + coeff4 + "\\zalgebra)";
-                        }
-                        else if (coeff4 > 1)
-                        {
-                            expression1 = "(\\yalgebra + " + coeff4 + "\\zalgebra)";
-                        }
-                        else if (coeff4 == 0)
-                            expression1 = "\\yalgebra";
-
-                        if (coeff5 == 1)
-                        {
-                            expression2 = "(\\zalgebra + \\xalgebra)";
-                        }
-                        else if (coeff5 == -1)
-                        {
-                            expression2 = "(\\zalgebra - \\xalgebra)";
-                        }
-                        else if (coeff5 < -1)
-                        {
-                            expression2 = "(\\zalgebra " + coeff5 + "\\xalgebra)";
-                        }
-                        else if (coeff5 > 1)
-                        {
-                            expression2 = "(\\zalgebra + " + coeff5 + "\\xalgebra)";
-                        }
-                        else if (coeff5 == 0)
-                            expression2 = "\\zalgebra";
-
-                        if (coeff6 == 1)
-                        {
-                            expression3 = "(\\yalgebra + \\xalgebra)";
-                        }
-                        else if (coeff6 == -1)
-                        {
-                            expression3 = "(\\yalgebra - \\xalgebra)";
-                        }
-                        else if (coeff6 < -1)
-                        {
-                            expression3 = "(\\yalgebra " + coeff6 + "\\xalgebra)";
-                        }
-                        else if (coeff6 > 1)
-                        {
-                            expression3 = "(\\yalgebra + " + coeff6 + "\\xalgebra)";
-                        }
-                        else if (coeff6 == 0)
-                            expression3 = "\\yalgebra";							               
-
-                        if (coeff2 == 1)
-                        {
-                            expression2 = coeff1 + expression1 + " + " + expression2;
-                        }
-                        else if (coeff2 > 1)
-                        {
-                            expression2 = coeff1 + expression1 + " + " + coeff2 + expression2;
-                        }
-                        else if (coeff2 == -1)
-                        {
-                            expression2 = coeff1 + expression1 + " - " + expression2;
-                        }
-                        else if (coeff2 < -1)
-                        {
-                            expression2 = coeff1 + expression1 + " " + coeff2 + expression2;
-                        }
-                        else if (coeff2 == 0)
-                        {
-                            expression2 = coeff1 + expression1;
-                        }
-
-                        if (coeff3 == 1)
-                        {
-                            expression3 = expression2 + " + " + expression3;
-                        }
-                        else if (coeff3 > 1)
-                        {
-                            expression3 = expression2 + " + " + coeff3 + expression3;
-                        }
-                        else if (coeff3 == -1)
-                        {
-                            expression3 = expression2 + " - " + expression3;
-                        }
-                        else if (coeff3 < -1)
-                        {
-                            expression3 = expression2 + " " + coeff3 + expression3;
-                        }
-                        else if (coeff3 == 0)
-                        {
-                            expression3 = expression2;
-                        }
-
-						QuestionText.text = "Solve for x = " + x + ", y = " + y + ", z = " + z + ".";
-                        int tempAns = coeff1 * (y + coeff4 * z) + coeff2 * (z + coeff5 * x) + coeff3 * (y + coeff6 * x);
-                        Answer = tempAns.ToString();
-
-
-                    }
+					QuestionText.text = "Solve for x = " + x + ".";
+                    int tempAns = (coeff1 * x * x * x * x) + (coeff2 * x * x * x) + (coeff3 * x * x) + (coeff4 * x) + coeff5;
+                    Answer = tempAns.ToString();
                 }
-                else if (selector == 3)
+				else if (selector == 4)
                 {
-                    // coeff4, coeff5 , coeff 6 are denominators
-                    coeff4 = Random.Range(2, 6);
-                    coeff5 = Random.Range(1, 6);
-                    coeff6 = Random.Range(1, 6);
-                    a = Random.Range(2, 6);
-                    b = Random.Range(1, 6);
-                    c = Random.Range(1, 6);
+					coeff1 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff2 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff3 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff4 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff5 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff6 = GenerateRandomIntegerExcluding0 (-5, 6);
+					x = Random.Range (-5, 6);
+					y = Random.Range (-5, 6);
+					z = Random.Range (-5, 6);
 
-					while ((a * b * c) % coeff4 != 0 || Mathf.Abs (coeff1) == coeff4)
-                        coeff4 = Random.Range(2, 6);
-					while ((a * b * c) % coeff5 != 0 || Mathf.Abs (coeff2) == coeff5)
-						coeff5 = Random.Range(1, 6);
-					while ((a * b * c) % coeff6 != 0 || Mathf.Abs (coeff3) == coeff6)
-                        coeff6 = Random.Range(1, 6);
+					expression3 = AlgebraicDisplayForm (coeff1, "({\\yalgebra" + AlgebraicDisplayForm (coeff4, "\\zalgebra") + "})", true);
+					expression3 += AlgebraicDisplayForm (coeff2, "({\\zalgebra" + AlgebraicDisplayForm (coeff5, "\\xalgebra") + "})");
+					expression3 += AlgebraicDisplayForm (coeff3, "({\\xalgebra" + AlgebraicDisplayForm (coeff6, "\\yalgebra") + "})");
 
-                   
-
-                    if (coeff1 != 0)                 
-						expression3 = NegativeSign (coeff1) + "\\frac{" + Mathf.Abs (coeff1) + "}{" + coeff4 + "}" + "\\aalgebra\\balgebra^2\\calgebra";
-                       
-                    if (coeff2 < 0)
-                    {
-                        if (coeff5 != 1 )
-							expression3 += "- \\frac{" + Mathf.Abs(coeff2) + "}{" + coeff5 + "}" + "\\balgebra\\calgebra^2\\aalgebra";
-                        else
-							expression3 += " - " + Mathf.Abs(coeff2) + "\\balgebra\\calgebra^2\\aalgebra";
-                    }
-                    else if (coeff2 > 0)
-                    {
-
-                        if (coeff5 != 1 && expression3 != " ")
-							expression3 += " + \\frac{" + coeff2 + "}{" + coeff5 + "}" + "\\balgebra\\calgebra^2\\aalgebra";
-                        else if(expression3 == " " && coeff5 != 1)
-							expression3 += " \\frac{" + coeff2 + "}{" + coeff5 + "}" + "\\balgebra\\calgebra^2\\aalgebra";
-                        else
-							expression3 += " + " + coeff2 + "\\balgebra\\calgebra^2\\aalgebra";
-                    }
-
-
-                    if (coeff3 > 0)
-                    {
-                        if (coeff6 != 1 && expression3 != " ")
-                            expression3 += " + \\frac{" + coeff3 + "}{" + coeff6 + "}" + "\\calgebra^3\\aalgebra\\balgebra^3";
-                        else if (coeff6 != 1 )
-                            expression3 += " \\frac{" + coeff3 + "}{" + coeff6 + "}" + "\\calgebra^3\\aalgebra\\balgebra^3";
-                        else
-                            expression3 += " + " + coeff3 + "\\calgebra^3\\aalgebra\\balgebra^3";
-                    }
-                    else if (coeff3 < 0)
-                    {
-                        if (coeff6 != 1 && expression3 != " ")
-                            expression3 += "- \\frac{" + Mathf.Abs(coeff3) + "}{" + coeff6 + "}" + "\\calgebra^3\\aalgebra\\balgebra^3";
-                        else if (coeff6 != 1 )
-                            expression3 += " \\frac{" + (coeff3) + "}{" + coeff6 + "}" + "\\calgebra^3\\aalgebra\\balgebra^3";
-                        else
-                            expression3 += " - " + Mathf.Abs(coeff3) + "\\calgebra^3\\aalgebra\\balgebra^3";
-                    }
+					QuestionText.text = "Solve for x = " + x + ", y = " + y + ", z = " + z + ".";
+					int tempAns = coeff1 * (y + coeff4 * z) + coeff2 * (z + coeff5 * x) + coeff3 * (x + coeff6 * y);
+                    Answer = tempAns.ToString();
+                }
+                else if (selector == 5)
+                {
+					coeff1 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff2 = Random.Range (-5, 6);
+					coeff3 = Random.Range (-5, 6);
+					do
+					{	a = GenerateRandomIntegerExcluding0 (-5, 6);
+						b = GenerateRandomIntegerExcluding0 (-5, 6);
+						c = GenerateRandomIntegerExcluding0 (-5, 6);
+						coeff4 = GenerateRandomIntegerExcluding0 (-5, 6);
+						coeff5 = GenerateRandomIntegerExcluding0 (-5, 6);
+						coeff6 = GenerateRandomIntegerExcluding0 (-5, 6);
+					} while ((a * b * b * c) % coeff4 != 0 || Mathf.Abs (coeff1) == Mathf.Abs (coeff4) || (a * b * b * c) % coeff5 != 0 || Mathf.Abs (coeff2) == Mathf.Abs (coeff5) || (a * a * b * c) % Mathf.Abs (coeff6) != 0 || Mathf.Abs (coeff3) == coeff6);
+				
+					expression3 = AlgebraicDisplayFormFraction (coeff1, coeff4, "\\aalgebra\\balgebra^2\\calgebra", true) + AlgebraicDisplayFormFraction (coeff2, coeff5, "\\balgebra\\calgebra^2\\aalgebra") + AlgebraicDisplayFormFraction (coeff3, coeff6, "\\calgebra\\aalgebra^2\\balgebra");
 					QuestionText.text = "Solve for a = " + a + ", b = " + b + ", c = " + c + ".";                               
 
-                    int tempAns = (int)((((float)coeff1 / (float)coeff4) * a * b * b * c) + (((float)coeff2 / (float)coeff5) * b * c * c * a) + (((float)coeff3 / (float)coeff6) * c * c * c * a * b * b * b));
-                   
-                  
+					int tempAns = (coeff1 * a * b * b * c) / coeff4 + (coeff2 * a * b * c * c) / coeff5 + (coeff3 * a * a * b * c)/ coeff6;
                     Answer = tempAns.ToString();
-
-
                 }
                 QuestionTEX.text = expression3;
             }
@@ -610,288 +301,95 @@ namespace Cerebro
             #region level2 
             else if (level == 2)
             {
-                a = Random.Range(-5, 5);
-                b = Random.Range(-5, 5);
-                c = Random.Range(-5, 5);
-
-
-				selector = GetRandomSelector (1, 3);
-
-				if (selector == 1) // Division
+				selector = GetRandomSelector (1, 5);
+				            
+				if (selector == 1)
                 {
-                    a = Random.Range(-5, 5);
-                    b = Random.Range(-5, 5);
-                    c = Random.Range(-5, 5);
-					int randSelector = Random.Range (1, 4);
-
-                    if (randSelector == 1)
+					coeff1 = GenerateRandomIntegerExcluding0 (-5, 6);
+                    coeff2 = Random.Range(-5, 6);
+                    coeff3 = Random.Range(-5, 6);
+					do
                     {
-                        coeff1 = Random.Range(-5, 5);
-                        coeff2 = Random.Range(-5, 5);
-                        coeff3 = Random.Range(-5, 5);
-                        coeff4 = Random.Range(-5, 5);
-                        coeff5 = Random.Range(-5, 5);
-                        coeff6 = Random.Range(-5, 5);
-                      
-                        while ((coeff4 * b * b + coeff5 * a * a + coeff6 * c * c) == 0)
-                        {
-                            coeff4 = Random.Range(-5, 5);
-                            coeff5 = Random.Range(-5, 5);
-                            coeff6 = Random.Range(-5, 5);
+						coeff4 = GenerateRandomIntegerExcluding0(-5, 6);
+                        coeff5 = Random.Range(-5, 6);
+                        coeff6 = Random.Range(-5, 6);
+                        a = Random.Range(-5, 6);
+                        b = Random.Range(-5, 6);
+                        c = Random.Range(-5, 6);
+					} while ((coeff4 * b * b + coeff5 * a * a + coeff6 * c * c) == 0);                   
 
-	                        a = Random.Range(-5, 5);
-	                        b = Random.Range(-5, 5);
-	                        c = Random.Range(-5, 5);
-                        }
-                        
-                        
-                        //  numerator = expression1
-                        if (coeff1 == 0)
-                            expression1 = "";
-                        else if (coeff1 == 1)
-							expression1 = "\\aalgebra^2";
-                        else if (coeff1 == -1)
-							expression1 = "- \\aalgebra^2";
-						else expression1 = coeff1 + "\\aalgebra^2";
+					expression1 = AlgebraicDisplayForm (coeff1, "\\aalgebra^2", true) + AlgebraicDisplayForm (coeff2, "\\balgebra^2") + AlgebraicDisplayForm (coeff3, "\\calgebra^2");
+					expression2 = AlgebraicDisplayForm (coeff4, "\\balgebra^2", true) + AlgebraicDisplayForm (coeff5, "\\aalgebra^2") + AlgebraicDisplayForm (coeff6, "\\calgebra^2");
+                    expression3 = "\\frac{" + expression1 + "}{" + expression2 + "}";
 
-                        if (coeff2 == 1)
-                        {   if(expression1 == "")
-                                 expression1 += "\\balgebra^2";
-                            else
-                            {
-                                expression1 += " + \\balgebra^2";
-                            }
-                        }
-                        else if (coeff2 == -1)
-                            expression1 +=  " - \\balgebra^2";
-                        else if (coeff2 > 1)
-                            expression1 += " + " + coeff2 + "\\balgebra^2";
-                        else if (coeff2 == 0)
-                            expression1 += "";
-                        else expression1 += coeff2 + "\\balgebra^2";
-
-                        if (coeff3 == 1)
-                        {
-                            if (expression1 == "")
-                                expression1 += "\\calgebra^2";
-                            else expression1 += " + \\calgebra^2";
-                        }
-                        else if (coeff3 == -1)
-                            expression1 += " - \\calgebra^2";
-                        else if (coeff3 > 1)
-                            expression1 += " + " + coeff3 + "\\calgebra^2";
-                        else if (coeff3 == 0)
-                            expression1 += " ";
-                        else expression1 += coeff3 + "\\calgebra^2";
-
-
-                        //denominator = expression2
-                        if (coeff4 == 0)
-                            expression2 = "";
-                        else if (coeff4 == 1)
-                            expression2 = " \\balgebra^2";
-                        else if (coeff4 == -1)
-                            expression2 = "- \\balgebra^2";
-                        else expression2 = coeff4 + "\\balgebra^2";
-
-                        if (coeff5 == 1)
-						{   
-							if(expression2 != "")
-							{
-								expression2 += " + \\aalgebra^2";
-							}
-                            else
-                            {
-								expression2 += "\\aalgebra^2";
-                            }
-                        }
-                        else if (coeff5 == -1)
-							expression2 +=  " - \\aalgebra^2";
-                        else if (coeff5 > 1)
-							expression2 += " + " + coeff5 + "\\aalgebra^2";
-                        else if (coeff5 == 0)
-                            expression2 += "";
-						else expression2 += coeff5 + "\\aalgebra^2";
-
-                        if (coeff6 == 1)
-							expression2 += " + \\calgebra^2";
-                        else if (coeff6 == -1)
-                            expression2 += " - \\calgebra^2";
-                        else if (coeff6 > 1)
-                            expression2 += " + " + coeff6 + "\\calgebra^2";
-                        else if (coeff6 == 0)
-                            expression2 += "";
-                        else expression2 += coeff6 + "\\calgebra^2";
-
-
-                        //expression3 = numerator/denominator
-                        expression3 = "\\frac{" + expression1 + "}{" + expression2 + "}";
-
-                        int tempAns = (coeff1 * a * a + coeff2 * b * b + coeff3 * c * c);
-                        int tempAns2 = (coeff4 * b * b + coeff5 * a * a + coeff6 * c * c);
-						int hcf = MathFunctions.GetHCF (Mathf.Abs (tempAns), Mathf.Abs (tempAns2));
-						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf) + "/" + Mathf.Abs (tempAns2/hcf);
-                      
-
-                    }
-					else if (randSelector == 2)
-                    {
-                        coeff1 = Random.Range(-5, 5);
-                        coeff2 = Random.Range(-5, 5);
-                        coeff3 = Random.Range(-5, 5);
-                       
-						while (coeff1 == 0)
-						{
-							coeff1 = Random.Range(-5, 5);
-						}
-                        while (coeff3 == 0)
-                        {
-                            coeff3 = Random.Range(-5, 5);
-                        }
-                        while (a == 0)
-                        {
-                            a = Random.Range(-5, 5);
-                        }
-                        while (b == 0)
-                        {
-                            b = Random.Range(-5, 5);
-                        }
-                        while (c == 0)
-                        {
-                            c = Random.Range(-5, 5);
-                        }
-                        
-                        //expression1 = numerator
-                       if (coeff1 == 1)
-                            expression1 = "\\aalgebra\\balgebra\\calgebra";
-                        else if (coeff1 == -1)
-                            expression1 = "- \\aalgebra\\balgebra\\calgebra";
-                        else expression1 = coeff1 + "\\aalgebra\\balgebra\\calgebra";
-
-                        if (coeff2 == 0)
-                            expression1 += "";
-                        else if (coeff2 == 1)
-							expression1 += " + \\aalgebra^2\\balgebra\\calgebra^0";
-                        else if (coeff2 == -1)
-							expression1 += " - \\aalgebra^2\\balgebra\\calgebra^0";
-                        else if (coeff2 > 1)
-							expression1 += " + " + coeff2 + "\\aalgebra^2\\balgebra\\calgebra^0";
-						else expression1 += " " + coeff2 + "\\aalgebra^2\\balgebra\\calgebra^0";
-
-                        //expression2 = denominator
-                        expression2 = "";
-                        if (coeff3 == 1)
-                            expression2 += "2\\aalgebra\\balgebra^0\\calgebra";
-                        else if (coeff3 == -1)
-                            expression2 += " -(2\\aalgebra\\balgebra^0\\calgebra)";
-                        else expression2 += coeff3 + "(2\\aalgebra\\balgebra^0\\calgebra)";
-                    
-			            expression3 = "\\frac{" + expression1 + "}{" + expression2 + "}";
-
-                        int tempAns = ((coeff1 * a * b * c) + (coeff2 * a * a * b));
-                        int tempAns2 = (coeff3 * 2 * a * c);
-						int hcf = MathFunctions.GetHCF (Mathf.Abs (tempAns), Mathf.Abs (tempAns2));
-						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf) + "/" + Mathf.Abs (tempAns2/hcf);                        
-                    }              
-					else if (randSelector == 3)
-                    {
-                        coeff1 = Random.Range(-5, 5);
-                        coeff2 = Random.Range(-5, 5);
-                        coeff3 = Random.Range(-5, 5);
-                        coeff4 = Random.Range(-5, 5);
-                        coeff5 = Random.Range(-5, 5);
-                        coeff6 = Random.Range(-5, 5);
-                        while (((coeff4 * a * b) + (coeff5 * c * a) + (coeff6 * b * c)) == 0)
-                        {
-                            coeff4 = Random.Range(-5, 5);
-                            coeff5 = Random.Range(-5, 5);
-                            coeff6 = Random.Range(-5, 5);
-                            a = Random.Range(-5, 5);
-                            b = Random.Range(-5, 5);
-                            c = Random.Range(-5, 5);
-
-                        }
-
-                        //  numerator = expression1
-                        if (coeff1 == 0)
-                            expression1 = " ";
-                        else if (coeff1 == 1)
-							expression1 = "\\aalgebra^2";
-                        else if (coeff1 == -1)
-							expression1 = "- \\aalgebra^2";
-						else expression1 = coeff1 + "\\aalgebra^2";
-
-                        if (coeff2 == 1)
-                        {   if (expression1 == " ")
-                                expression1 += "\\balgebra\\calgebra";
-                            else expression1 += "+ \\balgebra\\calgebra";
-                        }
-                        else if (coeff2 == -1)
-                            expression1 += " " + "- \\balgebra\\calgebra";
-                        else if (coeff2 > 1)
-                            expression1 += " + " + coeff2 + "\\balgebra\\calgebra";     
-                        else if(coeff2 < 0)
-                            expression1 += coeff2 + "\\balgebra\\calgebra";
-
-
-                        if (coeff3 == 1)
-                        {   if (expression1 == " ")
-                                expression1 = "\\calgebra^2";
-                            else expression1 += " + \\calgebra^2";
-                        }
-                        else if (coeff3 == -1)
-                            expression1 += " " + "- \\calgebra^2";
-                        else if (coeff3 > 1)
-                            expression1 += " + " + coeff3 + "\\calgebra^2";
-                        else if (coeff3 < 0)
-                            expression1 += coeff3 + "\\calgebra^2";
-
-
-                        //denominator = expression2
-                        if (coeff4 == 0)
-                            expression2 = " ";
-                        else if (coeff4 == 1)
-                            expression2 = "\\aalgebra\\balgebra";
-                        else if (coeff4 == -1)
-							expression2 = "- \\aalgebra\\balgebra";
-                        else expression2 = coeff4 + "\\aalgebra\\balgebra";
-
-                        if (coeff5 == 1)
-                        {   if (expression2 == " ")
-                                expression2 += "\\calgebra\\aalgebra";
-                            else expression2 += " + \\calgebra\\aalgebra";
-                        }
-                        else if (coeff5 == -1)
-                            expression2 += " " + "- \\calgebra\\aalgebra";
-                        else if (coeff5 > 1 && expression2 != " ")
-                            expression2 += " + " + coeff5 + "\\calgebra\\aalgebra";
-                        else if (coeff5 == 0)
-                            expression2 += " ";
-                        else expression2 += coeff5 + "\\calgebra\\aalgebra";
-
-                        if (coeff6 == 1)
-                        {   if (expression2 != " ")
-                                expression2 += "+ \\balgebra\\calgebra";
-                            else expression2 += "\\balgebra\\calgebra";
-                        }
-                        else if (coeff6 == -1)
-                            expression2 += " " + "- \\balgebra\\calgebra";
-                        else if (coeff6 > 1 && expression2 != " ")
-                            expression2 += " + " + coeff6 + "\\balgebra\\calgebra";
-                        else if (coeff6 == 0)
-                            expression2 += " ";
-                        else expression2 += coeff6 + "\\balgebra\\calgebra";
-
-                        expression3 = "\\frac{" + expression1 + "}{" + expression2 + "}";
-						                       
-                        int tempAns = (coeff1 * a * a + coeff2 * b * c + coeff3 * c * c);
-                        int tempAns2  = ((coeff4 * a * b) + (coeff5 * c * a) + (coeff6 * b * c));
-						int hcf = MathFunctions.GetHCF (Mathf.Abs (tempAns), Mathf.Abs (tempAns2));
-						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf) + "/" + Mathf.Abs (tempAns2/hcf);
-                    }
 					QuestionText.text = "Solve for a = " + a + ", b = " + b + ", c = " + c + ".\n(Answer in fraction.)" ;
+                    int tempAns = (coeff1 * a * a + coeff2 * b * b + coeff3 * c * c);
+                    int tempAns2 = (coeff4 * b * b + coeff5 * a * a + coeff6 * c * c);
+					int hcf = MathFunctions.GetHCF (Mathf.Abs (tempAns), Mathf.Abs (tempAns2));
+					if (hcf != Mathf.Abs (tempAns2))
+					{
+						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf) + "/" + Mathf.Abs (tempAns2/hcf);                        
+					} else
+					{
+						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf);                        
+					}                      
                 }
-				else if (selector == 2)           // Power
+				else if (selector == 2)
+                {
+					coeff1 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff2 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff3 = GenerateRandomIntegerExcluding0 (-5, 6);                       		                       
+					a = GenerateRandomIntegerExcluding0 (-5, 6);                       		                       
+					b = GenerateRandomIntegerExcluding0 (-5, 6);                       		                       
+					c = GenerateRandomIntegerExcluding0 (-5, 6);                       		                       
+					                            
+					expression1 = AlgebraicDisplayForm (coeff1, "\\aalgebra\\balgebra\\calgebra", true) + AlgebraicDisplayForm (coeff2, "\\aalgebra^2\\balgebra\\calgebra^0");
+					expression2 = AlgebraicDisplayForm (coeff3, "(2\\aalgebra\\balgebra^0\\calgebra)", true);
+		            expression3 = "\\frac{" + expression1 + "}{" + expression2 + "}";
+
+					QuestionText.text = "Solve for a = " + a + ", b = " + b + ", c = " + c + ".\n(Answer in fraction.)" ;
+                    int tempAns = ((coeff1 * a * b * c) + (coeff2 * a * a * b));
+                    int tempAns2 = (coeff3 * 2 * a * c);
+					int hcf = MathFunctions.GetHCF (Mathf.Abs (tempAns), Mathf.Abs (tempAns2));
+					if (hcf != Mathf.Abs (tempAns2))
+					{
+						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf) + "/" + Mathf.Abs (tempAns2/hcf);                        
+					} else
+					{
+						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf);                        
+					}
+                }              
+				else if (selector == 3)
+                {
+					coeff1 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff2 = Random.Range (-5, 6);
+					coeff3 = Random.Range (-5, 6);
+					do {
+						coeff4 = GenerateRandomIntegerExcluding0 (-5, 6);
+						coeff5 = Random.Range (-5, 6);
+						coeff6 = Random.Range (-5, 6);
+						a = Random.Range (-5, 6);
+						b = Random.Range (-5, 6);
+						c = Random.Range (-5, 6);
+					} while (((coeff4 * a * b) + (coeff5 * c * a) + (coeff6 * b * c)) == 0);
+
+					expression1 = AlgebraicDisplayForm (coeff1, "\\aalgebra^2", true) + AlgebraicDisplayForm (coeff2, "\\balgebra\\calgebra") + AlgebraicDisplayForm (coeff3, "\\calgebra^2");
+					expression2 = AlgebraicDisplayForm (coeff4, "\\aalgebra\\balgebra", true) + AlgebraicDisplayForm (coeff5, "\\calgebra\\aalgebra") + AlgebraicDisplayForm (coeff6, "\\balgebra\\calgebra");
+                    expression3 = "\\frac{" + expression1 + "}{" + expression2 + "}";
+					     
+					QuestionText.text = "Solve for a = " + a + ", b = " + b + ", c = " + c + ".\n(Answer in fraction.)" ;
+                    int tempAns = (coeff1 * a * a + coeff2 * b * c + coeff3 * c * c);
+                    int tempAns2  = ((coeff4 * a * b) + (coeff5 * c * a) + (coeff6 * b * c));
+					int hcf = MathFunctions.GetHCF (Mathf.Abs (tempAns), Mathf.Abs (tempAns2));
+					if (hcf != Mathf.Abs (tempAns2))
+					{
+						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf) + "/" + Mathf.Abs (tempAns2/hcf);                        
+					} else
+					{
+						Answer = NegativeSign (tempAns * tempAns2) + Mathf.Abs (tempAns/hcf);                        
+					}                    
+				}
+				else if (selector == 4)           // Power
                 {   
 					int randSelector = Random.Range (1, 5);
 
@@ -921,8 +419,6 @@ namespace Cerebro
                         Answer = tempAns.ToString("F2");
                         if (tempSel == 0)
                             Answer =  " 1/" + tempAns.ToString();
-
-
                     }
 					else if (randSelector == 3)
                     {
@@ -930,7 +426,6 @@ namespace Cerebro
                         b = Random.Range(1, 5);
                         c = Random.Range(1, 5);
                         x = Random.Range(1, 3);
-                        
 
 						expression3 = "{(\\aalgebra^2\\balgebra\\calgebra)}^{\\xalgebra}\\xalgebra\\yalgebra";
 
@@ -946,10 +441,7 @@ namespace Cerebro
 						expression3 = "\\aalgebra^{\\aalgebra}";
 
 						QuestionText.text = "Solve for a = " + a + ".";
-
 						int tempAns = (int)Mathf.Pow(a,a);
-
-
 						Answer = tempAns.ToString() ;
 					}
 				}
@@ -960,231 +452,80 @@ namespace Cerebro
             #region level3
             if (level == 3)                     // brackets
             {
-				selector = GetRandomSelector (1, 3);
+				selector = GetRandomSelector (1, 5);
 
 				if (selector == 1) 
+           	 	{
+					coeff1 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff2 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff3 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff4 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff5 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff6 = GenerateRandomIntegerExcluding0 (-5, 6);
+                    x = Random.Range(-3, 4);
+                    y = Random.Range(-3, 4);                                      
+
+					expression1 = "({" + AlgebraicDisplayForm (coeff2, "\\xalgebra^3\\yalgebra^2", true) + AlgebraicDisplayForm (coeff3, "\\yalgebra^2") + "})";
+					expression2 = "({" + AlgebraicDisplayForm (coeff5, "\\xalgebra^3\\yalgebra^2", true) + AlgebraicDisplayForm (coeff6, "\\yalgebra^2") + "})";
+					expression3 = AlgebraicDisplayForm (coeff1, expression1, true) + AlgebraicDisplayForm (coeff4, expression2);
+
+					QuestionText.text = "Solve for x = " + x + ", y = " + y + ".";
+                    int tempAns = (coeff1 * ((coeff2 * x * x * x * y * y) + (coeff3 * y * y)))+ (coeff4 * ((coeff5 * x * x * x * y * y) + (coeff6 * y *y)));
+                    Answer = tempAns.ToString();
+				}
+				else if (selector == 2)                //x-[y-{z2-(x+y)0}]
                 {
-					int randSelector = Random.Range (1, 3);
+					coeff1 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff2 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff3 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff4 = GenerateRandomIntegerExcluding0 (-5, 6);
+					coeff5 = GenerateRandomIntegerExcluding0 (-5, 6);
 
-					if (randSelector == 1) // (x3y2 + y2)- (x3y2 - y2)
-                    {
-						coeff1 = GenerateRandomIntegerExcluding0 (-5, 5);
-						coeff2 = GenerateRandomIntegerExcluding0 (-5, 5);
-						coeff3 = GenerateRandomIntegerExcluding0 (-5, 5);
-						coeff4 = GenerateRandomIntegerExcluding0 (-5, 5);
-						coeff5 = GenerateRandomIntegerExcluding0 (-5, 5);
-						coeff6 = GenerateRandomIntegerExcluding0 (-5, 5);
-                        x = Random.Range(-3, 4);
-                        y = Random.Range(-3, 4);                                      
+                    x = Random.Range(-5, 6);
+                    y = Random.Range(-5, 6);
+                    z = Random.Range(-3, 4);
+                    int pow1 = Random.Range(0, 3);
 
-                        if (coeff2 == 1)
-                        {
-                            if (coeff3 == 1)
-                                expression1 = "\\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
-                            else if (coeff3 == -1)
-                                expression1 = "\\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
-                            else if (coeff3 > 1)
-                                expression1 = "\\xalgebra^3\\yalgebra^2 +" + coeff3 + " \\yalgebra^2";
-                            else 
-								expression1 = "\\xalgebra^3\\yalgebra^2 " + coeff3 + " \\yalgebra^2";
-                        }
-                        else if (coeff2 == -1)
-                        {
-                            if (coeff3 == 1)
-                                expression1 = "- \\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
-                            else if (coeff3 == -1)
-                                expression1 = "- \\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
-                            else if (coeff3 > 1)
-                                expression1 = "- \\xalgebra^3\\yalgebra^2 +" + coeff3 + " \\yalgebra^2";
-                            else 
-								expression1 = "- \\xalgebra^3\\yalgebra^2 " + coeff3 + " \\yalgebra^2";
-                        }
-                        else
-                        {
-                            if (coeff3 == 1)
-                                expression1 = coeff2 + "\\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
-                            else if (coeff3 == -1)
-                                expression1 = coeff2 + "\\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
-                            else if (coeff3 > 1)
-                                expression1 = coeff2 + "\\xalgebra^3\\yalgebra^2 +" + coeff3 + " \\yalgebra^2";
-                            else 
-								expression1 = coeff2 + "\\xalgebra^3\\yalgebra^2 " + coeff3 + " \\yalgebra^2";
-                        }
+					expression1 = AlgebraicDisplayForm (coeff4, "\\xalgebra", true) + AlgebraicDisplayForm (coeff5, "\\yalgebra");
+					expression1 = "{(" + expression1 + ")}^" + pow1;
+					expression1 = AlgebraicDisplayForm (coeff3, expression1);
+					expression1 = "\\lbrace{\\zalgebra^2 " + expression1 + "}\\rbrace";
+					expression1 = AlgebraicDisplayForm (coeff2, expression1);
+					expression1 = "[{\\yalgebra " + expression1 + "}]";
+					expression1 = AlgebraicDisplayForm (coeff3, expression1);
+                    expression3 = "x" + expression1;
 
-                        if (coeff1 == 1)
-                            expression1 = "(" + expression1 + ")";
-                        else if (coeff1 == -1)
-                            expression1 = "-(" + expression1 + ")";
-                        else 
-							expression1 = coeff1 + "(" + expression1 + ")";
-
-                        // second term
-                        
-                        if (coeff5 == 1)
-                        {
-                            if (coeff6 == 1)
-                                expression2 = "\\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
-                            else if (coeff6 == -1)
-                                expression2 = "\\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
-                            else if (coeff6 > 1)
-                                expression2 = "\\xalgebra^3\\yalgebra^2 +" + coeff6 + " \\yalgebra^2";
-                            else 
-								expression2 = "\\xalgebra^3\\yalgebra^2 " + coeff6 + " \\yalgebra^2";
-                        }
-                        else if (coeff5 == -1)
-                        {
-                            if (coeff6 == 1)
-                                expression2 = "- \\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
-                            else if (coeff6 == -1)
-                                expression2 = "- \\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
-                            else if (coeff6 > 1)
-                                expression2 = "- \\xalgebra^3\\yalgebra^2 +" + coeff6 + " \\yalgebra^2";
-                            else 
-								expression2 = "- \\xalgebra^3\\yalgebra^2 " + coeff6 + " \\yalgebra^2";
-                        }
-                        else
-                        {
-                            if (coeff6 == 1)
-                                expression2 = coeff5 + "\\xalgebra^3\\yalgebra^2 + \\yalgebra^2";
-                            else if (coeff6 == -1)
-                                expression2 = coeff5 + "\\xalgebra^3\\yalgebra^2 - \\yalgebra^2";
-                            else if (coeff6 > 1)
-                                expression2 = coeff5 + "\\xalgebra^3\\yalgebra^2 +" + coeff6 + " \\yalgebra^2";
-                            else 
-								expression2 = coeff5 + "\\xalgebra^3\\yalgebra^2 " + coeff6 + " \\yalgebra^2";
-                        }
-
-                        if (coeff4 == 1)
-                            expression2 = "+ (" + expression2 + ")";
-                        else if (coeff4 == -1)
-                            expression2 = "- (" + expression2 + ")";
-                        else if (coeff4 >= 0)
-                            expression2 = " + " + coeff4 + "(" + expression2 + ")";
-                        else 
-							expression2 = coeff4 + "(" + expression2 + ")";
-
-                        expression3 = expression1 + expression2;
-
-						QuestionText.text = "Solve for x = " + x + ", y = " + y + ".";
-
-                        int tempAns = (coeff1 * ((coeff2 * x * x * x * y * y) + (coeff3 * y * y)))+ (coeff4 * ((coeff5 * x * x * x * y * y) + (coeff6 * y *y)));
-
-
-                       Answer = tempAns.ToString();
-
-                    }
-					else if (randSelector == 2)                //x-[y-{z2-(x+y)0}]
-                    {
-						coeff1 = GenerateRandomIntegerExcluding0 (-5, 5);
-						coeff2 = GenerateRandomIntegerExcluding0 (-5, 5);
-						coeff3 = GenerateRandomIntegerExcluding0 (-5, 5);
-						coeff4 = GenerateRandomIntegerExcluding0 (-5, 5);
-						coeff5 = GenerateRandomIntegerExcluding0 (-5, 5);
-
-                        x = Random.Range(-5, 5);
-                        y = Random.Range(-5, 5);
-                        z = Random.Range(-3, 4);
-             
-                        int pow1 = Random.Range(0, 3);
-
-                        if (coeff5 == 1)
-                            expression1 = "+ \\yalgebra";
-                        else if (coeff5 == -1)
-                            expression1 = "- \\yalgebra";
-                        else if (coeff5 < -1)
-                            expression1 = coeff5 + "\\yalgebra";
-                        else if (coeff5 > 1)
-                            expression1 = " + " + coeff5 + "\\yalgebra";
-
-                        if (coeff4 == 1)
-                            expression1 = "x" + expression1;
-                        else if (coeff4 == -1)
-                            expression1 = "-x" + expression1;
-                        else 
-							expression1 = coeff4 + "\\xalgebra" + expression1;
-
-
-						expression1 = "{(" + expression1 + ")}^" + pow1;
-
-                        if (coeff3 == 1)
-                            expression1 = " + " + expression1;
-                        else if (coeff3 == -1)
-                            expression1 = " - " + expression1;
-                        else if (coeff3 > 1)
-                            expression1 = " + " + coeff3 + expression1;
-                        else 
-							expression1 = coeff3 + expression1;
-                    
-
-						expression1 = "\\lbrace{\\zalgebra^2 " + expression1 + "}\\rbrace";
-
-                        if (coeff2 == 1)
-                            expression1 = " + " + expression1;
-                        else if (coeff2 == -1)
-                            expression1 = " - " + expression1;
-                        else if (coeff2 > 1)
-                            expression1 = " + " + coeff2 + expression1;
-                        else if (coeff2 < -1)
-                            expression1 = coeff2 + expression1;
-
-						expression1 = "[{\\yalgebra " + expression1 + "}]";
-
-
-                        if (coeff1 == 1)
-                            expression1 = " + " + expression1;
-                        else if (coeff1 == -1)
-                            expression1 = " - " + expression1;
-                        else if (coeff1 > 1)
-                            expression1 = " + " + coeff1 + expression1;
-                        else if (coeff1 < -1)
-                            expression1 = coeff1 + expression1;
-
-                        expression3 = " x " + expression1;
-
-						QuestionText.text = "Solve for x = " + x + ", y = " + y + ", z = " + z + ".";
-
-                        int tempAns = x + coeff1 * (y +  (coeff2 * ((int)Mathf.Pow(z, 2) + coeff3 * ((int)Mathf.Pow((coeff4 * x + coeff5 * y), pow1)))));    //x-[y-{z2-c3*(c4*x+c5*y)^pow1}]
-
-
-                        Answer = tempAns.ToString();
-
-                    }
-                   
+					QuestionText.text = "Solve for x = " + x + ", y = " + y + ", z = " + z + ".";
+                    int tempAns = x + coeff1 * (y +  (coeff2 * ((int)Mathf.Pow(z, 2) + coeff3 * ((int)Mathf.Pow((coeff4 * x + coeff5 * y), pow1)))));    //x-[y-{z2-c3*(c4*x+c5*y)^pow1}]
+                    Answer = tempAns.ToString();
                 }
-				else if (selector == 2)
-                {            
-					int randSelector = Random.Range (1, 3);
+				else if (selector == 3)
+           		{            
+					int v = Random.Range(-25, 25);   // v
+					int u = Random.Range(-25, 25);   // u
+					int t = GenerateRandomIntegerExcluding0 (-25, 25);   // t
 
-					if (randSelector == 1)
+					while ((v - u) % t != 0 || v == u || Mathf.Abs (v - u) == t)
 					{
-						int v = Random.Range(-25, 25);   // v
-						int u = Random.Range(-25, 25);   // u
-						int t = Random.Range(-25, 25);   // t
-
-						while ((v - u) % t != 0 || v == u || Mathf.Abs (v - u) == t)
-						{
-							u = Random.Range(-25, 25);   
-							t = Random.Range(-25, 25);
-						}
-						QuestionText.text = "Using first equation of motion : v = u + at, determine the value of a.\nGiven : v = " + v + ", u = " + u + ", t = " + t + ".";
-                        expression3 = "";
-                        
-						Answer = ((v - u) / t).ToString();
-                    }
-					else if (randSelector == 2)
-                    {
-                        x = Random.Range(-25, 25);   
-                        y = Random.Range(-25, 25);
-
-						QuestionText.text = "The equation of a circle with radius \'r\' is given below. Find the value of r,\nif x = " + x + ", y = " + y + " (round to two decimal places).";
-                        expression3 = "\\xalgebra^2 + \\yalgebra^2 = \\ralgebra^2";
-						float tempAns = MathFunctions.GetRounded (Mathf.Sqrt(x * x + y * y), 2);
-                        Answer = tempAns.ToString();
-                    }
+						u = Random.Range(-25, 25);   
+						t = GenerateRandomIntegerExcluding0(-25, 25);
+					}
+					QuestionText.text = "Using first equation of motion : v = u + at, determine the value of a.\nGiven : v = " + v + ", u = " + u + ", t = " + t + ".";
+                    expression3 = "";
+                    
+					Answer = ((v - u) / t).ToString();
                 }
+				else if (selector == 4)
+                {
+                    x = Random.Range(-25, 25);   
+                    y = Random.Range(-25, 25);
 
+					QuestionText.text = "The equation of a circle with radius \'r\' is given below. Find the value of r,\nif x = " + x + ", y = " + y + " (round to two decimal places).";
+                    expression3 = "\\xalgebra^2 + \\yalgebra^2 = \\ralgebra^2";
+					float tempAns = MathFunctions.GetRounded (Mathf.Sqrt(x * x + y * y), 2);
+                    Answer = tempAns.ToString();
+                }
                 QuestionTEX.text = expression3;
-
             }
             #endregion level3
 			#region level4
@@ -1305,13 +646,13 @@ namespace Cerebro
 			if (constant == 0) {
 				return "";
 			} else if (constant > 0) {
-				if (constant == 1){
+				if (constant == 1 && variable != ""){
 					str = "+";
 				} else {
 					str = "+" + constant;
 				}
 			} else {
-				if (constant == -1){
+				if (constant == -1 && variable != ""){
 					str = "-";
 				} else {
 					str = "-" + (-constant);
@@ -1319,6 +660,40 @@ namespace Cerebro
 			}
 			str += variable;
 			if (isFirstTerm && constant > 0) {
+				return str.Substring (1);
+			} else {
+				return str;	
+			}
+		}
+
+		public string AlgebraicDisplayFormFraction (int numerator, int denominator, string variable, bool isFirstTerm = false)
+		{
+			if (denominator == 0) {
+				Debug.Log ("ERROR : Denominator = 0");
+				return "";
+			}
+			if (numerator == 0) {
+				return "";
+			}
+			if (denominator == 1) {
+				return AlgebraicDisplayForm (numerator, variable, isFirstTerm);
+			}
+			if (denominator == -1) {
+				return AlgebraicDisplayForm (-numerator, variable, isFirstTerm);
+			}
+			string str = "";
+
+			if (numerator > 0 && denominator > 0) {
+				str = "+\\frac{" + numerator + "}{" + denominator + "}";
+			} else if (numerator < 0 && denominator > 0) {
+				str = "-\\frac{" + (-numerator) + "}{" + denominator + "}";
+			} else if (numerator < 0 && denominator < 0) {
+				str = "+\\frac{" + (-numerator) + "}{" + (-denominator) + "}";
+			} else if (numerator > 0 && denominator < 0) {
+				str = "-\\frac{" + numerator + "}{" + (-denominator) + "}";
+			}
+			str += variable;
+			if (isFirstTerm && str[0] == '+') {
 				return str.Substring (1);
 			} else {
 				return str;	
