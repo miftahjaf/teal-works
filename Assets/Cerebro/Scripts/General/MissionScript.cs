@@ -212,7 +212,9 @@ namespace Cerebro
 			CerebroHelper.DebugLog ("START");
 
 //			FG.transform.localPosition = new Vector2 (228f, -768f);
-			UpdateMission();
+			if (CerebroHelper.isTestUser ()) {
+				UpdateMission ();
+			}
 		}
 
 		public void UpdateMission() {

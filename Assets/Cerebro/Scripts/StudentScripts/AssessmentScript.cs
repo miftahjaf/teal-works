@@ -5,6 +5,7 @@ using MaterialUI;
 using System.IO;
 using System.Collections.Generic;
 using SimpleJSON;
+using UnityEngine.UI.ProceduralImage;
 
 namespace Cerebro
 {
@@ -56,6 +57,9 @@ namespace Cerebro
 
 		public bool isMissionCompleted = false;
 
+		public Slider masterySlider;
+		public Text backButtonText;
+
 		// Use this for initialization
 		void Start ()
 		{
@@ -89,9 +93,36 @@ namespace Cerebro
 		{
 			GetComponent<RectTransform> ().sizeDelta = new Vector2 (0f, 0f);
 			chooseAssessment = _chooseAssessment;
+
 			mPracticeName = _title;
 			mPracticeName = mPracticeName.Trim ();
-			title.text = StringHelper.RemoveNumbers (_title);
+			string backButtonTitle = "Practice";
+			if (!KCID.Equals (""))
+			{
+				if (LaunchList.instance.mKCMastery.ContainsKey (KCID)) {
+					UpdateMasterySlider (LaunchList.instance.mKCMastery [KCID]);
+				} else {
+					UpdateMasterySlider (0);
+				}
+				title.text = "";
+				if(LaunchList.instance.mPracticeItems.ContainsKey(practiceId) && LaunchList.instance.mPracticeItems [practiceId].KnowledgeComponents.ContainsKey(KCID))
+				{
+					backButtonTitle = LaunchList.instance.mPracticeItems [practiceId].KnowledgeComponents [KCID].KCName;
+				}
+			}
+			else 
+			{
+				title.text = StringHelper.RemoveNumbers (_title);
+				masterySlider.gameObject.SetActive (false);
+			}
+
+			if (testMode && backButtonTitle.Length > 10) {
+				backButtonTitle = backButtonTitle.Substring (0, 10) +"...";
+			} else if (backButtonTitle.Length > 30) {
+				backButtonTitle = backButtonTitle.Substring (0, 30) +"...";
+			}
+
+			backButtonText.text = backButtonTitle;
 
 			GameObject gameobject = PrefabManager.InstantiateGameObject (assessmentType, gameObject.transform);
 			gameobject.transform.SetAsFirstSibling ();
@@ -106,6 +137,8 @@ namespace Cerebro
 			baseAssessment.KCID = KCID;
 			baseAssessment.testMode = testMode;
 
+
+			
 			if (testMode) {
 				testingText.gameObject.SetActive (true);
 				regenButton.gameObject.SetActive (!WelcomeScript.instance.testingAllScreens);
@@ -448,6 +481,11 @@ namespace Cerebro
 			if (LaunchList.instance.mKCMastery.ContainsKey (KCID)) 
 			{
 				oldProficiency = LaunchList.instance.mKCMastery [KCID]/100f;
+
+				if (oldProficiency < 0.05f) 
+				{
+					oldProficiency = 0.05f;
+				}
 			}
 
 			int newProficiency = 0;
@@ -478,6 +516,7 @@ namespace Cerebro
 				LaunchList.instance.mKCMastery.Add (KCID,newProficiency);
 		
 			}
+
 			if (LaunchList.instance.mPracticeItems.ContainsKey (practiceID) &&  LaunchList.instance.mPracticeItems [practiceID].KnowledgeComponents.ContainsKey(KCID))
 			{
 				KnowledgeComponent KC = LaunchList.instance.mPracticeItems [practiceID].KnowledgeComponents[KCID];
@@ -485,6 +524,7 @@ namespace Cerebro
 			}
 
 			LaunchList.instance.UpdateKCMastery ();
+			UpdateMasterySlider (newProficiency);
 		}
 			
 		string MaxCoinsReached (string practiceID)
@@ -664,6 +704,35 @@ namespace Cerebro
 //				StartCoroutine (startChapters ());
 //			}
 		}
-			
+
+		public void UpdateMasterySlider(int mastery)
+		{
+			if (mastery >= 99) {
+				mastery = 100;
+			}
+			//masterySlider.value = mastery / 100f;
+			masterySlider.transform.Find ("MasteryText").GetComponent<Text> ().text = "Mastery " + mastery + "%";
+			masterySlider.fillRect.GetComponent<ProceduralImage> ().color = GetColor (mastery);
+			if (mastery >= 95f) {
+				masterySlider.fillRect.GetComponent<FreeModifier> ().Radius = new Vector4 (100f, 100f, 100f, 100f);
+			} else {
+				masterySlider.fillRect.GetComponent<FreeModifier> ().Radius = new Vector4 (100f,0f, 0f, 100f);
+			}
+
+			GoTween masterySliderTween = new GoTween(masterySlider, 0.5f, new GoTweenConfig().floatProp("value",mastery / 100f));
+			Go.addTween (masterySliderTween);
+		}
+		
+		public Color GetColor(int mastery)
+		{
+			if (mastery == 0)
+				return CerebroHelper.HexToRGB ("9A9AA4");
+			if (mastery >= 95f)
+				return CerebroHelper.HexToRGB ("24C8A6");
+
+			return CerebroHelper.HexToRGB ("FDD000");
+		}
 	}
+
+
 }

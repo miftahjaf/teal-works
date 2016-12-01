@@ -3198,7 +3198,7 @@ namespace Cerebro
 
 		public void LoadKCMastery()
 		{
-			string fileName = Application.persistentDataPath + "/KCsMastery.txt";
+			string fileName = Application.persistentDataPath + "/KCsMasteryUpdated.txt";
 			proficiencyConstants = new ProficiencyConstants ();
 			if (File.Exists (fileName)) 
 			{
@@ -3237,7 +3237,7 @@ namespace Cerebro
 		public void UpdateKCProficiencyConstants(JSONNode proficiency)
 		{
 			Debug.Log ("Update KC proficiency constants");
-			string fileName = Application.persistentDataPath + "/KCsMastery.txt";
+			string fileName = Application.persistentDataPath + "/KCsMasteryUpdated.txt";
 			JSONNode jsonNode;
 			if (File.Exists (fileName)) {
 				string json = File.ReadAllText (fileName);
@@ -3262,7 +3262,7 @@ namespace Cerebro
 
 		public void UpdateKCMastery()
 		{
-			string fileName = Application.persistentDataPath + "/KCsMastery.txt";
+			string fileName = Application.persistentDataPath + "/KCsMasteryUpdated.txt";
 			JSONNode jsonNode;
 			if (File.Exists (fileName))
 			{

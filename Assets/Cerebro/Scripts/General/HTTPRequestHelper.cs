@@ -31,7 +31,7 @@ namespace Cerebro
 
 		//		private string SERVER_URL = "http://192.168.1.28:3000/";
 		private string SERVER_URL = "https://teal-server.herokuapp.com/";
-//		private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
+		//private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
 		private string SERVER_NEW_URL ="http://apis.aischool.net/";
 		//private string SERVER_NEW_URL ="http://10.0.4.237:3000/";
 		public event EventHandler MoveValidated;
@@ -801,7 +801,7 @@ namespace Cerebro
 
 		public void GetKCMastery()
 		{
-			string fileName = Application.persistentDataPath + "/KCsMastery.txt";
+			string fileName = Application.persistentDataPath + "/KCsMasteryUpdated.txt";
 			if (File.Exists (fileName)) 
 			{
 				string json = File.ReadAllText (fileName);
@@ -853,9 +853,9 @@ namespace Cerebro
 			try {
 
 				WWWForm form = new WWWForm ();
-				form.AddField ("grade", PlayerPrefs.GetString (PlayerPrefKeys.GradeKey,"0"));
+				form.AddField ("student_id", PlayerPrefs.GetString (PlayerPrefKeys.IDKey,"0"));
 				Debug.Log("Load practice items");
-				CreatePostRequestSimpleJSON (SERVER_URL + "practice_item/with_kc",form, (jsonResponse) => {
+				CreatePostRequestSimpleJSON (SERVER_URL + "practice_item/get_practice_items_for_student",form, (jsonResponse) => {
 					if (jsonResponse != null && jsonResponse.ToString () != "") {
 						LaunchList.instance.mQuizAnalytics.Clear ();
 						StreamWriter sr = File.CreateText (fileName);	
