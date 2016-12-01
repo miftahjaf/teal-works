@@ -225,7 +225,7 @@ namespace Cerebro
                 if (selector == 1)
                 {
 					int randSelector = Random.Range(0, 2);
-					Debug.Log ("randSelector = " + randSelector);
+
                     if (randSelector == 1)
                     {
                         if (coeff1 == 0)
@@ -385,7 +385,7 @@ namespace Cerebro
                 else if (selector == 2)
                 {
 					int randSelector = Random.Range(1, 3);
-					Debug.Log ("randSelector = " + randSelector);
+
                     if (randSelector == 1)
                     {
 						coeff1 = GenerateRandomIntegerExcluding01 (-5, 6);
@@ -623,7 +623,7 @@ namespace Cerebro
                     b = Random.Range(-5, 5);
                     c = Random.Range(-5, 5);
 					int randSelector = Random.Range (1, 4);
-					Debug.Log ("randSelector = " + randSelector);
+
                     if (randSelector == 1)
                     {
                         coeff1 = Random.Range(-5, 5);
@@ -894,7 +894,7 @@ namespace Cerebro
 				else if (selector == 2)           // Power
                 {   
 					int randSelector = Random.Range (1, 5);
-					Debug.Log ("randSelector = " + randSelector);
+
 					if (randSelector == 1)
                     {
                         a = Random.Range(1, 7);
@@ -965,7 +965,7 @@ namespace Cerebro
 				if (selector == 1) 
                 {
 					int randSelector = Random.Range (1, 3);
-					Debug.Log ("randSelector = " + randSelector);
+
 					if (randSelector == 1) // (x3y2 + y2)- (x3y2 - y2)
                     {
 						coeff1 = GenerateRandomIntegerExcluding0 (-5, 5);
@@ -1154,7 +1154,7 @@ namespace Cerebro
 				else if (selector == 2)
                 {            
 					int randSelector = Random.Range (1, 3);
-					Debug.Log ("randSelector = " + randSelector);
+
 					if (randSelector == 1)
 					{
 						int v = Random.Range(-25, 25);   // v
