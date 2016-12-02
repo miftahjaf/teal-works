@@ -587,11 +587,11 @@ namespace Cerebro
 					for (int i = 0; i < 11; i++)
 						coeff.Add (Random.Range (2, 10));
 
-					coeff1 = coeff[0] * coeff[1] - coeff[4] * coeff[5] - coeff[9];
+					coeff1 = coeff[0] * coeff[1] - coeff[4] * coeff[5] - coeff[8];
 					coeff2 = -coeff[0] * coeff[2] + coeff[4] * coeff[6] + coeff[8] * coeff[9];
 					coeff3 = coeff[0] * coeff[3] + coeff[4] * coeff[7] - coeff[8] * coeff[10];	
 
-					QuestionTEX.text = string.Format ("{0}{11}({1}{12}{13} - {2}{12} + {3}) - {4}{11}({5}{12}{13} - {6}{12} + {7}) - {8}{11}({12}{13} - {9}{13} + {10})", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], coeff[5], coeff[6], coeff[7], coeff[8], coeff[9], coeff[10], "x".Algebra (), "y".Algebra (), "z".Algebra ());
+					QuestionTEX.text = string.Format ("{0}{11}({1}{12}{13} - {2}{13} + {3}) - {4}{11}({5}{12}{13} - {6}{13} - {7}) - {8}{11}({12}{13} - {9}{13} + {10})", coeff[0], coeff[1], coeff[2], coeff[3], coeff[4], coeff[5], coeff[6], coeff[7], coeff[8], coeff[9], coeff[10], "x".Algebra (), "y".Algebra (), "z".Algebra ());
 					Answer = string.Format ("{0}{1}{2}", AlgebraicDisplayForm (coeff1, "x".Algebra () + "y".Algebra () + "z".Algebra (), true), AlgebraicDisplayForm (coeff2, "x".Algebra () + "z".Algebra ()), AlgebraicDisplayForm (coeff3, "x".Algebra ()));
 				}
 				else if (selector == 6)  // c1x - c2y - [c3x - c4y - {c5x - y - (x + c6y)}]
