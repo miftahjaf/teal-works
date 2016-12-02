@@ -202,6 +202,7 @@ namespace Cerebro
 			mLeaderboard.Clear ();
 			mExplanation.Clear ();
 			mGameStatus.Clear ();
+			missionData.Clear ();
 
 			PlayerPrefs.DeleteAll ();
 			DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath);

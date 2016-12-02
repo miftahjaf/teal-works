@@ -712,10 +712,13 @@ namespace Cerebro
             }
             else if (value == 10)
             {    //Back
-                if (userAnswerLaText.text.Length > 0)
-                {
-                    userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
-                }
+				if (checkLastTextFor (new string[3] { "\\xalgebra", "\\yalgebra", "\\zalgebra" })) {
+					userAnswerLaText.text = userAnswerLaText.text.Substring (0, userAnswerLaText.text.Length - 9);
+				} else {
+					if (userAnswerLaText.text.Length > 0) {
+						userAnswerLaText.text = userAnswerLaText.text.Substring (0, userAnswerLaText.text.Length - 1);
+					}
+				}
             }
             else if (value == 11)
             {   // /
@@ -750,7 +753,7 @@ namespace Cerebro
 			{   // :
 				if (checkLastTextFor(new string[1] { "\\xalgebra" }))
 				{
-					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
+					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 9);
 				}
 				userAnswerLaText.text += "\\xalgebra";
 			}
@@ -758,7 +761,7 @@ namespace Cerebro
 			{   // :
 				if (checkLastTextFor(new string[1] { "\\yalgebra" }))
 				{
-					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
+					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 9);
 				}
 				userAnswerLaText.text += "\\yalgebra";
 			}
@@ -766,7 +769,7 @@ namespace Cerebro
 			{   // :
 				if (checkLastTextFor(new string[1] { "\\zalgebra" }))
 				{
-					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
+					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 9);
 				}
 				userAnswerLaText.text += "\\zalgebra";
 			}

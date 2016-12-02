@@ -35,6 +35,12 @@ namespace Cerebro
 			return isCompleted;
 		}
 
+		public void Clear()
+		{
+			this.dataList.Clear ();
+			SaveData ();
+		}
+
 		public int GetNotCompletedMissionCount()
 		{
 			return dataList.FindAll (x => x.endTime == "").Count;
