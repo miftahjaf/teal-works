@@ -12,6 +12,28 @@ namespace Cerebro {
 		public static char min = '\'';
 		public static char sec = '\"';
 
+		public static int GenerateRandomIntegerExcluding0 (int minRange, int maxRange)
+		{
+			int randNumber = Random.Range (minRange, maxRange);
+			while (randNumber == 0) {
+				randNumber = Random.Range (minRange, maxRange);
+			}
+			return randNumber;
+		}
+
+		public static int AddCyclic (int addend1, int addend2, int periodOfCycle, int minValueOfCycle = 0)  //Negi - Adds two numbers (+ve and/or -ve) cyclically (addend + periodOfCycle = addend)
+		{
+			int sum = addend1 + addend2;
+			int maxValueOfCycle = periodOfCycle + minValueOfCycle;  // maxValueOfCycle is the minimum number greater than minValueOfCycle whose value equal to minValueOfCycle cyclically
+			while (sum >= maxValueOfCycle) {
+				sum -= periodOfCycle;
+			}
+			while (sum < minValueOfCycle) {
+				sum += periodOfCycle;
+			}
+			return sum;
+		}
+
 		public static int GetHCF(int a, int b) 
 		{
 			return b == 0 ? a : GetHCF(b, a % b);
@@ -284,6 +306,15 @@ namespace Cerebro {
 		public static Vector2 PointAtDirection(Vector2 origin,float angle,float radius)
 		{
 			return new Vector2(origin.x+radius * Mathf.Cos(Mathf.Deg2Rad * angle), origin.y+radius*Mathf.Sin(Mathf.Deg2Rad*angle));
+		}
+
+		public static Vector2 RotatePoint (float angle, Vector2 PointToRotate, Vector2 origin)  // Negi - rotate a point about another point (origin) (angle is +ve anticlockwise)
+		{
+			angle += GetangleBetweenPoints (origin, PointToRotate);             
+			while (angle < 0) { 
+				angle += 360;
+			}
+			return PointAtDirection (origin, angle, Vector2.Distance (origin, PointToRotate)); 
 		}
 
 		public static float GetangleBetweenPoints (Vector2 point1, Vector2 point2)
