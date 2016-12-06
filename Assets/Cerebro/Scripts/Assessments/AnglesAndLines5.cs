@@ -470,6 +470,7 @@ namespace Cerebro
 					diagramHelper.AddLinePoint (new LinePoint ("E", Vector2.zero, AOE + AOB + COB + randAngle, true, 100));
 					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, EOD + AOE + AOB + COB + randAngle, true, 100));
 
+					diagramHelper.ShiftPosition (new Vector2 (0, 20));
 					diagramHelper.Draw ();
 					QuestionLatext.text = "In the given figure, which of the angles are adjacent?";
 
