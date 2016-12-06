@@ -556,10 +556,10 @@ namespace Cerebro
 				}
 				userAnswerText.text += "/";
 			} else if (value == 13) {   // ,
-				if (checkLastTextFor (new string[1]{ "," })) {
+				if (checkLastTextFor (new string[1]{ "." })) {
 					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
 				}
-				userAnswerText.text += ",";
+				userAnswerText.text += ".";
 			} else if (value == 14) {   // -
 				if (checkLastTextFor (new string[1]{ "-" })) {
 					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);

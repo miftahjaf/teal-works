@@ -336,7 +336,7 @@ namespace Cerebro
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (65, 0), 130, true, 60));
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (65, 0), 310, true, 60));
 					}
-					diagramHelper.ShiftPosition (new Vector2 (0, 65));
+					diagramHelper.ShiftPosition (new Vector2 (0, 30));
 					diagramHelper.Draw ();
 					QuestionLatext.text = "What type of lines are the following?";
 
@@ -365,7 +365,7 @@ namespace Cerebro
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 240, true, 60));
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 300, true, 60));
 					}
-					diagramHelper.ShiftPosition (new Vector2 (0, 65));
+					diagramHelper.ShiftPosition (new Vector2 (0, 30));
 					diagramHelper.Draw ();
 					QuestionLatext.text = "What type of lines are the following?";
 
@@ -393,7 +393,7 @@ namespace Cerebro
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 225, true, 60));
 						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 315, true, 60));
 					}
-					diagramHelper.ShiftPosition (new Vector2 (0, 65));
+					diagramHelper.ShiftPosition (new Vector2 (0, 30));
 					diagramHelper.Draw ();
 					QuestionLatext.text = "What type of lines are the following?";
 
@@ -470,9 +470,7 @@ namespace Cerebro
 					diagramHelper.AddLinePoint (new LinePoint ("E", Vector2.zero, AOE + AOB + COB + randAngle, true, 100));
 					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, EOD + AOE + AOB + COB + randAngle, true, 100));
 
-					diagramHelper.ShiftPosition (new Vector2 (0, 50));
 					diagramHelper.Draw ();
-					diagramHelper.SetScale (0.8f);
 					QuestionLatext.text = "In the given figure, which of the angles are adjacent?";
 
 					SetMCQMode ();
@@ -498,7 +496,7 @@ namespace Cerebro
 					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, 180f + randAngle, true, 90));
 					diagramHelper.AddLinePoint (new LinePoint ("E", Vector2.zero, 180f + AOB + randAngle, true, 90));
 
-					diagramHelper.ShiftPosition (new Vector2 (0, 25));
+					diagramHelper.ShiftPosition (new Vector2 (0, 20));
 					diagramHelper.Draw ();
 
 					if (selector == 3)
