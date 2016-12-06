@@ -17,6 +17,7 @@ namespace Cerebro
 		public UICircle dot;
 		public GraphLine lineObj;
 		public GraphDiagram diagramObj;
+		public StatisticsBar statisticsBar;
 		public Action<GraphPointScript,Vector2> onDragEvent;
 		public Action<GraphPointScript> onDragEndEvent;
 		public LinePoint linePoint;
@@ -137,6 +138,11 @@ namespace Cerebro
 			this.arrow.raycastTarget = isDragabble;
 			this.pointName.raycastTarget = isDragabble;
 			this.GetComponent<Image> ().raycastTarget = isDragabble;
+		}
+
+		public void SetStatisticsBar(StatisticsBar statisticsBar)
+		{
+			this.statisticsBar = statisticsBar;
 		}
 	}
 
