@@ -156,12 +156,12 @@ namespace Cerebro {
 				if (Mathf.Abs(diff) == 90 && arcAngle.squareArcFor90) 
 				{
 					UIpolygon.sides = 4;   //for square
-					UIpolygon.rotation = 45f;  
-					UIpolygon.fillPercent = 100;
-
-					Vector2 quadrants = GetQuadrants (arcAngle.startAngle);
-					//Set square in given position
-					UIpolygon.GetComponent<RectTransform> ().anchoredPosition = arcAngle.origin + new Vector2( (quadrants.x*tempRadius) / 3f,  (quadrants.y*tempRadius) / 3f) ;
+					UIpolygon.fillPercent = 70;
+					UIpolygon.rotation = arcAngle.startAngle-225f;
+					UIpolygon.GetComponent<RectTransform> ().anchoredPosition = MathFunctions.PointAtDirection(arcAngle.origin,45+ arcAngle.startAngle,tempRadius/2f);
+					if (arcAngle.squareArcFor90) {
+						arcAngle.value = "";
+					}
 				} 
 				else 
 				{

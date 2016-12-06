@@ -320,21 +320,24 @@ namespace Cerebro
 				selector = GetRandomSelector(1, 6);
 				if (selector == 1)
 				{
+					
 					if (Random.Range(1, 3) == 1)
 					{
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (-25, 0), 90, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (-25, 0), 270, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (25, 0), 90, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (25, 0), 270, true, 60));
+						int randomAngle =Random.Range(-60,60);
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (-25, 0), 90+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (-25, 0), 270+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (25, 0), 90+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (25, 0), 270+randomAngle, true, 60));
 					} 
 					else
 					{
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (-65, 0), 130, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (-65, 0), 310, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 130, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 310, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (65, 0), 130, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (65, 0), 310, true, 60));
+						int randomAngle =Random.Range(-60,0);
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (-65, 0), 130+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (-65, 0), 310+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 130+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 310+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (65, 0), 130+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (65, 0), 310+randomAngle, true, 60));
 					}
 					diagramHelper.ShiftPosition (new Vector2 (0, 30));
 					diagramHelper.Draw ();
@@ -351,19 +354,20 @@ namespace Cerebro
 				}
 				else if (selector == 2)
 				{
+					int randomAngle =Random.Range(0,360);
 					if (Random.Range(1, 3) == 1)
 					{
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 30, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 150, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 210, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 330, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 30+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 150+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 210+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 330+randomAngle, true, 60));
 					}
 					else
 					{
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 60, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 120, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 240, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 300, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 60+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 120+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 240+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 300+randomAngle, true, 60));
 					}
 					diagramHelper.ShiftPosition (new Vector2 (0, 30));
 					diagramHelper.Draw ();
@@ -380,18 +384,21 @@ namespace Cerebro
 				}
 				else if (selector == 3)
 				{
+					int randomAngle =Random.Range(0,360);
 					if (Random.Range(1, 3) == 1)
 					{
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 35, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 125, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 305, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 35+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 125+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 305+randomAngle, true, 60));
+						diagramHelper.AddAngleArc (new AngleArc ("", Vector2.zero, 35f+randomAngle,125f+randomAngle,15f));
 					}
 					else
 					{
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 45, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 135, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 225, true, 60));
-						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 315, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 45+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 135+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 225+randomAngle, true, 60));
+						diagramHelper.AddLinePoint (new LinePoint("" , new Vector2 (0, 0), 315+randomAngle, true, 60));
+						diagramHelper.AddAngleArc (new AngleArc ("", Vector2.zero, 45f+randomAngle, 135f+randomAngle,15f));
 					}
 					diagramHelper.ShiftPosition (new Vector2 (0, 30));
 					diagramHelper.Draw ();
