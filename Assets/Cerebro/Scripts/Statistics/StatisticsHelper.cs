@@ -8,8 +8,8 @@ namespace Cerebro
 {
 	public enum StatisticsType
 	{
-		HorizontalBar,
 		VerticalBar,
+		HorizontalBar,
 		Pie,
 		Line,
 		None
@@ -39,7 +39,7 @@ namespace Cerebro
 		private float fontMultiPlier;           //Font multiplier to make graph font smaller or bigger
 		private float snapValue;                //Graph sanp value (Default grid offset)
 
-		private StatisticsType statisticType;
+		public StatisticsType statisticType;
 
 		private StatisticsAxis[] statisticsAxises;
 		private List<StatisticsBar> statisticsBars;
@@ -58,6 +58,7 @@ namespace Cerebro
 			statisticType = StatisticsType.None;
 			statisticsAxises = new StatisticsAxis[]{new StatisticsAxis(),new StatisticsAxis() };
 			statisticsBars = new List<StatisticsBar> ();
+			this.ShiftPosition(Vector2.zero);
 		}
 
 		//Set grid parameters
@@ -70,6 +71,7 @@ namespace Cerebro
 			graphOrigin = graphCenter;
 			snapValue = gridOffset;
 			this.GetComponent<Image> ().GetComponent<RectTransform> ().sizeDelta = Vector2.one * _gridCoordinateRange.x * gridOffset;
+			ShiftGraphOrigin (new Vector2 (2, 2) - _gridCoordinateRange / 2);
 		}
 
 		//Set graph parameters
@@ -182,7 +184,7 @@ namespace Cerebro
 			{
 				string text = (i * axisOffset.x).ToString ();
 				int value = 0;
-				if (statisticType == StatisticsType.HorizontalBar) {
+				if (statisticType == StatisticsType.VerticalBar) {
 					text = "";
 					if(statisticsAxis.statisticsValues.Count > i - 1 )
 					{
@@ -206,7 +208,7 @@ namespace Cerebro
 			{
 				string text = (i * axisOffset.y).ToString ();
 				int value = 0;
-				if (statisticType == StatisticsType.VerticalBar) {
+				if (statisticType == StatisticsType.HorizontalBar) {
 					text = "";
 					if(statisticsAxis.statisticsValues.Count > i - 1 )
 					{
@@ -235,7 +237,7 @@ namespace Cerebro
 			barObj.name = "Bar";
 			barObj.transform.GetComponent<RectTransform> ().anchoredPosition = GraphPosToUIPos (startPoint);
 			float intitalHeight;
-			if (statisticType == StatisticsType.HorizontalBar) 
+			if (statisticType == StatisticsType.VerticalBar) 
 			{
 				barObj.transform.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 0f);
 			} 
@@ -243,13 +245,13 @@ namespace Cerebro
 			{
 				barObj.transform.GetComponent<RectTransform> ().pivot = new Vector2 (0f, 0.5f);
 			}
-			statisticsBar.SetIsHorizontal (statisticType == StatisticsType.HorizontalBar);
+			statisticsBar.SetIsHorizontal (statisticType == StatisticsType.VerticalBar);
 			statisticsBar.SetHeight (Vector2.Distance (GraphPosToUIPos (startPoint), GraphPosToUIPos (endPoint)));
 			statisticsBar.SetCurrentHeight (gridOffset);
 			statisticsBar.SetWidth (2f * gridOffset);
 			statisticsBar.SetBar ();
 			statisticsBars.Add (statisticsBar);
-			GraphPointScript pointScript = PlotPoint (startPoint +  (statisticType == StatisticsType.HorizontalBar ? new Vector2(0f,axisOffset.y):new Vector2(axisOffset.x,0f)),"",true,false);
+			GraphPointScript pointScript = PlotPoint (startPoint +  (statisticType == StatisticsType.VerticalBar ? new Vector2(0f,axisOffset.y):new Vector2(axisOffset.x,0f)),"",true,false);
 			pointScript.SetStatisticsBar (statisticsBar);
 		}
 
@@ -427,6 +429,34 @@ namespace Cerebro
 			}
 		}
 
+		public bool CheckAnswer ()
+		{
+			return true;
+		}
 
+		public void HandleCorrectAnswer ()
+		{
+
+		}
+		public void ResetAnswer ()
+		{
+
+		}
+		public void HandleIncorrectAnwer (bool isRevisitedQuestion)
+		{
+
+		}
+
+		public bool IsAnswered ()
+		{
+
+			return true;
+		}
+
+		//Shift graph position
+		public void ShiftPosition (Vector2 position)
+		{
+			this.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, -30f) + position;
+		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Cerebro
 			statisticsHelper.Reset ();
 			statisticsHelper.SetGridParameters (new Vector2 (20, 22), 22);
 			statisticsHelper.ShiftGraphOrigin (new Vector2 (-7, -7));
-			statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
+			statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
 			statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 				{
 					new StatisticsAxis().SetStatisticsValues
