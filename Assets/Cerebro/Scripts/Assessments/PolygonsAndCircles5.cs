@@ -433,7 +433,7 @@ namespace Cerebro
 					else if (Answer == "Parallelogram")
 					{
 						angle1 = 90 + Random.Range (10, 40) * (Random.Range (1, 3) == 1? 1: -1);
-						lengthForDiagram = breadthForDiagram * Random.Range (1.2f, 1.8f);
+						lengthForDiagram = breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad) * Random.Range (1.2f, 1.8f);
 
 						points.Add (new Vector2 (0, 0));
 						points.Add (new Vector2 (lengthForDiagram, 0));
@@ -444,7 +444,7 @@ namespace Cerebro
 					else if (Answer == "Rhombus")
 					{
 						angle1 = 90 + Random.Range (10, 40) * (Random.Range (1, 3) == 1? 1: -1);
-						lengthForDiagram = breadthForDiagram;
+						lengthForDiagram = breadthForDiagram / Mathf.Sin (angle1 * Mathf.Deg2Rad);
 
 						points.Add (new Vector2 (0, 0));
 						points.Add (new Vector2 (lengthForDiagram, 0));

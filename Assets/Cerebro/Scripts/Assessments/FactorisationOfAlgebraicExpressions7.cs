@@ -468,10 +468,10 @@ namespace Cerebro
 					coeff3 = 2 * coeff1 - 1;
 					QuestionText.text = "Factorise :";
 					subQuestionTEX.text = "\\aalgebra^{2} + " + coeff1 + "\\aalgebra^{4} " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{7} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{9}";
-					expression1 = "\\aalgebra^{2}(1 + " + coeff1 + " " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
-					expression2 = "\\aalgebra^{2}(1 + " + coeff1 + " " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
-					expression3 = "\\aalgebra^{2}(1 + " + coeff1 + " " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
-					expression4 = "\\aalgebra^{2}(1 + " + coeff1 + " " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
+					expression1 = "\\aalgebra^{2}(1 + " + coeff1 + "\\aalgebra^{2} " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
+					expression2 = "\\aalgebra^{2}(1 + " + coeff1 + "\\aalgebra^{2} " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
+					expression3 = "\\aalgebra^{2}(1 + " + coeff1 + "\\aalgebra^{2} " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
+					expression4 = "\\aalgebra^{2}(1 + " + coeff1 + "\\aalgebra^{2} " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
 					options.Add(expression1);	
 					options.Add(expression2);
 					options.Add(expression3);
@@ -588,7 +588,7 @@ namespace Cerebro
 					options.Add(expression2);
 					options.Add(expression3);
 					options.Add(expression4);
-					Answer = options[0];
+					Answer = options[3];
 					RandomizeMCQOptionsAndFill(options);
 
 				}
@@ -619,10 +619,10 @@ namespace Cerebro
 						coeff1 = Random.Range (2, 10);
 					QuestionText.text = "Factorise :";
 					subQuestionTEX.text = coeff1 + "(\\xalgebra - \\yalgebra)^{2} - " + (coeff1 * coeff2 * coeff2) + "(\\xalgebra - \\yalgebra)^{4}";
-					expression1 = coeff1 + "(\\xalgebra - \\yalgebra)^{2}(1 - " + coeff2 + "\\xalgebra + " + coeff2 + "\\yalgebra)(1 + " + coeff1 + "\\xalgebra - " + coeff2 + "\\yalgebra)";
-					expression2 = coeff1 + "(\\xalgebra - \\yalgebra)^{2}(1 + " + coeff2 + "\\xalgebra - " + coeff2 + "\\yalgebra)(1 + " + coeff1 + "\\xalgebra - " + coeff2 + "\\yalgebra)";
-					expression3 = coeff1 + "(\\xalgebra - \\yalgebra)^{2}(1 - " + coeff2 + "\\xalgebra + " + coeff2 + "\\yalgebra)(1 - " + coeff1 + "\\xalgebra + " + coeff2 + "\\yalgebra)";
-					expression4 = coeff1 + "(\\xalgebra - \\yalgebra)^{2}(1 - " + coeff2 + "\\xalgebra + " + coeff2 + "\\yalgebra)(" + coeff1 + "\\xalgebra - " + coeff2 + "\\yalgebra)";
+					expression1 = coeff1 + "(\\xalgebra - \\yalgebra)^{2}(1 - " + coeff2 + "\\xalgebra + " + coeff2 + "\\yalgebra)(1 + " + coeff2 + "\\xalgebra - " + coeff2 + "\\yalgebra)";
+					expression2 = coeff1 + "(\\xalgebra - \\yalgebra)^{2}(1 - " + coeff2 + "\\xalgebra + " + coeff2 + "\\yalgebra)(1 - " + coeff2 + "\\xalgebra + " + coeff2 + "\\yalgebra)";
+					expression3 = coeff1 + "(\\xalgebra - \\yalgebra)^{2}(1 - " + coeff2 + "\\xalgebra - " + coeff2 + "\\yalgebra)(1 + " + coeff2 + "\\xalgebra + " + coeff2 + "\\yalgebra)";
+					expression4 = coeff1 + "(\\xalgebra - \\yalgebra)^{2}(1 + " + coeff2 + "\\xalgebra - " + coeff2 + "\\yalgebra)(1 + " + coeff2 + "\\xalgebra - " + coeff2 + "\\yalgebra)";
 					options.Add(expression1);	
 					options.Add(expression2);
 					options.Add(expression3);

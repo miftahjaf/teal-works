@@ -476,6 +476,7 @@ namespace Cerebro
 					diagramHelper.AddLinePoint (new LinePoint ("A", Vector2.zero, AOB + COB + randAngle, true, 100));
 					diagramHelper.AddLinePoint (new LinePoint ("E", Vector2.zero, AOE + AOB + COB + randAngle, true, 100));
 					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, EOD + AOE + AOB + COB + randAngle, true, 100));
+					diagramHelper.AddLinePoint (new LinePoint ("O", Vector2.zero, Vector2.zero));
 
 					diagramHelper.ShiftPosition (new Vector2 (0, 20));
 					diagramHelper.Draw ();
@@ -503,7 +504,8 @@ namespace Cerebro
 					diagramHelper.AddLinePoint (new LinePoint ("C", Vector2.zero, 90f + randAngle, true, 90));
 					diagramHelper.AddLinePoint (new LinePoint ("D", Vector2.zero, 180f + randAngle, true, 90));
 					diagramHelper.AddLinePoint (new LinePoint ("E", Vector2.zero, 180f + AOB + randAngle, true, 90));
-
+					diagramHelper.AddAngleArc (new AngleArc ("", Vector2.zero, randAngle, randAngle + 90));
+						
 					diagramHelper.ShiftPosition (new Vector2 (0, 20));
 					diagramHelper.Draw ();
 
@@ -515,9 +517,9 @@ namespace Cerebro
 					} 
 					else if (selector == 4)
 					{
-						QuestionLatext.text = "Name the supplement of \\angle{AOB}?";
-						Answer = "\\angle{DOB}";
-						alternateAnswer = "\\angle{BOD}";
+						QuestionLatext.text = "Name the supplement of \\angle{BOC}?";
+						Answer = "\\angle{COE}";
+						alternateAnswer = "\\angle{EOC}";
 					}
 					else if (selector == 5)
 					{
