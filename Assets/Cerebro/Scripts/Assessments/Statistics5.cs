@@ -232,12 +232,12 @@ namespace Cerebro {
 					QuestionText.text = "Study the bar graph and answer the given questions.";
 					subQuestionTEX.text = "How many marks did Srinivas score in his January test?";
 
-					statisticsHelper.SetGridParameters (new Vector2 (10, 10), 22);
+					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 13);
 					statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
-					statisticsHelper.ShiftPosition (new Vector2 (-270, 200));
+					statisticsHelper.ShiftPosition (new Vector2 (-270, 225));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 						{
-							new StatisticsAxis().SetOffsetValue(5).SetAxisName("Marks").SetPointOffset(1),
+							new StatisticsAxis().SetOffsetValue(5).SetAxisName("Marks").SetPointOffset(2),
 							new StatisticsAxis().SetStatisticsValues
 							(
 								new List<StatisticsValue>{
@@ -246,7 +246,7 @@ namespace Cerebro {
 									new StatisticsValue("Sep", 25),
 									new StatisticsValue("July", 20),
 								}
-							).SetAxisName("Name").SetPointOffset(1)
+							).SetAxisName("Name").SetPointOffset(3)
 
 						}
 					);

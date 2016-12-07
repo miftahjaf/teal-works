@@ -21,6 +21,7 @@ namespace Cerebro
 		public GameObject vectorDottedObjectPrefab; //Vector line prefab to draw dotted line
 		public GameObject linePointPrefab;   // point prefab to render point 
 		public GameObject arcPrefab;
+		public GameObject textObjectPrefab;
 
 		public Sprite arrowSprite;
 		private GameObject pointLineDisplay;   //Display line when change plotted point position
@@ -34,15 +35,21 @@ namespace Cerebro
 		private Vector2 axisOffset;             //Axis offset (Default 1)
 		private Vector2 graphMinValue;          //Graph Min x and y point value
 		private Vector2 graphMaxValue;          //Graph Max x and y point value
+		private Vector2 pointOffset;
 
 		private float gridOffset;               //Grid offset
 		private float fontMultiPlier;           //Font multiplier to make graph font smaller or bigger
 		private float snapValue;                //Graph sanp value (Default grid offset)
 
+		private bool isInteractable;
+
+		private string graphTitle;
+
 		public StatisticsType statisticType;
 
 		private StatisticsAxis[] statisticsAxises;
 		private List<StatisticsBar> statisticsBars;
+
 
 		//Reset old set values
 		public void Reset()
@@ -58,7 +65,9 @@ namespace Cerebro
 			statisticType = StatisticsType.None;
 			statisticsAxises = new StatisticsAxis[]{new StatisticsAxis(),new StatisticsAxis() };
 			statisticsBars = new List<StatisticsBar> ();
+			isInteractable = false;
 			this.ShiftPosition(Vector2.zero);
+
 		}
 
 		//Set grid parameters
@@ -79,7 +88,13 @@ namespace Cerebro
 		{
 			statisticsAxises = _statisticsAxises;
 			axisOffset = new Vector2 (statisticsAxises [0].offsetValue, statisticsAxises [1].offsetValue);
+			pointOffset = new Vector2 (statisticsAxises [0].pointOffset,statisticsAxises [1].pointOffset);
+		}
 
+		//Set Is Interactable
+		public void SetInteractable(bool _isInteractable)
+		{
+			this.isInteractable = _isInteractable;
 		}
 
 		//Set snap value
@@ -106,6 +121,7 @@ namespace Cerebro
 		{
 			DrawGrid ();
 			DrawAxis (showAxis);
+			SetTitles ();
 		}
 
 		//Draw grid
@@ -175,12 +191,26 @@ namespace Cerebro
 				GenerateLinePoint (new LinePoint("",point + gridPosition, angles[cnt], true,0),axisParent);
 				cnt++;
 			}
-
+		
 			StatisticsAxis statisticsAxis = statisticsAxises [0];
+			float startOffset=0;
 			//Pos X
-			int pointInPosXAxis = Mathf.Abs((Mathf.RoundToInt((gridCoordinateRange.x/2f + graphCenterOffset.x)/statisticsAxis.pointOffset)));
-			graphMaxValue.x = pointInPosXAxis * axisOffset.x * statisticsAxis.pointOffset;
-			for (int i = 1; i < pointInPosXAxis; i++) 
+			int pointInPosXAxis =0;
+			if(statisticsAxis.statisticsValues.Count==0)
+			{
+				pointInPosXAxis =  Mathf.Abs((Mathf.RoundToInt((gridCoordinateRange.x/2f + graphCenterOffset.x)/pointOffset.x)))-1;
+				graphMaxValue.x = (gridCoordinateRange.x / 2f + graphCenterOffset.x) * axisOffset.x / pointOffset.x;
+			}
+			else
+			{
+				if (statisticType == StatisticsType.HorizontalBar || statisticType == StatisticsType.VerticalBar) {
+					startOffset = axisOffset.x / pointOffset.x;
+				}
+				pointInPosXAxis = statisticsAxis.statisticsValues.Count;
+				graphMaxValue.x =  Mathf.Abs((Mathf.RoundToInt((gridCoordinateRange.x/2f + graphCenterOffset.x)))) * axisOffset.x/pointOffset.x ;
+			}
+
+			for (int i = 1; i <= pointInPosXAxis; i++) 
 			{
 				string text = (i * axisOffset.x).ToString ();
 				int value = 0;
@@ -191,20 +221,33 @@ namespace Cerebro
 						text =  statisticsAxis.statisticsValues [i - 1].name;
 						value = statisticsAxis.statisticsValues [i - 1].value;
 					}
-					GenerateGraphBar (new Vector2 ( i * statisticsAxis.pointOffset * axisOffset.x,0), new Vector2 ( i * statisticsAxis.pointOffset * axisOffset.x,value ));
+					GenerateGraphBar (new Vector2 ( i  * axisOffset.x-startOffset,0), new Vector2 ( i * axisOffset.x-startOffset,value ));
 				}
-				GenerateLinePoint (new LinePoint (text, GraphPosToUIPos (new Vector2 (i * statisticsAxis.pointOffset   * axisOffset.x, 0)), 0f, false,0).SetPointTextOffset(new Vector2(0,-20)),axisParent);
+				GenerateLinePoint (new LinePoint (text, GraphPosToUIPos (new Vector2 (i * axisOffset.x-startOffset, 0)), 0f, false,0).SetPointTextOffset(new Vector2(0,-15)),axisParent);
 			}
 
 			//Neg X
 			graphMinValue.x = 0f;
 			statisticsAxis = statisticsAxises [1];
 
-		
 			//Pos Y
-			int pointInPosYAxis =  Mathf.Abs((Mathf.RoundToInt((gridCoordinateRange.y/2f + graphCenterOffset.y)/statisticsAxis.pointOffset)));
-			graphMaxValue.y = pointInPosYAxis * axisOffset.y * statisticsAxis.pointOffset;
-			for (int i = 1; i < pointInPosYAxis; i++) 
+			int pointInPosYAxis =  0;
+
+			if(statisticsAxis.statisticsValues.Count==0)
+			{
+				pointInPosYAxis =  Mathf.Abs((Mathf.RoundToInt((gridCoordinateRange.y/2f + graphCenterOffset.y)/pointOffset.y)))-1;
+				graphMaxValue.y =(gridCoordinateRange.y / 2f + graphCenterOffset.y) * axisOffset.y / pointOffset.y;
+			}
+			else
+			{
+				if (statisticType == StatisticsType.HorizontalBar || statisticType == StatisticsType.VerticalBar) {
+					startOffset = axisOffset.y / pointOffset.y;
+				}
+				pointInPosYAxis = statisticsAxis.statisticsValues.Count;
+				graphMaxValue.y = Mathf.Abs((Mathf.RoundToInt(gridCoordinateRange.y/2f + graphCenterOffset.y))) * axisOffset.y/pointOffset.y;
+			}
+
+			for (int i = 1; i <= pointInPosYAxis; i++) 
 			{
 				string text = (i * axisOffset.y).ToString ();
 				int value = 0;
@@ -215,24 +258,28 @@ namespace Cerebro
 						text =  statisticsAxis.statisticsValues [i - 1].name;
 						value = statisticsAxis.statisticsValues [i - 1].value;
 					}
-					GenerateGraphBar (new Vector2 (0, i * statisticsAxis.pointOffset * axisOffset.y), new Vector2 (value, i * statisticsAxis.pointOffset * axisOffset.y ));
+					GenerateGraphBar (new Vector2 (0, i * axisOffset.y-startOffset), new Vector2 (value, i * axisOffset.y-startOffset ));
 				}
-				GenerateLinePoint (new LinePoint (text, GraphPosToUIPos (new Vector2 (0, i * statisticsAxis.pointOffset * axisOffset.y)), 0f, false, 0).SetPointTextOffset(new Vector2(-20,0)),axisParent);
+				GenerateLinePoint (new LinePoint (text, GraphPosToUIPos (new Vector2 (0, i  * axisOffset.y -startOffset)), 0f, false, 0).SetPointTextOffset(new Vector2(-20,0)),axisParent);
 			}
+
 
 			//Neg 
 			graphMinValue.y = 0f;
 			axisParent.gameObject.SetActive (showAxis);
+			Debug.Log ("graph min value "+graphMinValue + " graph max value " + graphMaxValue);
 		}
 
 
 
 		public void GenerateGraphBar(Vector2 startPoint,Vector2 endPoint)
 		{
+			Debug.Log ("start point" + startPoint);
 			GameObject barObj = new GameObject ();
 			barObj.transform.SetParent (this.transform, false);
 			StatisticsBar statisticsBar = barObj.AddComponent<StatisticsBar> ();
 			barObj.AddComponent<Image> ();
+			barObj.GetComponent<Image> ().raycastTarget = false;
 			barObj.GetComponent<Image> ().color = Color.black;
 			barObj.name = "Bar";
 			barObj.transform.GetComponent<RectTransform> ().anchoredPosition = GraphPosToUIPos (startPoint);
@@ -246,13 +293,18 @@ namespace Cerebro
 				barObj.transform.GetComponent<RectTransform> ().pivot = new Vector2 (0f, 0.5f);
 			}
 			statisticsBar.SetIsHorizontal (statisticType == StatisticsType.VerticalBar);
-			statisticsBar.SetHeight (Vector2.Distance (GraphPosToUIPos (startPoint), GraphPosToUIPos (endPoint)));
-			statisticsBar.SetCurrentHeight (gridOffset);
-			statisticsBar.SetWidth (2f * gridOffset);
+			float height = Vector2.Distance (GraphPosToUIPos (startPoint), GraphPosToUIPos (endPoint));
+			statisticsBar.SetHeight (height);
+			statisticsBar.SetCurrentHeight (isInteractable?gridOffset: height);
+			statisticsBar.SetWidth (gridOffset*2f);
 			statisticsBar.SetBar ();
 			statisticsBars.Add (statisticsBar);
-			GraphPointScript pointScript = PlotPoint (startPoint +  (statisticType == StatisticsType.VerticalBar ? new Vector2(0f,axisOffset.y):new Vector2(axisOffset.x,0f)),"",true,false);
-			pointScript.SetStatisticsBar (statisticsBar);
+
+			if (isInteractable) 
+			{
+				GraphPointScript pointScript = PlotPoint (startPoint + (statisticType == StatisticsType.VerticalBar ? new Vector2 (0f, axisOffset.y/pointOffset.y) : new Vector2 (axisOffset.x/pointOffset.x, 0f)), "", true, false);
+				pointScript.SetStatisticsBar (statisticsBar);
+			}
 		}
 
 
@@ -306,7 +358,6 @@ namespace Cerebro
 		//Is given point inside graph?
 		public bool IsContainInGraph(Vector2 point)
 		{
-			
 			if (point.x <= graphMaxValue.x && point.x >= graphMinValue.x && point.y <= graphMaxValue.y && point.y >= graphMinValue.y) {
 				return true;
 			} 
@@ -319,13 +370,13 @@ namespace Cerebro
 		//Graph pos to UI pos	
 		public Vector2 GraphPosToUIPos(Vector2 point)
 		{
-			return new Vector2((point.x / axisOffset.x) * gridOffset, (point.y / axisOffset.y) * gridOffset)+ gridPosition + graphOrigin;
+			return new Vector2((point.x / axisOffset.x * pointOffset.x) * gridOffset, (point.y / axisOffset.y * pointOffset.y) * gridOffset )+ gridPosition + graphOrigin;
 		}
 
 		//UI pos to graph pos
 		public Vector2 UIPosToGraphPos(Vector2 position)
 		{
-			return new Vector2 (MathFunctions.GetRounded((position.x - gridPosition.x - graphOrigin.x) * axisOffset.x / gridOffset,1), MathFunctions.GetRounded(((position.y - gridPosition.y - graphOrigin.y) * axisOffset.y / gridOffset),1));
+			return new Vector2 (MathFunctions.GetRounded((position.x - gridPosition.x - graphOrigin.x) * axisOffset.x / pointOffset.x/ gridOffset,1), MathFunctions.GetRounded(((position.y - gridPosition.y - graphOrigin.y) * axisOffset.y / pointOffset.y / gridOffset),1));
 		}
 
 		//Set font multiplier
@@ -337,13 +388,13 @@ namespace Cerebro
 		//Set snap position
 		public Vector2 GetSnapPosition(Vector2 position)
 		{
-			return new Vector2 (Mathf.RoundToInt (position.x/snapValue) * snapValue, Mathf.RoundToInt (position.y/snapValue) *snapValue);
+			return new Vector2 (Mathf.RoundToInt (position.x/snapValue ) * snapValue , Mathf.RoundToInt (position.y/snapValue) *snapValue);
 		}
 
 		//Get snap point from given point
 		public Vector2 GetSnapPoint(Vector2 point)
 		{
-			return new Vector2 (Mathf.RoundToInt (point.x/axisOffset.x) * axisOffset.x, Mathf.RoundToInt (point.y/axisOffset.y) *axisOffset.y);
+			return new Vector2 (Mathf.RoundToInt (point.x/(axisOffset.x/pointOffset.x)) *(axisOffset.x/pointOffset.x), Mathf.RoundToInt (point.y/(axisOffset.y/pointOffset.y)) *(axisOffset.y/pointOffset.y));
 		}
 
 		//Move plotted point or line point and change line according to point movement
@@ -365,9 +416,12 @@ namespace Cerebro
 			}
 			graphPointObj.transform.position = position;
 
-			pointRectTransform.anchoredPosition = GetSnapPosition(pointRectTransform.anchoredPosition);
-			Vector2 pos =pointRectTransform.anchoredPosition;
-			Vector2 graphPoint = UIPosToGraphPos (pos);
+			//Debug.Log ("Anchor pos "+pointRectTransform.anchoredPosition+"Snap position "+GetSnapPosition(pointRectTransform.anchoredPosition));
+
+			//pointRectTransform.anchoredPosition = GetSnapPosition(pointRectTransform.anchoredPosition);  
+			Vector2 graphPoint = GetSnapPoint(UIPosToGraphPos(pointRectTransform.anchoredPosition));
+			Vector2 pos =GraphPosToUIPos (graphPoint);
+			pointRectTransform.anchoredPosition = pos;
 
 			if(!IsContainInGraph(graphPoint))
 			{
@@ -382,9 +436,6 @@ namespace Cerebro
 				graphPointObj.statisticsBar.SetBar ();
 			}
 		
-			//if (!string.IsNullOrEmpty (graphPointObj.pointName.text)) {
-			//	graphPointObj.pointName.text = "(" + graphPoint.x + "," + graphPoint.y + ")";
-			//}
 			if (pointLineDisplay == null) 
 			{
 				pointLineDisplay = GameObject.Instantiate (vectorObjectPrefab);
@@ -458,5 +509,33 @@ namespace Cerebro
 		{
 			this.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, -30f) + position;
 		}
+
+		private void SetTitles()
+		{
+			GenerateTextObject (new Vector2(0,-gridPosition.y + 17f),graphTitle,"XAxis Title",15);
+			GenerateTextObject (new Vector2(0,gridPosition.y - 17f),statisticsAxises[0].axisName,"XAxis Title");
+			GenerateTextObject (new Vector2(gridPosition.x - 20f,0),statisticsAxises[1].axisName,"yAxis Title",13,90);
+		}
+
+		private void GenerateTextObject(Vector2 position,string text,string name,int fontSize=13,float rotation=0)
+		{
+			if(string.IsNullOrEmpty(text))
+			{
+			  return;
+			}
+			GameObject textObj = GameObject.Instantiate (textObjectPrefab);
+			textObj.GetComponent<Text> ().text = text;
+			textObj.GetComponent<Text> ().fontSize = fontSize;
+			textObj.GetComponent<RectTransform> ().anchoredPosition =position;
+			textObj.transform.SetParent (this.transform, false);
+			textObj.GetComponent<RectTransform> ().localEulerAngles = new Vector3 (0f, 0f, rotation);
+			textObj.name = name;
+		}
+
+		public void SetGraphTitle(string _graphTitle)
+		{
+			graphTitle = _graphTitle;
+		}
+			
 	}
 }
