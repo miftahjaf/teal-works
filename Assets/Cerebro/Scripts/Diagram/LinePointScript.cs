@@ -38,7 +38,7 @@ namespace Cerebro {
 			this.arrow.GetComponent<RectTransform> ().localEulerAngles = new Vector3 (0f, 0f, 180 + angle);
 
 			//Calculate dot postion
-			if ((radius > 0 ||radius < 0 ) && linePoint.shouldShowArrow) 
+			if ((radius > 0 ||radius < 0 ) && linePoint.shouldShowArrow && linePoint.shouldShowDot) 
 			{
 				position = MathFunctions.PointAtDirection(linePoint.origin,angle, radius * 0.75f);
 			}

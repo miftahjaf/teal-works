@@ -248,6 +248,66 @@ namespace Cerebro {
 			return true;
 		}
 
+		public static string AlgebraicDisplayForm (int constant, string variable, bool isFirstTerm = false)
+		{
+			string str;
+			if (constant == 0) {
+				return "";
+			} else if (constant > 0) {
+				if (constant == 1 && variable != ""){
+					str = "+";
+				} else {
+					str = "+" + constant;
+				}
+			} else {
+				if (constant == -1 && variable != ""){
+					str = "-";
+				} else {
+					str = "-" + (-constant);
+				}
+			}
+			str += variable;
+			if (isFirstTerm && constant > 0) {
+				return str.Substring (1);
+			} else {
+				return str;	
+			}
+		}
+
+		public static string AlgebraicDisplayFormFraction (int numerator, int denominator, string variable, bool isFirstTerm = false)
+		{
+			if (denominator == 0) {
+				Debug.Log ("ERROR : Denominator = 0");
+				return "";
+			}
+			if (numerator == 0) {
+				return "";
+			}
+			if (denominator == 1) {
+				return AlgebraicDisplayForm (numerator, variable, isFirstTerm);
+			}
+			if (denominator == -1) {
+				return AlgebraicDisplayForm (-numerator, variable, isFirstTerm);
+			}
+			string str = "";
+
+			if (numerator > 0 && denominator > 0) {
+				str = "+\\frac{" + numerator + "}{" + denominator + "}";
+			} else if (numerator < 0 && denominator > 0) {
+				str = "-\\frac{" + (-numerator) + "}{" + denominator + "}";
+			} else if (numerator < 0 && denominator < 0) {
+				str = "+\\frac{" + (-numerator) + "}{" + (-denominator) + "}";
+			} else if (numerator > 0 && denominator < 0) {
+				str = "-\\frac{" + numerator + "}{" + (-denominator) + "}";
+			}
+			str += variable;
+			if (isFirstTerm && str[0] == '+') {
+				return str.Substring (1);
+			} else {
+				return str;	
+			}
+		}
+
 		public static bool checkFractions (string[] userAnswers, string[] correctAnswers)  //checks all forms 
 		{
 			float num1 = -1;
