@@ -54,12 +54,19 @@ namespace Cerebro
 	public class StatisticsValue
 	{
 		public string name;
-		public int value;
+		public int[] values;
+
+
+		public StatisticsValue(string _name,int[] _values)
+		{
+			name = _name;
+			values = _values;
+		}
 
 		public StatisticsValue(string _name,int _value)
 		{
 			name = _name;
-			value = _value;
+			values = new int[]{_value};
 		}
 	}
 }

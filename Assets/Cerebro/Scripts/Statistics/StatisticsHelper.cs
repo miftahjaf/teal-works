@@ -219,9 +219,17 @@ namespace Cerebro
 					if(statisticsAxis.statisticsValues.Count > i - 1 )
 					{
 						text =  statisticsAxis.statisticsValues [i - 1].name;
-						value = statisticsAxis.statisticsValues [i - 1].value;
+						int totalValues = statisticsAxis.statisticsValues [i - 1].values.Length;
+						float offsetValue = (2 *startOffset) / totalValues;
+						float startPoint = i * axisOffset.x - GetStartOffsetValue(startOffset, totalValues);
+
+						for (int count = 0; count < totalValues; count++) {
+							value = statisticsAxis.statisticsValues [i - 1].values [count];
+							GenerateGraphBar (new Vector2 ( startPoint,0f), new Vector2 (startPoint,value ),Color.black,2f/totalValues);
+							startPoint +=offsetValue;
+						}
 					}
-					GenerateGraphBar (new Vector2 ( i  * axisOffset.x-startOffset,0), new Vector2 ( i * axisOffset.x-startOffset,value ));
+
 				}
 				GenerateLinePoint (new LinePoint (text, GraphPosToUIPos (new Vector2 (i * axisOffset.x-startOffset, 0)), 0f, false,0).SetPointTextOffset(new Vector2(0,-15)),axisParent);
 			}
@@ -256,9 +264,17 @@ namespace Cerebro
 					if(statisticsAxis.statisticsValues.Count > i - 1 )
 					{
 						text =  statisticsAxis.statisticsValues [i - 1].name;
-						value = statisticsAxis.statisticsValues [i - 1].value;
+						int totalValues = statisticsAxis.statisticsValues [i - 1].values.Length;
+						float offsetValue = (2 *startOffset) / totalValues;
+						float startPoint = i * axisOffset.y - GetStartOffsetValue(startOffset, totalValues);
+
+						for (int count = 0; count < totalValues; count++) {
+							value = statisticsAxis.statisticsValues [i - 1].values [count];
+							GenerateGraphBar (new Vector2 (0f,startPoint), new Vector2 (value, startPoint),Color.black,2f/totalValues);
+							startPoint +=offsetValue;
+						}
 					}
-					GenerateGraphBar (new Vector2 (0, i * axisOffset.y-startOffset), new Vector2 (value, i * axisOffset.y-startOffset ));
+
 				}
 				GenerateLinePoint (new LinePoint (text, GraphPosToUIPos (new Vector2 (0, i  * axisOffset.y -startOffset)), 0f, false, 0).SetPointTextOffset(new Vector2(-20,0)),axisParent);
 			}
@@ -270,17 +286,24 @@ namespace Cerebro
 			Debug.Log ("graph min value "+graphMinValue + " graph max value " + graphMaxValue);
 		}
 
-
-
-		public void GenerateGraphBar(Vector2 startPoint,Vector2 endPoint)
+		private float GetStartOffsetValue(float offset, int noOfValues)
 		{
-			Debug.Log ("start point" + startPoint);
+			float value = offset;
+			for (int i =1; i < noOfValues; i++) {
+				value += (offset/ (i*2f));
+			}
+			return value;
+		}
+
+
+		public void GenerateGraphBar(Vector2 startPoint,Vector2 endPoint,Color color,float width = 2f)
+		{
 			GameObject barObj = new GameObject ();
 			barObj.transform.SetParent (this.transform, false);
 			StatisticsBar statisticsBar = barObj.AddComponent<StatisticsBar> ();
 			barObj.AddComponent<Image> ();
 			barObj.GetComponent<Image> ().raycastTarget = false;
-			barObj.GetComponent<Image> ().color = Color.black;
+			barObj.GetComponent<Image> ().color = color;
 			barObj.name = "Bar";
 			barObj.transform.GetComponent<RectTransform> ().anchoredPosition = GraphPosToUIPos (startPoint);
 			float intitalHeight;
@@ -296,7 +319,7 @@ namespace Cerebro
 			float height = Vector2.Distance (GraphPosToUIPos (startPoint), GraphPosToUIPos (endPoint));
 			statisticsBar.SetHeight (height);
 			statisticsBar.SetCurrentHeight (isInteractable?gridOffset: height);
-			statisticsBar.SetWidth (gridOffset*2f);
+			statisticsBar.SetWidth (gridOffset*width);
 			statisticsBar.SetBar ();
 			statisticsBars.Add (statisticsBar);
 
@@ -416,11 +439,8 @@ namespace Cerebro
 			}
 			graphPointObj.transform.position = position;
 
-			//Debug.Log ("Anchor pos "+pointRectTransform.anchoredPosition+"Snap position "+GetSnapPosition(pointRectTransform.anchoredPosition));
-
-			//pointRectTransform.anchoredPosition = GetSnapPosition(pointRectTransform.anchoredPosition);  
 			Vector2 graphPoint = GetSnapPoint(UIPosToGraphPos(pointRectTransform.anchoredPosition));
-			Vector2 pos =GraphPosToUIPos (graphPoint);
+			Vector2 pos = GraphPosToUIPos (graphPoint);
 			pointRectTransform.anchoredPosition = pos;
 
 			if(!IsContainInGraph(graphPoint))
