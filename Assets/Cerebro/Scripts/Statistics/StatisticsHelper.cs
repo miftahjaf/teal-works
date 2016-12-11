@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Vectrosity;
+using UnityEngine.UI.Extensions;
+using System.Linq;
 
 namespace Cerebro
 {
@@ -50,6 +52,9 @@ namespace Cerebro
 		private StatisticsAxis[] statisticsAxises;
 		private List<StatisticsBar> statisticsBars;
 
+		private List<int> pieValues;
+		private List<string> pieStrings;
+		private float pieRadius;
 
 		//Reset old set values
 		public void Reset()
@@ -66,7 +71,10 @@ namespace Cerebro
 			statisticsAxises = new StatisticsAxis[]{new StatisticsAxis(),new StatisticsAxis() };
 			statisticsBars = new List<StatisticsBar> ();
 			isInteractable = false;
+			pieValues = new List<int> ();
+			pieStrings = new List<string> ();
 			this.ShiftPosition(Vector2.zero);
+			pieRadius = 250f;
 
 		}
 
@@ -119,9 +127,14 @@ namespace Cerebro
 		//Draw graph and grid according to parameters
 		public void DrawGraph(bool showAxis = true)
 		{
-			DrawGrid ();
-			DrawAxis (showAxis);
-			SetTitles ();
+			if (statisticType == StatisticsType.Pie) 
+			{
+				DrawPieGraph ();
+			} else {
+				DrawGrid ();
+				DrawAxis (showAxis);
+				SetTitles ();
+			}
 		}
 
 		//Draw grid
@@ -555,6 +568,76 @@ namespace Cerebro
 		public void SetGraphTitle(string _graphTitle)
 		{
 			graphTitle = _graphTitle;
+		}
+
+		public void SetPieParameters(List<string> _pieStrings, List<int> _pieValues)
+		{
+			pieStrings = _pieStrings;
+			pieValues = _pieValues;
+		}
+
+		public void SetPieRadius(float _pieRadius)
+		{
+			pieRadius = _pieRadius;
+		}
+
+		public void DrawPieGraph()
+		{
+			int count = pieStrings.Count;
+			float startAngle = 0f;
+			int totalValue = pieValues.Sum(x => System.Convert.ToInt32(x));
+			int pieValueCount = pieValues.Count;
+			float offsetPos = pieRadius / 6;
+			Vector2 labelPosition = new Vector2 (pieRadius+offsetPos, pieRadius/2f);
+			for (int i = 0; i < count; i++) {
+				//Instantiate arc prefab
+				GameObject arc = GameObject.Instantiate (arcPrefab);
+				arc.transform.SetParent (this.transform, false);
+
+				//UI polygon component to draw arc
+				UIPolygon UIpolygon = arc.GetComponent<UIPolygon> ();
+			
+				float nextAngle = 0;
+				if (pieValueCount > i) {
+					nextAngle = 360f * pieValues [i] /totalValue;
+				}
+			
+				if(nextAngle>0)
+				{
+					Color color = new Color (Random.Range (150f, 220f) / 255f, Random.Range (150f, 220f) / 255f, Random.Range (150f, 220f) / 255f);
+					//set arc size according to radius
+					UIpolygon.GetComponent<RectTransform> ().sizeDelta = Vector2.one * pieRadius * 2f;
+					UIpolygon.color = color;
+					UIpolygon.fill = true;
+					UIpolygon.fillPercent = Mathf.RoundToInt (100f * (nextAngle) / 360f)+1;
+					UIpolygon.rotation = startAngle + 180f;
+					UIpolygon.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
+					startAngle += nextAngle;
+					UIpolygon.ReDraw ();
+					GeneratePieLabel (pieStrings [i], labelPosition, color,offsetPos);
+					labelPosition -= new Vector2(0,1.3f*offsetPos);
+				}
+			}
+		}
+
+		public void GeneratePieLabel(string text, Vector2 position, Color color,float size)
+		{
+			GameObject pieLabel = new GameObject ();
+			pieLabel.name = "pielLabel";
+			pieLabel.transform.SetParent (this.transform, false);
+			Image pieLabelImage = pieLabel.AddComponent<Image> ();
+			pieLabel.GetComponent<RectTransform> ().anchoredPosition = position;
+			pieLabelImage.color = color;
+			pieLabel.GetComponent<RectTransform> ().sizeDelta = Vector2.one * size;
+
+			GameObject pieLabelText = GameObject.Instantiate (textObjectPrefab);
+			pieLabelText.name = text;
+			pieLabelText.transform.SetParent (this.transform, false);
+			Text pieText = pieLabelText.GetComponent<Text> ();
+			pieText.alignment = TextAnchor.MiddleLeft;
+			pieText.text = text;
+			pieLabelText.GetComponent<RectTransform> ().anchoredPosition = position+new Vector2(size,0);
+			pieLabelText.GetComponent<RectTransform> ().sizeDelta = Vector2.zero;
 		}
 			
 	}

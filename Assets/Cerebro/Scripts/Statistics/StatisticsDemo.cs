@@ -10,27 +10,8 @@ namespace Cerebro
 		void Start () 
 		{
 			statisticsHelper.Reset ();
-			/*statisticsHelper.SetGridParameters (new Vector2 (20, 22), 22);
-			statisticsHelper.ShiftGraphOrigin (new Vector2 (-7, -7));
-			statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
-			statisticsHelper.SetGraphParameters (new StatisticsAxis[]
-				{
-					new StatisticsAxis().SetStatisticsValues
-					(
-						new List<StatisticsValue>{
-							new StatisticsValue("Ramiz",20),
-							new StatisticsValue("Vijaypal",40),
-							new StatisticsValue("Ankit",50),
-							new StatisticsValue("Misbah",50),
-							new StatisticsValue("Vraj",70)
-						}
-					).SetAxisName("Name").SetPointOffset(3),
-					new StatisticsAxis().SetOffsetValue(10).SetAxisName("Value").SetPointOffset(2)
-
-				}
-			);
-			statisticsHelper.DrawGraph ();*/
-			statisticsHelper.SetGridParameters (new Vector2 (25, 25), 20);
+	
+			/*statisticsHelper.SetGridParameters (new Vector2 (25, 25), 20);
 			statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
 			//statisticsHelper.ShiftPosition (new Vector2 (-270, 200));
 			//statisticsHelper.SetInteractable (true);
@@ -50,7 +31,15 @@ namespace Cerebro
 			);
 			statisticsHelper.SetGraphTitle ("ashdkjadhskjahsdjkasdh");
 			statisticsHelper.DrawGraph ();
-			statisticsHelper.PlotPoint (new Vector2 (50, 2));
+			statisticsHelper.PlotPoint (new Vector2 (50, 2));*/
+			statisticsHelper.SetStatisticsType (StatisticsType.Pie);
+			statisticsHelper.SetPieParameters (
+				new List<string> (){ "Ramiz", "Negi", "Ankit", "Sagar" },
+				new List<int> (){ 10, 20, 30, 40 }
+			);
+			statisticsHelper.SetPieRadius (250f); //250 default radius
+			//statisticsHelper.ShiftPosition (new Vector2 (-270, 200));
+			statisticsHelper.DrawGraph ();
 		}
 }
 }
