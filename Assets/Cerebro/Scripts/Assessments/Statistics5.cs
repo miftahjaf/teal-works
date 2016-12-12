@@ -8,14 +8,20 @@ namespace Cerebro {
 	public class Statistics5 : BaseAssessment {
 
 		private string Answer;
-		private List<string> AnswerList;
+		private List<string> options;
 		private int randSelector;
+		private List<int> coeff;
 
 		public TEXDraw subQuestionTEX;
+		public Text StatTableColumn1;
+		public Text StatTableColumn2;
+		public Text StatTableColumn3;
 		public GameObject MCQ;
 		public StatisticsHelper statisticsHelper;
 		public GameObject CheckButton;
 		public GameObject numPadBg;
+		public int gridValOffset, axisValueOffset;
+
 		void Start () {
 
 			base.Initialise ("M", "STA05", "S01", "A01");
@@ -34,7 +40,7 @@ namespace Cerebro {
 		}
 
 		public override void SubmitClick(){
-			if (ignoreTouches || (userAnswerText.text == "" && statisticsHelper.statisticType == StatisticsType.None) || (statisticsHelper.statisticType != StatisticsType.None && !statisticsHelper.IsAnswered())) {
+			if (ignoreTouches){ //|| (userAnswerText.text == "" && statisticsHelper.statisticType == StatisticsType.None) || (statisticsHelper.statisticType != StatisticsType.None && !statisticsHelper.IsAnswered())) {
 				return;
 			}
 			int increment = 0;
@@ -45,7 +51,7 @@ namespace Cerebro {
 			questionsAttempted++;
 			updateQuestionsAttempted ();
 
-			if (statisticsHelper.statisticType == StatisticsType.None) {
+			//if (statisticsHelper.statisticType == StatisticsType.None) {
 
 				if (MCQ.activeSelf) {
 					if (Answer == userAnswerText.text) {
@@ -72,7 +78,7 @@ namespace Cerebro {
 
 
 					if (directCheck) {
-						if (userAnswerText.text == Answer || AnswerList.Contains (userAnswerText.text)) {
+						if (userAnswerText.text == Answer){
 							correct = true;
 						} else {
 							correct = false;
@@ -81,11 +87,11 @@ namespace Cerebro {
 						correct = (answer == userAnswer);
 					}
 				} 
-			} 
-			else
+			//} 
+			/*else
 			{
 				correct = statisticsHelper.CheckAnswer ();
-			}
+			}*/
 			if (correct == true) {
 				if (Queslevel == 1) {
 					increment = 5;
@@ -203,6 +209,15 @@ namespace Cerebro {
 
 		}
 
+		void RandomizeMCQOptionsAndFill(List<string> options)
+		{
+			options.Shuffle ();
+			int cnt = options.Count;
+			for (int i = 1; i <= cnt; i++) {
+				MCQ.transform.Find ("Option"+i).Find ("Text").GetComponent<Text> ().text = options [i - 1];
+			}
+		}
+
 		protected override void GenerateQuestion ()
 		{
 			ignoreTouches = false;
@@ -213,10 +228,12 @@ namespace Cerebro {
 			if (Queslevel > scorestreaklvls.Length) {
 				level = UnityEngine.Random.Range (1, scorestreaklvls.Length + 1);
 			}
-			subQuestionTEX.gameObject.SetActive (true);
+			subQuestionTEX.gameObject.SetActive (false);
+			ResetTable ();
 			SetNumpadMode ();
 
-			AnswerList = new List<string> ();
+			options = new List<string> ();
+			coeff = new List<int> ();
 			statisticsHelper.Reset ();
 			for (int i = 1; i < 5; i++) {
 				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().color = MaterialColor.textDark;
@@ -225,56 +242,442 @@ namespace Cerebro {
 			#region level1
 			if (level == 1) 
 			{
-				selector = GetRandomSelector (1, 7);
+				selector = GetRandomSelector (1, 6);
 
 				if (selector == 1)
 				{
-					QuestionText.text = "Study the bar graph and answer the given questions.";
-					subQuestionTEX.text = "How many marks did Srinivas score in his January test?";
+					axisValueOffset = 10;
+					gridValOffset = axisValueOffset / 2;
+					int minValue, maxValue;
+					int numberOfBars = 4;
+					do {
+						minValue = Random.Range (2, 10);
+						maxValue = Random.Range (minValue, 11);
+					} while (maxValue - minValue < numberOfBars - 1);
 
-					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 13);
+					List<string> months = new List<string> (){"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+					months.Shuffle ();
+
+					coeff.Add (gridValOffset * minValue);
+					for (int i = 1; i < numberOfBars - 1; i++){
+						coeff.Add (gridValOffset * Random.Range (minValue + 1, maxValue));
+					}
+					coeff.Add (gridValOffset * maxValue);
+					coeff.Shuffle ();
+
+					QuestionText.text = "Given are the marks that Srinivas got in four maths tests. The tests were out of 50 marks.";
+					randSelector = Random.Range (1, 9);
+
+					if (randSelector == 1)
+					{
+						SetMCQMode (3);
+						subQuestionTEX.gameObject.SetActive (true);
+
+						int randSelector1 = Random.Range (0, 2);
+						subQuestionTEX.text = string.Format ("What does each square in the {0} scale stand for?", randSelector1 == 0? "vertical": "horizontal");
+						options.Add ("Test Month");
+						options.Add ("Marks");
+						options.Add (months[Random.Range(0, 4)]);
+						Answer = options[randSelector1];
+						RandomizeMCQOptionsAndFill (options);
+					}
+					else if (randSelector == 2)
+					{
+						int randSelector1 = Random.Range (0, 4);
+						subQuestionTEX.text = string.Format ("How many marks did Srinivas score in his {0} test?", months[randSelector1]);
+						Answer = string.Format ("{0}", coeff[randSelector1]);
+					}
+					else if (randSelector == 3)
+					{
+						subQuestionTEX.text = "What is his minimum score?";
+						Answer = string.Format ("{0}", minValue * gridValOffset);
+					}
+					else if (randSelector == 4)
+					{
+						subQuestionTEX.text = "What is his maximum score?";
+						Answer = string.Format ("{0}", maxValue * gridValOffset);
+					}
+					else if (randSelector == 5)
+					{
+						SetMCQMode (4);
+						for (int i = 0; i < numberOfBars; i++){
+							options.Add (months[i]);
+						}
+						RandomizeMCQOptionsAndFill (options);
+
+						subQuestionTEX.text = "In which month did he score his minimum?";
+						Answer = string.Format ("{0}", months[coeff.IndexOf (minValue * gridValOffset)]);
+					}
+					else if (randSelector == 6)
+					{
+						SetMCQMode (4);
+						for (int i = 0; i < numberOfBars; i++){
+							options.Add (months[i]);
+						}
+						RandomizeMCQOptionsAndFill (options);
+
+						subQuestionTEX.text = "In which month did he score his maximum?";
+						Answer = string.Format ("{0}", months[coeff.IndexOf (Mathf.Max (coeff.ToArray ()))]);
+					}
+					else if (randSelector == 7)
+					{
+						int randSelector1 = Random.Range (0, numberOfBars);
+
+						subQuestionTEX.text = "What is the difference between maximum and minimum marks?";
+						Answer = string.Format ("{0}", (maxValue - minValue) * gridValOffset);
+					}
+					else if (randSelector == 8)
+					{
+						int randSelector1;
+						int randSelector2;
+						do {
+							randSelector1 = Random.Range (0, numberOfBars);
+							randSelector2 = Random.Range (0, numberOfBars);
+						} while (randSelector1 == randSelector2);
+
+						string expression = coeff[randSelector1] > coeff[randSelector2]? "more": "fewer";
+						subQuestionTEX.text = string.Format ("How many {0} marks did he get in the {1} test as compared to the {2} test?", expression, months[randSelector1], months[randSelector2]);
+						Answer = string.Format ("{0}", Mathf.Abs (coeff[randSelector1] - coeff[randSelector2]));
+					}
+
+					statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
 					statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
-					statisticsHelper.ShiftPosition (new Vector2 (-270, 225));
+					statisticsHelper.ShiftPosition (new Vector2 (-270, 215));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 						{
-							new StatisticsAxis().SetOffsetValue(5).SetAxisName("Marks").SetPointOffset(2),
-							new StatisticsAxis().SetStatisticsValues
+							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Marks").SetPointOffset (2),
+							new StatisticsAxis ().SetStatisticsValues
 							(
-								new List<StatisticsValue>{
-									new StatisticsValue("Jan", 30),
-									new StatisticsValue("Nov", 35),
-									new StatisticsValue("Sep", 25),
-									new StatisticsValue("July", 20),
+								new List<StatisticsValue>(){
+									new StatisticsValue (months[0], coeff[0]),
+									new StatisticsValue (months[1], coeff[1]),
+									new StatisticsValue (months[2], coeff[2]),
+									new StatisticsValue (months[3], coeff[3]),
 								}
-							).SetAxisName("Name").SetPointOffset(3)
-
+							).SetAxisName ("Test Month").SetPointOffset (3)
 						}
 					);
 					statisticsHelper.DrawGraph ();
 				}
 				else if (selector == 2) 
 				{
+					SetStatisticsMode ();
+					SetTable ();
+
+					List<string> TableContentsColumn1 = new List<string>();
+					List<string> TableContentsColumn2 = new List<string>();
+
+					axisValueOffset = 10 * Random.Range (1, 5);
+					gridValOffset = axisValueOffset / 2;
+					int minValue, maxValue;
+					int numberOfBars = 5;
+					do {
+						minValue = Random.Range (2, 10);
+						maxValue = Random.Range (minValue, 13);
+					} while (maxValue - minValue < numberOfBars - 1);
+
+					List<string> Animals = new List<string> (){"Rabbit", "Monkey", "Lion", "Elephant", "Zebra", "Giraffe", "Tiger", "Leopard"};
+					Animals.Shuffle ();
+
+					for (int i = 0; i < numberOfBars; i++){
+						coeff.Add (gridValOffset * Random.Range (minValue + 1, maxValue));
+					}
+					coeff.Shuffle ();
+
+					TableContentsColumn1.Add ("Animals");
+					TableContentsColumn1.AddRange (Animals);
+					TableContentsColumn2.Add ("Number in Zoo");
+					foreach (int i in coeff){
+						TableContentsColumn2.Add (i.ToString ());
+					}
+					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
+					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
+
+					QuestionText.text = "Draw a bar graph to show the following information.\n";
+
+					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
+					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
+					statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
+					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
+						{
+							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number in Zoo").SetPointOffset (2),
+							new StatisticsAxis ().SetStatisticsValues
+							(
+								new List<StatisticsValue>(){
+									new StatisticsValue (Animals[0], coeff[0]),
+									new StatisticsValue (Animals[1], coeff[1]),
+									new StatisticsValue (Animals[2], coeff[2]),
+									new StatisticsValue (Animals[3], coeff[3]),
+									new StatisticsValue (Animals[4], coeff[4])
+								}
+							).SetAxisName ("Animals").SetPointOffset (3)
+						}
+					);
+					statisticsHelper.SetInteractable (true);
+					statisticsHelper.DrawGraph ();
 
 				}
 				else if (selector == 3)
 				{
-					
+					SetStatisticsMode ();
+					SetTable (3);
+
+					List<string> TableContentsColumn1 = new List<string>();
+					List<string> TableContentsColumn2 = new List<string>();
+					List<string> TableContentsColumn3 = new List<string>();
+					List<int> coeff1 = new List<int> ();
+
+					axisValueOffset = 10 * Random.Range (1, 5);
+					gridValOffset = axisValueOffset / 2;
+					int minValue, minValue1, maxValue, maxValue1;
+					int numberOfBars = 5;
+					do {
+						minValue = Random.Range (2, 10);
+						maxValue = Random.Range (minValue, 13);
+					} while (maxValue - minValue < numberOfBars - 1);
+					do {
+						minValue1 = Random.Range (2, 10);
+						maxValue1 = Random.Range (minValue1, 13);
+					} while (maxValue1 - minValue1 < numberOfBars - 1);
+
+					List<string> months = new List<string> (){"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+					months.Shuffle ();
+
+					for (int i = 0; i < numberOfBars; i++){
+						coeff.Add (gridValOffset * Random.Range (minValue + 1, maxValue));
+						coeff1.Add (gridValOffset * Random.Range (minValue1 + 1, maxValue1));
+					}
+					coeff.Shuffle ();
+
+					TableContentsColumn1.Add ("Months");
+					TableContentsColumn1.AddRange (months);
+					TableContentsColumn2.Add ("Refrigerators");
+					TableContentsColumn3.Add ("ACs");
+					foreach (int i in coeff){
+						TableContentsColumn2.Add (i.ToString ());
+					}
+					foreach (int i in coeff1){
+						TableContentsColumn3.Add (i.ToString ());
+					}
+					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
+					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
+					StatTableColumn3.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn3.ToArray ());
+
+					QuestionText.text = "Draw a bar graph to show the following information.\n";
+
+					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
+					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
+					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
+					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
+						{
+							new StatisticsAxis ().SetStatisticsValues
+							(
+								new List<StatisticsValue>(){
+									new StatisticsValue (months[0], new int[] {coeff[0], coeff1[0]}),
+									new StatisticsValue (months[1], new int[] {coeff[1], coeff1[1]}),
+									new StatisticsValue (months[2], new int[] {coeff[2], coeff1[2]}),
+									new StatisticsValue (months[3], new int[] {coeff[3], coeff1[3]}),
+									new StatisticsValue (months[4], new int[] {coeff[4], coeff1[4]})
+								}
+							).SetAxisName ("Months").SetPointOffset (3),
+							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of Units").SetPointOffset (2)
+						}
+					);
+					statisticsHelper.SetInteractable (true);
+					statisticsHelper.DrawGraph ();
 				}
 				else if (selector == 4)
 				{
+					SetStatisticsMode ();
+					SetTable ();
+
+					List<string> TableContentsColumn1 = new List<string>();
+					List<string> TableContentsColumn2 = new List<string>();
+
+					axisValueOffset = 10 * Random.Range (1, 5);
+					gridValOffset = axisValueOffset / 2;
+					int minValue, maxValue;
+					int numberOfBars = 5;
+					minValue = 3;
+					maxValue = 10;
+
+					List<string> weekDays = new List<string>() {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+
+					for (int i = 0; i < numberOfBars; i++){
+						coeff.Add (gridValOffset * Random.Range (minValue + 1, maxValue));
+					}
+					coeff.Shuffle ();
+
+					QuestionText.text = "Given : Table of 'Weekdays' vs 'The number of people who visited a flower show'. Complete the given graph.";
+					TableContentsColumn1.Add ("Weekdays");
+					TableContentsColumn1.AddRange (weekDays);
+					TableContentsColumn2.Add ("Number");
+					foreach (int i in coeff){
+						TableContentsColumn2.Add (i.ToString ());
+					}
+					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
+					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
+
+					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
+					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
+					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
+					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
+						{
+							new StatisticsAxis ().SetStatisticsValues
+							(
+								new List<StatisticsValue>(){
+									new StatisticsValue (weekDays[0], coeff[0]),
+									new StatisticsValue (weekDays[1], coeff[1]),
+									new StatisticsValue (weekDays[2], coeff[2]),
+									new StatisticsValue (weekDays[3], coeff[3]),
+									new StatisticsValue (weekDays[4], coeff[4])
+								}
+							).SetAxisName ("Weekdays").SetPointOffset (3),
+							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of People").SetPointOffset (2)
+						}
+					);
+					statisticsHelper.SetInteractable (true);
+					statisticsHelper.DrawGraph ();
 
 				}
 				else if (selector == 5)
 				{
-					
-				}
-				else if (selector == 6)
-				{
-					
+					subQuestionTEX.gameObject.SetActive (true);
+
+					List<int> coeff1 = new List<int> ();
+
+					axisValueOffset = 2;
+					gridValOffset = axisValueOffset / 2;
+					int minValue, minValue1, maxValue, maxValue1;
+					int numberOfBars = 4;
+					do {
+						minValue = Random.Range (2, 10);
+						maxValue = Random.Range (minValue, 13);
+					} while (maxValue - minValue < numberOfBars - 1);
+					do {
+						minValue1 = Random.Range (2, 10);
+						maxValue1 = Random.Range (minValue1, 13);
+					} while (maxValue1 - minValue1 < numberOfBars - 1);
+
+					List<string> Books = new List<string> (){"Mystery", "Adventure", "Comics", "Fiction", "Satire", "Drama", "Horror"};
+					Books.Shuffle ();
+
+					coeff.Add (minValue * gridValOffset);
+					coeff1.Add (minValue1 * gridValOffset);
+					for (int i = 1; i < numberOfBars - 1; i++){
+						coeff.Add (gridValOffset * Random.Range (minValue + 1, maxValue));
+						coeff1.Add (gridValOffset * Random.Range (minValue1 + 1, maxValue1));
+					}
+					coeff.Add (maxValue * gridValOffset);
+					coeff1.Add (maxValue1 * gridValOffset);
+					coeff.Shuffle ();
+					coeff1.Shuffle ();
+
+					QuestionText.text = "Use the given graph to answer the following question.";
+
+					statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
+					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
+					statisticsHelper.ShiftPosition (new Vector2 (-270, 215));
+					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
+						{
+							new StatisticsAxis ().SetStatisticsValues
+							(
+								new List<StatisticsValue>(){
+									new StatisticsValue (Books[0], new int[] {coeff[0], coeff1[0]}),
+									new StatisticsValue (Books[1], new int[] {coeff[1], coeff1[1]}),
+									new StatisticsValue (Books[2], new int[] {coeff[2], coeff1[2]}),
+									new StatisticsValue (Books[3], new int[] {coeff[3], coeff1[3]}),
+								}
+							).SetAxisName ("Types of Books").SetPointOffset (3),
+							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of Boys/Girls").SetPointOffset (2)
+						}
+					);
+					statisticsHelper.DrawGraph ();
+
+					randSelector = Random.Range (0, 3);
+					if (randSelector == 0)
+					{
+						int randSelector1 = Random.Range (0, numberOfBars);
+						string expression = coeff[randSelector1] > coeff1[randSelector1]? "more": "fewer";
+						subQuestionTEX.text = string.Format ("How many {0} girls than boys read {1}?", expression, Books[randSelector1]);
+						Answer = string.Format ("{0}", Mathf.Abs (coeff[randSelector1] - coeff1[randSelector1])); 
+					} 
+					else if (randSelector == 1)
+					{
+						string expression = Random.Range (0, 2) == 0? "girls": "boys";
+						subQuestionTEX.text = string.Format ("What is the total number of {0} in the class?", expression);
+						int total = 0;
+						if (expression == "girls") {
+							foreach (int i in coeff){
+								total += i;
+							}
+						} else {
+							foreach (int i in coeff1){
+								total += i;
+							}
+						}
+						Answer = string.Format ("{0}", total);
+					}
+					else if (randSelector == 2)
+					{
+						SetMCQMode (4);
+						string expression = Random.Range (0, 2) == 0? "girls": "boys";
+						subQuestionTEX.text = string.Format ("Which are the most popular kind of books among {0}?", expression);
+
+						if (expression == "girls") {
+							Answer = string.Format ("{0}", Books[coeff.IndexOf (maxValue * gridValOffset)]);				
+						} else {
+							Answer = string.Format ("{0}", Books[coeff1.IndexOf (maxValue1 * gridValOffset)]);				
+						}
+						for (int i = 0; i < 4; i++){
+							options.Add (Books [i]);
+						}
+						RandomizeMCQOptionsAndFill (options);
+					}
 				}
 			}
 			#endregion
+			#region level2
+			else if (level == 2)
+			{
+				selector = GetRandomSelector (1, 6);
 
+				if (selector == 1)
+				{
+					SetStatisticsMode ();
+					List<string> pieStringData = new List<string> () {"Beach Holiday", "Trekking Holiday", "Relaxed Holiday", "Sightseeing Holiday"};
+					int numberOfData = pieStringData.Count;
+					for (int i = 0; i < numberOfData; i++){
+						//coeff.Add ();
+					}
+					statisticsHelper.SetStatisticsType (StatisticsType.Pie);
+					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
+					statisticsHelper.SetPieParameters (
+						new List<string> (){ "Ramiz", "Negi", "Ankit", "Sagar" },
+						new List<int> (){ 10, 20, 30, 40 }
+					);
+					statisticsHelper.SetPieRadius (150f); 
+					statisticsHelper.DrawGraph ();
+				}
+				else if (selector == 2)
+				{
+					SetStatisticsMode ();
+					List<string> pieStringData = new List<string> () {"Arnav", "Trekking Holiday", "Relaxed Holiday", "Sightseeing Holiday"};
+					int numberOfData = pieStringData.Count;
+					for (int i = 0; i < numberOfData; i++){
+						//coeff.Add ();
+					}
+					statisticsHelper.SetStatisticsType (StatisticsType.Pie);
+					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
+					statisticsHelper.SetPieParameters (
+						new List<string> (){ "Ramiz", "Negi", "Ankit", "Sagar" },
+						new List<int> (){ 10, 20, 30, 40 }
+					);
+					statisticsHelper.SetPieRadius (150f); 
+					statisticsHelper.DrawGraph ();
+				}
+			}
+			#endregion
 			CerebroHelper.DebugLog (Answer);
 			userAnswerText = GeneralButton.gameObject.GetChildByName<Text>("Text");
 			userAnswerText.text = "";
@@ -401,6 +804,20 @@ namespace Cerebro {
 			ContinueBtn.gameObject.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (375f,ContinueBtn.gameObject.GetComponent<RectTransform> ().anchoredPosition.y);
 			FlagButton.gameObject.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (375f,FlagButton.gameObject.GetComponent<RectTransform> ().anchoredPosition.y);
 			SolutionButton.gameObject.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (375f,SolutionButton.gameObject.GetComponent<RectTransform> ().anchoredPosition.y);
+		}
+		protected void SetTable (int number_of_columns = 2)
+		{
+			StatTableColumn1.gameObject.SetActive (true);
+			StatTableColumn2.gameObject.SetActive (true);
+			if (number_of_columns == 3) {
+				StatTableColumn3.gameObject.SetActive (true);
+			}
+		}
+		protected void ResetTable ()
+		{
+			StatTableColumn1.gameObject.SetActive (false);
+			StatTableColumn2.gameObject.SetActive (false);
+			StatTableColumn3.gameObject.SetActive (false);
 		}
 	}
 }

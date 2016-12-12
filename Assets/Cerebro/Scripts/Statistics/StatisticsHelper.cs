@@ -74,7 +74,7 @@ namespace Cerebro
 			pieValues = new List<int> ();
 			pieStrings = new List<string> ();
 			this.ShiftPosition(Vector2.zero);
-			pieRadius = 250f;
+			pieRadius = 150f;
 
 		}
 
@@ -88,7 +88,7 @@ namespace Cerebro
 			graphOrigin = graphCenter;
 			snapValue = gridOffset;
 			this.GetComponent<Image> ().GetComponent<RectTransform> ().sizeDelta = Vector2.one * _gridCoordinateRange.x * gridOffset;
-			ShiftGraphOrigin (new Vector2 (2, 2) - _gridCoordinateRange / 2);
+			ShiftGraphOrigin (- _gridCoordinateRange / 2);
 		}
 
 		//Set graph parameters
