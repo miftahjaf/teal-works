@@ -554,7 +554,7 @@ namespace Cerebro {
 		}
 
 		public override void numPadButtonPressed(int value) {
-			if (ignoreTouches || checkLastTextFor (new string[1]{ "%" })) {
+			if (ignoreTouches) {
 				return;
 			}
 			if (value <= 9) {
