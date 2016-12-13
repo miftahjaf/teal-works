@@ -41,7 +41,7 @@ namespace Cerebro
 
 		private float gridOffset;               //Grid offset
 		private float fontMultiPlier;           //Font multiplier to make graph font smaller or bigger
-		private float snapValue;                //Graph sanp value (Default grid offset)
+		private Vector2 snapValue;                //Graph sanp value (Default grid offset)
 
 		private bool isInteractable;
 
@@ -86,7 +86,7 @@ namespace Cerebro
 			graphCenter = new Vector2 (Mathf.RoundToInt(gridCoordinateRange.x * gridOffset / 2f),Mathf.RoundToInt(gridCoordinateRange.y * gridOffset / 2f));
 			gridPosition = new Vector2 (-gridCoordinateRange.x * gridOffset/2f , -gridCoordinateRange.y * gridOffset/2f);
 			graphOrigin = graphCenter;
-			snapValue = gridOffset;
+			snapValue = Vector2.one * gridOffset;
 			this.GetComponent<Image> ().GetComponent<RectTransform> ().sizeDelta = Vector2.one * _gridCoordinateRange.x * gridOffset;
 			ShiftGraphOrigin (- _gridCoordinateRange / 2);
 		}
@@ -107,6 +107,12 @@ namespace Cerebro
 
 		//Set snap value
 		public void SetSnapValue(float _snapValue)
+		{
+			this.snapValue = Vector2.one * _snapValue;
+		}
+
+		//Set snap value
+		public void SetSnapValue(Vector2 _snapValue)
 		{
 			this.snapValue = _snapValue;
 		}
@@ -222,11 +228,12 @@ namespace Cerebro
 				pointInPosXAxis = statisticsAxis.statisticsValues.Count;
 				graphMaxValue.x =  Mathf.Abs((Mathf.RoundToInt((gridCoordinateRange.x/2f + graphCenterOffset.x)))) * axisOffset.x/pointOffset.x ;
 			}
-
+			Color[] randomColors = null;
 			for (int i = 1; i <= pointInPosXAxis; i++) 
 			{
 				string text = (i * axisOffset.x).ToString ();
 				int value = 0;
+
 				if (statisticType == StatisticsType.VerticalBar) {
 					text = "";
 					if(statisticsAxis.statisticsValues.Count > i - 1 )
@@ -235,10 +242,12 @@ namespace Cerebro
 						int totalValues = statisticsAxis.statisticsValues [i - 1].values.Length;
 						float offsetValue = (2 *startOffset) / totalValues;
 						float startPoint = i * axisOffset.x - GetStartOffsetValue(startOffset, totalValues);
-
+						if (randomColors == null) {
+							randomColors = CerebroHelper.GetRandomColorValues (totalValues);
+						}
 						for (int count = 0; count < totalValues; count++) {
 							value = statisticsAxis.statisticsValues [i - 1].values [count];
-							GenerateGraphBar (new Vector2 ( startPoint,0f), new Vector2 (startPoint,value ),Color.black,2f/totalValues);
+							GenerateGraphBar (new Vector2 ( startPoint,0f), new Vector2 (startPoint,value ),randomColors[count],2f/totalValues);
 							startPoint +=offsetValue;
 						}
 					}
@@ -267,29 +276,32 @@ namespace Cerebro
 				pointInPosYAxis = statisticsAxis.statisticsValues.Count;
 				graphMaxValue.y = Mathf.Abs((Mathf.RoundToInt(gridCoordinateRange.y/2f + graphCenterOffset.y))) * axisOffset.y/pointOffset.y;
 			}
-
+			randomColors = null;
 			for (int i = 1; i <= pointInPosYAxis; i++) 
 			{
 				string text = (i * axisOffset.y).ToString ();
 				int value = 0;
 				if (statisticType == StatisticsType.HorizontalBar) {
 					text = "";
+				
 					if(statisticsAxis.statisticsValues.Count > i - 1 )
 					{
 						text =  statisticsAxis.statisticsValues [i - 1].name;
 						int totalValues = statisticsAxis.statisticsValues [i - 1].values.Length;
 						float offsetValue = (2 *startOffset) / totalValues;
 						float startPoint = i * axisOffset.y - GetStartOffsetValue(startOffset, totalValues);
-
+						if (randomColors == null) {
+							randomColors = CerebroHelper.GetRandomColorValues (totalValues);
+						}
 						for (int count = 0; count < totalValues; count++) {
 							value = statisticsAxis.statisticsValues [i - 1].values [count];
-							GenerateGraphBar (new Vector2 (0f,startPoint), new Vector2 (value, startPoint),Color.black,2f/totalValues);
+							GenerateGraphBar (new Vector2 (0f,startPoint), new Vector2 (value, startPoint),randomColors[count],2f/totalValues);
 							startPoint +=offsetValue;
 						}
 					}
 
 				}
-				GenerateLinePoint (new LinePoint (text, GraphPosToUIPos (new Vector2 (0, i  * axisOffset.y -startOffset)), 0f, false, 0).SetPointTextOffset(new Vector2(-20,0)),axisParent);
+				GenerateLinePoint (new LinePoint (text, GraphPosToUIPos (new Vector2 (0, i  * axisOffset.y -startOffset)), 0f, false, 0).SetPointTextOffset(new Vector2(statisticsAxis.statisticsValues.Count>0?-30f:-20f,0)),axisParent);
 			}
 
 
@@ -420,17 +432,17 @@ namespace Cerebro
 		{
 			fontMultiPlier = _fontMultiplier;
 		}
-
 		//Set snap position
 		public Vector2 GetSnapPosition(Vector2 position)
 		{
-			return new Vector2 (Mathf.RoundToInt (position.x/snapValue ) * snapValue , Mathf.RoundToInt (position.y/snapValue) *snapValue);
+			return new Vector2 (Mathf.RoundToInt (position.x/snapValue.x ) * snapValue.x , Mathf.RoundToInt (position.y/snapValue.y) *snapValue.y);
 		}
 
 		//Get snap point from given point
 		public Vector2 GetSnapPoint(Vector2 point)
 		{
-			return new Vector2 (Mathf.RoundToInt (point.x/(axisOffset.x/pointOffset.x)) *(axisOffset.x/pointOffset.x), Mathf.RoundToInt (point.y/(axisOffset.y/pointOffset.y)) *(axisOffset.y/pointOffset.y));
+			Vector2 snapOffsetValue = (snapValue / gridOffset);
+			return new Vector2 (Mathf.RoundToInt (point.x/(axisOffset.x/pointOffset.x * snapOffsetValue.x)) *(axisOffset.x/pointOffset.x * snapOffsetValue.x), Mathf.RoundToInt (point.y/(axisOffset.y/pointOffset.y * snapOffsetValue.y)) * (axisOffset.y/pointOffset.y * snapOffsetValue.y));
 		}
 
 		//Move plotted point or line point and change line according to point movement
@@ -546,8 +558,8 @@ namespace Cerebro
 		private void SetTitles()
 		{
 			GenerateTextObject (new Vector2(0,-gridPosition.y + 17f),graphTitle,"XAxis Title",15);
-			GenerateTextObject (new Vector2(0,gridPosition.y - 17f),statisticsAxises[0].axisName,"XAxis Title");
-			GenerateTextObject (new Vector2(gridPosition.x - 20f,0),statisticsAxises[1].axisName,"yAxis Title",13,90);
+			GenerateTextObject (new Vector2(0,gridPosition.y - 37f),statisticsAxises[0].axisName,"XAxis Title");
+			GenerateTextObject (new Vector2(gridPosition.x - (statisticsAxises[1].statisticsValues.Count>0?65f:45f),0),statisticsAxises[1].axisName,"yAxis Title",13,90);
 		}
 
 		private void GenerateTextObject(Vector2 position,string text,string name,int fontSize=13,float rotation=0)
@@ -589,6 +601,7 @@ namespace Cerebro
 			int pieValueCount = pieValues.Count;
 			float offsetPos = pieRadius / 6;
 			Vector2 labelPosition = new Vector2 (pieRadius+offsetPos, pieRadius/2f);
+			Color[] randomColorValues = CerebroHelper.GetRandomColorValues (count);
 			for (int i = 0; i < count; i++) {
 				//Instantiate arc prefab
 				GameObject arc = GameObject.Instantiate (arcPrefab);
@@ -604,7 +617,7 @@ namespace Cerebro
 			
 				if(nextAngle>0)
 				{
-					Color color = new Color (Random.Range (150f, 220f) / 255f, Random.Range (150f, 220f) / 255f, Random.Range (150f, 220f) / 255f);
+					Color color = randomColorValues [i];
 					//set arc size according to radius
 					UIpolygon.GetComponent<RectTransform> ().sizeDelta = Vector2.one * pieRadius * 2f;
 					UIpolygon.color = color;
