@@ -397,7 +397,7 @@ namespace Cerebro {
 					QuestionText.text = "Draw a bar graph to show the following information.\n";
 
 					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
-					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
+					statisticsHelper.ShiftPosition (new Vector2 (-185f, 0));
 					statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 						{
