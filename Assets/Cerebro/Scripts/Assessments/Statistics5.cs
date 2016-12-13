@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using MaterialUI;
+using System.Linq;
 
 namespace Cerebro {
 	public class Statistics5 : BaseAssessment {
@@ -29,7 +30,7 @@ namespace Cerebro {
 			StartCoroutine(StartAnimation ());
 
 
-			scorestreaklvls = new int[3];
+			scorestreaklvls = new int[2];
 			for (var i = 0; i < scorestreaklvls.Length; i++) {
 				scorestreaklvls [i] = 0;
 			}
@@ -467,6 +468,7 @@ namespace Cerebro {
 
 					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
+					statisticsHelper.SetSnapValue (new Vector2 (11, 22));
 					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 						{
@@ -559,7 +561,7 @@ namespace Cerebro {
 						maxValue1 = Random.Range (minValue1, 13);
 					} while (maxValue1 - minValue1 < numberOfBars - 1);
 
-					List<string> Books = new List<string> (){"Mystery", "Adventure", "Comics", "Fiction", "Satire", "Drama", "Horror"};
+					List<string> Books = new List<string> (){"Mystery", "Action", "Comics", "Fiction", "Satire", "Drama", "Horror"};
 					Books.Shuffle ();
 
 					coeff.Add (minValue * gridValOffset);
@@ -640,41 +642,154 @@ namespace Cerebro {
 			#region level2
 			else if (level == 2)
 			{
-				selector = GetRandomSelector (1, 6);
+				selector = GetRandomSelector (1, 4);
 
 				if (selector == 1)
 				{
 					SetStatisticsMode ();
+					SetTable ();
+
+					List<string> TableContentsColumn1 = new List<string>();
+					List<string> TableContentsColumn2 = new List<string>();
 					List<string> pieStringData = new List<string> () {"Beach Holiday", "Trekking Holiday", "Relaxed Holiday", "Sightseeing Holiday"};
-					int numberOfData = pieStringData.Count;
-					for (int i = 0; i < numberOfData; i++){
-						//coeff.Add ();
+					pieStringData.Shuffle ();
+
+					int numberOfData = 4;
+					int unitData = Random.Range (5, 15);
+					do {
+						coeff = new List<int> ();
+						for (int i = 0; i < numberOfData; i++){
+							coeff.Add (unitData);
+						}
+
+						for (int i = 0; i < numberOfData; i++){
+							coeff[i] *= Random.Range (1, 5);
+						}
+					} while (coeff.Sum () != 8 * unitData);
+
+					TableContentsColumn1.AddRange (pieStringData);
+					foreach (int i in coeff){
+						TableContentsColumn2.Add (i.ToString ());
 					}
+					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}", TableContentsColumn1.ToArray ());
+					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}", TableContentsColumn2.ToArray ());
+
 					statisticsHelper.SetStatisticsType (StatisticsType.Pie);
-					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
+					statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
 					statisticsHelper.SetPieParameters (
-						new List<string> (){ "Ramiz", "Negi", "Ankit", "Sagar" },
-						new List<int> (){ 10, 20, 30, 40 }
+						pieStringData,
+						coeff
 					);
-					statisticsHelper.SetPieRadius (150f); 
+					statisticsHelper.SetPieRadius (100f); 
 					statisticsHelper.DrawGraph ();
+
+					QuestionText.text = string.Format ("{0} people were asked what kind of holiday was their favourite. Their responses are given in the table below. Colour the circle graph accordingly.", 8 * unitData);
 				}
 				else if (selector == 2)
 				{
-					SetStatisticsMode ();
-					List<string> pieStringData = new List<string> () {"Arnav", "Trekking Holiday", "Relaxed Holiday", "Sightseeing Holiday"};
-					int numberOfData = pieStringData.Count;
-					for (int i = 0; i < numberOfData; i++){
-						//coeff.Add ();
-					}
+					subQuestionTEX.gameObject.SetActive (true);
+					List<string> pieStringData = new List<string> () {"Arnav", "Nitya", "Zara", "Anvi", "Rachit"};
+					pieStringData.Shuffle ();
+
+					int numberOfData = 4;
+					int unitData = Random.Range (5, 15);
+					do {
+						coeff = new List<int> ();
+						for (int i = 0; i < numberOfData; i++){
+							coeff.Add (unitData);
+						}
+
+						for (int i = 0; i < numberOfData; i++){
+							coeff[i] *= Random.Range (1, 5);
+						}
+					} while (coeff.Sum () != 8 * unitData);
+
 					statisticsHelper.SetStatisticsType (StatisticsType.Pie);
-					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
+					statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
 					statisticsHelper.SetPieParameters (
-						new List<string> (){ "Ramiz", "Negi", "Ankit", "Sagar" },
-						new List<int> (){ 10, 20, 30, 40 }
+						pieStringData.GetRange (0, numberOfData),
+						coeff
 					);
-					statisticsHelper.SetPieRadius (150f); 
+					statisticsHelper.SetPieRadius (100f); 
 					statisticsHelper.DrawGraph ();
+
+					QuestionText.text = string.Format ("This circle graph shows the votes for the class election. There are {0} students in the class.", 8 * unitData);
+					randSelector = Random.Range (0, 3);
+					if (randSelector == 0)
+					{
+						int randSelector1 = Random.Range (0, numberOfData);
+						subQuestionTEX.text = string.Format ("Estimate the number of votes {0} got?", pieStringData[randSelector1]);
+						Answer = string.Format ("{0}", coeff[randSelector1]);
+					}
+					else if (randSelector == 1)
+					{
+						SetMCQMode (4);
+
+						subQuestionTEX.text = "Who won the election?";
+						for (int i = 0; i < 4; i++){
+							options.Add (pieStringData[i]);
+						}
+						Answer = pieStringData[coeff.IndexOf (coeff.Max ())];
+						RandomizeMCQOptionsAndFill (options);
+					}
+					else if (randSelector == 2)
+					{
+						int randSelector1;
+						int randSelector2;
+						do {
+							randSelector1 = Random.Range (0, numberOfData);
+							randSelector2 = Random.Range (0, numberOfData);
+						} while (randSelector1 == randSelector2);
+
+						string expression = coeff[randSelector1] > coeff[randSelector2]? "more": "fewer";
+						subQuestionTEX.text = string.Format ("How many {0} votes did {1} get than {2}?", expression, pieStringData[randSelector1], pieStringData[randSelector2]);
+						Answer = string.Format ("{0}", Mathf.Abs (coeff[randSelector1] - coeff[randSelector2]));
+					}
+				}
+				else if (selector == 3)
+				{
+					subQuestionTEX.gameObject.SetActive (true);
+					List<string> pieStringData = new List<string> () {"Maths", "Physics", "Biology", "Chemistry", "English", "Economy", "Philosophy", "Computer"};
+					pieStringData.Shuffle ();
+
+					int numberOfData = 4;
+					int unitData = Random.Range (5, 15);
+					do {
+						coeff = new List<int> ();
+						for (int i = 0; i < numberOfData; i++){
+							coeff.Add (unitData);
+						}
+
+						for (int i = 0; i < numberOfData; i++){
+							coeff[i] *= Random.Range (1, 5);
+						}
+					} while (coeff.Sum () != 8 * unitData);
+
+
+					statisticsHelper.SetStatisticsType (StatisticsType.Pie);
+					statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
+					statisticsHelper.SetPieParameters (
+						pieStringData.GetRange (0, numberOfData),
+						coeff
+					);
+					statisticsHelper.SetPieRadius (100f); 
+					statisticsHelper.DrawGraph ();
+
+					QuestionText.text = string.Format ("This circle graph shows the number of days Tirthan spent studying different subjects out of a total study time of {0} days.", coeff.Sum ());
+					randSelector = Random.Range (0, 2);
+					if (randSelector == 0)
+					{
+						int randSelector1 = Random.Range (0, numberOfData);
+						int hcf = MathFunctions.GetHCF (coeff[randSelector1], coeff.Sum ());
+						subQuestionTEX.text = string.Format ("Give the fraction shown by the circle graph for {0}.", pieStringData[randSelector1]);
+						Answer = string.Format ("{0}/{1}", coeff[randSelector1] / hcf, coeff.Sum () / hcf);
+					}
+					else if (randSelector == 1)
+					{
+						int randSelector1 = Random.Range (0, numberOfData);
+						subQuestionTEX.text = string.Format ("How many days did he spend studying {0} in that period.", pieStringData[randSelector1]);
+						Answer = string.Format ("{0}", coeff[randSelector1]);
+					}
 				}
 			}
 			#endregion
