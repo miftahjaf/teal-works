@@ -677,7 +677,7 @@ namespace Cerebro
 														   string.Format ("\\Delta{{ABC}} is an equilateral triangle with \\angle{{A}} = \\angle{{B}} = \\angle{{C}} = 60{0}", MathFunctions.deg)};
 					randSelector = Random.Range (0, 3);
 					QuestionLatext.text = questionsList[randSelector];
-					Answer = randSelector == 3? "Possible": "Not Possible";
+					Answer = randSelector == 2? "Possible": "Not Possible";
 
 					MCQ.transform.Find ("Option1").Find ("Text").GetComponent<TEXDraw> ().text = "Possible";
 					MCQ.transform.Find ("Option2").Find ("Text").GetComponent<TEXDraw> ().text = "Not Possible";

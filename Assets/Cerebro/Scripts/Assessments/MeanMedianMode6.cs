@@ -330,7 +330,7 @@ namespace Cerebro {
 				else if (selector == 4)
 				{
 					fDataSet = MathFunctions.GetFloatRandomDataSet (1.1f, 2.5f, dataSetLength); 
-					fRange = fDataSet.Max () - fDataSet.Min (); 
+					fRange = MathFunctions.GetRounded (fDataSet.Max () - fDataSet.Min (), 2); 
 
 					Answer = fRange.ToString ();
 				}
