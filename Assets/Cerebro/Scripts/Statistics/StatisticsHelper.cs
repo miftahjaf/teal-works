@@ -262,6 +262,7 @@ namespace Cerebro
 
 			//Pos Y
 			int pointInPosYAxis =  0;
+			startOffset = 0f;
 
 			if(statisticsAxis.statisticsValues.Count==0)
 			{
@@ -308,7 +309,6 @@ namespace Cerebro
 			//Neg 
 			graphMinValue.y = 0f;
 			axisParent.gameObject.SetActive (showAxis);
-			Debug.Log ("graph min value "+graphMinValue + " graph max value " + graphMaxValue);
 		}
 
 		private float GetStartOffsetValue(float offset, int noOfValues)
