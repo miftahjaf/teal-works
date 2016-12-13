@@ -469,9 +469,9 @@ namespace Cerebro
 					QuestionText.text = "Factorise :";
 					subQuestionTEX.text = "\\aalgebra^{2} + " + coeff1 + "\\aalgebra^{4} " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{7} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{9}";
 					expression1 = "\\aalgebra^{2}(1 + " + coeff1 + "\\aalgebra^{2} " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
-					expression2 = "\\aalgebra^{2}(1 + " + coeff1 + "\\aalgebra^{2} " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
-					expression3 = "\\aalgebra^{2}(1 + " + coeff1 + "\\aalgebra^{2} " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
-					expression4 = "\\aalgebra^{2}(1 + " + coeff1 + "\\aalgebra^{2} " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
+					expression2 = "\\aalgebra^{2}(1 + " + coeff1 + "\\aalgebra^{2} " + (sign == -1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
+					expression3 = "\\aalgebra^{2}(1 + " + coeff1 + "\\aalgebra^{2} " + (sign == 1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == 1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
+					expression4 = "\\aalgebra^{2}(1 + " + coeff1 + "\\aalgebra^{2} " + (sign == -1? "+ ":"- ") + coeff2 + "\\aalgebra^{5} " + (sign == -1? "+ ":"- ") + coeff3 + "\\aalgebra^{7})";
 					options.Add(expression1);	
 					options.Add(expression2);
 					options.Add(expression3);
