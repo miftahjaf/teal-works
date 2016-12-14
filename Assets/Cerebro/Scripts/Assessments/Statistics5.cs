@@ -674,7 +674,7 @@ namespace Cerebro {
 					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}", TableContentsColumn1.ToArray ());
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}", TableContentsColumn2.ToArray ());
 
-					statisticsHelper.SetStatisticsType (StatisticsType.Pie);
+					statisticsHelper.SetStatisticsType (StatisticsType.PieToFill);
 					statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
 					statisticsHelper.SetPieParameters (
 						pieStringData,

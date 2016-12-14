@@ -13,6 +13,7 @@ namespace Cerebro
 		VerticalBar,
 		HorizontalBar,
 		Pie,
+		PieToFill,
 		Line,
 		None
 	}
@@ -56,6 +57,10 @@ namespace Cerebro
 		private List<string> pieStrings;
 		private float pieRadius;
 
+		private List<UIPolygon> pieArcList;
+		private List<Color> pieArcColors;
+		private Color currentSelectedColor;
+
 		//Reset old set values
 		public void Reset()
 		{
@@ -75,6 +80,9 @@ namespace Cerebro
 			pieStrings = new List<string> ();
 			this.ShiftPosition(Vector2.zero);
 			pieRadius = 150f;
+			pieArcList = new List<UIPolygon> ();
+			pieArcColors = new List<Color> ();
+			currentSelectedColor = Color.white;
 
 		}
 
@@ -133,7 +141,7 @@ namespace Cerebro
 		//Draw graph and grid according to parameters
 		public void DrawGraph(bool showAxis = true)
 		{
-			if (statisticType == StatisticsType.Pie) 
+			if (statisticType == StatisticsType.Pie || statisticType == StatisticsType.PieToFill) 
 			{
 				DrawPieGraph ();
 			} else {
@@ -602,6 +610,7 @@ namespace Cerebro
 			float offsetPos = pieRadius / 6;
 			Vector2 labelPosition = new Vector2 (pieRadius+offsetPos, pieRadius/2f);
 			Color[] randomColorValues = CerebroHelper.GetRandomColorValues (count);
+			List<Vector2> linePoints = new List<Vector2> ();
 			for (int i = 0; i < count; i++) {
 				//Instantiate arc prefab
 				GameObject arc = GameObject.Instantiate (arcPrefab);
@@ -620,16 +629,69 @@ namespace Cerebro
 					Color color = randomColorValues [i];
 					//set arc size according to radius
 					UIpolygon.GetComponent<RectTransform> ().sizeDelta = Vector2.one * pieRadius * 2f;
-					UIpolygon.color = color;
-					UIpolygon.fill = true;
-					UIpolygon.fillPercent = Mathf.RoundToInt (100f * (nextAngle) / 360f)+1;
+
+					UIpolygon.fillPercent =  ((100f * nextAngle) / 360f) + 0.5f;
 					UIpolygon.rotation = startAngle + 180f;
 					UIpolygon.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
-					startAngle += nextAngle;
+
 					UIpolygon.ReDraw ();
 					GeneratePieLabel (pieStrings [i], labelPosition, color,offsetPos);
 					labelPosition -= new Vector2(0,1.3f*offsetPos);
+
+					if (statisticType == StatisticsType.PieToFill) {
+						UIpolygon.color = Color.black;
+						linePoints.Add (Vector2.zero);
+						linePoints.Add (MathFunctions.PointAtDirection (Vector2.zero, startAngle, pieRadius));
+
+
+
+						PolygonCollider2D collider = UIpolygon.gameObject.AddComponent<PolygonCollider2D> ();
+						List<Vector2> colliderPoints = new List<Vector2> ();
+						colliderPoints.Add (Vector2.zero);
+						for(float angle = startAngle ; angle<= startAngle + nextAngle ; angle = angle+5)
+						{
+							colliderPoints.Add (MathFunctions.PointAtDirection(Vector2.zero,angle,pieRadius));
+						}
+						collider.SetPath(0, colliderPoints.ToArray());
+
+						ColliderButton colliderButton = UIpolygon.gameObject.AddComponent<ColliderButton> ();
+						colliderButton.OnClicked = delegate {
+							UIpolygon.color =currentSelectedColor;
+							UIpolygon.fill = true;
+						};
+
+					} else {
+						UIpolygon.color = color;
+						UIpolygon.fill = true;
+					}
+					startAngle += nextAngle;
+					pieArcList.Add (UIpolygon);
+					pieArcColors.Add (color);
 				}
+			}
+			if (linePoints.Count > 0) {
+
+
+				//Instantiate arc prefab
+				GameObject arc = GameObject.Instantiate (arcPrefab);
+				arc.transform.SetParent (this.transform, false);
+				UIPolygon UIpolygon = arc.GetComponent<UIPolygon> ();
+				UIpolygon.fillPercent = 100f;
+				UIpolygon.GetComponent<RectTransform> ().sizeDelta = Vector2.one * pieRadius * 2f;
+				UIpolygon.ReDraw ();
+
+				GameObject lineObject = GameObject.Instantiate (vectorObjectPrefab);
+				lineObject.transform.SetParent (this.transform,false);
+				lineObject.name = "Pie Line";
+				lineObject.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
+				VectorLine vectorLine = lineObject.GetComponent<VectorObject2D> ().vectorLine;
+				vectorLine.points2 = linePoints;
+				vectorLine.lineType = LineType.Discrete;
+				vectorLine.Draw ();
+
+				GameObject raycastDetector = new GameObject ();
+				raycastDetector.AddComponent<RayCastDetector> ();
+				raycastDetector.transform.SetParent (this.transform, false);
 			}
 		}
 
@@ -642,6 +704,8 @@ namespace Cerebro
 			pieLabel.GetComponent<RectTransform> ().anchoredPosition = position;
 			pieLabelImage.color = color;
 			pieLabel.GetComponent<RectTransform> ().sizeDelta = Vector2.one * size;
+			Button button = pieLabel.AddComponent<Button> ();
+			button.onClick.AddListener(()=>{currentSelectedColor =color;});
 
 			GameObject pieLabelText = GameObject.Instantiate (textObjectPrefab);
 			pieLabelText.name = text;

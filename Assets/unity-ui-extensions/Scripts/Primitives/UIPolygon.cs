@@ -8,7 +8,7 @@ namespace UnityEngine.UI.Extensions
 	{
 		[Tooltip("The circular fill percentage of the primitive, affected by FixedToSegments")]
 		[Range(0, 100)]
-		public int fillPercent = 100;
+		public float fillPercent = 100;
 
 		public bool fill = true;
 		public float thickness = 5;
