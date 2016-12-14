@@ -30,7 +30,7 @@ namespace Cerebro {
 			StartCoroutine(StartAnimation ());
 
 
-			scorestreaklvls = new int[2];
+			scorestreaklvls = new int[5];
 			for (var i = 0; i < scorestreaklvls.Length; i++) {
 				scorestreaklvls [i] = 0;
 			}
@@ -243,124 +243,227 @@ namespace Cerebro {
 			#region level1
 			if (level == 1) 
 			{
-				selector = GetRandomSelector (1, 6);
+				selector = GetRandomSelector (1, 9);
+
+				subQuestionTEX.gameObject.SetActive (true);
+
+				axisValueOffset = 10;
+				gridValOffset = axisValueOffset / 2;
+				int minValue, maxValue;
+				int numberOfBars = 4;
+				do {
+					minValue = Random.Range (2, 10);
+					maxValue = Random.Range (minValue, 11);
+				} while (maxValue - minValue < numberOfBars - 1);
+
+				List<string> months = new List<string> (){"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+				months.Shuffle ();
+
+				coeff.Add (gridValOffset * minValue);
+				for (int i = 1; i < numberOfBars - 1; i++){
+					coeff.Add (gridValOffset * Random.Range (minValue + 1, maxValue));
+				}
+				coeff.Add (gridValOffset * maxValue);
+				coeff.Shuffle ();
+
+				QuestionText.text = "Given are the marks that Srinivas got in four maths tests. The tests were out of 50 marks.";
 
 				if (selector == 1)
 				{
-					axisValueOffset = 10;
-					gridValOffset = axisValueOffset / 2;
-					int minValue, maxValue;
-					int numberOfBars = 4;
-					do {
-						minValue = Random.Range (2, 10);
-						maxValue = Random.Range (minValue, 11);
-					} while (maxValue - minValue < numberOfBars - 1);
+					SetMCQMode (3);
 
-					List<string> months = new List<string> (){"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-					months.Shuffle ();
-
-					coeff.Add (gridValOffset * minValue);
-					for (int i = 1; i < numberOfBars - 1; i++){
-						coeff.Add (gridValOffset * Random.Range (minValue + 1, maxValue));
-					}
-					coeff.Add (gridValOffset * maxValue);
-					coeff.Shuffle ();
-
-					QuestionText.text = "Given are the marks that Srinivas got in four maths tests. The tests were out of 50 marks.";
-					randSelector = Random.Range (1, 9);
-
-					if (randSelector == 1)
-					{
-						SetMCQMode (3);
-						subQuestionTEX.gameObject.SetActive (true);
-
-						int randSelector1 = Random.Range (0, 2);
-						subQuestionTEX.text = string.Format ("What does each square in the {0} scale stand for?", randSelector1 == 0? "vertical": "horizontal");
-						options.Add ("Test Month");
-						options.Add ("Marks");
-						options.Add (months[Random.Range(0, 4)]);
-						Answer = options[randSelector1];
-						RandomizeMCQOptionsAndFill (options);
-					}
-					else if (randSelector == 2)
-					{
-						int randSelector1 = Random.Range (0, 4);
-						subQuestionTEX.text = string.Format ("How many marks did Srinivas score in his {0} test?", months[randSelector1]);
-						Answer = string.Format ("{0}", coeff[randSelector1]);
-					}
-					else if (randSelector == 3)
-					{
-						subQuestionTEX.text = "What is his minimum score?";
-						Answer = string.Format ("{0}", minValue * gridValOffset);
-					}
-					else if (randSelector == 4)
-					{
-						subQuestionTEX.text = "What is his maximum score?";
-						Answer = string.Format ("{0}", maxValue * gridValOffset);
-					}
-					else if (randSelector == 5)
-					{
-						SetMCQMode (4);
-						for (int i = 0; i < numberOfBars; i++){
-							options.Add (months[i]);
-						}
-						RandomizeMCQOptionsAndFill (options);
-
-						subQuestionTEX.text = "In which month did he score his minimum?";
-						Answer = string.Format ("{0}", months[coeff.IndexOf (minValue * gridValOffset)]);
-					}
-					else if (randSelector == 6)
-					{
-						SetMCQMode (4);
-						for (int i = 0; i < numberOfBars; i++){
-							options.Add (months[i]);
-						}
-						RandomizeMCQOptionsAndFill (options);
-
-						subQuestionTEX.text = "In which month did he score his maximum?";
-						Answer = string.Format ("{0}", months[coeff.IndexOf (Mathf.Max (coeff.ToArray ()))]);
-					}
-					else if (randSelector == 7)
-					{
-						int randSelector1 = Random.Range (0, numberOfBars);
-
-						subQuestionTEX.text = "What is the difference between maximum and minimum marks?";
-						Answer = string.Format ("{0}", (maxValue - minValue) * gridValOffset);
-					}
-					else if (randSelector == 8)
-					{
-						int randSelector1;
-						int randSelector2;
-						do {
-							randSelector1 = Random.Range (0, numberOfBars);
-							randSelector2 = Random.Range (0, numberOfBars);
-						} while (randSelector1 == randSelector2);
-
-						string expression = coeff[randSelector1] > coeff[randSelector2]? "more": "fewer";
-						subQuestionTEX.text = string.Format ("How many {0} marks did he get in the {1} test as compared to the {2} test?", expression, months[randSelector1], months[randSelector2]);
-						Answer = string.Format ("{0}", Mathf.Abs (coeff[randSelector1] - coeff[randSelector2]));
-					}
-
-					statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
-					statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
-					statisticsHelper.ShiftPosition (new Vector2 (-270, 215));
-					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
-						{
-							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Marks").SetPointOffset (2),
-							new StatisticsAxis ().SetStatisticsValues
-							(
-								new List<StatisticsValue>(){
-									new StatisticsValue (months[0], coeff[0]),
-									new StatisticsValue (months[1], coeff[1]),
-									new StatisticsValue (months[2], coeff[2]),
-									new StatisticsValue (months[3], coeff[3]),
-								}
-							).SetAxisName ("Test Month").SetPointOffset (3)
-						}
-					);
-					statisticsHelper.DrawGraph ();
+					int randSelector1 = Random.Range (0, 2);
+					subQuestionTEX.text = string.Format ("What does each square in the {0} scale stand for?", randSelector1 == 0? "vertical": "horizontal");
+					options.Add ("Test Month");
+					options.Add ("Marks");
+					options.Add (months[Random.Range(0, 4)]);
+					Answer = options[randSelector1];
+					RandomizeMCQOptionsAndFill (options);
 				}
-				else if (selector == 2) 
+				else if (selector == 2)
+				{
+					int randSelector1 = Random.Range (0, 4);
+					subQuestionTEX.text = string.Format ("How many marks did Srinivas score in his {0} test?", months[randSelector1]);
+					Answer = string.Format ("{0}", coeff[randSelector1]);
+				}
+				else if (selector == 3)
+				{
+					subQuestionTEX.text = "What is his minimum score?";
+					Answer = string.Format ("{0}", minValue * gridValOffset);
+				}
+				else if (selector == 4)
+				{
+					subQuestionTEX.text = "What is his maximum score?";
+					Answer = string.Format ("{0}", maxValue * gridValOffset);
+				}
+				else if (selector == 5)
+				{
+					SetMCQMode (4);
+					for (int i = 0; i < numberOfBars; i++){
+						options.Add (months[i]);
+					}
+					RandomizeMCQOptionsAndFill (options);
+
+					subQuestionTEX.text = "In which month did he score his minimum?";
+					Answer = string.Format ("{0}", months[coeff.IndexOf (minValue * gridValOffset)]);
+				}
+				else if (selector == 6)
+				{
+					SetMCQMode (4);
+					for (int i = 0; i < numberOfBars; i++){
+						options.Add (months[i]);
+					}
+					RandomizeMCQOptionsAndFill (options);
+
+					subQuestionTEX.text = "In which month did he score his maximum?";
+					Answer = string.Format ("{0}", months[coeff.IndexOf (Mathf.Max (coeff.ToArray ()))]);
+				}
+				else if (selector == 7)
+				{
+					int randSelector1 = Random.Range (0, numberOfBars);
+
+					subQuestionTEX.text = "What is the difference between maximum and minimum marks?";
+					Answer = string.Format ("{0}", (maxValue - minValue) * gridValOffset);
+				}
+				else if (selector == 8)
+				{
+					int randSelector1;
+					int randSelector2;
+					do {
+						randSelector1 = Random.Range (0, numberOfBars);
+						randSelector2 = Random.Range (0, numberOfBars);
+					} while (randSelector1 == randSelector2);
+
+					string expression = coeff[randSelector1] > coeff[randSelector2]? "more": "fewer";
+					subQuestionTEX.text = string.Format ("How many {0} marks did he get in the {1} test as compared to the {2} test?", expression, months[randSelector1], months[randSelector2]);
+					Answer = string.Format ("{0}", Mathf.Abs (coeff[randSelector1] - coeff[randSelector2]));
+				}
+
+				statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
+				statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
+				statisticsHelper.ShiftPosition (new Vector2 (-270, 215));
+				statisticsHelper.SetGraphParameters (new StatisticsAxis[]
+					{
+						new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Marks").SetPointOffset (2),
+						new StatisticsAxis ().SetStatisticsValues
+						(
+							new List<StatisticsValue>(){
+								new StatisticsValue (months[0], coeff[0]),
+								new StatisticsValue (months[1], coeff[1]),
+								new StatisticsValue (months[2], coeff[2]),
+								new StatisticsValue (months[3], coeff[3]),
+							}
+						).SetAxisName ("Test Month").SetPointOffset (3)
+					}
+				);
+				statisticsHelper.DrawGraph ();
+			}
+			#endregion
+			#region level2
+			else if (level == 2)
+			{
+				selector = GetRandomSelector (1, 4);
+
+				subQuestionTEX.gameObject.SetActive (true);
+
+				List<int> coeff1 = new List<int> ();
+
+				axisValueOffset = 2;
+				gridValOffset = axisValueOffset / 2;
+				int minValue, minValue1, maxValue, maxValue1;
+				int numberOfBars = 4;
+				do {
+					minValue = Random.Range (2, 10);
+					maxValue = Random.Range (minValue, 13);
+				} while (maxValue - minValue < numberOfBars - 1);
+				do {
+					minValue1 = Random.Range (2, 10);
+					maxValue1 = Random.Range (minValue1, 13);
+				} while (maxValue1 - minValue1 < numberOfBars - 1);
+
+				List<string> Books = new List<string> (){"Mystery", "Action", "Comics", "Fiction", "Satire", "Drama", "Horror"};
+				Books.Shuffle ();
+
+				coeff.Add (minValue * gridValOffset);
+				coeff1.Add (minValue1 * gridValOffset);
+				for (int i = 1; i < numberOfBars - 1; i++){
+					coeff.Add (gridValOffset * Random.Range (minValue + 1, maxValue));
+					coeff1.Add (gridValOffset * Random.Range (minValue1 + 1, maxValue1));
+				}
+				coeff.Add (maxValue * gridValOffset);
+				coeff1.Add (maxValue1 * gridValOffset);
+				coeff.Shuffle ();
+				coeff1.Shuffle ();
+
+				QuestionText.text = "Use the given graph to answer the following question.";
+
+				statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
+				statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
+				statisticsHelper.ShiftPosition (new Vector2 (-270, 215));
+				statisticsHelper.SetBarValues (new List<string> () {"Girls", "Boys"});
+				statisticsHelper.SetGraphParameters (new StatisticsAxis[]
+					{
+						new StatisticsAxis ().SetStatisticsValues
+						(
+							new List<StatisticsValue>(){
+								new StatisticsValue (Books[0], new int[] {coeff[0], coeff1[0]}),
+								new StatisticsValue (Books[1], new int[] {coeff[1], coeff1[1]}),
+								new StatisticsValue (Books[2], new int[] {coeff[2], coeff1[2]}),
+								new StatisticsValue (Books[3], new int[] {coeff[3], coeff1[3]}),
+							}
+						).SetAxisName ("Types of Books").SetPointOffset (3),
+						new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of Boys/Girls").SetPointOffset (2)
+					}
+				);
+				statisticsHelper.DrawGraph ();
+									
+				if (selector == 1)
+				{
+					int randSelector1 = Random.Range (0, numberOfBars);
+					string expression = coeff[randSelector1] > coeff1[randSelector1]? "more": "fewer";
+					subQuestionTEX.text = string.Format ("How many {0} girls than boys read {1}?", expression, Books[randSelector1]);
+					Answer = string.Format ("{0}", Mathf.Abs (coeff[randSelector1] - coeff1[randSelector1])); 
+				} 
+				else if (selector == 2)
+				{
+					string expression = Random.Range (0, 2) == 0? "girls": "boys";
+					subQuestionTEX.text = string.Format ("What is the total number of {0} in the class?", expression);
+					int total = 0;
+					if (expression == "girls") {
+						foreach (int i in coeff){
+							total += i;
+						}
+					} else {
+						foreach (int i in coeff1){
+							total += i;
+						}
+					}
+					Answer = string.Format ("{0}", total);
+				}
+				else if (selector == 3)
+				{
+					SetMCQMode (4);
+					string expression = Random.Range (0, 2) == 0? "girls": "boys";
+					subQuestionTEX.text = string.Format ("Which are the most popular kind of books among {0}?", expression);
+
+					if (expression == "girls") {
+						Answer = string.Format ("{0}", Books[coeff.IndexOf (maxValue * gridValOffset)]);				
+					} else {
+						Answer = string.Format ("{0}", Books[coeff1.IndexOf (maxValue1 * gridValOffset)]);				
+					}
+					for (int i = 0; i < 4; i++){
+						options.Add (Books [i]);
+					}
+					RandomizeMCQOptionsAndFill (options);
+				}
+			}
+			#endregion
+			#region level3
+			else if (level == 3)
+			{
+				selector = GetRandomSelector (1, 5);
+
+				if (selector == 1) 
 				{
 					SetStatisticsMode ();
 					SetTable ();
@@ -385,9 +488,9 @@ namespace Cerebro {
 					}
 					coeff.Shuffle ();
 
-					TableContentsColumn1.Add ("Animals");
+					TableContentsColumn1.Add ("<size=25>Animals</size>");
 					TableContentsColumn1.AddRange (Animals);
-					TableContentsColumn2.Add ("Number in Zoo");
+					TableContentsColumn2.Add ("<size=25>Number in Zoo</size>");
 					foreach (int i in coeff){
 						TableContentsColumn2.Add (i.ToString ());
 					}
@@ -418,7 +521,7 @@ namespace Cerebro {
 					statisticsHelper.DrawGraph ();
 
 				}
-				else if (selector == 3)
+				else if (selector == 2)
 				{
 					SetStatisticsMode ();
 					SetTable (3);
@@ -450,10 +553,10 @@ namespace Cerebro {
 					}
 					coeff.Shuffle ();
 
-					TableContentsColumn1.Add ("Months");
+					TableContentsColumn1.Add ("<size=25>Months</size>");
 					TableContentsColumn1.AddRange (months);
-					TableContentsColumn2.Add ("Refrigerators");
-					TableContentsColumn3.Add ("ACs");
+					TableContentsColumn2.Add ("<size=25>Refrigerators</size>");
+					TableContentsColumn3.Add ("<size=25>ACs</size>");
 					foreach (int i in coeff){
 						TableContentsColumn2.Add (i.ToString ());
 					}
@@ -468,8 +571,9 @@ namespace Cerebro {
 
 					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 18f);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 90f));
-					statisticsHelper.SetSnapValue (new Vector2 (11, 22));
+					statisticsHelper.SetSnapValue (new Vector2 (9, 22));
 					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
+					statisticsHelper.SetBarValues (new List<string> () {"Refrigerators", "ACs"});
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 						{
 							new StatisticsAxis ().SetStatisticsValues
@@ -488,7 +592,7 @@ namespace Cerebro {
 					statisticsHelper.SetInteractable (true);
 					statisticsHelper.DrawGraph ();
 				}
-				else if (selector == 4)
+				else if (selector == 3)
 				{
 					SetStatisticsMode ();
 					SetTable ();
@@ -511,9 +615,9 @@ namespace Cerebro {
 					coeff.Shuffle ();
 
 					QuestionText.text = "Given : Table of 'Weekdays' vs 'The number of people who visited a flower show'. Complete the given graph.";
-					TableContentsColumn1.Add ("Weekdays");
+					TableContentsColumn1.Add ("<size=25>Weekdays</size>");
 					TableContentsColumn1.AddRange (weekDays);
-					TableContentsColumn2.Add ("Number");
+					TableContentsColumn2.Add ("<size=25>Number</size>");
 					foreach (int i in coeff){
 						TableContentsColumn2.Add (i.ToString ());
 					}
@@ -542,109 +646,7 @@ namespace Cerebro {
 					statisticsHelper.DrawGraph ();
 
 				}
-				else if (selector == 5)
-				{
-					subQuestionTEX.gameObject.SetActive (true);
-
-					List<int> coeff1 = new List<int> ();
-
-					axisValueOffset = 2;
-					gridValOffset = axisValueOffset / 2;
-					int minValue, minValue1, maxValue, maxValue1;
-					int numberOfBars = 4;
-					do {
-						minValue = Random.Range (2, 10);
-						maxValue = Random.Range (minValue, 13);
-					} while (maxValue - minValue < numberOfBars - 1);
-					do {
-						minValue1 = Random.Range (2, 10);
-						maxValue1 = Random.Range (minValue1, 13);
-					} while (maxValue1 - minValue1 < numberOfBars - 1);
-
-					List<string> Books = new List<string> (){"Mystery", "Action", "Comics", "Fiction", "Satire", "Drama", "Horror"};
-					Books.Shuffle ();
-
-					coeff.Add (minValue * gridValOffset);
-					coeff1.Add (minValue1 * gridValOffset);
-					for (int i = 1; i < numberOfBars - 1; i++){
-						coeff.Add (gridValOffset * Random.Range (minValue + 1, maxValue));
-						coeff1.Add (gridValOffset * Random.Range (minValue1 + 1, maxValue1));
-					}
-					coeff.Add (maxValue * gridValOffset);
-					coeff1.Add (maxValue1 * gridValOffset);
-					coeff.Shuffle ();
-					coeff1.Shuffle ();
-
-					QuestionText.text = "Use the given graph to answer the following question.";
-
-					statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
-					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
-					statisticsHelper.ShiftPosition (new Vector2 (-270, 215));
-					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
-						{
-							new StatisticsAxis ().SetStatisticsValues
-							(
-								new List<StatisticsValue>(){
-									new StatisticsValue (Books[0], new int[] {coeff[0], coeff1[0]}),
-									new StatisticsValue (Books[1], new int[] {coeff[1], coeff1[1]}),
-									new StatisticsValue (Books[2], new int[] {coeff[2], coeff1[2]}),
-									new StatisticsValue (Books[3], new int[] {coeff[3], coeff1[3]}),
-								}
-							).SetAxisName ("Types of Books").SetPointOffset (3),
-							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of Boys/Girls").SetPointOffset (2)
-						}
-					);
-					statisticsHelper.DrawGraph ();
-
-					randSelector = Random.Range (0, 3);
-					if (randSelector == 0)
-					{
-						int randSelector1 = Random.Range (0, numberOfBars);
-						string expression = coeff[randSelector1] > coeff1[randSelector1]? "more": "fewer";
-						subQuestionTEX.text = string.Format ("How many {0} girls than boys read {1}?", expression, Books[randSelector1]);
-						Answer = string.Format ("{0}", Mathf.Abs (coeff[randSelector1] - coeff1[randSelector1])); 
-					} 
-					else if (randSelector == 1)
-					{
-						string expression = Random.Range (0, 2) == 0? "girls": "boys";
-						subQuestionTEX.text = string.Format ("What is the total number of {0} in the class?", expression);
-						int total = 0;
-						if (expression == "girls") {
-							foreach (int i in coeff){
-								total += i;
-							}
-						} else {
-							foreach (int i in coeff1){
-								total += i;
-							}
-						}
-						Answer = string.Format ("{0}", total);
-					}
-					else if (randSelector == 2)
-					{
-						SetMCQMode (4);
-						string expression = Random.Range (0, 2) == 0? "girls": "boys";
-						subQuestionTEX.text = string.Format ("Which are the most popular kind of books among {0}?", expression);
-
-						if (expression == "girls") {
-							Answer = string.Format ("{0}", Books[coeff.IndexOf (maxValue * gridValOffset)]);				
-						} else {
-							Answer = string.Format ("{0}", Books[coeff1.IndexOf (maxValue1 * gridValOffset)]);				
-						}
-						for (int i = 0; i < 4; i++){
-							options.Add (Books [i]);
-						}
-						RandomizeMCQOptionsAndFill (options);
-					}
-				}
-			}
-			#endregion
-			#region level2
-			else if (level == 2)
-			{
-				selector = GetRandomSelector (1, 4);
-
-				if (selector == 1)
+				else if (selector == 4)
 				{
 					SetStatisticsMode ();
 					SetTable ();
@@ -685,111 +687,119 @@ namespace Cerebro {
 
 					QuestionText.text = string.Format ("{0} people were asked what kind of holiday was their favourite. Their responses are given in the table below. Colour the circle graph accordingly.", 8 * unitData);
 				}
+			}
+			#endregion
+			#region level4
+			else if (level == 4)
+			{
+				selector = GetRandomSelector (1, 4);
+
+				subQuestionTEX.gameObject.SetActive (true);
+				List<string> pieStringData = new List<string> () {"Arnav", "Nitya", "Zara", "Anvi", "Rachit"};
+				pieStringData.Shuffle ();
+
+				int numberOfData = 4;
+				int unitData = Random.Range (5, 15);
+				do {
+					coeff = new List<int> ();
+					for (int i = 0; i < numberOfData; i++){
+						coeff.Add (unitData);
+					}
+
+					for (int i = 0; i < numberOfData; i++){
+						coeff[i] *= Random.Range (1, 5);
+					}
+				} while (coeff.Sum () != 8 * unitData);
+
+				statisticsHelper.SetStatisticsType (StatisticsType.Pie);
+				statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
+				statisticsHelper.SetPieParameters (
+					pieStringData.GetRange (0, numberOfData),
+					coeff
+				);
+				statisticsHelper.SetPieRadius (100f);  
+				statisticsHelper.DrawGraph ();
+									
+				QuestionText.text = string.Format ("This circle graph shows the votes for the class election. There are {0} students in the class.", 8 * unitData);
+
+				if (selector == 1)
+				{
+					int randSelector1 = Random.Range (0, numberOfData);
+					subQuestionTEX.text = string.Format ("Estimate the number of votes {0} got?", pieStringData[randSelector1]);
+					Answer = string.Format ("{0}", coeff[randSelector1]);
+				}
 				else if (selector == 2)
 				{
-					subQuestionTEX.gameObject.SetActive (true);
-					List<string> pieStringData = new List<string> () {"Arnav", "Nitya", "Zara", "Anvi", "Rachit"};
-					pieStringData.Shuffle ();
+					SetMCQMode (4);
 
-					int numberOfData = 4;
-					int unitData = Random.Range (5, 15);
-					do {
-						coeff = new List<int> ();
-						for (int i = 0; i < numberOfData; i++){
-							coeff.Add (unitData);
-						}
-
-						for (int i = 0; i < numberOfData; i++){
-							coeff[i] *= Random.Range (1, 5);
-						}
-					} while (coeff.Sum () != 8 * unitData);
-
-					statisticsHelper.SetStatisticsType (StatisticsType.Pie);
-					statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
-					statisticsHelper.SetPieParameters (
-						pieStringData.GetRange (0, numberOfData),
-						coeff
-					);
-					statisticsHelper.SetPieRadius (100f); 
-					statisticsHelper.DrawGraph ();
-
-					QuestionText.text = string.Format ("This circle graph shows the votes for the class election. There are {0} students in the class.", 8 * unitData);
-					randSelector = Random.Range (0, 3);
-					if (randSelector == 0)
-					{
-						int randSelector1 = Random.Range (0, numberOfData);
-						subQuestionTEX.text = string.Format ("Estimate the number of votes {0} got?", pieStringData[randSelector1]);
-						Answer = string.Format ("{0}", coeff[randSelector1]);
+					subQuestionTEX.text = "Who won the election?";
+					for (int i = 0; i < 4; i++){
+						options.Add (pieStringData[i]);
 					}
-					else if (randSelector == 1)
-					{
-						SetMCQMode (4);
-
-						subQuestionTEX.text = "Who won the election?";
-						for (int i = 0; i < 4; i++){
-							options.Add (pieStringData[i]);
-						}
-						Answer = pieStringData[coeff.IndexOf (coeff.Max ())];
-						RandomizeMCQOptionsAndFill (options);
-					}
-					else if (randSelector == 2)
-					{
-						int randSelector1;
-						int randSelector2;
-						do {
-							randSelector1 = Random.Range (0, numberOfData);
-							randSelector2 = Random.Range (0, numberOfData);
-						} while (randSelector1 == randSelector2);
-
-						string expression = coeff[randSelector1] > coeff[randSelector2]? "more": "fewer";
-						subQuestionTEX.text = string.Format ("How many {0} votes did {1} get than {2}?", expression, pieStringData[randSelector1], pieStringData[randSelector2]);
-						Answer = string.Format ("{0}", Mathf.Abs (coeff[randSelector1] - coeff[randSelector2]));
-					}
+					Answer = pieStringData[coeff.IndexOf (coeff.Max ())];
+					RandomizeMCQOptionsAndFill (options);
 				}
 				else if (selector == 3)
 				{
-					subQuestionTEX.gameObject.SetActive (true);
-					List<string> pieStringData = new List<string> () {"Maths", "Physics", "Biology", "Chemistry", "English", "Economy", "Philosophy", "Computer"};
-					pieStringData.Shuffle ();
-
-					int numberOfData = 4;
-					int unitData = Random.Range (5, 15);
+					int randSelector1;
+					int randSelector2;
 					do {
-						coeff = new List<int> ();
-						for (int i = 0; i < numberOfData; i++){
-							coeff.Add (unitData);
-						}
+						randSelector1 = Random.Range (0, numberOfData);
+						randSelector2 = Random.Range (0, numberOfData);
+					} while (randSelector1 == randSelector2);
 
-						for (int i = 0; i < numberOfData; i++){
-							coeff[i] *= Random.Range (1, 5);
-						}
-					} while (coeff.Sum () != 8 * unitData);
+					string expression = coeff[randSelector1] > coeff[randSelector2]? "more": "fewer";
+					subQuestionTEX.text = string.Format ("How many {0} votes did {1} get than {2}?", expression, pieStringData[randSelector1], pieStringData[randSelector2]);
+					Answer = string.Format ("{0}", Mathf.Abs (coeff[randSelector1] - coeff[randSelector2]));
+				}
+			}
+			#endregion
+			#region level5
+			else if (level == 5)
+			{
+				selector = GetRandomSelector (1, 3);
 
+				subQuestionTEX.gameObject.SetActive (true);
+				List<string> pieStringData = new List<string> () {"Maths", "Physics", "Biology", "Chemistry", "English", "Economy", "Philosophy", "Computer"};
+				pieStringData.Shuffle ();
 
-					statisticsHelper.SetStatisticsType (StatisticsType.Pie);
-					statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
-					statisticsHelper.SetPieParameters (
-						pieStringData.GetRange (0, numberOfData),
-						coeff
-					);
-					statisticsHelper.SetPieRadius (100f); 
-					statisticsHelper.DrawGraph ();
-
-					QuestionText.text = string.Format ("This circle graph shows the number of days Tirthan spent studying different subjects out of a total study time of {0} days.", coeff.Sum ());
-					randSelector = Random.Range (0, 2);
-					if (randSelector == 0)
-					{
-						int randSelector1 = Random.Range (0, numberOfData);
-						int hcf = MathFunctions.GetHCF (coeff[randSelector1], coeff.Sum ());
-						subQuestionTEX.text = string.Format ("Give the fraction shown by the circle graph for {0}.", pieStringData[randSelector1]);
-						Answer = string.Format ("{0}/{1}", coeff[randSelector1] / hcf, coeff.Sum () / hcf);
+				int numberOfData = 4;
+				int unitData = Random.Range (5, 15);
+				do {
+					coeff = new List<int> ();
+					for (int i = 0; i < numberOfData; i++){
+						coeff.Add (unitData);
 					}
-					else if (randSelector == 1)
-					{
-						int randSelector1 = Random.Range (0, numberOfData);
-						subQuestionTEX.text = string.Format ("How many days did he spend studying {0} in that period.", pieStringData[randSelector1]);
-						Answer = string.Format ("{0}", coeff[randSelector1]);
+
+					for (int i = 0; i < numberOfData; i++){
+						coeff[i] *= Random.Range (1, 5);
 					}
+				} while (coeff.Sum () != 8 * unitData);
+
+
+				statisticsHelper.SetStatisticsType (StatisticsType.Pie);
+				statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
+				statisticsHelper.SetPieParameters (
+					pieStringData.GetRange (0, numberOfData),
+					coeff
+				);
+				statisticsHelper.SetPieRadius (100f); 
+				statisticsHelper.DrawGraph ();					
+
+				QuestionText.text = string.Format ("This circle graph shows the number of days Tirthan spent studying different subjects out of a total study time of {0} days.", coeff.Sum ());
+				randSelector = Random.Range (0, 2);
+				if (selector == 1)
+				{
+					int randSelector1 = Random.Range (0, numberOfData);
+					int hcf = MathFunctions.GetHCF (coeff[randSelector1], coeff.Sum ());
+					subQuestionTEX.text = string.Format ("Give the fraction shown by the circle graph for {0}.", pieStringData[randSelector1]);
+					Answer = string.Format ("{0}/{1}", coeff[randSelector1] / hcf, coeff.Sum () / hcf);
+				}
+				else if (selector == 2)
+				{
+					int randSelector1 = Random.Range (0, numberOfData);
+					subQuestionTEX.text = string.Format ("How many days did he spend studying {0} in that period.", pieStringData[randSelector1]);
+					Answer = string.Format ("{0}", coeff[randSelector1]);
 				}
 			}
 			#endregion
