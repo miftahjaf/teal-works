@@ -540,13 +540,13 @@ namespace Cerebro {
 					int minValue, minValue1, maxValue, maxValue1;
 					int numberOfBars = 5;
 					do {
-						minValue = Random.Range (2, 10);
-						maxValue = Random.Range (minValue, 13);
-					} while (maxValue - minValue < numberOfBars - 1);
+						minValue = Random.Range (2, 8);
+						maxValue = Random.Range (10, 13);
+					} while (maxValue - minValue < numberOfBars);
 					do {
-						minValue1 = Random.Range (2, 10);
-						maxValue1 = Random.Range (minValue1, 13);
-					} while (maxValue1 - minValue1 < numberOfBars - 1);
+						minValue1 = Random.Range (2, 8);
+						maxValue1 = Random.Range (10, 13);
+					} while (maxValue1 - minValue1 < numberOfBars);
 
 					List<string> months = new List<string> (){"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 					months.Shuffle ();
