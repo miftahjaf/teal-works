@@ -45,28 +45,22 @@ namespace Cerebro {
 			updateQuestionsAttempted ();
 
 
-			if (MCQ.activeSelf){
+			if (MCQ.activeSelf) {
 
-				if (Answer == userAnswerText.text) 
-				{
+				if (Answer == userAnswerText.text) {
 					correct = true;
-				}
-				else
-				{
+				} else {
 					correct = false;
-					AnimateMCQOptionCorrect(Answer);
+					AnimateMCQOptionCorrect (Answer);
 
 				}
 				
-			}
-			else if (isProportion)
-			{
+			} else if (isProportion) {
 				if (Answer == userAnswerText.text)
 					correct = true;
 				else
 					correct = false;
-			}
-			else if (Answer.Contains ("/")){
+			} else if (Answer.Contains ("/")) {
 				var answerSplits = Answer.Split (new string[] { "/" }, System.StringSplitOptions.None);
 				if (userAnswerText.text.Contains ("/")) {
 					var userAnswerSplits = userAnswerText.text.Split (new string[] { "/" }, System.StringSplitOptions.None);
@@ -77,9 +71,7 @@ namespace Cerebro {
 					}
 				} else
 					correct = false;
-			}
-			else if (Answer.Contains (":") && inSimplestForm)
-			{
+			} else if (Answer.Contains (":") && inSimplestForm) {
 				var answerSplits = Answer.Split (new string[] { ":" }, System.StringSplitOptions.None);
 				if (userAnswerText.text.Contains (":")) {
 					var userAnswerSplits = userAnswerText.text.Split (new string[] { ":" }, System.StringSplitOptions.None);
@@ -90,8 +82,7 @@ namespace Cerebro {
 					}
 				} else
 					correct = false;
-			}
-			else if (Answer.Contains (":") && !inSimplestForm){
+			} else if (Answer.Contains (":") && !inSimplestForm) {
 				var answerSplits = Answer.Split (new string[] { ":" }, System.StringSplitOptions.None);
 				if (userAnswerText.text.Contains (":")) {
 					var userAnswerSplits = userAnswerText.text.Split (new string[] { ":" }, System.StringSplitOptions.None);
@@ -102,6 +93,32 @@ namespace Cerebro {
 					}
 				} else
 					correct = false;
+			} else {
+				float answer = 0;
+				float userAnswer = 0;
+				bool directCheck = false;
+				if (float.TryParse (Answer, out answer)) {
+					answer = float.Parse (Answer);
+				} else {
+					directCheck = true;
+				}
+
+				if (float.TryParse (userAnswerText.text, out userAnswer)) {
+					userAnswer = float.Parse (userAnswerText.text);
+				} else {
+					directCheck = true;
+				}
+
+
+				if (directCheck) {
+					if (userAnswerText.text == Answer) {
+						correct = true;
+					} else {
+						correct = false;
+					}
+				} else {
+					correct = (answer == userAnswer);
+				}
 			}
 			if (correct == true) {
 				if (Queslevel == 1) {
