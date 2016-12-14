@@ -144,6 +144,21 @@ namespace Cerebro
 		{
 			this.statisticsBar = statisticsBar;
 		}
+
+		public void Reset()
+		{
+			if (linePoint == null) {
+				return;
+			}
+
+			isValueChanged = false;
+			SetPoint (linePoint);
+		}
+
+		public void SetSize(float size)
+		{
+			this.transform.GetComponent<RectTransform> ().sizeDelta = Vector2.one * size;
+		}
 	}
 
 }

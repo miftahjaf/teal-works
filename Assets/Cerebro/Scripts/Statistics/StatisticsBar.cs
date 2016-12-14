@@ -13,6 +13,11 @@ namespace Cerebro
 		private float currentHeight = 0;
 		private bool isHorizontal =true;
 		private float width =0;
+		private float startHeight = 0;
+		private Color color;
+		private GraphPointScript graphPointScript;
+		private Vector2 graphPointStartPosition;
+
 		public void SetHeight(float _height)
 		{
 			height = _height;
@@ -21,6 +26,18 @@ namespace Cerebro
 		public void SetWidth(float _width)
 		{
 			width = _width;
+		}
+
+		public void SetStartHeight(float _startheight)
+		{
+			startHeight = _startheight;
+			currentHeight = _startheight;
+		}
+
+		public void SetColor(Color _color)
+		{
+			color = _color;
+			SetColor ();
 		}
 
 		public void SetCurrentHeight(float _currentHeight)
@@ -32,6 +49,12 @@ namespace Cerebro
 		public void SetIsHorizontal(bool _isHorizontal)
 		{
 			isHorizontal = _isHorizontal;
+		}
+
+		public void SetGraphPoint(GraphPointScript _graphPointScript)
+		{
+			graphPointScript = _graphPointScript;
+			graphPointStartPosition = graphPointScript.linePoint.origin;
 		}
 
 		public void SetBar()
@@ -53,5 +76,51 @@ namespace Cerebro
 		{
 			return this.isHorizontal;
 		}
+
+		public bool IsCorrect()
+		{
+			return currentHeight == height;
+		}
+
+		public bool IsChanged()
+		{
+			return currentHeight != startHeight;
+		}
+
+		public void Reset()
+		{
+			currentHeight = startHeight;
+
+			if (graphPointScript != null)
+			{
+				graphPointScript.gameObject.SetActive (true);
+				graphPointScript.linePoint.origin = graphPointStartPosition;
+				graphPointScript.Reset ();
+			}
+			SetBar ();
+			SetColor ();
+		}
+
+		public void SetColor()
+		{
+			this.GetComponent<Image> ().color = color;
+		}
+
+		public void SetCorrectAnswer()
+		{
+			currentHeight = height;
+			SetBar ();
+			SetColor ();
+			graphPointScript.gameObject.SetActive (false);
+		}
+
+		public void ChangeColor(Color color)
+		{
+			this.GetComponent<Image> ().color = color;
+		}
+
+
+
+
 	}
 }

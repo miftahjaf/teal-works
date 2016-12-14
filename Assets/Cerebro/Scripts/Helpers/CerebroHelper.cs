@@ -56,7 +56,7 @@ namespace Cerebro
 			ConsoleScreenScript.instance.ShowScreen();
 		}
 
-		public static Color[] GetRandomColorValues(int number)
+		public static List<Color> GetRandomColorValues(int number)
 		{
 			List<Vector3> colorValues = new List<Vector3> ();
 			float delta = 50f;
@@ -79,7 +79,7 @@ namespace Cerebro
 				colors.Add(new Color(colorValues[i].x/255f,colorValues[i].y/255f,colorValues[i].z/255f));
 			}
 				
-			return colors.ToArray();
+			return colors;
 		}
 
 

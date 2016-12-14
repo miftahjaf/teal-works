@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Vectrosity;
 using UnityEngine.UI.Extensions;
 using System.Linq;
+using MaterialUI;
 
 namespace Cerebro
 {
@@ -58,7 +59,7 @@ namespace Cerebro
 		private float pieRadius;
 
 		private List<UIPolygon> pieArcList;
-		private List<Color> pieArcColors;
+		private List<Color> currentColors;
 		private Color currentSelectedColor;
 
 		//Reset old set values
@@ -81,7 +82,7 @@ namespace Cerebro
 			this.ShiftPosition(Vector2.zero);
 			pieRadius = 150f;
 			pieArcList = new List<UIPolygon> ();
-			pieArcColors = new List<Color> ();
+			currentColors = new List<Color> ();
 			currentSelectedColor = Color.white;
 			barValues = new List<string> ();
 
@@ -207,6 +208,12 @@ namespace Cerebro
 			vectorLine.lineType = LineType.Discrete;
 			vectorLine.Draw ();
 
+			currentColors = CerebroHelper.GetRandomColorValues (barValues.Count>0?barValues.Count:1);
+			for(int barValueCnt = barValues.Count-1; barValueCnt >=0 ; barValueCnt--)
+			{
+				GenerateGraphLabel (barValues [barValueCnt], new Vector2 (-gridPosition.x +20f , gridPosition.y +  barValues.Count *30f - barValueCnt * 30f), currentColors [barValueCnt], gridOffset);
+			}
+
 			float[] angles = new float[]{ 180f, 0f, 270f, 90f };
 			int cnt = 0;
 			foreach (Vector2 point in points)
@@ -219,7 +226,7 @@ namespace Cerebro
 				GenerateLinePoint (new LinePoint("",point + gridPosition, angles[cnt], true,0),axisParent);
 				cnt++;
 			}
-		
+		    
 			StatisticsAxis statisticsAxis = statisticsAxises [0];
 			float startOffset=0;
 			//Pos X
@@ -237,7 +244,7 @@ namespace Cerebro
 				pointInPosXAxis = statisticsAxis.statisticsValues.Count;
 				graphMaxValue.x =  Mathf.Abs((Mathf.RoundToInt((gridCoordinateRange.x/2f + graphCenterOffset.x)))) * axisOffset.x/pointOffset.x ;
 			}
-			Color[] randomColors = null;
+
 			for (int i = 1; i <= pointInPosXAxis; i++) 
 			{
 				string text = (i * axisOffset.x).ToString ();
@@ -251,16 +258,9 @@ namespace Cerebro
 						int totalValues = statisticsAxis.statisticsValues [i - 1].values.Length;
 						float offsetValue = (2 *startOffset) / totalValues;
 						float startPoint = i * axisOffset.x - GetStartOffsetValue(startOffset, totalValues);
-						if (randomColors == null) {
-							randomColors = CerebroHelper.GetRandomColorValues (totalValues);
-							for(int barValueCnt =0; barValueCnt <barValues.Count; barValueCnt++)
-							{
-								GenerateGraphLabel (barValues [barValueCnt], new Vector2 (-gridPosition.x +20f , gridPosition.y +20 + barValueCnt * 30f), randomColors [barValueCnt], gridOffset);
-							}
-						}
 						for (int count = 0; count < totalValues; count++) {
 							value = statisticsAxis.statisticsValues [i - 1].values [count];
-							GenerateGraphBar (new Vector2 ( startPoint,0f), new Vector2 (startPoint,value ),randomColors[count],2f/totalValues);
+							GenerateGraphBar (new Vector2 ( startPoint,0f), new Vector2 (startPoint,value ),currentColors[count],2f/totalValues,50f/totalValues);
 							startPoint +=offsetValue;
 						}
 					}
@@ -290,7 +290,7 @@ namespace Cerebro
 				pointInPosYAxis = statisticsAxis.statisticsValues.Count;
 				graphMaxValue.y = Mathf.Abs((Mathf.RoundToInt(gridCoordinateRange.y/2f + graphCenterOffset.y))) * axisOffset.y/pointOffset.y;
 			}
-			randomColors = null;
+
 			for (int i = 1; i <= pointInPosYAxis; i++) 
 			{
 				string text = (i * axisOffset.y).ToString ();
@@ -304,16 +304,10 @@ namespace Cerebro
 						int totalValues = statisticsAxis.statisticsValues [i - 1].values.Length;
 						float offsetValue = (2 *startOffset) / totalValues;
 						float startPoint = i * axisOffset.y - GetStartOffsetValue(startOffset, totalValues);
-						if (randomColors == null) {
-							randomColors = CerebroHelper.GetRandomColorValues (totalValues);
-							for(int barValueCnt =0; barValueCnt <barValues.Count; barValueCnt++)
-							{
-								GenerateGraphLabel (barValues [barValueCnt], new Vector2 (-gridPosition.x +20f , gridPosition.y +20 + barValueCnt * 30f), randomColors [barValueCnt], gridOffset);
-							}
-						}
+
 						for (int count = 0; count < totalValues; count++) {
 							value = statisticsAxis.statisticsValues [i - 1].values [count];
-							GenerateGraphBar (new Vector2 (0f,startPoint), new Vector2 (value, startPoint),randomColors[count],2f/totalValues);
+							GenerateGraphBar (new Vector2 (0f,startPoint), new Vector2 (value, startPoint),currentColors[count],2f/totalValues,50f/totalValues);
 							startPoint +=offsetValue;
 						}
 					}
@@ -338,14 +332,14 @@ namespace Cerebro
 		}
 
 
-		public void GenerateGraphBar(Vector2 startPoint,Vector2 endPoint,Color color,float width = 2f)
+		public void GenerateGraphBar(Vector2 startPoint,Vector2 endPoint,Color color,float width = 2f,float pointSize =50f)
 		{
 			GameObject barObj = new GameObject ();
 			barObj.transform.SetParent (this.transform, false);
 			StatisticsBar statisticsBar = barObj.AddComponent<StatisticsBar> ();
 			barObj.AddComponent<Image> ();
 			barObj.GetComponent<Image> ().raycastTarget = false;
-			barObj.GetComponent<Image> ().color = color;
+			statisticsBar.SetColor (color);
 			barObj.name = "Bar";
 			barObj.transform.GetComponent<RectTransform> ().anchoredPosition = GraphPosToUIPos (startPoint);
 			float intitalHeight;
@@ -360,15 +354,16 @@ namespace Cerebro
 			statisticsBar.SetIsHorizontal (statisticType == StatisticsType.VerticalBar);
 			float height = Vector2.Distance (GraphPosToUIPos (startPoint), GraphPosToUIPos (endPoint));
 			statisticsBar.SetHeight (height);
-			statisticsBar.SetCurrentHeight (isInteractable?gridOffset: height);
+			statisticsBar.SetStartHeight (isInteractable?gridOffset: height);
 			statisticsBar.SetWidth (gridOffset*width);
 			statisticsBar.SetBar ();
 			statisticsBars.Add (statisticsBar);
 
 			if (isInteractable) 
 			{
-				GraphPointScript pointScript = PlotPoint (startPoint + (statisticType == StatisticsType.VerticalBar ? new Vector2 (0f, axisOffset.y/pointOffset.y) : new Vector2 (axisOffset.x/pointOffset.x, 0f)), "", true, false);
+				GraphPointScript pointScript = PlotPoint (startPoint + (statisticType == StatisticsType.VerticalBar ? new Vector2 (0f, axisOffset.y/pointOffset.y) : new Vector2 (axisOffset.x/pointOffset.x, 0f)), "", true, false,pointSize);
 				pointScript.SetStatisticsBar (statisticsBar);
+				statisticsBar.SetGraphPoint (pointScript);
 			}
 		}
 
@@ -399,13 +394,14 @@ namespace Cerebro
 			
 
 		//Plot point and choose can drag or not?
-		public GraphPointScript PlotPoint(Vector2 point,string displayText="",bool canDrag =true,bool checkInsideGraph = true)
+		public GraphPointScript PlotPoint(Vector2 point,string displayText="",bool canDrag =true,bool checkInsideGraph = true,float size = 50f)
 		{
 			if (IsContainInGraph (point) || !checkInsideGraph) {
 				GraphPointScript graphPointScript = GenerateLinePoint (new LinePoint (displayText, GraphPosToUIPos (point), 0f, false,0).SetPointTextOffset(new Vector2(0,-10)));
 				graphPointScript.SetPointColor (Color.blue);
 				graphPointScript.SetDotSize (3f);
 				graphPointScript.SetIsDragabble (canDrag);
+				graphPointScript.SetSize (size);
 				if (canDrag) 
 				{
 					graphPointScript.onDragEvent += MovePlottedPoint;
@@ -544,27 +540,196 @@ namespace Cerebro
 
 		public bool CheckAnswer ()
 		{
+			bool correct = false;
+			switch (statisticType) 
+			{
+				case StatisticsType.HorizontalBar:
+				case StatisticsType.VerticalBar:
+					correct = IsAllBarAnswersCorrect ();
+					break;
+
+				case StatisticsType.PieToFill:
+					correct = IsAllPieFillAnswersCorrect ();
+					break;
+
+			}
+
+			return correct;
+		}
+
+		public bool IsAllBarAnswersCorrect()
+		{
+			foreach (StatisticsBar bar in statisticsBars) {
+				if (!bar.IsCorrect ()) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		public bool IsAllPieFillAnswersCorrect()
+		{
+			int cnt =0;
+			foreach (UIPolygon arc in pieArcList) {
+				if (currentColors.Count < cnt ||  arc.color != currentColors[cnt]) {
+					return false;
+				}
+				cnt++;
+			}
 			return true;
 		}
 
 		public void HandleCorrectAnswer ()
 		{
+			if (!isInteractable) {
+				return;
+			}
+			switch (statisticType) {
+			case StatisticsType.HorizontalBar:
+			case StatisticsType.VerticalBar:
+				ShowCorrectBars ();
+				break;
 
+			case StatisticsType.PieToFill:
+				
+				break;
+
+			}
 		}
+
 		public void ResetAnswer ()
 		{
+			if (!isInteractable) {
+				return;
+			}
+			switch (statisticType) {
+			case StatisticsType.HorizontalBar:
+			case StatisticsType.VerticalBar:
+				ResetAllBars ();
+				break;
 
+			case StatisticsType.PieToFill:
+				ResetAllPieArcs ();
+				break;
+
+			}
 		}
-		public void HandleIncorrectAnwer (bool isRevisitedQuestion)
+		public void HandleIncorrectAnwer (bool isRevisited)
 		{
+			if (!isInteractable) {
+				return;
+			}
+			switch (statisticType) {
+			case StatisticsType.HorizontalBar:
+			case StatisticsType.VerticalBar:
+				ShowWrongBars ();
+				break;
+			}
+		}
 
+		public void ShowCorrectAnswer()
+		{
+			if (!isInteractable) {
+				return;
+			}
+			switch (statisticType) {
+			case StatisticsType.HorizontalBar:
+			case StatisticsType.VerticalBar:
+				ShowCorrectBarAnswers ();
+				break;
+			}
+		}
+
+		public void ShowCorrectBarAnswers()
+		{
+			foreach (StatisticsBar bar in statisticsBars) 
+			{
+				bar.SetCorrectAnswer ();
+			}
+		}
+
+		public void ShowCorrectBars()
+		{
+			foreach (StatisticsBar bar in statisticsBars) 
+			{
+					bar.ChangeColor (MaterialColor.green800);
+			}
+		}
+			
+
+		public void ShowWrongBars()
+		{
+			foreach (StatisticsBar bar in statisticsBars) 
+			{
+				if (!bar.IsCorrect ()) {
+					bar.ChangeColor (MaterialColor.red800);
+				}
+			}
 		}
 
 		public bool IsAnswered ()
 		{
+			bool isAnswered = true;
 
-			return true;
+			if (!isInteractable) {
+				return isAnswered;
+			}
+
+			switch(statisticType)
+			{
+				case StatisticsType.HorizontalBar:
+				case StatisticsType.VerticalBar:
+					isAnswered = IsGraphAnswered ();
+				break;
+
+				case StatisticsType.PieToFill:
+				   isAnswered = IsPieGraphFilled ();
+				break;
+			}
+
+			return isAnswered;
 		}
+
+
+		public bool IsGraphAnswered()
+		{
+			foreach (StatisticsBar bar in statisticsBars) {
+				if (bar.IsChanged ()) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+	    public void ResetAllBars()
+		{
+			foreach (StatisticsBar bar in statisticsBars) 
+			{
+				bar.Reset ();
+			}
+
+		}
+
+		public void ResetAllPieArcs()
+		{
+			foreach (UIPolygon arc in pieArcList) {
+				arc.fill = false;
+				arc.color = Color.black;
+			}
+			currentSelectedColor = Color.white;
+		}
+
+		public bool IsPieGraphFilled()
+		{
+			foreach (UIPolygon arc in pieArcList) {
+				if (arc.fill) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 
 		//Shift graph position
 		public void ShiftPosition (Vector2 position)
@@ -618,7 +783,7 @@ namespace Cerebro
 			int pieValueCount = pieValues.Count;
 			float offsetPos = pieRadius / 6;
 			Vector2 labelPosition = new Vector2 (pieRadius+offsetPos, pieRadius/2f);
-			Color[] randomColorValues = CerebroHelper.GetRandomColorValues (count);
+			currentColors = CerebroHelper.GetRandomColorValues (count);
 			List<Vector2> linePoints = new List<Vector2> ();
 			for (int i = 0; i < count; i++) {
 				//Instantiate arc prefab
@@ -635,7 +800,7 @@ namespace Cerebro
 			
 				if(nextAngle>0)
 				{
-					Color color = randomColorValues [i];
+					Color color = currentColors [i];
 					//set arc size according to radius
 					UIpolygon.GetComponent<RectTransform> ().sizeDelta = Vector2.one * pieRadius * 2f;
 
@@ -675,7 +840,7 @@ namespace Cerebro
 					}
 					startAngle += nextAngle;
 					pieArcList.Add (UIpolygon);
-					pieArcColors.Add (color);
+
 				}
 			}
 			if (linePoints.Count > 0) {
@@ -729,6 +894,11 @@ namespace Cerebro
 		public void SetBarValues(List<string> _barValues)
 		{
 			barValues = _barValues;
+		}
+
+		public bool IsInteractable()
+		{
+			return isInteractable;
 		}
 			
 	}

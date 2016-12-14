@@ -41,7 +41,7 @@ namespace Cerebro {
 		}
 
 		public override void SubmitClick(){
-			if (ignoreTouches){ //|| (userAnswerText.text == "" && statisticsHelper.statisticType == StatisticsType.None) || (statisticsHelper.statisticType != StatisticsType.None && !statisticsHelper.IsAnswered())) {
+			if (ignoreTouches || (userAnswerText.text == "" && !statisticsHelper.IsInteractable()) || (statisticsHelper.IsInteractable() && !statisticsHelper.IsAnswered())) {
 				return;
 			}
 			int increment = 0;
@@ -52,7 +52,7 @@ namespace Cerebro {
 			questionsAttempted++;
 			updateQuestionsAttempted ();
 
-			//if (statisticsHelper.statisticType == StatisticsType.None) {
+			if (!statisticsHelper.IsInteractable()) {
 
 				if (MCQ.activeSelf) {
 					if (Answer == userAnswerText.text) {
@@ -88,11 +88,11 @@ namespace Cerebro {
 						correct = (answer == userAnswer);
 					}
 				} 
-			//} 
-			/*else
+			} 
+			else
 			{
 				correct = statisticsHelper.CheckAnswer ();
-			}*/
+			}
 			if (correct == true) {
 				if (Queslevel == 1) {
 					increment = 5;
@@ -184,6 +184,8 @@ namespace Cerebro {
 				{
 					CerebroHelper.DebugLog("going in else");
 					userAnswerText.color = MaterialColor.textDark;
+
+					statisticsHelper.ShowCorrectAnswer ();
 				}
 			}
 
@@ -575,7 +577,7 @@ namespace Cerebro {
 
 					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 18f);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 90f));
-					statisticsHelper.SetSnapValue (new Vector2 (9, 22));
+					statisticsHelper.SetSnapValue (new Vector2 (9f, 18f));
 					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
 					statisticsHelper.SetBarValues (new List<string> () {"Refrigerators", "ACs"});
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -688,6 +690,7 @@ namespace Cerebro {
 						pieStringData,
 						coeff
 					);
+					statisticsHelper.SetInteractable(true);
 					statisticsHelper.SetPieRadius (100f); 
 					statisticsHelper.DrawGraph ();
 
