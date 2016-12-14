@@ -102,7 +102,11 @@ namespace Cerebro {
 					increment = 10;
 				} else if (Queslevel == 4) {
 					increment = 10;
-				} 
+				} else if (Queslevel == 5) {
+					increment = 10;
+				} else if (Queslevel == 6) {
+					increment = 15;
+				}  
 					
 				UpdateStreak(8, 12);
 
@@ -341,7 +345,7 @@ namespace Cerebro {
 
 				statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
 				statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
-				statisticsHelper.ShiftPosition (new Vector2 (-270, 215));
+				statisticsHelper.ShiftPosition (new Vector2 (-270, 235));
 				statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 					{
 						new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Marks").SetPointOffset (2),
@@ -399,7 +403,7 @@ namespace Cerebro {
 
 				statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
 				statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
-				statisticsHelper.ShiftPosition (new Vector2 (-270, 215));
+				statisticsHelper.ShiftPosition (new Vector2 (-270, 235));
 				statisticsHelper.SetBarValues (new List<string> () {"Girls", "Boys"});
 				statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 					{
@@ -653,7 +657,7 @@ namespace Cerebro {
 
 					List<string> TableContentsColumn1 = new List<string>();
 					List<string> TableContentsColumn2 = new List<string>();
-					List<string> pieStringData = new List<string> () {"Beach Holiday", "Trekking Holiday", "Relaxed Holiday", "Sightseeing Holiday"};
+					List<string> pieStringData = new List<string> () {"Beach", "Trekking", "Relaxed", "Sightseeing"};
 					pieStringData.Shuffle ();
 
 					int numberOfData = 4;
@@ -669,12 +673,14 @@ namespace Cerebro {
 						}
 					} while (coeff.Sum () != 8 * unitData);
 
+					TableContentsColumn1.Add ("<size=25>Holiday</size>");
 					TableContentsColumn1.AddRange (pieStringData);
+					TableContentsColumn2.Add ("<size=25>Number of People</size>");
 					foreach (int i in coeff){
 						TableContentsColumn2.Add (i.ToString ());
 					}
-					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}", TableContentsColumn1.ToArray ());
-					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}", TableContentsColumn2.ToArray ());
+					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}", TableContentsColumn1.ToArray ());
+					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}", TableContentsColumn2.ToArray ());
 
 					statisticsHelper.SetStatisticsType (StatisticsType.PieToFill);
 					statisticsHelper.ShiftPosition (new Vector2 (-330, 110f));
@@ -822,38 +828,10 @@ namespace Cerebro {
 				userAnswerText.text = "";
 			} else if (value == 12)
 			{
-				if (checkLastTextFor (new string[1]{ "(" })) {
+				if (checkLastTextFor (new string[1]{ "/" })) {
 					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
 				}
-				userAnswerText.text += "(";
-			}
-			else if (value == 13)
-			{
-				if (checkLastTextFor (new string[1]{ ")" })) {
-					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
-				}
-				userAnswerText.text += ")";
-			}
-			else if (value == 14)
-			{
-				if (checkLastTextFor (new string[1]{ "-" })) {
-					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
-				}
-				userAnswerText.text += "-";
-			}
-			else if (value == 15)
-			{
-				if (checkLastTextFor (new string[1]{ "," })) {
-					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
-				}
-				userAnswerText.text += ",";
-			}
-			else if (value == 16)
-			{
-				if (checkLastTextFor (new string[1]{ "." })) {
-					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
-				}
-				userAnswerText.text += ".";
+				userAnswerText.text += "/";
 			}
 		}
 
