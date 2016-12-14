@@ -12,6 +12,7 @@ namespace Cerebro {
 		private List<string> options;
 		private int randSelector;
 		private List<int> coeff;
+		private int sequence = -1, lastRandom = 1;
 
 		public TEXDraw subQuestionTEX;
 		public Text StatTableColumn1;
@@ -251,6 +252,8 @@ namespace Cerebro {
 			{
 				selector = GetRandomSelector (1, 9);
 
+				StartSequence(8);
+
 				subQuestionTEX.gameObject.SetActive (true);
 
 				axisValueOffset = 10;
@@ -271,6 +274,25 @@ namespace Cerebro {
 				}
 				coeff.Add (gridValOffset * maxValue);
 				coeff.Shuffle ();
+
+				statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
+				statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
+				statisticsHelper.ShiftPosition (new Vector2 (-270, 235));
+				statisticsHelper.SetGraphParameters (new StatisticsAxis[]
+					{
+						new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Marks").SetPointOffset (2),
+						new StatisticsAxis ().SetStatisticsValues
+						(
+							new List<StatisticsValue>(){
+								new StatisticsValue (months[0], coeff[0]),
+								new StatisticsValue (months[1], coeff[1]),
+								new StatisticsValue (months[2], coeff[2]),
+								new StatisticsValue (months[3], coeff[3]),
+							}
+						).SetAxisName ("Test Month").SetPointOffset (3)
+					}
+				);
+				statisticsHelper.DrawGraph ();
 
 				QuestionText.text = "Given are the marks that Srinivas got in four maths tests. The tests were out of 50 marks.";
 
@@ -345,30 +367,15 @@ namespace Cerebro {
 					Answer = string.Format ("{0}", Mathf.Abs (coeff[randSelector1] - coeff[randSelector2]));
 				}
 
-				statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
-				statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
-				statisticsHelper.ShiftPosition (new Vector2 (-270, 235));
-				statisticsHelper.SetGraphParameters (new StatisticsAxis[]
-					{
-						new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Marks").SetPointOffset (2),
-						new StatisticsAxis ().SetStatisticsValues
-						(
-							new List<StatisticsValue>(){
-								new StatisticsValue (months[0], coeff[0]),
-								new StatisticsValue (months[1], coeff[1]),
-								new StatisticsValue (months[2], coeff[2]),
-								new StatisticsValue (months[3], coeff[3]),
-							}
-						).SetAxisName ("Test Month").SetPointOffset (3)
-					}
-				);
-				statisticsHelper.DrawGraph ();
+
 			}
 			#endregion
 			#region level2
 			else if (level == 2)
 			{
 				selector = GetRandomSelector (1, 4);
+
+				StartSequence(3);
 
 				subQuestionTEX.gameObject.SetActive (true);
 

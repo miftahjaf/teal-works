@@ -51,6 +51,8 @@ namespace Cerebro {
 		public Button GeneralButton;			//General Button for user Input Answer
 
 		private int randomSeed;					//Seed used to generate each question
+		private int sequence = -1, lastRandom = 1;
+		private bool canStartSequence;
 		protected bool levelUp;					//Set this to true to show levelUp animation between two questions.
 
 		public bool isDestroyed = false;
@@ -133,6 +135,39 @@ namespace Cerebro {
 					}
 				}
 			}
+		}
+
+		public void StartSequence(int max)
+		{
+			if(canStartSequence)
+			{
+				if(sequence != -1)
+				{
+					if(sequence > max)
+					{
+						sequence = 1;
+						lastRandom = Random.seed;
+					}
+					else
+					{
+						Random.seed = lastRandom;
+						randomSeed = Random.seed;
+					}
+					selector = sequence;
+					sequence++;
+				}
+				else
+				{
+					lastRandom = Random.seed;
+					sequence = 1;
+					selector = 1;
+				}
+			}
+		}
+
+		void ResetSequence()
+		{
+			sequence = -1;
 		}
 
 		private string GetKCMapping()
@@ -342,6 +377,7 @@ namespace Cerebro {
 			}*/
 
 			int randomSelector = -1;
+			canStartSequence = false;
 
 			if (forceSelector != -1) {
 				if (forceSelector >= lowerLimit && forceSelector < upperLimit) {
@@ -395,6 +431,7 @@ namespace Cerebro {
 
 			if (randomSelector == -1) {
 				randomSelector = Random.Range (lowerLimit, upperLimit);
+				canStartSequence = true;
 			}
 			Random.seed = randomSeed;
 
@@ -528,6 +565,7 @@ namespace Cerebro {
 					Queslevel = Queslevel + 1;    
 					questionsAttempted = 0;
 					SetLevelToLocalDB (Queslevel);
+					ResetSequence ();
 				}
 			}
 		}
