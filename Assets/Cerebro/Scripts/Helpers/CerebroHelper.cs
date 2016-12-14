@@ -56,30 +56,24 @@ namespace Cerebro
 			ConsoleScreenScript.instance.ShowScreen();
 		}
 
-		public static List<Color> GetRandomColorValues(int number)
+		public static List<string> GetRandomColorValues(int number)
 		{
-			List<Vector3> colorValues = new List<Vector3> ();
-			float delta = 50f;
-			while (colorValues.Count < number) 
-			{
-				Vector3 colorValue = new Vector3 (Random.Range (60f, 180f), Random.Range (60f, 180f), Random.Range (60f, 180f));
-				int count = colorValues.Count;
-				for (int i = 0; i < count; i++) 
-				{
-					while(Vector3.Distance(colorValue, colorValues[i])<delta)
-					{
-						colorValue = new Vector3 (Random.Range (60f, 180f), Random.Range (60f, 180f), Random.Range (60f, 180f));
-					}
-				}
-				colorValues.Add (colorValue);
-			}
+			List<string> colors = new List<string>() {
+				"F1522A",
+				"FEC841",
+				"0A356A",
+				"DE377C",
+				"B29A76",
+				"B6C894",
+				"EEC6E0",
+				"827773",
+				"9772A5",
+				"7ECCBE"
+			};
 
-			List<Color> colors = new List<Color> ();
-			for (int i = 0; i < number; i++) {
-				colors.Add(new Color(colorValues[i].x/255f,colorValues[i].y/255f,colorValues[i].z/255f));
-			}
-				
-			return colors;
+			colors.Shuffle ();
+
+			return colors.GetRange (0, number);;
 		}
 
 

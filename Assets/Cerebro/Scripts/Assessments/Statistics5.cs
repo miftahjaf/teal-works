@@ -12,7 +12,6 @@ namespace Cerebro {
 		private List<string> options;
 		private int randSelector;
 		private List<int> coeff;
-		private int sequence = -1, lastRandom = 1;
 
 		public TEXDraw subQuestionTEX;
 		public Text StatTableColumn1;

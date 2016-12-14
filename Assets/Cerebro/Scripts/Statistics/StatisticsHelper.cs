@@ -59,7 +59,11 @@ namespace Cerebro
 		private float pieRadius;
 
 		private List<UIPolygon> pieArcList;
-		private List<Color> currentColors;
+		private List<string> currentColors;
+
+
+		private bool canClick;
+
 		private Color currentSelectedColor;
 
 		//Reset old set values
@@ -82,9 +86,11 @@ namespace Cerebro
 			this.ShiftPosition(Vector2.zero);
 			pieRadius = 150f;
 			pieArcList = new List<UIPolygon> ();
-			currentColors = new List<Color> ();
+			currentColors = new List<string> ();
 			currentSelectedColor = Color.white;
+			currentSelectedColor.a = 0;
 			barValues = new List<string> ();
+			canClick = true;
 
 		}
 
@@ -332,14 +338,14 @@ namespace Cerebro
 		}
 
 
-		public void GenerateGraphBar(Vector2 startPoint,Vector2 endPoint,Color color,float width = 2f,float pointSize =50f)
+		public void GenerateGraphBar(Vector2 startPoint,Vector2 endPoint,string colorCode,float width = 2f,float pointSize =50f)
 		{
 			GameObject barObj = new GameObject ();
 			barObj.transform.SetParent (this.transform, false);
 			StatisticsBar statisticsBar = barObj.AddComponent<StatisticsBar> ();
 			barObj.AddComponent<Image> ();
 			barObj.GetComponent<Image> ().raycastTarget = false;
-			statisticsBar.SetColor (color);
+			statisticsBar.SetColor (CerebroHelper.HexToRGB(colorCode));
 			barObj.name = "Bar";
 			barObj.transform.GetComponent<RectTransform> ().anchoredPosition = GraphPosToUIPos (startPoint);
 			float intitalHeight;
@@ -549,7 +555,7 @@ namespace Cerebro
 					break;
 
 				case StatisticsType.PieToFill:
-					correct = IsAllPieFillAnswersCorrect ();
+					correct = IsPieFilledCorrect ();
 					break;
 
 			}
@@ -568,16 +574,41 @@ namespace Cerebro
 			return true;
 		}
 
-		public bool IsAllPieFillAnswersCorrect()
+		public bool IsPieFilledCorrect()
 		{
-			int cnt =0;
-			foreach (UIPolygon arc in pieArcList) {
-				if (currentColors.Count < cnt ||  arc.color != currentColors[cnt]) {
+			int cnt = currentColors.Count;
+			for(int i=0;i< cnt;i++)
+			{
+				List<UIPolygon> tempPolygons = pieArcList.FindAll(x=>x.color == CerebroHelper.HexToRGB(currentColors[i]));
+				Debug.Log ("Color "+CerebroHelper.HexToRGB(currentColors[i]) +"Polygon count "+tempPolygons.Count);
+				if (tempPolygons.Count > 1 || tempPolygons.Count<=0) {
 					return false;
-				}
-				cnt++;
+				} 
 			}
-			return true;
+			Dictionary<int,List<int>> tempValueList = new Dictionary<int, List<int>> ();
+			for (int i = 0; i < cnt; i++) {
+				if (tempValueList.ContainsKey (pieValues [i])) {
+					tempValueList [pieValues [i]].Add (i);
+				} else {
+					tempValueList [pieValues [i]] = new List<int> ();
+					tempValueList [pieValues [i]].Add (i);
+				}
+			}
+			List<bool> correctPieFillValues = new List<bool>();
+			for (int i = 0; i < cnt; i++)
+			{
+				List<int>  tempColorValues = tempValueList [pieValues [i]];
+				bool correctColor = false;
+				foreach(int value in tempColorValues)
+				{
+					if (pieArcList [i].color == CerebroHelper.HexToRGB(currentColors[value])) {
+						correctColor = true;
+					}
+				}
+				correctPieFillValues.Add (correctColor);
+			}
+
+			return correctPieFillValues.Count(x=>x == true) == cnt;
 		}
 
 		public void HandleCorrectAnswer ()
@@ -592,7 +623,7 @@ namespace Cerebro
 				break;
 
 			case StatisticsType.PieToFill:
-				
+				ShowCorrectPieToFillArcs ();
 				break;
 
 			}
@@ -603,6 +634,7 @@ namespace Cerebro
 			if (!isInteractable) {
 				return;
 			}
+			canClick = true;
 			switch (statisticType) {
 			case StatisticsType.HorizontalBar:
 			case StatisticsType.VerticalBar:
@@ -615,6 +647,7 @@ namespace Cerebro
 
 			}
 		}
+
 		public void HandleIncorrectAnwer (bool isRevisited)
 		{
 			if (!isInteractable) {
@@ -624,6 +657,13 @@ namespace Cerebro
 			case StatisticsType.HorizontalBar:
 			case StatisticsType.VerticalBar:
 				ShowWrongBars ();
+				break;
+
+			case StatisticsType.PieToFill:
+				ShowWrongPieToFillArcs ();
+				if (!isRevisited) {
+					canClick = false;
+				}
 				break;
 			}
 		}
@@ -638,6 +678,10 @@ namespace Cerebro
 			case StatisticsType.VerticalBar:
 				ShowCorrectBarAnswers ();
 				break;
+
+			case StatisticsType.PieToFill:
+				ShowCorrectPieToFillAnswers ();
+				break;
 			}
 		}
 
@@ -649,11 +693,29 @@ namespace Cerebro
 			}
 		}
 
+		public void ShowCorrectPieToFillAnswers()
+		{
+			int cnt = 0;
+			foreach (UIPolygon arc in pieArcList) {
+				arc.fill = true;
+				arc.color = CerebroHelper.HexToRGB (currentColors [cnt]);
+			    cnt++;
+			}
+		}
+
 		public void ShowCorrectBars()
 		{
 			foreach (StatisticsBar bar in statisticsBars) 
 			{
 					bar.ChangeColor (MaterialColor.green800);
+			}
+		}
+
+		public void ShowCorrectPieToFillArcs()
+		{
+			foreach (UIPolygon arc in pieArcList) {
+				arc.fill = true;
+				arc.color = MaterialColor.green800;
 			}
 		}
 			
@@ -664,7 +726,19 @@ namespace Cerebro
 			{
 				if (!bar.IsCorrect ()) {
 					bar.ChangeColor (MaterialColor.red800);
+				} else {
+					bar.ChangeColor (MaterialColor.green800);
 				}
+			}
+		}
+
+		public void ShowWrongPieToFillArcs()
+		{
+
+			foreach (UIPolygon arc in pieArcList) 
+			{
+				arc.fill = true;
+				arc.color = MaterialColor.red800;
 			}
 		}
 
@@ -717,7 +791,7 @@ namespace Cerebro
 				arc.fill = false;
 				arc.color = Color.black;
 			}
-			currentSelectedColor = Color.white;
+			currentSelectedColor.a = 0;
 		}
 
 		public bool IsPieGraphFilled()
@@ -783,9 +857,18 @@ namespace Cerebro
 			int pieValueCount = pieValues.Count;
 			float offsetPos = pieRadius / 6;
 			Vector2 labelPosition = new Vector2 (pieRadius+offsetPos, pieRadius/2f);
-			currentColors = CerebroHelper.GetRandomColorValues (count);
+			currentColors = CerebroHelper.GetRandomColorValues (pieValueCount);
+
 			List<Vector2> linePoints = new List<Vector2> ();
-			for (int i = 0; i < count; i++) {
+
+			List<int> randomList =  Enumerable.Range(0, pieValueCount).ToList();
+			UIPolygon[] tempPolygons = new UIPolygon[pieValueCount];
+			if (statisticType == StatisticsType.PieToFill) {
+				randomList.Shuffle ();
+			}
+
+			UIPolygon[]  tempPieArcList = new UIPolygon[count];
+			for (int i = 0; i < pieValueCount; i++) {
 				//Instantiate arc prefab
 				GameObject arc = GameObject.Instantiate (arcPrefab);
 				arc.transform.SetParent (this.transform, false);
@@ -795,12 +878,12 @@ namespace Cerebro
 			
 				float nextAngle = 0;
 				if (pieValueCount > i) {
-					nextAngle = 360f * pieValues [i] /totalValue;
+					nextAngle = 360f * pieValues [randomList[i]] /totalValue;
 				}
 			
 				if(nextAngle>0)
 				{
-					Color color = currentColors [i];
+					Color color = CerebroHelper.HexToRGB(currentColors [i]);
 					//set arc size according to radius
 					UIpolygon.GetComponent<RectTransform> ().sizeDelta = Vector2.one * pieRadius * 2f;
 
@@ -809,14 +892,13 @@ namespace Cerebro
 					UIpolygon.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 
 					UIpolygon.ReDraw ();
-					GenerateGraphLabel (pieStrings [i], labelPosition, color,offsetPos);
+					GenerateGraphLabel (pieStrings [i], labelPosition, currentColors [i],offsetPos);
 					labelPosition -= new Vector2(0,1.3f*offsetPos);
 
 					if (statisticType == StatisticsType.PieToFill) {
 						UIpolygon.color = Color.black;
 						linePoints.Add (Vector2.zero);
 						linePoints.Add (MathFunctions.PointAtDirection (Vector2.zero, startAngle, pieRadius));
-
 
 
 						PolygonCollider2D collider = UIpolygon.gameObject.AddComponent<PolygonCollider2D> ();
@@ -830,8 +912,11 @@ namespace Cerebro
 
 						ColliderButton colliderButton = UIpolygon.gameObject.AddComponent<ColliderButton> ();
 						colliderButton.OnClicked = delegate {
-							UIpolygon.color =currentSelectedColor;
-							UIpolygon.fill = true;
+							if(currentSelectedColor.a>0 && canClick)
+							{
+								UIpolygon.color =currentSelectedColor;
+								UIpolygon.fill = true;
+							}
 						};
 
 					} else {
@@ -839,10 +924,12 @@ namespace Cerebro
 						UIpolygon.fill = true;
 					}
 					startAngle += nextAngle;
-					pieArcList.Add (UIpolygon);
-
+					tempPolygons [randomList [i]] = UIpolygon;
 				}
 			}
+
+			pieArcList = tempPolygons.ToList ();
+
 			if (linePoints.Count > 0) {
 
 
@@ -866,20 +953,21 @@ namespace Cerebro
 				GameObject raycastDetector = new GameObject ();
 				raycastDetector.AddComponent<RayCastDetector> ();
 				raycastDetector.transform.SetParent (this.transform, false);
+				raycastDetector.name = "Raycaster";
 			}
 		}
 
-		public void GenerateGraphLabel(string text, Vector2 position, Color color,float size)
+		public void GenerateGraphLabel(string text, Vector2 position, string colorCode,float size)
 		{
 			GameObject pieLabel = new GameObject ();
 			pieLabel.name = "pielLabel";
 			pieLabel.transform.SetParent (this.transform, false);
 			Image pieLabelImage = pieLabel.AddComponent<Image> ();
 			pieLabel.GetComponent<RectTransform> ().anchoredPosition = position;
-			pieLabelImage.color = color;
+			pieLabelImage.color = CerebroHelper.HexToRGB(colorCode);
 			pieLabel.GetComponent<RectTransform> ().sizeDelta = Vector2.one * size;
 			Button button = pieLabel.AddComponent<Button> ();
-			button.onClick.AddListener(()=>{currentSelectedColor =color;});
+			button.onClick.AddListener(()=>{currentSelectedColor = CerebroHelper.HexToRGB(colorCode);});
 
 			GameObject pieLabelText = GameObject.Instantiate (textObjectPrefab);
 			pieLabelText.name = text;
