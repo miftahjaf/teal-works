@@ -52,7 +52,7 @@ namespace Cerebro
 
 		private StatisticsAxis[] statisticsAxises;
 		private List<StatisticsBar> statisticsBars;
-
+		public List<string> barValues;
 		private List<int> pieValues;
 		private List<string> pieStrings;
 		private float pieRadius;
@@ -83,6 +83,7 @@ namespace Cerebro
 			pieArcList = new List<UIPolygon> ();
 			pieArcColors = new List<Color> ();
 			currentSelectedColor = Color.white;
+			barValues = new List<string> ();
 
 		}
 
@@ -252,6 +253,10 @@ namespace Cerebro
 						float startPoint = i * axisOffset.x - GetStartOffsetValue(startOffset, totalValues);
 						if (randomColors == null) {
 							randomColors = CerebroHelper.GetRandomColorValues (totalValues);
+							for(int barValueCnt =0; barValueCnt <barValues.Count; barValueCnt++)
+							{
+								GenerateGraphLabel (barValues [barValueCnt], new Vector2 (-gridPosition.x +20f , gridPosition.y +20 + barValueCnt * 30f), randomColors [barValueCnt], gridOffset);
+							}
 						}
 						for (int count = 0; count < totalValues; count++) {
 							value = statisticsAxis.statisticsValues [i - 1].values [count];
@@ -301,6 +306,10 @@ namespace Cerebro
 						float startPoint = i * axisOffset.y - GetStartOffsetValue(startOffset, totalValues);
 						if (randomColors == null) {
 							randomColors = CerebroHelper.GetRandomColorValues (totalValues);
+							for(int barValueCnt =0; barValueCnt <barValues.Count; barValueCnt++)
+							{
+								GenerateGraphLabel (barValues [barValueCnt], new Vector2 (-gridPosition.x +20f , gridPosition.y +20 + barValueCnt * 30f), randomColors [barValueCnt], gridOffset);
+							}
 						}
 						for (int count = 0; count < totalValues; count++) {
 							value = statisticsAxis.statisticsValues [i - 1].values [count];
@@ -635,7 +644,7 @@ namespace Cerebro
 					UIpolygon.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 
 					UIpolygon.ReDraw ();
-					GeneratePieLabel (pieStrings [i], labelPosition, color,offsetPos);
+					GenerateGraphLabel (pieStrings [i], labelPosition, color,offsetPos);
 					labelPosition -= new Vector2(0,1.3f*offsetPos);
 
 					if (statisticType == StatisticsType.PieToFill) {
@@ -695,7 +704,7 @@ namespace Cerebro
 			}
 		}
 
-		public void GeneratePieLabel(string text, Vector2 position, Color color,float size)
+		public void GenerateGraphLabel(string text, Vector2 position, Color color,float size)
 		{
 			GameObject pieLabel = new GameObject ();
 			pieLabel.name = "pielLabel";
@@ -715,6 +724,11 @@ namespace Cerebro
 			pieText.text = text;
 			pieLabelText.GetComponent<RectTransform> ().anchoredPosition = position+new Vector2(size,0);
 			pieLabelText.GetComponent<RectTransform> ().sizeDelta = Vector2.zero;
+		}
+
+		public void SetBarValues(List<string> _barValues)
+		{
+			barValues = _barValues;
 		}
 			
 	}
