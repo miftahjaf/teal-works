@@ -161,6 +161,7 @@ namespace Cerebro {
 					lastRandom = Random.seed;
 					sequence = 1;
 					selector = 1;
+					sequence++;
 				}
 			}
 		}
