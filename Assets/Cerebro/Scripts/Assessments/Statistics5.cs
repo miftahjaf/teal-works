@@ -396,8 +396,8 @@ namespace Cerebro {
 
 					QuestionText.text = "Draw a bar graph to show the following information.\n";
 
-					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
-					statisticsHelper.ShiftPosition (new Vector2 (-185f, 0));
+					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 18f);
+					statisticsHelper.ShiftPosition (new Vector2 (-185f, 90f));
 					statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 						{
@@ -466,8 +466,8 @@ namespace Cerebro {
 
 					QuestionText.text = "Draw a bar graph to show the following information.\n";
 
-					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
-					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
+					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 18f);
+					statisticsHelper.ShiftPosition (new Vector2 (-200, 90f));
 					statisticsHelper.SetSnapValue (new Vector2 (11, 22));
 					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -520,9 +520,9 @@ namespace Cerebro {
 					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
 
-					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
+					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 18f);
+					statisticsHelper.ShiftPosition (new Vector2 (-200, 90f));
 					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
-					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 						{
 							new StatisticsAxis ().SetStatisticsValues
@@ -675,7 +675,7 @@ namespace Cerebro {
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}", TableContentsColumn2.ToArray ());
 
 					statisticsHelper.SetStatisticsType (StatisticsType.PieToFill);
-					statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
+					statisticsHelper.ShiftPosition (new Vector2 (-330, 110f));
 					statisticsHelper.SetPieParameters (
 						pieStringData,
 						coeff
