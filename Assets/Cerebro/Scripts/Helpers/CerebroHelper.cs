@@ -58,7 +58,7 @@ namespace Cerebro
 
 		public static List<string> GetRandomColorValues(int number)
 		{
-			List<string> colors = new List<string>() {
+			/*List<string> colors = new List<string>() {
 				"F1522A",
 				"FEC841",
 				"0A356A",
@@ -69,7 +69,21 @@ namespace Cerebro
 				"827773",
 				"9772A5",
 				"7ECCBE"
+			};*/
+			List<string> colors = new List<string>() {
+				"EF9A9A",
+				"B39DDB",
+				"81D4FA",
+				"00838F",
+				"1DE9B6",
+				"C5E1A5",
+				"FFE082",
+				"FFAB91",
+				"BCAAA4",
+				"90A4AE",
 			};
+
+
 
 			colors.Shuffle ();
 
