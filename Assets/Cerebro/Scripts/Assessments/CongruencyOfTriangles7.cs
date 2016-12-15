@@ -1194,7 +1194,7 @@ namespace Cerebro
 					} while (lengthForDiagram / breadthForDiagram > 2f || lengthForDiagram / breadthForDiagram < 0.9f);
 
 					QuestionLatext.text = "Given : \\Delta{ABC} is congruent to \\Delta{ABD}. Find \\angle{ABC}.";
-					Answer = string.Format ("{1}{0},{2}{0}", MathFunctions.deg, angle1, (180 - angle1 - angle2) / 2);
+					Answer = string.Format ("{1}{0}", MathFunctions.deg, angle2);
 
 					origin = new Vector2 (lengthForDiagram, breadthForDiagram) / 2f;
 					randSelector = Random.Range (1, 3);

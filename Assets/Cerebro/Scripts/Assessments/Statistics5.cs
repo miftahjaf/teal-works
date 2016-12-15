@@ -671,16 +671,11 @@ namespace Cerebro {
 
 					int numberOfData = 4;
 					int unitData = Random.Range (5, 15);
-					do {
-						coeff = new List<int> ();
-						for (int i = 0; i < numberOfData; i++){
-							coeff.Add (unitData);
-						}
 
-						for (int i = 0; i < numberOfData; i++){
-							coeff[i] *= Random.Range (1, 5);
-						}
-					} while (coeff.Sum () != 8 * unitData);
+					coeff = Random.Range (1, 3) == 1? new List<int> () {1,2,2,3}: new List<int> () {1,1,2,4};
+					for (int i = 0; i < numberOfData; i++){
+						coeff[i] *= unitData;
+					}
 
 					TableContentsColumn1.Add ("<size=25>Holiday</size>");
 					TableContentsColumn1.AddRange (pieStringData);
@@ -717,16 +712,11 @@ namespace Cerebro {
 
 				int numberOfData = 4;
 				int unitData = Random.Range (5, 15);
-				do {
-					coeff = new List<int> ();
-					for (int i = 0; i < numberOfData; i++){
-						coeff.Add (unitData);
-					}
 
-					for (int i = 0; i < numberOfData; i++){
-						coeff[i] *= Random.Range (1, 5);
-					}
-				} while (coeff.Sum () != 8 * unitData);
+				coeff = Random.Range (1, 3) == 1? new List<int> () {1,2,2,3}: new List<int> () {1,1,2,4};
+				for (int i = 0; i < numberOfData; i++){
+					coeff[i] *= unitData;
+				}
 
 				statisticsHelper.SetStatisticsType (StatisticsType.Pie);
 				statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
@@ -783,17 +773,11 @@ namespace Cerebro {
 
 				int numberOfData = 4;
 				int unitData = Random.Range (5, 15);
-				do {
-					coeff = new List<int> ();
-					for (int i = 0; i < numberOfData; i++){
-						coeff.Add (unitData);
-					}
 
-					for (int i = 0; i < numberOfData; i++){
-						coeff[i] *= Random.Range (1, 5);
-					}
-				} while (coeff.Sum () != 8 * unitData);
-
+				coeff = Random.Range (1, 3) == 1? new List<int> () {1,2,2,3}: new List<int> () {1,1,2,4};
+				for (int i = 0; i < numberOfData; i++){
+					coeff[i] *= unitData;
+				}
 
 				statisticsHelper.SetStatisticsType (StatisticsType.Pie);
 				statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
