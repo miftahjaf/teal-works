@@ -867,11 +867,11 @@ namespace Cerebro
 		public void DrawPieGraph()
 		{
 			int count = pieStrings.Count;
-			float startAngle = 0f;
+			float startAngle = Random.Range(0f,360f);
 			int totalValue = pieValues.Sum(x => System.Convert.ToInt32(x));
 			int pieValueCount = pieValues.Count;
-			float offsetPos = pieRadius / 6;
-			Vector2 labelPosition = new Vector2 (pieRadius+offsetPos, pieRadius/2f);
+			float offsetPos = pieRadius / 5.5f;
+			Vector2 labelPosition = new Vector2 (pieRadius+offsetPos+10f, pieRadius/2f);
 			currentColors = CerebroHelper.GetRandomColorValues (pieValueCount);
 
 			List<Vector2> linePoints = new List<Vector2> ();
@@ -891,7 +891,7 @@ namespace Cerebro
 				//UI polygon component to draw arc
 				UIPolygon UIpolygon = arc.GetComponent<UIPolygon> ();
 			
-				float nextAngle = 0;
+				float nextAngle = 0f;
 				if (pieValueCount > i) {
 					nextAngle = 360f * pieValues [randomList[i]] /totalValue;
 				}
@@ -907,8 +907,8 @@ namespace Cerebro
 					UIpolygon.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 
 					UIpolygon.ReDraw ();
-					GenerateGraphLabel (pieStrings [i], labelPosition, currentColors [i],offsetPos);
-					labelPosition -= new Vector2(0,1.3f*offsetPos);
+					GenerateGraphLabel (pieStrings [i], labelPosition, currentColors [i],offsetPos + 10f,statisticType == StatisticsType.PieToFill);
+					labelPosition -= new Vector2(0, offsetPos + 18f);
 
 					if (statisticType == StatisticsType.PieToFill) {
 						UIpolygon.color = Color.black;
@@ -973,7 +973,7 @@ namespace Cerebro
 			}
 		}
 
-		public void GenerateGraphLabel(string text, Vector2 position, string colorCode,float size)
+		public void GenerateGraphLabel(string text, Vector2 position, string colorCode,float size,bool addButton =false)
 		{
 			GameObject pieLabel = new GameObject ();
 			pieLabel.name = "pielLabel";
@@ -982,8 +982,12 @@ namespace Cerebro
 			pieLabel.GetComponent<RectTransform> ().anchoredPosition = position;
 			pieLabelImage.color = CerebroHelper.HexToRGB(colorCode);
 			pieLabel.GetComponent<RectTransform> ().sizeDelta = Vector2.one * size;
-			Button button = pieLabel.AddComponent<Button> ();
-			button.onClick.AddListener(()=>{currentSelectedColor = CerebroHelper.HexToRGB(colorCode);});
+			if (addButton) {
+				Button button = pieLabel.AddComponent<Button> ();
+				button.onClick.AddListener (() => {
+					currentSelectedColor = CerebroHelper.HexToRGB (colorCode);
+				});
+			}
 
 			GameObject pieLabelText = GameObject.Instantiate (textObjectPrefab);
 			pieLabelText.name = text;
