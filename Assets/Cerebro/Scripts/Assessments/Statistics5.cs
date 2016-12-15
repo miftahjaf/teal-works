@@ -816,7 +816,7 @@ namespace Cerebro {
 				else if (selector == 2)
 				{
 					int randSelector1 = Random.Range (0, numberOfData);
-					subQuestionTEX.text = string.Format ("How many days did he spend studying {0} in that period.", pieStringData[randSelector1]);
+					subQuestionTEX.text = string.Format ("How many days did he spend studying {0} in that period?", pieStringData[randSelector1]);
 					Answer = string.Format ("{0}", coeff[randSelector1]);
 				}
 			}
