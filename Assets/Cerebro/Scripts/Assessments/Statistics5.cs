@@ -96,19 +96,23 @@ namespace Cerebro {
 			if (correct == true) {
 				if (Queslevel == 1) {
 					increment = 5;
+					UpdateStreak(12, 17);
 				} else if (Queslevel == 2) {
 					increment = 5;
+					UpdateStreak(8, 12);
 				} else if (Queslevel == 3) {
 					increment = 10;
+					UpdateStreak(8, 12);
 				} else if (Queslevel == 4) {
 					increment = 10;
+					UpdateStreak(8, 12);
 				} else if (Queslevel == 5) {
 					increment = 10;
+					UpdateStreak(8, 12);
 				} else if (Queslevel == 6) {
 					increment = 15;
+					UpdateStreak(8, 12);
 				}  
-					
-				UpdateStreak(8, 12);
 
 				updateQuestionsAttempted ();
 				StartCoroutine (ShowCorrectAnimation());
@@ -250,10 +254,8 @@ namespace Cerebro {
 			if (level == 1) 
 			{
 				selector = GetRandomSelector (1, 9);
-
-				StartSequence(8);
-
 				subQuestionTEX.gameObject.SetActive (true);
+				StartSequence (8);
 
 				axisValueOffset = 10;
 				gridValOffset = axisValueOffset / 2;
@@ -274,6 +276,8 @@ namespace Cerebro {
 				coeff.Add (gridValOffset * maxValue);
 				coeff.Shuffle ();
 
+				QuestionText.text = "The given graph shows the marks that Srinivas got in four maths tests. The tests were out of 50 marks.";
+
 				statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
 				statisticsHelper.SetStatisticsType (StatisticsType.HorizontalBar);
 				statisticsHelper.ShiftPosition (new Vector2 (-270, 235));
@@ -292,8 +296,6 @@ namespace Cerebro {
 					}
 				);
 				statisticsHelper.DrawGraph ();
-
-				QuestionText.text = "Given are the marks that Srinivas got in four maths tests. The tests were out of 50 marks.";
 
 				if (selector == 1)
 				{
@@ -365,17 +367,13 @@ namespace Cerebro {
 					subQuestionTEX.text = string.Format ("How many {0} marks did he get in the {1} test as compared to the {2} test?", expression, months[randSelector1], months[randSelector2]);
 					Answer = string.Format ("{0}", Mathf.Abs (coeff[randSelector1] - coeff[randSelector2]));
 				}
-
-
 			}
 			#endregion
 			#region level2
 			else if (level == 2)
 			{
 				selector = GetRandomSelector (1, 4);
-
 				StartSequence(3);
-
 				subQuestionTEX.gameObject.SetActive (true);
 
 				List<int> coeff1 = new List<int> ();
@@ -488,9 +486,9 @@ namespace Cerebro {
 					int minValue, maxValue;
 					int numberOfBars = 5;
 					do {
-						minValue = Random.Range (2, 10);
-						maxValue = Random.Range (minValue, 13);
-					} while (maxValue - minValue < numberOfBars - 1);
+						minValue = Random.Range (2, 8);
+						maxValue = Random.Range (10, 13);
+					} while (maxValue - minValue < numberOfBars);
 
 					List<string> Animals = new List<string> (){"Rabbit", "Monkey", "Lion", "Elephant", "Zebra", "Giraffe", "Tiger", "Leopard"};
 					Animals.Shuffle ();
@@ -700,7 +698,7 @@ namespace Cerebro {
 					statisticsHelper.SetPieRadius (100f); 
 					statisticsHelper.DrawGraph ();
 
-					QuestionText.text = string.Format ("{0} people were asked what kind of holiday was their favourite. Their responses are given in the table below. Colour the circle graph accordingly.", 8 * unitData);
+					QuestionText.text = string.Format ("{0} people were asked what kind of holiday was their favourite. Their responses are given in the table below. Colour (pick from the corresponding boxes) the circle graph accordingly.", 8 * unitData);
 				}
 			}
 			#endregion
@@ -708,8 +706,9 @@ namespace Cerebro {
 			else if (level == 4)
 			{
 				selector = GetRandomSelector (1, 4);
-
+				StartSequence (3);
 				subQuestionTEX.gameObject.SetActive (true);
+
 				List<string> pieStringData = new List<string> () {"Arnav", "Nitya", "Zara", "Anvi", "Rachit"};
 				pieStringData.Shuffle ();
 
@@ -773,8 +772,9 @@ namespace Cerebro {
 			else if (level == 5)
 			{
 				selector = GetRandomSelector (1, 3);
-
 				subQuestionTEX.gameObject.SetActive (true);
+				StartSequence (2);
+
 				List<string> pieStringData = new List<string> () {"Maths", "Physics", "Biology", "Chemistry", "English", "Economy", "Philosophy", "Computer"};
 				pieStringData.Shuffle ();
 
@@ -802,7 +802,7 @@ namespace Cerebro {
 				statisticsHelper.DrawGraph ();					
 
 				QuestionText.text = string.Format ("This circle graph shows the number of days Tirthan spent studying different subjects out of a total study time of {0} days.", coeff.Sum ());
-				randSelector = Random.Range (0, 2);
+
 				if (selector == 1)
 				{
 					int randSelector1 = Random.Range (0, numberOfData);
