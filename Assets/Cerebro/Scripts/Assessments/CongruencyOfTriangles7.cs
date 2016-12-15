@@ -1378,38 +1378,16 @@ namespace Cerebro
 				userAnswerLaText.text += value.ToString();
 			}
 			else if (value == 10)
-			{    //.
-				if (checkLastTextFor(new string[1] { "." }))
-				{
-					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
-				}
-				userAnswerLaText.text += ".";
-			}
-			else if (value == 11)
 			{   // Back
 				if (userAnswerLaText.text.Length > 0)
 				{
 					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
 				}
 			}
+			else if (value == 11) {   // All Clear
+				userAnswerLaText.text = "";
+			}
 			else if (value == 12)
-			{   // min
-				if (checkLastTextFor(new string[1] {""+ MathFunctions.min }))
-				{
-					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
-				}
-				userAnswerLaText.text += ""+MathFunctions.min;			
-			}
-			else if (value == 13)
-			{   // Sec
-
-				if (checkLastTextFor(new string[1] { ""+MathFunctions.sec }))
-				{
-					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
-				}
-				userAnswerLaText.text += ""+MathFunctions.sec;
-			}
-			else if (value == 14)
 			{   // Deg
 
 				if (checkLastTextFor(new string[1] {""+ MathFunctions.deg }))
@@ -1419,16 +1397,13 @@ namespace Cerebro
 				userAnswerLaText.text += ""+MathFunctions.deg;
 
 			}
-			else if (value == 15)
+			else if (value == 13)
 			{   // comma
 				if (checkLastTextFor(new string[1] { "," }))
 				{
 					userAnswerLaText.text = userAnswerLaText.text.Substring(0, userAnswerLaText.text.Length - 1);
 				}
 				userAnswerLaText.text += ",";
-			}
-			else if (value == 16) {   // All Clear
-				userAnswerLaText.text = "";
 			}
 		}
 
