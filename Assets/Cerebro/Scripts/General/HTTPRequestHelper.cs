@@ -30,7 +30,7 @@ namespace Cerebro
 		
 
 		//		private string SERVER_URL = "http://192.168.1.28:3000/";
-		private string SERVER_URL = "http://apis.aischool.net/cerebro/";//"https://teal-server.herokuapp.com/";
+		private string SERVER_URL = "https://teal-server.herokuapp.com/"; //"http://apis.aischool.net/cerebro/";
 		//private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
 		private string SERVER_NEW_URL = "http://apis.aischool.net/";
 		//private string SERVER_NEW_URL ="http://10.0.4.237:3000/";
