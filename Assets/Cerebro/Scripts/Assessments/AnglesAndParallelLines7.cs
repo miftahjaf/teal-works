@@ -234,6 +234,9 @@ namespace Cerebro
 
 		void AnimateMCQOptionCorrect(string ans)
 		{
+			if (isRevisitedQuestion) {
+				return;
+			}
 			for (int i = 1; i <= 4; i++) {
 				if (MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().text == ans) {
 					MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.green800;

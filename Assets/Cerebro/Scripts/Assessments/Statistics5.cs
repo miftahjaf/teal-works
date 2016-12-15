@@ -59,10 +59,7 @@ namespace Cerebro {
 						correct = true;
 					} else {
 						correct = false;
-						if (!isRevisitedQuestion) {
-							AnimateMCQOptionCorrect (Answer);
-						}
-
+						AnimateMCQOptionCorrect (Answer);
 					}
 				} else {
 					float answer = 0;
@@ -133,6 +130,9 @@ namespace Cerebro {
 
 		void AnimateMCQOptionCorrect(string ans)
 		{
+			if (isRevisitedQuestion) {
+				return;
+			}
 			for (int i = 1; i <= 4; i++) {
 				if (MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().text == ans) {
 					MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().color = MaterialColor.green800;

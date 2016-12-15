@@ -381,6 +381,9 @@ namespace Cerebro
         }
 		void AnimateMCQOptionCorrect(string ans)
 		{
+			if (isRevisitedQuestion) {
+				return;
+			}
 			for (int i = 1; i <= 2; i++) {
 				if (MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().text == ans) {
 					MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.green800;
@@ -396,6 +399,9 @@ namespace Cerebro
         }
 		void AnimateThreeChoiceOptionCorrect(string ans)
 		{
+			if (isRevisitedQuestion) {
+				return;
+			}
 			int index = -1;
 			for (int i = 1; i <= 3; i++) {
 				if (ThreeChoice.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().text == ans) {
