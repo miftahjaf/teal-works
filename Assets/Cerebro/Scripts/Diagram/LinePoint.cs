@@ -34,6 +34,7 @@ namespace Cerebro
 
 		public bool shouldShowArrow;
 		public bool shouldShowDot;
+		public bool shouldFlip;
 
 		public string lineText;
 
@@ -62,6 +63,7 @@ namespace Cerebro
 			this.lineTextDirection = TextDir.None;
 			this.nextPoint = Vector2.zero;
 			this.sticks = new List<Stick> ();
+			this.shouldFlip = false;
 		}
 
 
@@ -170,6 +172,20 @@ namespace Cerebro
 		{
 			this.sticks = sticks;
 			return this;
+		}
+
+		public LinePoint FlipArrow()
+		{
+			if (nextPoint.Equals (origin)) {
+				this.origin = MathFunctions.PointAtDirection (origin, angle, radius);
+				this.angle = angle + 180f;
+			} else {
+				Vector2 tempPoint = this.origin;
+				this.origin = this.nextPoint;
+				this.nextPoint = tempPoint;
+			}
+			return this;
+
 		}
 
 			
