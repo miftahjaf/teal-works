@@ -713,9 +713,21 @@ namespace Cerebro
 
 		public void ShowCorrectPieToFillArcs()
 		{
-			foreach (UIPolygon arc in pieArcList) {
-				arc.fill = true;
-				arc.color = MaterialColor.green800;
+			Transform obj;
+			if (obj = transform.Find ("PieArcFill"))
+			{
+				if(obj.GetComponent<UIPolygon> ())
+				{
+					obj.GetComponent<UIPolygon> ().color = MaterialColor.green800;
+				}
+			}
+
+			if (obj = transform.Find ("PieLineFill"))
+			{
+				if(obj.GetComponent<VectorObject2D> ())
+				{
+					obj.GetComponent<VectorObject2D> ().vectorLine.color = MaterialColor.green800;
+				}
 			}
 		}
 			
@@ -734,11 +746,21 @@ namespace Cerebro
 
 		public void ShowWrongPieToFillArcs()
 		{
-
-			foreach (UIPolygon arc in pieArcList) 
+			Transform obj;
+			if (obj = transform.Find ("PieArcFill"))
 			{
-				arc.fill = true;
-				arc.color = MaterialColor.red800;
+				if(obj.GetComponent<UIPolygon> ())
+				{
+					obj.GetComponent<UIPolygon> ().color = MaterialColor.red800;
+				}
+			}
+
+			if (obj = transform.Find ("PieLineFill"))
+			{
+				if(obj.GetComponent<VectorObject2D> ())
+				{
+					obj.GetComponent<VectorObject2D> ().vectorLine.color = MaterialColor.red800;
+				}
 			}
 		}
 
@@ -940,10 +962,11 @@ namespace Cerebro
 				UIpolygon.fillPercent = 100f;
 				UIpolygon.GetComponent<RectTransform> ().sizeDelta = Vector2.one * pieRadius * 2f;
 				UIpolygon.ReDraw ();
+				UIpolygon.name = "PieArcFill";
 
 				GameObject lineObject = GameObject.Instantiate (vectorObjectPrefab);
 				lineObject.transform.SetParent (this.transform,false);
-				lineObject.name = "Pie Line";
+				lineObject.name = "PieLineFill";
 				lineObject.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 				VectorLine vectorLine = lineObject.GetComponent<VectorObject2D> ().vectorLine;
 				vectorLine.points2 = linePoints;
