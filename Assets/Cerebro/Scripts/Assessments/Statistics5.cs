@@ -59,7 +59,10 @@ namespace Cerebro {
 						correct = true;
 					} else {
 						correct = false;
-						AnimateMCQOptionCorrect (Answer);
+						if (!isRevisitedQuestion) {
+							AnimateMCQOptionCorrect (Answer);
+						}
+
 					}
 				} else {
 					float answer = 0;
