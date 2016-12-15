@@ -266,7 +266,7 @@ namespace Cerebro {
 					maxValue = Random.Range (minValue, 11);
 				} while (maxValue - minValue < numberOfBars - 1);
 
-				List<string> months = new List<string> (){"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+				List<string> months = new List<string> (){"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 				months.Shuffle ();
 
 				coeff.Add (gridValOffset * minValue);
@@ -554,7 +554,7 @@ namespace Cerebro {
 						maxValue1 = Random.Range (10, 13);
 					} while (maxValue1 - minValue1 < numberOfBars);
 
-					List<string> months = new List<string> (){"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+					List<string> months = new List<string> (){"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 					months.Shuffle ();
 
 					for (int i = 0; i < numberOfBars; i++){
@@ -617,7 +617,7 @@ namespace Cerebro {
 					minValue = 3;
 					maxValue = 10;
 
-					List<string> weekDays = new List<string>() {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+					List<string> weekDays = new List<string>() {"Mon", "Tue", "Wed", "Thu", "Fri"};
 
 					for (int i = 0; i < numberOfBars; i++){
 						coeff.Add (gridValOffset * Random.Range (minValue + 1, maxValue));
