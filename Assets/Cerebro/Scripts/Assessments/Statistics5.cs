@@ -266,7 +266,7 @@ namespace Cerebro {
 					maxValue = Random.Range (minValue, 11);
 				} while (maxValue - minValue < numberOfBars - 1);
 
-				List<string> months = new List<string> (){"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+				List<string> months = new List<string> (){"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 				months.Shuffle ();
 
 				coeff.Add (gridValOffset * minValue);
@@ -287,10 +287,10 @@ namespace Cerebro {
 						new StatisticsAxis ().SetStatisticsValues
 						(
 							new List<StatisticsValue>(){
-								new StatisticsValue (months[0], coeff[0]),
-								new StatisticsValue (months[1], coeff[1]),
-								new StatisticsValue (months[2], coeff[2]),
-								new StatisticsValue (months[3], coeff[3]),
+								new StatisticsValue (months[0].Substring (0, 3), coeff[0]),
+								new StatisticsValue (months[1].Substring (0, 3), coeff[1]),
+								new StatisticsValue (months[2].Substring (0, 3), coeff[2]),
+								new StatisticsValue (months[3].Substring (0, 3), coeff[3]),
 							}
 						).SetAxisName ("Test Month").SetPointOffset (3)
 					}
@@ -554,7 +554,7 @@ namespace Cerebro {
 						maxValue1 = Random.Range (10, 13);
 					} while (maxValue1 - minValue1 < numberOfBars);
 
-					List<string> months = new List<string> (){"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+					List<string> months = new List<string> (){"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 					months.Shuffle ();
 
 					for (int i = 0; i < numberOfBars; i++){
@@ -589,11 +589,11 @@ namespace Cerebro {
 							new StatisticsAxis ().SetStatisticsValues
 							(
 								new List<StatisticsValue>(){
-									new StatisticsValue (months[0], new int[] {coeff[0], coeff1[0]}),
-									new StatisticsValue (months[1], new int[] {coeff[1], coeff1[1]}),
-									new StatisticsValue (months[2], new int[] {coeff[2], coeff1[2]}),
-									new StatisticsValue (months[3], new int[] {coeff[3], coeff1[3]}),
-									new StatisticsValue (months[4], new int[] {coeff[4], coeff1[4]})
+									new StatisticsValue (months[0].Substring (0, 3), new int[] {coeff[0], coeff1[0]}),
+									new StatisticsValue (months[1].Substring (0, 3), new int[] {coeff[1], coeff1[1]}),
+									new StatisticsValue (months[2].Substring (0, 3), new int[] {coeff[2], coeff1[2]}),
+									new StatisticsValue (months[3].Substring (0, 3), new int[] {coeff[3], coeff1[3]}),
+									new StatisticsValue (months[4].Substring (0, 3), new int[] {coeff[4], coeff1[4]})
 								}
 							).SetAxisName ("Months").SetPointOffset (3),
 							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of Units").SetPointOffset (2)
@@ -617,7 +617,7 @@ namespace Cerebro {
 					minValue = 3;
 					maxValue = 10;
 
-					List<string> weekDays = new List<string>() {"Mon", "Tue", "Wed", "Thu", "Fri"};
+					List<string> weekDays = new List<string>() {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
 					for (int i = 0; i < numberOfBars; i++){
 						coeff.Add (gridValOffset * Random.Range (minValue + 1, maxValue));
@@ -642,11 +642,11 @@ namespace Cerebro {
 							new StatisticsAxis ().SetStatisticsValues
 							(
 								new List<StatisticsValue>(){
-									new StatisticsValue (weekDays[0], coeff[0]),
-									new StatisticsValue (weekDays[1], coeff[1]),
-									new StatisticsValue (weekDays[2], coeff[2]),
-									new StatisticsValue (weekDays[3], coeff[3]),
-									new StatisticsValue (weekDays[4], coeff[4])
+									new StatisticsValue (weekDays[0].Substring (0, 3), coeff[0]),
+									new StatisticsValue (weekDays[1].Substring (0, 3), coeff[1]),
+									new StatisticsValue (weekDays[2].Substring (0, 3), coeff[2]),
+									new StatisticsValue (weekDays[3].Substring (0, 3), coeff[3]),
+									new StatisticsValue (weekDays[4].Substring (0, 3), coeff[4])
 								}
 							).SetAxisName ("Weekdays").SetPointOffset (3),
 							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of People").SetPointOffset (2)
