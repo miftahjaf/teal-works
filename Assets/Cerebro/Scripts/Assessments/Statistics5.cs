@@ -305,7 +305,7 @@ namespace Cerebro {
 					SetMCQMode (3);
 
 					int randSelector1 = Random.Range (0, 2);
-					subQuestionTEX.text = string.Format ("What does each square in the {0} scale stand for?", randSelector1 == 0? "vertical": "horizontal");
+					subQuestionTEX.text = string.Format ("What does the {0} scale represent?", randSelector1 == 0? "vertical": "horizontal");
 					options.Add ("Test Month");
 					options.Add ("Marks");
 					options.Add (months[Random.Range(0, 4)]);
