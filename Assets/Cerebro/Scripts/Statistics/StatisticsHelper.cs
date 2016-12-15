@@ -701,6 +701,8 @@ namespace Cerebro
 				arc.color = CerebroHelper.HexToRGB (currentColors [cnt]);
 			    cnt++;
 			}
+			SetPieFillBorderColor (MaterialColor.green800);
+
 		}
 
 		public void ShowCorrectBars()
@@ -713,12 +715,17 @@ namespace Cerebro
 
 		public void ShowCorrectPieToFillArcs()
 		{
+			SetPieFillBorderColor (MaterialColor.green800);
+		}
+
+		public void SetPieFillBorderColor(Color color)
+		{
 			Transform obj;
 			if (obj = transform.Find ("PieArcFill"))
 			{
 				if(obj.GetComponent<UIPolygon> ())
 				{
-					obj.GetComponent<UIPolygon> ().color = MaterialColor.green800;
+					obj.GetComponent<UIPolygon> ().color = color;
 				}
 			}
 
@@ -726,7 +733,7 @@ namespace Cerebro
 			{
 				if(obj.GetComponent<VectorObject2D> ())
 				{
-					obj.GetComponent<VectorObject2D> ().vectorLine.color = MaterialColor.green800;
+					obj.GetComponent<VectorObject2D> ().vectorLine.color = color;
 				}
 			}
 		}
@@ -746,22 +753,7 @@ namespace Cerebro
 
 		public void ShowWrongPieToFillArcs()
 		{
-			Transform obj;
-			if (obj = transform.Find ("PieArcFill"))
-			{
-				if(obj.GetComponent<UIPolygon> ())
-				{
-					obj.GetComponent<UIPolygon> ().color = MaterialColor.red800;
-				}
-			}
-
-			if (obj = transform.Find ("PieLineFill"))
-			{
-				if(obj.GetComponent<VectorObject2D> ())
-				{
-					obj.GetComponent<VectorObject2D> ().vectorLine.color = MaterialColor.red800;
-				}
-			}
+			SetPieFillBorderColor (MaterialColor.red800);
 		}
 
 		public bool IsAnswered ()
@@ -814,6 +806,7 @@ namespace Cerebro
 				arc.color = Color.black;
 			}
 			currentSelectedColor.a = 0;
+			SetPieFillBorderColor (Color.black);
 		}
 
 		public bool IsPieGraphFilled()
