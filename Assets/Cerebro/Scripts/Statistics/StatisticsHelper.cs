@@ -40,10 +40,12 @@ namespace Cerebro
 		private Vector2 graphMinValue;          //Graph Min x and y point value
 		private Vector2 graphMaxValue;          //Graph Max x and y point value
 		private Vector2 pointOffset;
+		private Vector2 snapValue;                //Graph sanp value (Default grid offset)
 
 		private float gridOffset;               //Grid offset
 		private float fontMultiPlier;           //Font multiplier to make graph font smaller or bigger
-		private Vector2 snapValue;                //Graph sanp value (Default grid offset)
+		private float pieRadius;
+
 
 		private bool isInteractable;
 
@@ -53,18 +55,21 @@ namespace Cerebro
 
 		private StatisticsAxis[] statisticsAxises;
 		private List<StatisticsBar> statisticsBars;
+
 		public List<string> barValues;
 		private List<int> pieValues;
 		private List<string> pieStrings;
-		private float pieRadius;
+
 
 		private List<UIPolygon> pieArcList;
 		private List<string> currentColors;
-
+		private List<GraphPointScript> lineGraphPoints;
 
 		private bool canClick;
 
 		private Color currentSelectedColor;
+
+		private GraphDiagram currentLineGraphDiagram;
 
 		//Reset old set values
 		public void Reset()
@@ -91,6 +96,7 @@ namespace Cerebro
 			currentSelectedColor.a = 0;
 			barValues = new List<string> ();
 			canClick = true;
+			lineGraphPoints = new List<GraphPointScript> ();
 
 		}
 
@@ -244,7 +250,7 @@ namespace Cerebro
 			}
 			else
 			{
-				if (statisticType == StatisticsType.HorizontalBar || statisticType == StatisticsType.VerticalBar) {
+				if (statisticType == StatisticsType.HorizontalBar || statisticType == StatisticsType.VerticalBar || statisticType == StatisticsType.Line) {
 					startOffset = axisOffset.x / pointOffset.x;
 				}
 				pointInPosXAxis = statisticsAxis.statisticsValues.Count;
@@ -256,7 +262,7 @@ namespace Cerebro
 				string text = (i * axisOffset.x).ToString ();
 				int value = 0;
 
-				if (statisticType == StatisticsType.VerticalBar) {
+				if (statisticType == StatisticsType.VerticalBar || statisticType == StatisticsType.Line) {
 					text = "";
 					if(statisticsAxis.statisticsValues.Count > i - 1 )
 					{
@@ -266,13 +272,22 @@ namespace Cerebro
 						float startPoint = i * axisOffset.x - GetStartOffsetValue(startOffset, totalValues);
 						for (int count = 0; count < totalValues; count++) {
 							value = statisticsAxis.statisticsValues [i - 1].values [count];
-							GenerateGraphBar (new Vector2 ( startPoint,0f), new Vector2 (startPoint,value ),currentColors[count],2f/totalValues,50f/totalValues);
+
+							if (statisticType == StatisticsType.Line) {
+								GenerateLineGraphPoint (new Vector2 (startPoint, 0f), new Vector2 (startPoint, value));
+							} else {
+								GenerateGraphBar (new Vector2 (startPoint, 0f), new Vector2 (startPoint, value), currentColors [count], 2f / totalValues, 50f / totalValues);
+							}
 							startPoint +=offsetValue;
 						}
 					}
 
 				}
 				GenerateLinePoint (new LinePoint (text, GraphPosToUIPos (new Vector2 (i * axisOffset.x-startOffset, 0)), 0f, false,0).SetPointTextOffset(new Vector2(0,-15)),axisParent);
+			}
+
+			if (statisticType == StatisticsType.Line) {
+				DrawLineGraph ();
 			}
 
 			//Neg X
@@ -338,6 +353,37 @@ namespace Cerebro
 		}
 
 
+
+
+		public void DrawLineGraph()
+		{
+			GameObject diagramObj = GameObject.Instantiate (vectorObjectPrefab);
+			diagramObj.transform.SetParent (this.transform,false);
+			diagramObj.name = "line graph";
+
+
+			VectorLine vectorLine = diagramObj.GetComponent<VectorObject2D> ().vectorLine;
+			vectorLine.SetWidth (2f);
+			vectorLine.color = Color.black;
+			vectorLine.lineType = LineType.Continuous;
+		
+			currentLineGraphDiagram = new GraphDiagram (vectorLine,LineShapeType.Normal);
+			foreach (GraphPointScript graphPointScript in lineGraphPoints) 
+			{
+				graphPointScript.SetDigramObject (currentLineGraphDiagram);
+				currentLineGraphDiagram.AddGraphPoint (graphPointScript);
+			}
+
+			currentLineGraphDiagram.Draw ();
+		}
+
+		public void GenerateLineGraphPoint(Vector2 startPoint,Vector2 endPoint)
+		{
+			GraphPointScript graphPointScript = PlotPoint (startPoint +  new Vector2 (0f, axisOffset.y/pointOffset.y), "", true, false);
+			graphPointScript.SetPointMovementType (PointMovementType.Vertical);
+			lineGraphPoints.Add (graphPointScript);
+		}
+
 		public void GenerateGraphBar(Vector2 startPoint,Vector2 endPoint,string colorCode,float width = 2f,float pointSize =50f)
 		{
 			GameObject barObj = new GameObject ();
@@ -357,7 +403,7 @@ namespace Cerebro
 			{
 				barObj.transform.GetComponent<RectTransform> ().pivot = new Vector2 (0f, 0.5f);
 			}
-			statisticsBar.SetIsHorizontal (statisticType == StatisticsType.VerticalBar);
+			statisticsBar.SetIsHorizontal (statisticType == StatisticsType.HorizontalBar);
 			float height = Vector2.Distance (GraphPosToUIPos (startPoint), GraphPosToUIPos (endPoint));
 			statisticsBar.SetHeight (height);
 			statisticsBar.SetStartHeight (isInteractable?gridOffset: height);
@@ -369,7 +415,9 @@ namespace Cerebro
 			{
 				GraphPointScript pointScript = PlotPoint (startPoint + (statisticType == StatisticsType.VerticalBar ? new Vector2 (0f, axisOffset.y/pointOffset.y) : new Vector2 (axisOffset.x/pointOffset.x, 0f)), "", true, false,pointSize);
 				pointScript.SetStatisticsBar (statisticsBar);
+				pointScript.SetPointMovementType (statisticType == StatisticsType.HorizontalBar ? PointMovementType.Horizontal : PointMovementType.Vertical);
 				statisticsBar.SetGraphPoint (pointScript);
+
 			}
 		}
 
@@ -470,17 +518,14 @@ namespace Cerebro
 			RectTransform pointRectTransform = graphPointObj.GetComponent<RectTransform> ();
 			Vector2 oldPos = pointRectTransform.anchoredPosition;
 
-			if (graphPointObj.statisticsBar != null) 
-			{
-				if(graphPointObj.statisticsBar.IsHorizontal())
-				{
-					position.x = graphPointObj.transform.position.x;
-				}
-				else
-				{
-					position.y = graphPointObj.transform.position.y;
-				}
-			}
+
+			if (graphPointObj.GetPointMovementType () == PointMovementType.Vertical) {
+				position.x = graphPointObj.transform.position.x;
+					
+			} else if (graphPointObj.GetPointMovementType () == PointMovementType.Horizontal) {
+				position.y = graphPointObj.transform.position.y;
+			} 
+
 			graphPointObj.transform.position = position;
 
 			Vector2 graphPoint = GetSnapPoint(UIPosToGraphPos(pointRectTransform.anchoredPosition));
@@ -498,6 +543,8 @@ namespace Cerebro
 			{
 				graphPointObj.statisticsBar.SetCurrentHeight (GraphPosToUIPos(graphPoint));
 				graphPointObj.statisticsBar.SetBar ();
+			}
+			if (graphPointObj.diagramObj != null) {
 			}
 		
 			if (pointLineDisplay == null) 

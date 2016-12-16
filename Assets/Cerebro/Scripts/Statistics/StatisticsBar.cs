@@ -60,9 +60,9 @@ namespace Cerebro
 		public void SetBar()
 		{
 			if (this.isHorizontal) {
-				this.gameObject.GetComponent<RectTransform> ().sizeDelta = new Vector2 (width, currentHeight);
-			} else {
 				this.gameObject.GetComponent<RectTransform> ().sizeDelta = new Vector2 (currentHeight, width);
+			} else {
+				this.gameObject.GetComponent<RectTransform> ().sizeDelta = new Vector2 (width, currentHeight);
 			}
 		}
 

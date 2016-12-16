@@ -8,6 +8,12 @@ using System;
 
 namespace Cerebro
 {
+	public enum PointMovementType
+	{
+		Vertical,
+		Horizontal,
+		Both
+	}
 	public class GraphPointScript : MonoBehaviour,IDragHandler,IEndDragHandler
 	{
 
@@ -22,6 +28,7 @@ namespace Cerebro
 		public Action<GraphPointScript> onDragEndEvent;
 		public LinePoint linePoint;
 		private bool isValueChanged;
+		private PointMovementType pointMovementType = PointMovementType.Both;
 
 		public void SetPoint( LinePoint linePoint)
 		{
@@ -158,6 +165,16 @@ namespace Cerebro
 		public void SetSize(float size)
 		{
 			this.transform.GetComponent<RectTransform> ().sizeDelta = Vector2.one * size;
+		}
+
+		public void SetPointMovementType(PointMovementType pointMovementType)
+		{
+			this.pointMovementType = pointMovementType;
+		}
+
+		public PointMovementType GetPointMovementType()
+		{
+			return this.pointMovementType;
 		}
 	}
 
