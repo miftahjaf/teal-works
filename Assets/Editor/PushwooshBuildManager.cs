@@ -53,8 +53,41 @@ public class PushwooshBuildManager : MonoBehaviour
 			string projTarget = proj.TargetGuidByName("Unity-iPhone");
 			UnityEngine.Debug.Log ("Project Target: " + projTarget);
 
+
+			//Push Whoosh Setting
+			//===================================================================
 			proj.AddFrameworkToProject(projTarget, "Security.framework", false);
 			proj.AddBuildProperty(projTarget, "OTHER_LDFLAGS", "-ObjC -lz -lstdc++");
+			//===================================================================
+
+			//Cerebro Setting 
+			//===================================================================
+			proj.AddBuildProperty(projTarget,"ENABLE_BITCODE","NO");
+			proj.AddBuildProperty(projTarget,"ARCHS","$(ARCHS_STANDARD)");
+			proj.AddBuildProperty(projTarget,"DEBUG_INFORMATION_FORMAT","DWARF");
+
+			var fileName = "GothamSSm-Book.otf";
+			var filePath = Path.Combine(Application.dataPath+"/Cerebro/Prefabs/Resources/Fonts", fileName);
+			File.Copy(filePath,Path.Combine(pathToBuiltProject+"/Data/Resources", fileName));
+			UnityEngine.Debug.Log("File path "+filePath);
+			UnityEngine.Debug.Log("Dest path "+Path.Combine(pathToBuiltProject+"/Data/Resources", fileName));
+			proj.AddFileToBuild(projTarget, proj.AddFile(Path.Combine(pathToBuiltProject+"/Data/Resources", fileName), Path.Combine(pathToBuiltProject+"/Data/Resources", fileName),PBXSourceTree.Source));
+
+			// Get plist
+			string plistPath = pathToBuiltProject + "/Info.plist";
+			PlistDocument plist = new PlistDocument();
+			plist.ReadFromString(File.ReadAllText(plistPath));
+
+			// Get root
+			PlistElementDict rootDict = plist.root;
+
+			//UIAppFonts
+			PlistElementArray bgModes = rootDict.CreateArray("UIAppFonts");
+			bgModes.AddString("GothamSSm-Book.otf");
+
+			// Write to file
+			File.WriteAllText(plistPath, plist.WriteToString());
+			//===================================================================
 
 			File.WriteAllText(projPath, proj.WriteToString());
 #endif
