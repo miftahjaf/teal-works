@@ -261,7 +261,7 @@ namespace Cerebro {
 					var side2 = Random.Range (2, 11);
 					var cost = Random.Range (2, 11);
 					var perimeter = (side1 + side2) * 2;
-					QuestionText.text = "The length of the sides of a rectanglular plot are " + side1.ToString () + " m and " + side2.ToString () + " m. If the cost of fencing 1 cm is Rs. " + cost.ToString () + ", what will be the cost (in Rs.) of fencing the rectangular plot.";
+					QuestionText.text = "The length of the sides of a rectanglular plot are " + side1.ToString () + " m and " + side2.ToString () + " m. If the cost of fencing 1 m is Rs. " + cost.ToString () + ", what will be the cost (in Rs.) of fencing the rectangular plot.";
 					GeneralButton.gameObject.SetActive (true);
 					answerButton = GeneralButton;
 					Answer = perimeter * cost;
