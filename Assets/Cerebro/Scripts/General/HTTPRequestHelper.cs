@@ -226,6 +226,37 @@ namespace Cerebro
 			});
 		}
 
+		public void SendYoutubeAnalytics(string componentName,string createdAt, string searchOrVideoText, string videoId, string startTime, string endTime)
+		{
+			var studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
+
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			N ["myData"] ["component_name"]= componentName;
+			N ["myData"] ["component_data"] ["student_id"] = studentID;
+			N ["myData"] ["component_data"] ["created_at"] = createdAt.ToString ();
+
+			if (componentName == "you_tube_student_log") 
+			{
+				N ["myData"] ["component_data"] ["video_title"] = searchOrVideoText;
+				N ["myData"] ["component_data"] ["video_id"] = videoId;
+				N ["myData"] ["component_data"] ["start_time"] = startTime;
+				N ["myData"] ["component_data"] ["end_time"] = endTime;
+			} else {
+				N ["myData"] ["component_data"] ["search_text"] = searchOrVideoText;
+			}
+
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArray (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
+					CerebroHelper.DebugLog ("Added youtube analytics");
+
+				} else {
+					CerebroHelper.DebugLog ("Error in request");
+				}
+			});
+		}
+
 		public void IncrementCoins ()
 		{
 			int currentDeltaValue = PlayerPrefs.GetInt (PlayerPrefKeys.DeltaCoins);	

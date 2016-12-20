@@ -9,25 +9,16 @@ using System.Collections;
 using MaterialUI;
 using System.IO;
 using SimpleJSON;
-
+using EnhancedUI.EnhancedScroller;
 namespace Cerebro
 {
 	//	[AddComponentMenu("MaterialUI/Dialogs/Simple List", 1)]
-	public class StudentPlaylist : MonoBehaviour
+	public class StudentPlaylist : MonoBehaviour,IEnhancedScrollerDelegate
 	{
-		[SerializeField]
-		private VerticalScrollLayoutElement m_ListScrollLayoutElement;
-		public VerticalScrollLayoutElement listScrollLayoutElement
-		{
-			get { return m_ListScrollLayoutElement; }
-			set { m_ListScrollLayoutElement = value; }
-		}
 
-		private List<StudentPlaylistOption> m_SelectionItems;
-		public List<StudentPlaylistOption> selectionItems
-		{
-			get { return m_SelectionItems; }
-		}
+		public VideoCell videoCell;
+		public List<VideoData> videosData;
+		public EnhancedScroller videoSelector;
 
 		private StudentPlaylistOptionDataList m_OptionDataList;
 		public StudentPlaylistOptionDataList optionDataList
@@ -35,15 +26,7 @@ namespace Cerebro
 			get { return m_OptionDataList; }
 			set { m_OptionDataList = value; }
 		}
-
-		[SerializeField]
-		private GameObject m_OptionTemplate;
-
-		private List<Color> colors;
-
-		public bool isAssigning = false;
-		private List<string> assignedStudents;
-
+			
 		private string currentContentID;
 		private int currentListIndex;
 
@@ -53,35 +36,25 @@ namespace Cerebro
 		private Dictionary<int,bool> textureLoaded = new Dictionary<int,bool>();
 		private Dictionary<int,bool> textureLoading = new Dictionary<int,bool>();
 
-		void OnEnable()
-		{
-			assignedStudents = new List<string> ();
-		}
 
 		public void Initialize(StudentPlaylistOptionDataList optionDataList)
 		{
 
 			m_OptionDataList = optionDataList;
-			m_SelectionItems = new List<StudentPlaylistOption>();
+			videosData = new List<VideoData>();
 
 			watchedVideos = WelcomeScript.instance.GetWatchedVideosJSON ();
 
 
 			for (int i = 0; i < m_OptionDataList.options.Count; i++)
 			{
-				m_SelectionItems.Add(CreateSubListItem(i,m_OptionDataList));
+				videosData.Add(CreateSubListItem(i,m_OptionDataList));
 			}
-
-			float availableHeight = DialogManager.rectTransform.rect.height;
-
-			m_ListScrollLayoutElement.maxHeight = availableHeight - 68f;
-
-			m_OptionTemplate.gameObject.SetActive(false);
-
+				
 			GetComponent<RectTransform>().sizeDelta = new Vector2(1024f,GetComponent<RectTransform>().sizeDelta.y);
 			GetComponent<RectTransform> ().localPosition = new Vector3 (GetComponent<RectTransform> ().localPosition.x, 316f);
-			LoadImages ();
-//			Initialize();
+			videoSelector.Delegate = this;
+			videoSelector.ReloadData ();
 		}
 
 		public void OpenMissionVideo(MissionItemData missionItemData) {
@@ -99,47 +72,54 @@ namespace Cerebro
 			}
 		}
 
-		private StudentPlaylistOption CreateSubListItem(int i, StudentPlaylistOptionDataList tmpoptionDataList)
+		#region IEnhancedScrollerDelegate implementation
+
+		public int GetNumberOfCells (EnhancedScroller scroller)
 		{
-			GameObject abc = Instantiate (m_OptionTemplate);
-			abc.SetActive (true);
-			StudentPlaylistOption option = abc.GetComponent<StudentPlaylistOption>();
-			option.rectTransform.SetParent(m_OptionTemplate.transform.parent);
-			option.rectTransform.localScale = Vector3.one;
-			option.rectTransform.localEulerAngles = Vector3.zero;
+			if (videosData != null) {
+				return videosData.Count;
+			} else {
+				return 0;
+			}
+		}
 
+		public float GetCellViewSize (EnhancedScroller scroller, int dataIndex)
+		{
+			return 100f;
+		}
+
+		public EnhancedScrollerCellView GetCellView (EnhancedScroller scroller, int dataIndex, int cellIndex)
+		{
+			VideoCell cellView = scroller.GetCellView (videoCell) as VideoCell;
+			cellView.SetData (videosData[dataIndex],dataIndex,OnItemClick);
+			return cellView;
+		}
+
+		#endregion
+
+		private VideoData CreateSubListItem(int i, StudentPlaylistOptionDataList tmpoptionDataList)
+		{
+			VideoData videoData = new VideoData();
 			StudentPlaylistOptionData data = tmpoptionDataList.options[i];
-
-			Text name = abc.GetChildByName<Text>("Name");
-			Image watchedIcon = abc.transform.Find ("Watched").gameObject.GetComponent<Image> ();
-			name.text = data.name;
-
+		
 			var str = data.Url;
 			var firstSplit = str.Split ("v="[1]);
 			var videoID = firstSplit [1].Split ("&"[0])[0];
-
 			var videoUrl = "https://www.youtube.com/embed/" + videoID;
 			var imgurl = "https://img.youtube.com/vi/" + videoID + "/default.jpg";
 
-			if (watchedVideos.Contains (data.id)) {
-				watchedIcon.color = new Color (watchedIcon.color.r, watchedIcon.color.g, watchedIcon.color.b, 1);
-			} else {
-				watchedIcon.color = new Color (watchedIcon.color.r, watchedIcon.color.g, watchedIcon.color.b, 0);
-			}
-
-			Image icon = abc.GetChildByName<Image>("Icon");
-			icon.color = new Color (1, 1, 1, 0);
-
-			option.Id = data.id;
-			option.index = i;
-			option.onClickAction += OnItemClick;
-			option.PhotoUrl = imgurl;
-			option.Url = videoUrl;
-
-			return option;
+			videoData.isWatched = watchedVideos.Contains (data.id);
+			Debug.Log ("s watched "+videoData.isWatched);
+			videoData.thumbnailSprite = null;
+			videoData.title = data.name;
+			videoData.videoId = videoUrl;
+			videoData.thumbnailUrl = imgurl;
+			videoData.videoUrl = videoUrl;
+			videoData.contentId = data.id;
+			return videoData;
 		}
 
-		IEnumerator LoadImages(List<StudentPlaylistOption> arr, int startIndex = 0, int lastIndex = -1) {
+		/*IEnumerator LoadImages(List<StudentPlaylistOption> arr, int startIndex = 0, int lastIndex = -1) {
 			if (lastIndex == -1 || lastIndex > arr.Count-1) {
 				lastIndex = arr.Count-1;
 			}
@@ -188,14 +168,14 @@ namespace Cerebro
 				}
 				textureLoading.Remove (i);
 			}
-		}
+		}*/
 
 		public void OnItemClick(int index)
 		{	
-			currentContentID = m_SelectionItems [index].Id;
+			currentContentID = videosData [index].contentId;
 			currentListIndex = index;
 			VideoHelper.instance.VideoEnded += CloseWebView;
-			VideoHelper.instance.OpenVideoWithUrl (m_SelectionItems [index].Url);
+			VideoHelper.instance.OpenVideoWithUrl (videosData [index].videoUrl);
 		}
 
 		void CloseWebView(object sender, System.EventArgs e) {
@@ -210,8 +190,8 @@ namespace Cerebro
 			var videoWatched = false;
 			if (eventArgs.videoLength != -1 && eventArgs.timeSpent >= 0.8 * eventArgs.videoLength) {
 				videoWatched = true;
-				var watchedIcon = m_SelectionItems [currentListIndex].gameObject.transform.Find ("Watched").GetComponent<Image> ();
-				watchedIcon.color = new Color (watchedIcon.color.r, watchedIcon.color.g, watchedIcon.color.b, 1);
+				videosData [currentListIndex].isWatched = true;
+				videoSelector.RefreshActiveCellViews ();
 			}
 
 			var totalimeTaken = eventArgs.timeEnd - eventArgs.timeIni;
@@ -277,34 +257,12 @@ namespace Cerebro
 			return missionQuestionIDs;
 		}
 
-		public void LoadImages() {
-			StartCoroutine (LoadImages (m_SelectionItems,0,5));
-		}
 
-		public List<string> GetAssignedStudentList() {
-			return assignedStudents;
-		}
 
-		public void ListScrolled() {
-			List<int> indices = new List<int> ();
-			for (var i = 0; i < m_SelectionItems.Count; i++) {
-				if (m_SelectionItems [i].gameObject.GetComponent<RectTransform> ().position.y > 0) {
-					if (textureLoaded.ContainsKey (i) && textureLoaded[i] == true) {
-						continue;
-					}
-					if (textureLoading.ContainsKey (i) && textureLoading[i] == true) {
-						continue;
-					}
-					indices.Add (i);
-				}
-			}
-			if (indices.Count > 0) {
-				StartCoroutine (LoadImages (m_SelectionItems, indices [0], indices [indices.Count - 1]));
-			}
-		}
+	
 		public void DestroyingScreen() {
 			screenActive = false;
-			StopCoroutine (LoadImages(m_SelectionItems));
+			//StopCoroutine (LoadImages(m_SelectionItems));
 		}
 	}
 }

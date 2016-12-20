@@ -30,6 +30,7 @@ namespace Cerebro {
 		public const string Revisit = "Revisit";
 		public const string Googly = "Googly";
 		public const string StudentPlaylist = "StudentPlaylist";
+		public const string YoutubePlaylist = "Watch/YoutubePlayList";
 		public const string Achievements = "Achievements";
 		public const string ChooseAssessments = "ChooseAssessments";
 		public const string ChooseLearnContent = "ChooseLearnContent";

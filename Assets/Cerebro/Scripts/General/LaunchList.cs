@@ -2837,6 +2837,19 @@ namespace Cerebro
 			}
 
 		}
+
+		public void SendYoutubeAnalytics(string componentName,string createdAt, string searchOrVideoText, string videoId, string startTime, string endTime)
+		{
+			if (!PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
+				CerebroHelper.DebugLog ("SendAnalytics - no ID set");
+				return;
+			}
+
+			if (mHitServer) {
+				HTTPRequestHelper.instance.SendYoutubeAnalytics (componentName, createdAt, searchOrVideoText, videoId, startTime, endTime);
+			}
+		}
+
 				
 
 		public void StudentDataLoaded ()

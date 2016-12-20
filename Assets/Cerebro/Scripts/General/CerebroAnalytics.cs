@@ -21,6 +21,7 @@ namespace Cerebro
 		public const string Feedback = "Feedback";
 		public const string Profile = "Profile";
 		public const string Analytics = "Analytics";
+		public const string Youtube = "Youtube";
 	}
 
 	public class CerebroAnalytics : MonoBehaviour
