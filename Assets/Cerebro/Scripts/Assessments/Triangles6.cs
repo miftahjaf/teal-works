@@ -664,7 +664,7 @@ namespace Cerebro
 				{
 					angle1 = 2 * Random.Range (40, 66);
 					QuestionLatext.text = string.Format ("One of the angles of an isosceles triangle measures {0}{1}. Find the measure of the remaining angles.", angle1, MathFunctions.deg);
-					Answer = string.Format ("{0}{1}", 180 - (int) angle1 / 2, MathFunctions.deg);
+					Answer = string.Format ("{0}{1}", (180 -  angle1) / 2, MathFunctions.deg);
 				}
 				else if(selector == 5)
 				{
