@@ -424,7 +424,7 @@ namespace Cerebro
 					options.Add (string.Format ("FExterior angle of a triangle is equal to the sum of its interior angles."));
 					options.Add (string.Format ("TA right angled triangle can be isosceles."));
 					options.Add (string.Format ("TAn equilateral triangle is always acute angled."));
-					options.Add (string.Format ("FAright angled triangle can be equilateral."));
+					options.Add (string.Format ("FA right angled triangle can be equilateral."));
 					options.Add (string.Format ("FA triangle can have each of its angles less than 60{0}.", MathFunctions.deg));
 					options.Add (string.Format ("TAn isosceles triangle can be equilateral."));
 
@@ -593,7 +593,7 @@ namespace Cerebro
 					do{
 						coeff1 = Random.Range (1, 7);
 						do {
-							coeff3 = Random.Range (6, 19);
+							coeff3 = Random.Range (8, 19);
 						} while (180 % coeff3 != 0);
 
 						coeff2 = Random.Range (1, coeff3 - coeff1);
@@ -605,7 +605,7 @@ namespace Cerebro
 							Debug.Log ("Loop FASA");
 							break;
 						}
-					} while (MathFunctions.GetHCF (coeff1, coeff2, coeff3) > 1 || coeff3 == coeff2 || coeff1 == coeff3 || coeff2 == coeff1);
+					} while (MathFunctions.GetHCF (coeff1, coeff2, coeff3) > 1 || coeff3 == coeff2 || coeff1 == coeff3 || coeff2 == coeff1 || coeff3 == 0);
 						
 					angle1 = 180 - (coeff1 + coeff2) * coeff3;
 					randSelector = Random.Range (1, 3);
