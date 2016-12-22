@@ -70,6 +70,7 @@ namespace Cerebro {
 					CerebroAnalytics.instance.ScreenOpen (isYoutube ? CerebroScreens.Youtube : CerebroScreens.Watch);
 				}
 			}
+			toggleGroup.gameObject.SetActive (false);
 		}
 	}
 }

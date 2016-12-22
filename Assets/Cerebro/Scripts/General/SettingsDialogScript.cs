@@ -28,7 +28,9 @@ namespace Cerebro
 			if (str.IndexOf ("=") == 0) {
 				str = str.Replace ("=", "");
 			} else {
-				str = str + "@aischool.net";
+				if (!str.Contains ("@aischool.net")) {
+					str = str + "@aischool.net";
+				}
 			}
 			str = str.ToLower ();
 			cerebroScript.updateData (str);

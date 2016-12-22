@@ -93,7 +93,7 @@ namespace Cerebro {
 		public void ChooseUnit(string groupID, Unit unit, int hairID = 1, int faceID = 1, int bodyID = 1, int hatID = 0, int gogglesID = 0, int badgesID = 0)
 		{
 			DisableAllComponents (unit);
-			Debug.Log ("here "+unit.Cell.cellIndex+" hat "+hatID+" badge "+badgesID);
+//			Debug.Log ("here "+unit.Cell.cellIndex+" hat "+hatID+" badge "+badgesID);
 			hairID = Mathf.Clamp (hairID, 1, 8);
 			faceID = Mathf.Clamp (faceID, 1, 8);
 			bodyID = Mathf.Clamp (bodyID, 1, 8);
