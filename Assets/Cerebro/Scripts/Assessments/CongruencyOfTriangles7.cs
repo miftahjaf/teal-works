@@ -1193,7 +1193,7 @@ namespace Cerebro
 						lengthForDiagram = (1f / Mathf.Tan (angle1 * Mathf.Deg2Rad) + 1f / Mathf.Tan (angle2 * Mathf.Deg2Rad)) * breadthForDiagram;
 					} while (lengthForDiagram / breadthForDiagram > 2f || lengthForDiagram / breadthForDiagram < 0.9f);
 
-					QuestionLatext.text = "Given : \\Delta{ABC} is congruent to \\Delta{ABD}. Find \\angle{ABC}.";
+					QuestionLatext.text = "Given : \\Delta{ABC} is congruent to \\Delta{BCD}. Find \\angle{ABC}.";
 					Answer = string.Format ("{1}{0}", MathFunctions.deg, angle2);
 
 					origin = new Vector2 (lengthForDiagram, breadthForDiagram) / 2f;

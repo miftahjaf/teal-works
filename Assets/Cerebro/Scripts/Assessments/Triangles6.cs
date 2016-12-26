@@ -361,13 +361,12 @@ namespace Cerebro
 
 					if (randSelector == 0)  //Scalene
 					{
-						coeff1 = Random.Range (3, 10);
-
 						do {
+							coeff1 = Random.Range (3, 10);
 							coeff2 = Random.Range (3, 10);
 							coeff3 = Random.Range (3, 10);
 						
-						} while (coeff1 == coeff2 || coeff2 == coeff3 || coeff3 == coeff1);
+						} while (coeff1 == coeff2 || coeff2 == coeff3 || coeff3 == coeff1 || !MathFunctions.isValidTriangle (coeff1, coeff2, coeff3));
 							
 						do {
 							angle1 = Random.Range (30, 60);
@@ -377,13 +376,11 @@ namespace Cerebro
 					}
 					else if (randSelector == 1)  //Isosceles
 					{
-						coeff1 = Random.Range (3, 10);
-
 						do {
+							coeff1 = Random.Range (3, 10);
 							coeff2 = Random.Range (3, 10);
-						} while (coeff2 == coeff1);
-
-						coeff3 = coeff2;
+							coeff3 = coeff2;
+						} while (coeff2 == coeff1 || !MathFunctions.isValidTriangle (coeff1, coeff2, coeff3));
 
 						angle1 = Random.Range (40, 70);
 

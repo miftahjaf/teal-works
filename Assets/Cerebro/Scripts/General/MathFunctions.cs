@@ -658,5 +658,22 @@ namespace Cerebro {
 		{
 			return lineParameters.y ==0 ? 0: (- lineParameters.z - lineParameters.x * x) /lineParameters.y;
 		}
+
+		public static bool isValidTriangle (float side1, float side2, float side3)
+		{
+			if (side1 <= 0f || side2 <= 0f || side3 <= 0f){
+				return false;
+			}
+			if (side1 + side2 <= side3){
+				return false;
+			}
+			if (side2 + side3 <= side1){
+				return false;
+			}
+			if (side3 + side1 <= side2){
+				return false;
+			}
+			return true;
+		}
 	}
 }
