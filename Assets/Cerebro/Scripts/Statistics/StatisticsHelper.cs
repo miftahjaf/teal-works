@@ -15,6 +15,7 @@ namespace Cerebro
 		HorizontalBar,
 		Pie,
 		PieToFill,
+		PieToDrag,
 		Line,
 		None
 	}
@@ -70,6 +71,7 @@ namespace Cerebro
 		private Color currentSelectedColor;
 
 		private GraphDiagram currentLineGraphDiagram;
+		private GraphDiagram currentPieGraphDiagram;
 
 		//Reset old set values
 		public void Reset()
@@ -155,7 +157,7 @@ namespace Cerebro
 		//Draw graph and grid according to parameters
 		public void DrawGraph(bool showAxis = true)
 		{
-			if (statisticType == StatisticsType.Pie || statisticType == StatisticsType.PieToFill) 
+			if (statisticType == StatisticsType.Pie || statisticType == StatisticsType.PieToFill || statisticType == StatisticsType.PieToDrag) 
 			{
 				DrawPieGraph ();
 			} else {
@@ -250,7 +252,7 @@ namespace Cerebro
 			}
 			else
 			{
-				if (statisticType == StatisticsType.HorizontalBar || statisticType == StatisticsType.VerticalBar || statisticType == StatisticsType.Line) {
+				if (statisticType == StatisticsType.HorizontalBar || statisticType == StatisticsType.VerticalBar) {
 					startOffset = axisOffset.x / pointOffset.x;
 				}
 				pointInPosXAxis = statisticsAxis.statisticsValues.Count;
@@ -379,7 +381,7 @@ namespace Cerebro
 
 		public void GenerateLineGraphPoint(Vector2 startPoint,Vector2 endPoint)
 		{
-			GraphPointScript graphPointScript = PlotPoint (startPoint +  new Vector2 (0f, axisOffset.y/pointOffset.y), "", true, false);
+			GraphPointScript graphPointScript = PlotPoint (startPoint +  (isInteractable ? new Vector2 (0f, axisOffset.y/pointOffset.y) :  new Vector2 (0f, endPoint.y)) , "", isInteractable, false);
 			graphPointScript.SetPointMovementType (PointMovementType.Vertical);
 			lineGraphPoints.Add (graphPointScript);
 		}
@@ -519,10 +521,12 @@ namespace Cerebro
 			Vector2 oldPos = pointRectTransform.anchoredPosition;
 
 
-			if (graphPointObj.GetPointMovementType () == PointMovementType.Vertical) {
+			if (graphPointObj.GetPointMovementType () == PointMovementType.Vertical)
+			{
 				position.x = graphPointObj.transform.position.x;
-					
-			} else if (graphPointObj.GetPointMovementType () == PointMovementType.Horizontal) {
+
+			} 
+			else if (graphPointObj.GetPointMovementType () == PointMovementType.Horizontal) {
 				position.y = graphPointObj.transform.position.y;
 			} 
 
@@ -579,6 +583,23 @@ namespace Cerebro
 			vectorLine.Draw ();
 		}
 
+	
+		private void MovePiePoint(GraphPointScript graphPointObj,Vector2 position)
+		{
+			Vector3 oldPos = graphPointObj.transform.position;
+			Vector3 v = new Vector3(position.x, position.y, transform.position.z)- transform.position;
+			Vector3 newPos = transform.position + v.normalized * (pieRadius-20f);
+			graphPointObj.transform.position = newPos;
+
+			currentSelectedColor.a = 0;
+			if (graphPointObj.diagramObj != null) {
+				bool canDrag = graphPointObj.diagramObj.DragPiePoint (graphPointObj, graphPointObj.GetComponent<RectTransform>().anchoredPosition );
+				if (!canDrag) {
+					graphPointObj.transform.position = oldPos;
+				}
+			}
+		}
+
 
 		//Drag End of plotted point
 		public void MoveEndPlottedPoint(GraphPointScript graphPointObj)
@@ -588,6 +609,13 @@ namespace Cerebro
 				VectorLine vectorLine = pointLineDisplay.GetComponent<VectorObject2D> ().vectorLine;
 				vectorLine.points2 = new List<Vector2>(){Vector2.zero,Vector2.zero};
 				vectorLine.Draw ();
+			}
+		}
+
+		public void MoveEndPiePoint(GraphPointScript graphPointObj)
+		{
+			if (graphPointObj.diagramObj != null) {
+				graphPointObj.diagramObj.UpdatePieArc (pieRadius);
 			}
 		}
 
@@ -954,16 +982,16 @@ namespace Cerebro
 					UIpolygon.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 
 					UIpolygon.ReDraw ();
-					GenerateGraphLabel (pieStrings [i], labelPosition, currentColors [i],offsetPos + 10f,statisticType == StatisticsType.PieToFill);
+					GenerateGraphLabel (pieStrings [i], labelPosition, currentColors [i],offsetPos + 10f,statisticType == StatisticsType.PieToFill || statisticType == StatisticsType.PieToDrag);
 					labelPosition -= new Vector2(0, offsetPos + 18f);
 
-					if (statisticType == StatisticsType.PieToFill) {
+					if (statisticType == StatisticsType.PieToFill || statisticType == StatisticsType.PieToDrag) {
 						UIpolygon.color = Color.black;
 						linePoints.Add (Vector2.zero);
 						linePoints.Add (MathFunctions.PointAtDirection (Vector2.zero, startAngle, pieRadius));
 
 
-						PolygonCollider2D collider = UIpolygon.gameObject.AddComponent<PolygonCollider2D> ();
+					 PolygonCollider2D collider = UIpolygon.gameObject.AddComponent<PolygonCollider2D> ();
 						List<Vector2> colliderPoints = new List<Vector2> ();
 						colliderPoints.Add (Vector2.zero);
 						for(float angle = startAngle ; angle<= startAngle + nextAngle ; angle = angle+5)
@@ -1009,9 +1037,29 @@ namespace Cerebro
 				lineObject.name = "PieLineFill";
 				lineObject.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 				VectorLine vectorLine = lineObject.GetComponent<VectorObject2D> ().vectorLine;
-				vectorLine.points2 = linePoints;
+				//vectorLine.points2 = linePoints;
 				vectorLine.lineType = LineType.Discrete;
-				vectorLine.Draw ();
+				currentPieGraphDiagram = new GraphDiagram (vectorLine,LineShapeType.Normal);
+				if (statisticType == StatisticsType.PieToDrag || statisticType == StatisticsType.PieToFill) {
+					foreach (Vector2 point in linePoints) {
+							GraphPointScript piePoint = GenerateLinePoint (new LinePoint ("", point, 0, false, 0));
+							piePoint.SetPointColor (Color.blue);
+							piePoint.SetDotSize (point.Equals (Vector2.zero)?0:4f);
+
+							if (statisticType == StatisticsType.PieToDrag)
+						    {
+								piePoint.onDragEvent += MovePiePoint;
+								piePoint.onDragEndEvent += MoveEndPiePoint;
+							}	
+
+							piePoint.SetDigramObject (currentPieGraphDiagram);
+							currentPieGraphDiagram.AddGraphPoint (piePoint);
+					}
+				}
+
+				currentPieGraphDiagram.SetArcs (pieArcList);
+				currentPieGraphDiagram.Draw ();
+				//currentPieGraphDiagram.UpdatePieArc (pieRadius);
 
 				GameObject raycastDetector = new GameObject ();
 				raycastDetector.AddComponent<RayCastDetector> ();

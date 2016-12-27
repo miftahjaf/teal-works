@@ -659,7 +659,16 @@ namespace Cerebro {
 			return lineParameters.y ==0 ? 0: (- lineParameters.z - lineParameters.x * x) /lineParameters.y;
 		}
 
-		public static bool isValidTriangle (float side1, float side2, float side3)
+		public static float GetClampedAngle(float angle)
+		{
+			if (angle < 0) 
+			{
+				return 360f + (angle % 360f);
+			}
+			return angle > 360f ? angle % 360f : angle;
+		}
+
+		public static bool IsValidTriangle (float side1, float side2, float side3)
 		{
 			if (side1 <= 0f || side2 <= 0f || side3 <= 0f){
 				return false;
