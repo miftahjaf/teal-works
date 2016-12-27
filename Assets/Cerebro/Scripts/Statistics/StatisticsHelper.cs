@@ -1020,9 +1020,8 @@ namespace Cerebro
 
 			pieArcList = tempPolygons.ToList ();
 
-			if (linePoints.Count > 0) {
-
-
+			if (linePoints.Count > 0) 
+			{
 				//Instantiate arc prefab
 				GameObject arc = GameObject.Instantiate (arcPrefab);
 				arc.transform.SetParent (this.transform, false);
@@ -1037,15 +1036,16 @@ namespace Cerebro
 				lineObject.name = "PieLineFill";
 				lineObject.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 				VectorLine vectorLine = lineObject.GetComponent<VectorObject2D> ().vectorLine;
-				//vectorLine.points2 = linePoints;
 				vectorLine.lineType = LineType.Discrete;
-				currentPieGraphDiagram = new GraphDiagram (vectorLine,LineShapeType.Normal);
-				if (statisticType == StatisticsType.PieToDrag || statisticType == StatisticsType.PieToFill) {
+
+				if (statisticType == StatisticsType.PieToDrag) 
+				{
+					currentPieGraphDiagram = new GraphDiagram (vectorLine,LineShapeType.Normal);
 					foreach (Vector2 point in linePoints) {
 							GraphPointScript piePoint = GenerateLinePoint (new LinePoint ("", point, 0, false, 0));
 							piePoint.SetPointColor (Color.blue);
 							piePoint.SetDotSize (point.Equals (Vector2.zero)?0:4f);
-
+						    
 							if (statisticType == StatisticsType.PieToDrag)
 						    {
 								piePoint.onDragEvent += MovePiePoint;
@@ -1055,12 +1055,16 @@ namespace Cerebro
 							piePoint.SetDigramObject (currentPieGraphDiagram);
 							currentPieGraphDiagram.AddGraphPoint (piePoint);
 					}
+					currentPieGraphDiagram.SetArcs (pieArcList);
+					currentPieGraphDiagram.Draw ();
+					//currentPieGraphDiagram.UpdatePieArc (pieRadius);
 				}
-
-				currentPieGraphDiagram.SetArcs (pieArcList);
-				currentPieGraphDiagram.Draw ();
-				//currentPieGraphDiagram.UpdatePieArc (pieRadius);
-
+				else if (statisticType == StatisticsType.PieToFill)
+				{
+					vectorLine.points2 = linePoints;
+					vectorLine.Draw ();
+				}
+					
 				GameObject raycastDetector = new GameObject ();
 				raycastDetector.AddComponent<RayCastDetector> ();
 				raycastDetector.transform.SetParent (this.transform, false);
