@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Cerebro {
 
@@ -95,6 +96,18 @@ namespace Cerebro {
 			}
 			factors.Add (num.ToString());
 			return string.Join(",", factors.ToArray());
+		}
+
+		public static List<int> GetFactorsList(int num) {
+			List<int> factors = new List<int> ();
+			factors.Add (1);
+			for (int i = 2; i <= num/2; i++) {
+				if((num % i) == 0) {
+					factors.Add (i);
+				}
+			}
+			factors.Add (num);
+			return factors;
 		}
 
 		public static bool checkAlgebraicExpressions (string CorrectAnswer, string UserAnswer)  // Negi - without braces of any type
@@ -683,6 +696,69 @@ namespace Cerebro {
 				return false;
 			}
 			return true;
+		}
+
+		public static List<int> GetPieDataSet (int minValue, int maxValue, int dataSetLength, int commonFactor = 1, bool includeMinMax = false)
+		{
+			List<int> pieDataSet = new List<int> ();
+			minValue += -minValue % commonFactor + ((minValue % commonFactor == 0)? 0 : commonFactor);
+			maxValue -= maxValue % commonFactor;
+
+			if (minValue >= maxValue || 360 * commonFactor < minValue + (dataSetLength - 1) * maxValue){
+				Debug.Log ("Adjust parameters in MathFunctions.GetPieDataSet()");
+				return pieDataSet;
+			}
+
+			List<int> factors = GetFactorsList (360 * commonFactor);
+			int total = factors [Random.Range (0, factors.Count)];
+			int validTotalIndexInitial = 0;    //minimum total value
+			int validTotalIndexFinal = 0;      //maximum total value
+
+			for (int i = 0; i < factors.Count; i++) {
+				if (factors[i] > maxValue + (dataSetLength - 1) * minValue) {
+					validTotalIndexInitial = i;
+					break;
+				}
+			}
+
+			for (int i = 0; i < factors.Count; i++) {
+				if (factors[i] > minValue + (dataSetLength - 1) * maxValue) {
+					validTotalIndexFinal = i;
+					break;
+				}
+			}
+
+			if (validTotalIndexInitial == 0) {
+				Debug.Log ("Adjust parameters in MathFunctions.GetPieDataSet()");
+				return pieDataSet;
+			}
+
+			if (includeMinMax) {
+				do {
+					total = factors [Random.Range (validTotalIndexInitial, validTotalIndexFinal)];
+					pieDataSet = new List<int> ();
+					pieDataSet.Add (minValue);
+					pieDataSet.Add (maxValue);
+
+					for (int i = 1; i < dataSetLength - 1; i++) {
+						pieDataSet.Add (Random.Range (minValue / commonFactor + 1, maxValue / commonFactor) * commonFactor);
+					}
+				} while (pieDataSet.Sum () != total);
+			} 
+			else {
+				do {
+					total = factors [Random.Range (validTotalIndexInitial, validTotalIndexFinal)];
+					pieDataSet = new List<int> ();
+
+					for (int i = 0; i < dataSetLength; i++) {
+						pieDataSet.Add (Random.Range (minValue / commonFactor, maxValue / commonFactor + 1) * commonFactor);
+					}
+				} while (pieDataSet.Sum () != total);
+			}
+			Debug.Log ("total = " + total + ", totalValidMin = " + factors[validTotalIndexInitial] + ", totalValidMax" + factors[validTotalIndexFinal - 1]);  // dont remove - helps in adjusting the parameters
+			Debug.Log ("Minimum Possible angle = " + (minValue * 360) / total);
+			pieDataSet.Shuffle ();
+			return pieDataSet;
 		}
 	}
 }
