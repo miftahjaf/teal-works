@@ -51,14 +51,18 @@ namespace Cerebro
 			if (string.IsNullOrEmpty (searchField.text)) {
 				return;
 			}
-			nextPageToken = "";
+			nextPageToken = null;
 			Cerebro.LaunchList.instance.SendYoutubeAnalytics ("you_tube_search_log", System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), searchField.text, "", "", "");
+
+			youtubeVideoSelector.youtubeVideosData = new List<VideoData> ();
+			youtubeVideoSelector.Reload ();
+
 			YoutubeV3Call (searchField.text);
+
 		}
 
 		public void CallNextPage(int dataIndex)
 		{
-			
 			if (nextPageLoaded) {
 				return;
 			}
@@ -70,11 +74,6 @@ namespace Cerebro
 			
 		public void YoutubeV3Call(string searchString)
 		{
-			if (string.IsNullOrEmpty(nextPageToken)) 
-			{
-				youtubeVideoSelector.youtubeVideosData = new List<VideoData> ();
-				youtubeVideoSelector.Reload ();
-			}
 			string newSearchString = searchString.Replace(" ", "%20");
 			if (filterByDate) {
 				if (useCategoryFilter)
@@ -106,7 +105,7 @@ namespace Cerebro
 			JSONNode youtubeReturn = JSONNode.Parse (call.text);
 			nextPageToken = youtubeReturn["nextPageToken"].Value;
 			youtubeReturn = youtubeReturn ["items"];
-	
+			Debug.Log (nextPageToken);
 			for (int i = 0; i < youtubeReturn.Count; i++) {
 				VideoData youtubeVideoData = new VideoData ();
 				youtubeVideoData.videoId = youtubeReturn [i] ["id"] ["videoId"].Value;

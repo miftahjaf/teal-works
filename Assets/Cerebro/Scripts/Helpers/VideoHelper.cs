@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using YoutubeExtractor;
 
 namespace Cerebro
 {
@@ -38,7 +39,7 @@ namespace Cerebro
 		private bool videoEnded = false;
 
 		private float videoLength;
-		private string _fileName = "Cerebro/youtube.html";
+		private string _fileName ="Cerebro/videoPlayer.html"; // "Cerebro/youtube.html";
 
 		public EventHandler VideoEnded;
 
@@ -170,7 +171,9 @@ namespace Cerebro
 
 		void _webView_OnLoadComplete (UniWebView webView, bool success, string errorMessage)
 		{
-			_webView.EvaluatingJavaScript ("loadVideo('" + videoID + "')");
+			VideoInfo video = YoutubeHelper.RequestVideo (videoID);
+			string url = video.DownloadUrl;
+			_webView.EvaluatingJavaScript ("loadVideo('" + url + "')");
 		}
 
 		UniWebView CreateWebView ()

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html>
+
+    <body style="background-color:black;position: fixed;top: 0;right: 0;bottom: 0;left: 0;overflow: hidden;z-index: -100;">
+
+        <video id="player" style="background-color:black;position: absolute;top: 0;left: 0;width: 100%;height: 100%;"  controls></video>
+        <div id ="spinner"></div>
+    <script>
+
+    var vid = document.getElementById("player");
+    var spinner = document.getElementById("spinner");
+
+
+      function loadVideo(_url) {
+        vid.src = _url;
+        startSpinner();
+
+        vid.play();
+      }
+
+
+
+      vid.onplaying = function() {
+         stopSpinner();
+         window.location.href = "uniwebview://ytEvent?state=playing";
+      };
+
+      vid.onpause = function() {
+          window.location.href = "uniwebview://ytEvent?state=paused";
+      };
+
+      vid.onwaiting = function() {
+          startSpinner();
+          window.location.href = "uniwebview://ytEvent?state=buffering";
+      };
+
+      vid.onended = function() {
+          window.location.href = "uniwebview://ytEvent?state=ended";
+      };
+
+     vid.onloadedmetadata = function() {
+            var length = vid.duration;
+            window.location.href = "uniwebview://ytParams?duration=" + length;
+     };
+
+     function startSpinner()
+     {
+          spinner.setAttribute("style", "width:98%;height:100%;position:fixed;z-index:9999;background:url(loading.gif) no-repeat center center");
+     }
+
+     function stopSpinner()
+     {
+        spinner.setAttribute("style","");
+     }
+
+      function stopVideo() {
+        vid.pause();
+        vid.currentTime = 0;
+      }
+
+    </script>
+  </body>
+</html>
