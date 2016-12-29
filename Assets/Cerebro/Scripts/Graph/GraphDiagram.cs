@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Vectrosity;
 using UnityEngine.UI.Extensions;
+using UnityEngine.UI;
 
 
 namespace Cerebro
@@ -125,8 +126,6 @@ namespace Cerebro
 
 			this.Draw();
 
-			this.UpdatePieArcFill ();
-
 			return true;
 		}
 
@@ -167,10 +166,9 @@ namespace Cerebro
 
 				collider.SetPath (0, colliderPoints.ToArray ());
 			}
-			this.UpdatePieArcFill ();
 		}
 
-		public void UpdatePieArcFill()
+		public void UpdatePieArcFill(float pieRadius)
 		{
 			int nextIndex = 0;
 			foreach (UIPolygon arc in arcs) 
@@ -184,7 +182,8 @@ namespace Cerebro
 				} else {
 					nextAngle = arcs [nextIndex].rotation;
 				}
-
+				arc.gameObject.GetComponentInChildren<TEXDraw> ().transform.GetComponent<RectTransform> ().anchoredPosition = (MathFunctions.PointAtDirection (Vector2.zero, arc.rotation+270f, pieRadius) - MathFunctions.PointAtDirection (Vector2.zero, nextAngle+270f, pieRadius)).normalized * (pieRadius/1.5f);
+				arc.gameObject.GetComponentInChildren<TEXDraw> ().text = Mathf.RoundToInt(Mathf.Abs (arc.rotation - nextAngle))+""+MathFunctions.deg;
 				arc.fillPercent = (Mathf.Abs (arc.rotation - nextAngle) * 100f / 360f) +0.5f;
 				arc.ReDraw ();
 			}

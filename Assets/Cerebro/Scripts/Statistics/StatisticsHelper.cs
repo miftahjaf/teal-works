@@ -598,6 +598,8 @@ namespace Cerebro
 				bool canDrag = graphPointObj.diagramObj.DragPiePoint (graphPointObj, graphPointObj.GetComponent<RectTransform>().anchoredPosition );
 				if (!canDrag) {
 					graphPointObj.transform.position = oldPos;
+				} else {
+					graphPointObj.diagramObj.UpdatePieArcFill (pieRadius);
 				}
 
 			}
@@ -1087,13 +1089,6 @@ namespace Cerebro
 
 
 					    PolygonCollider2D collider = UIpolygon.gameObject.AddComponent<PolygonCollider2D> ();
-						List<Vector2> colliderPoints = new List<Vector2> ();
-						/*colliderPoints.Add (Vector2.zero);
-						for(float angle = startAngle ; angle<= startAngle + nextAngle ; angle = angle+5)
-						{
-							colliderPoints.Add (MathFunctions.PointAtDirection(Vector2.zero,angle,pieRadius));
-						}
-						collider.SetPath(0, colliderPoints.ToArray());*/
 
 						ColliderButton colliderButton = UIpolygon.gameObject.AddComponent<ColliderButton> ();
 						colliderButton.OnClicked = delegate {
@@ -1150,8 +1145,11 @@ namespace Cerebro
 
 							piePoint.SetDigramObject (currentPieGraphDiagram);
 							currentPieGraphDiagram.AddGraphPoint (piePoint);
+							
 					}
-
+					currentPieGraphDiagram.SetArcs (tempPieArcList);
+					currentPieGraphDiagram.UpdatePieArc (pieRadius);
+					currentPieGraphDiagram.UpdatePieArcFill (pieRadius);
 					currentPieGraphDiagram.Draw ();
 
 				}
@@ -1159,10 +1157,11 @@ namespace Cerebro
 				{
 					vectorLine.points2 = linePoints;
 					vectorLine.Draw ();
+					currentPieGraphDiagram.SetArcs (tempPieArcList);
+					currentPieGraphDiagram.UpdatePieArc (pieRadius);
 			
 				}
-				currentPieGraphDiagram.SetArcs (tempPieArcList);
-				currentPieGraphDiagram.UpdatePieArc (pieRadius);
+
 					
 				GameObject raycastDetector = new GameObject ();
 				raycastDetector.AddComponent<RayCastDetector> ();
