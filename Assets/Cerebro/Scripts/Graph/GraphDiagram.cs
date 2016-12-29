@@ -86,6 +86,7 @@ namespace Cerebro
 				previousIndex =  arcs.Count - 1;
 			}
 
+
 			if (nextIndex >= arcs.Count)
 			{
 				nextIndex = 0;
@@ -95,20 +96,20 @@ namespace Cerebro
 			UIPolygon previousArc = arcs [previousIndex];
 			UIPolygon nextArc = arcs [nextIndex];
 
-			float diff =  MathFunctions.GetangleBetweenPoints(Vector2.zero, position) - MathFunctions.GetangleBetweenPoints (Vector2.zero, piePoint.linePoint.origin);
+			float diff = MathFunctions.GetangleBetweenPoints (Vector2.zero, position) - MathFunctions.GetangleBetweenPoints (Vector2.zero, piePoint.linePoint.origin);
 
 			if (diff > 180f) {
 				diff =  diff - 360f;
 			}
 
 			if (diff < -180f) {
-				diff = 360 + diff;
+				diff = 360f + diff;
 			}
 
 
 			float newRotation =  currentArc.rotation + diff;
-			float minAngle = MathFunctions.GetClampedAngle (previousArc.rotation) + 5f;
-			float maxAngle = MathFunctions.GetClampedAngle (nextArc.rotation) - 5f;
+			/*float minAngle = MathFunctions.GetClampedAngle (previousArc.rotation) + 10f;
+			float maxAngle = MathFunctions.GetClampedAngle (nextArc.rotation) - 10f;
 		
 			if (minAngle > maxAngle) {
 				maxAngle = 360f + maxAngle;
@@ -120,9 +121,13 @@ namespace Cerebro
 
 			if (newRotation > maxAngle) {
 				newRotation =  newRotation - 360f;
-			}
+			}*/
 
-			if (newRotation < minAngle || newRotation > maxAngle)
+			float minAngle = (previousIndex == arcs.Count - 1 ? previousArc.rotation -360f : previousArc.rotation) + 7.5f;
+			float maxAngle = (nextIndex ==0 ? 360 + nextArc.rotation : nextArc.rotation) - 7.5f  ;
+
+			Debug.Log ("Min angle " + minAngle + " max angle " + maxAngle + " rotation "+newRotation);
+			if (newRotation <= minAngle  || newRotation >= maxAngle)
 			{
 				return false;
 			}
@@ -133,6 +138,7 @@ namespace Cerebro
 			piePoint.linePoint.origin = position;
 
 			this.Draw();
+
 			this.UpdatePieArcFill ();
 
 			return true;
@@ -141,27 +147,41 @@ namespace Cerebro
 		public void UpdatePieArc(float radius)
 		{
 			int nextIndex = 0;
+	
 			foreach (UIPolygon arc in arcs) 
 			{
-				PolygonCollider2D collider = arc.gameObject.AddComponent<PolygonCollider2D> ();
+				PolygonCollider2D collider;
+
+				if (arc.gameObject.GetComponent<PolygonCollider2D> ())
+				{
+					collider = arc.gameObject.GetComponent<PolygonCollider2D> ();
+				} 
+				else 
+				{
+					collider = arc.gameObject.AddComponent<PolygonCollider2D> ();
+				}
+
 				List<Vector2> colliderPoints = new List<Vector2> ();
 
 				nextIndex++;
-		
+				float nextAngle = 0;
 				if (nextIndex >= arcs.Count) {
 					nextIndex = 0;
+					nextAngle = 360 + arcs [nextIndex].rotation;
+				} else {
+					nextAngle = arcs [nextIndex].rotation;
 				}
-			
-				float nextAngle =  (nextIndex == 0? 540 + arcs[nextIndex].rotation : 180f +  arcs[nextIndex].rotation);
-				Debug.Log (" Start angle " + (180f + arc.rotation) + " next angle " + nextAngle);
+				Debug.Log ( arc.rotation + " "+nextAngle);
+
 				colliderPoints.Add (Vector2.zero);
-				Debug.Log ("Start Angle " + (180f + arc.rotation) + " end angle " + nextAngle);
-				for (float angle =   180f + arc.rotation; angle <= nextAngle; angle = angle + 5) {
-					colliderPoints.Add (MathFunctions.PointAtDirection (Vector2.zero, angle, radius));
+
+				for (float angle =  arc.rotation ; angle <= nextAngle; angle = angle + 5) {
+					colliderPoints.Add (MathFunctions.PointAtDirection (Vector2.zero, angle+180f, radius));
 				}
 
 				collider.SetPath (0, colliderPoints.ToArray ());
 			}
+			this.UpdatePieArcFill ();
 		}
 
 		public void UpdatePieArcFill()
@@ -171,11 +191,16 @@ namespace Cerebro
 			{
 				nextIndex++;
 
+				float nextAngle = 0;
 				if (nextIndex >= arcs.Count) {
 					nextIndex = 0;
+					nextAngle = 360f + arcs [nextIndex].rotation;
+				} else {
+					nextAngle = arcs [nextIndex].rotation;
 				}
 
-			
+				arc.fillPercent = (Mathf.Abs (arc.rotation - nextAngle) * 100f / 360f) +0.5f;
+				arc.ReDraw ();
 			}
 		}
 

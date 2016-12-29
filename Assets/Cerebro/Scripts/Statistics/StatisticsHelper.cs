@@ -47,7 +47,6 @@ namespace Cerebro
 		private float fontMultiPlier;           //Font multiplier to make graph font smaller or bigger
 		private float pieRadius;
 
-
 		private bool isInteractable;
 
 		private string graphTitle;
@@ -586,9 +585,10 @@ namespace Cerebro
 	
 		private void MovePiePoint(GraphPointScript graphPointObj,Vector2 position)
 		{
+			
 			Vector3 oldPos = graphPointObj.transform.position;
 			Vector3 v = new Vector3(position.x, position.y, transform.position.z)- transform.position;
-			Vector3 newPos = transform.position + v.normalized * (pieRadius-20f);
+			Vector3 newPos = transform.position + v.normalized * (pieRadius+5f);
 			graphPointObj.transform.position = newPos;
 
 			currentSelectedColor.a = 0;
@@ -597,6 +597,7 @@ namespace Cerebro
 				if (!canDrag) {
 					graphPointObj.transform.position = oldPos;
 				}
+
 			}
 		}
 
@@ -614,6 +615,7 @@ namespace Cerebro
 
 		public void MoveEndPiePoint(GraphPointScript graphPointObj)
 		{
+			
 			if (graphPointObj.diagramObj != null) {
 				graphPointObj.diagramObj.UpdatePieArc (pieRadius);
 			}
@@ -942,7 +944,7 @@ namespace Cerebro
 		public void DrawPieGraph()
 		{
 			int count = pieStrings.Count;
-			float startAngle = Random.Range(0f,360f);
+			float pieStartAngle = Random.Range(0f,360f);
 			int totalValue = pieValues.Sum(x => System.Convert.ToInt32(x));
 			int pieValueCount = pieValues.Count;
 			float offsetPos = pieRadius / 5.5f;
@@ -957,7 +959,7 @@ namespace Cerebro
 				randomList.Shuffle ();
 			}
 
-			UIPolygon[]  tempPieArcList = new UIPolygon[count];
+			List<UIPolygon> tempPieArcList = new List<UIPolygon> ();
 			for (int i = 0; i < pieValueCount; i++) {
 				//Instantiate arc prefab
 				GameObject arc = GameObject.Instantiate (arcPrefab);
@@ -967,8 +969,14 @@ namespace Cerebro
 				UIPolygon UIpolygon = arc.GetComponent<UIPolygon> ();
 			
 				float nextAngle = 0f;
-				if (pieValueCount > i) {
-					nextAngle = 360f * pieValues [randomList[i]] /totalValue;
+				if (statisticType == StatisticsType.PieToFill || statisticType == StatisticsType.Pie)
+				{
+					if (pieValueCount > i) {
+						nextAngle = 360f * pieValues [randomList [i]] / totalValue;
+					}
+				} else if(statisticType == StatisticsType.PieToDrag) 
+				{
+					nextAngle = 360f / pieValueCount ;
 				}
 			
 				if(nextAngle>0)
@@ -978,7 +986,7 @@ namespace Cerebro
 					UIpolygon.GetComponent<RectTransform> ().sizeDelta = Vector2.one * pieRadius * 2f;
 
 					UIpolygon.fillPercent =  ((100f * nextAngle) / 360f) + 0.5f;
-					UIpolygon.rotation = startAngle + 180f;
+					UIpolygon.rotation = pieStartAngle + 180f ;
 					UIpolygon.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 
 					UIpolygon.ReDraw ();
@@ -988,17 +996,17 @@ namespace Cerebro
 					if (statisticType == StatisticsType.PieToFill || statisticType == StatisticsType.PieToDrag) {
 						UIpolygon.color = Color.black;
 						linePoints.Add (Vector2.zero);
-						linePoints.Add (MathFunctions.PointAtDirection (Vector2.zero, startAngle, pieRadius));
+						linePoints.Add (MathFunctions.PointAtDirection (Vector2.zero, pieStartAngle, pieRadius));
 
 
-					 PolygonCollider2D collider = UIpolygon.gameObject.AddComponent<PolygonCollider2D> ();
+					    PolygonCollider2D collider = UIpolygon.gameObject.AddComponent<PolygonCollider2D> ();
 						List<Vector2> colliderPoints = new List<Vector2> ();
-						colliderPoints.Add (Vector2.zero);
+						/*colliderPoints.Add (Vector2.zero);
 						for(float angle = startAngle ; angle<= startAngle + nextAngle ; angle = angle+5)
 						{
 							colliderPoints.Add (MathFunctions.PointAtDirection(Vector2.zero,angle,pieRadius));
 						}
-						collider.SetPath(0, colliderPoints.ToArray());
+						collider.SetPath(0, colliderPoints.ToArray());*/
 
 						ColliderButton colliderButton = UIpolygon.gameObject.AddComponent<ColliderButton> ();
 						colliderButton.OnClicked = delegate {
@@ -1013,7 +1021,8 @@ namespace Cerebro
 						UIpolygon.color = color;
 						UIpolygon.fill = true;
 					}
-					startAngle += nextAngle;
+					pieStartAngle += nextAngle;
+					tempPieArcList.Add (UIpolygon);
 					tempPolygons [randomList [i]] = UIpolygon;
 				}
 			}
@@ -1037,10 +1046,10 @@ namespace Cerebro
 				lineObject.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 				VectorLine vectorLine = lineObject.GetComponent<VectorObject2D> ().vectorLine;
 				vectorLine.lineType = LineType.Discrete;
+				currentPieGraphDiagram = new GraphDiagram (vectorLine,LineShapeType.Normal);
 
 				if (statisticType == StatisticsType.PieToDrag) 
 				{
-					currentPieGraphDiagram = new GraphDiagram (vectorLine,LineShapeType.Normal);
 					foreach (Vector2 point in linePoints) {
 							GraphPointScript piePoint = GenerateLinePoint (new LinePoint ("", point, 0, false, 0));
 							piePoint.SetPointColor (Color.blue);
@@ -1055,15 +1064,18 @@ namespace Cerebro
 							piePoint.SetDigramObject (currentPieGraphDiagram);
 							currentPieGraphDiagram.AddGraphPoint (piePoint);
 					}
-					currentPieGraphDiagram.SetArcs (pieArcList);
+
 					currentPieGraphDiagram.Draw ();
-					//currentPieGraphDiagram.UpdatePieArc (pieRadius);
+
 				}
 				else if (statisticType == StatisticsType.PieToFill)
 				{
 					vectorLine.points2 = linePoints;
 					vectorLine.Draw ();
+			
 				}
+				currentPieGraphDiagram.SetArcs (tempPieArcList);
+				currentPieGraphDiagram.UpdatePieArc (pieRadius);
 					
 				GameObject raycastDetector = new GameObject ();
 				raycastDetector.AddComponent<RayCastDetector> ();
