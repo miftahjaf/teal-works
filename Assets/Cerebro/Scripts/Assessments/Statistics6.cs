@@ -292,7 +292,7 @@ namespace Cerebro {
 					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
 
-					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
+					statisticsHelper.SetGridParameters (new Vector2 (16, 18), 22f);
 					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -458,7 +458,7 @@ namespace Cerebro {
 					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
 
-					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
+					statisticsHelper.SetGridParameters (new Vector2 (16, 18), 22f);
 					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -531,7 +531,7 @@ namespace Cerebro {
 						Answer = string.Format ("{0}", coeff[randSelector1]);
 					}
 
-					statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
+					statisticsHelper.SetGridParameters (new Vector2 (13, 14), 15f);
 					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
 					statisticsHelper.ShiftPosition (new Vector2 (-270, 215));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -568,11 +568,11 @@ namespace Cerebro {
 					Subjects.Shuffle ();
 
 					int numberOfData = 5;
-					coeff = MathFunctions.GetPieDataSet (15, 100, numberOfData, 5);
+					coeff = MathFunctions.GetPieDataSet (10, 100, numberOfData, 10);
 
 					TableContentsColumn1.Add ("<size=25>Subjects</size>");
 					TableContentsColumn1.AddRange (Subjects);
-					TableContentsColumn2.Add ("<size=25>Number of Students</size>");
+					TableContentsColumn2.Add ("<size=25>Number</size>");
 					foreach (int i in coeff){
 						TableContentsColumn2.Add (i.ToString ());
 					}
@@ -606,7 +606,7 @@ namespace Cerebro {
 
 					TableContentsColumn1.Add ("<size=25>Subjects</size>");
 					TableContentsColumn1.AddRange (Subjects);
-					TableContentsColumn2.Add ("<size=25>Number of Books</size>");
+					TableContentsColumn2.Add ("<size=25>Number</size>");
 					foreach (int i in coeff){
 						TableContentsColumn2.Add (i.ToString ());
 					}
@@ -653,14 +653,14 @@ namespace Cerebro {
 					QuestionText.text = string.Format ("The following table shows the preference of students for various sports in a school. Represent the data in the given line graph.");
 					TableContentsColumn1.Add ("<size=25>Sports</size>");
 					TableContentsColumn1.AddRange (Sports);
-					TableContentsColumn2.Add ("<size=25>Number of Students</size>");
+					TableContentsColumn2.Add ("<size=25>Number</size>");
 					foreach (int i in coeff){
 						TableContentsColumn2.Add (i.ToString ());
 					}
 					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
 
-					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
+					statisticsHelper.SetGridParameters (new Vector2 (12, 18), 22f);
 					statisticsHelper.SetStatisticsType (StatisticsType.Line);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -674,7 +674,7 @@ namespace Cerebro {
 									new StatisticsValue (Sports[3], coeff[3]),
 									new StatisticsValue (Sports[4], coeff[4])
 								}
-							).SetAxisName ("Sports").SetPointOffset (3),
+							).SetAxisName ("Sports").SetPointOffset (2),
 							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of Students").SetPointOffset (2)
 						}
 					);
@@ -709,14 +709,14 @@ namespace Cerebro {
 					QuestionText.text = string.Format ("The given table shows the performance of a student in various subjects in the annual examination. Complete the line graph for the data.");
 					TableContentsColumn1.Add ("<size=25>Subjects</size>");
 					TableContentsColumn1.AddRange (Subjects);
-					TableContentsColumn2.Add ("<size=25>Number of Students</size>");
+					TableContentsColumn2.Add ("<size=25>Number</size>");
 					foreach (int i in coeff){
 						TableContentsColumn2.Add (i.ToString ());
 					}
 					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
 
-					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
+					statisticsHelper.SetGridParameters (new Vector2 (12, 18), 22f);
 					statisticsHelper.SetStatisticsType (StatisticsType.Line);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -730,7 +730,7 @@ namespace Cerebro {
 									new StatisticsValue (Subjects[3], coeff[3]),
 									new StatisticsValue (Subjects[4], coeff[4])
 								}
-							).SetAxisName ("Subjects").SetPointOffset (3),
+							).SetAxisName ("Subjects").SetPointOffset (2),
 							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of Students").SetPointOffset (2)
 						}
 					);
@@ -759,7 +759,7 @@ namespace Cerebro {
 
 					TableContentsColumn1.Add ("<size=25>Branch</size>");
 					TableContentsColumn1.AddRange (Branch);
-					TableContentsColumn2.Add ("<size=25>Number of Candidates</size>");
+					TableContentsColumn2.Add ("<size=25>Number</size>");
 					foreach (int i in coeff){
 						TableContentsColumn2.Add (i.ToString ());
 					}
@@ -812,7 +812,7 @@ namespace Cerebro {
 					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}", TableContentsColumn1.ToArray ());
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}", TableContentsColumn2.ToArray ());
 
-					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
+					statisticsHelper.SetGridParameters (new Vector2 (16, 18), 22f);
 					statisticsHelper.SetStatisticsType (StatisticsType.Line);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -870,7 +870,7 @@ namespace Cerebro {
 					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
 
-					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
+					statisticsHelper.SetGridParameters (new Vector2 (12, 18), 22f);
 					statisticsHelper.SetStatisticsType (StatisticsType.Line);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -884,7 +884,7 @@ namespace Cerebro {
 									new StatisticsValue (Make[3], coeff[3]),
 									new StatisticsValue (Make[4], coeff[4])
 								}
-							).SetAxisName ("Make").SetPointOffset (3),
+							).SetAxisName ("Make").SetPointOffset (2),
 							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number").SetPointOffset (2)
 						}
 					);
