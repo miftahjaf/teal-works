@@ -162,6 +162,14 @@ namespace Cerebro
 			SetPoint (linePoint);
 		}
 
+		public void SetLinePoint()
+		{
+			if (linePoint == null) {
+				return;
+			}
+			SetPoint (linePoint);
+		}
+
 		public void SetSize(float size)
 		{
 			this.transform.GetComponent<RectTransform> ().sizeDelta = Vector2.one * size;

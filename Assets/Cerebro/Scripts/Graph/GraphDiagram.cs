@@ -108,25 +108,11 @@ namespace Cerebro
 
 
 			float newRotation =  currentArc.rotation + diff;
-			/*float minAngle = MathFunctions.GetClampedAngle (previousArc.rotation) + 10f;
-			float maxAngle = MathFunctions.GetClampedAngle (nextArc.rotation) - 10f;
 		
-			if (minAngle > maxAngle) {
-				maxAngle = 360f + maxAngle;
-			}
-
-			if (newRotation < minAngle) {
-				newRotation =  360f + newRotation;
-			}
-
-			if (newRotation > maxAngle) {
-				newRotation =  newRotation - 360f;
-			}*/
-
 			float minAngle = (previousIndex == arcs.Count - 1 ? previousArc.rotation -360f : previousArc.rotation) + 7.5f;
 			float maxAngle = (nextIndex ==0 ? 360 + nextArc.rotation : nextArc.rotation) - 7.5f  ;
 
-			Debug.Log ("Min angle " + minAngle + " max angle " + maxAngle + " rotation "+newRotation);
+
 			if (newRotation <= minAngle  || newRotation >= maxAngle)
 			{
 				return false;
@@ -171,7 +157,7 @@ namespace Cerebro
 				} else {
 					nextAngle = arcs [nextIndex].rotation;
 				}
-				Debug.Log ( arc.rotation + " "+nextAngle);
+
 
 				colliderPoints.Add (Vector2.zero);
 

@@ -59,7 +59,7 @@ namespace Cerebro
 		public List<string> barValues;
 		private List<int> pieValues;
 		private List<string> pieStrings;
-
+		private List<Vector2> currentLineGraphPoints;
 
 		private List<UIPolygon> pieArcList;
 		private List<string> currentColors;
@@ -98,6 +98,7 @@ namespace Cerebro
 			barValues = new List<string> ();
 			canClick = true;
 			lineGraphPoints = new List<GraphPointScript> ();
+			currentLineGraphPoints = new List<Vector2> ();
 
 		}
 
@@ -380,6 +381,7 @@ namespace Cerebro
 
 		public void GenerateLineGraphPoint(Vector2 startPoint,Vector2 endPoint)
 		{
+			currentLineGraphPoints.Add (startPoint + new Vector2 (0f, endPoint.y));
 			GraphPointScript graphPointScript = PlotPoint (startPoint +  (isInteractable ? new Vector2 (0f, axisOffset.y/pointOffset.y) :  new Vector2 (0f, endPoint.y)) , "", isInteractable, false);
 			graphPointScript.SetPointMovementType (PointMovementType.Vertical);
 			lineGraphPoints.Add (graphPointScript);
@@ -635,9 +637,30 @@ namespace Cerebro
 					correct = IsPieFilledCorrect ();
 					break;
 
+				case StatisticsType.Line:
+					correct = IsValidCurrentLineGrapjDiagram ();
+				break;
+
 			}
 
 			return correct;
+		}
+
+		public bool IsValidCurrentLineGrapjDiagram()
+		{
+			List<Vector2> currentPlottedPoints = currentLineGraphDiagram.GetPointList ();
+			List<Vector2> currentCorrectPoints = new List<Vector2>();
+
+			foreach (Vector2 point in currentLineGraphPoints) {
+				currentCorrectPoints.Add (GraphPosToUIPos (point));
+			}
+
+			foreach (Vector2 point in currentPlottedPoints)
+			{
+				currentCorrectPoints.RemoveAll (x => x == point);
+			}
+
+			return currentCorrectPoints.Count<=0;
 		}
 
 		public bool IsAllBarAnswersCorrect()
@@ -703,6 +726,11 @@ namespace Cerebro
 				ShowCorrectPieToFillArcs ();
 				break;
 
+			case StatisticsType.Line:
+				currentLineGraphDiagram.vectorLine.color = MaterialColor.green800;
+				currentLineGraphDiagram.vectorLine.Draw ();
+				break;
+
 			}
 		}
 
@@ -720,6 +748,18 @@ namespace Cerebro
 
 			case StatisticsType.PieToFill:
 				ResetAllPieArcs ();
+				break;
+
+			case StatisticsType.Line:
+				currentLineGraphDiagram.vectorLine.color = Color.black;
+				int cnt = 0;
+				foreach (GraphPointScript graphPoint in currentLineGraphDiagram.graphPoints) {
+					graphPoint.SetIsValueChanged (false);
+					graphPoint.linePoint.origin = GraphPosToUIPos(new Vector2(currentLineGraphPoints [cnt].x,axisOffset.y/pointOffset.y));
+					graphPoint.SetLinePoint ();
+					cnt++;
+				}
+				currentLineGraphDiagram.Draw ();
 				break;
 
 			}
@@ -742,7 +782,24 @@ namespace Cerebro
 					canClick = false;
 				}
 				break;
+
+			case StatisticsType.Line:
+				currentLineGraphDiagram.vectorLine.color = MaterialColor.red800;
+				currentLineGraphDiagram.vectorLine.Draw ();
+				if (!isRevisited) {
+					foreach (GraphPointScript graphPoint in currentLineGraphDiagram.graphPoints) {
+						RemoveDragEventInGraphPoint (graphPoint);
+					}
+				}
+				break;
 			}
+		}
+
+		//Remove drag event to stop dragging
+		public void RemoveDragEventInGraphPoint(GraphPointScript graphPoint)
+		{
+			graphPoint.onDragEvent = null;
+			graphPoint.onDragEndEvent = null;
 		}
 
 		public void ShowCorrectAnswer()
@@ -758,6 +815,18 @@ namespace Cerebro
 
 			case StatisticsType.PieToFill:
 				ShowCorrectPieToFillAnswers ();
+				break;
+
+			case StatisticsType.Line:
+				currentLineGraphDiagram.vectorLine.color = MaterialColor.green800;
+				int cnt = 0;
+				foreach (GraphPointScript graphPoint in currentLineGraphDiagram.graphPoints) {
+					graphPoint.SetIsValueChanged (false);
+					graphPoint.linePoint.origin = GraphPosToUIPos(currentLineGraphPoints [cnt]);
+					graphPoint.SetLinePoint ();
+					cnt++;
+				}
+				currentLineGraphDiagram.Draw ();
 				break;
 			}
 		}
@@ -850,6 +919,24 @@ namespace Cerebro
 
 				case StatisticsType.PieToFill:
 				   isAnswered = IsPieGraphFilled ();
+				break;
+
+			  	case StatisticsType.Line:
+					isAnswered = false;
+					foreach (GraphPointScript graphPoint in currentLineGraphDiagram.graphPoints) {
+						if (graphPoint.IsValueChanged ()) {
+							isAnswered = true;
+						}
+					}
+				break;
+
+				case StatisticsType.PieToDrag:
+					isAnswered = false;
+					foreach (GraphPointScript graphPoint in currentPieGraphDiagram.graphPoints) {
+						if (graphPoint.IsValueChanged ()) {
+							isAnswered = true;
+						}
+					}
 				break;
 			}
 
@@ -1054,7 +1141,7 @@ namespace Cerebro
 							GraphPointScript piePoint = GenerateLinePoint (new LinePoint ("", point, 0, false, 0));
 							piePoint.SetPointColor (Color.blue);
 							piePoint.SetDotSize (point.Equals (Vector2.zero)?0:4f);
-						    
+							piePoint.SetSize (20f);
 							if (statisticType == StatisticsType.PieToDrag)
 						    {
 								piePoint.onDragEvent += MovePiePoint;
