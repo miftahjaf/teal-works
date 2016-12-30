@@ -35,7 +35,7 @@ namespace Cerebro
 			statisticsHelper.SetGraphTitle ("ashdkjadhskjahsdjkasdh");
 			statisticsHelper.DrawGraph ();*/
 
-			statisticsHelper.SetStatisticsType (StatisticsType.PieToFill);
+			statisticsHelper.SetStatisticsType (StatisticsType.PieToDrag);
 			statisticsHelper.SetPieParameters (
 				new List<string> (){ "Ramiz", "Negi", "Ankit", "Sagar" },
 				new List<int> (){ 10, 20, 30, 40 }

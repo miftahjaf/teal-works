@@ -170,6 +170,7 @@ namespace Cerebro
 
 		public void UpdatePieArcFill(float pieRadius)
 		{
+			int totalAngle = 0;
 			int nextIndex = 0;
 			foreach (UIPolygon arc in arcs) 
 			{
@@ -182,8 +183,10 @@ namespace Cerebro
 				} else {
 					nextAngle = arcs [nextIndex].rotation;
 				}
+				int angle = nextIndex==0? 360 - totalAngle  :  Mathf.RoundToInt(Mathf.Abs (arc.rotation - nextAngle));
+				totalAngle += angle;
 				arc.gameObject.GetComponentInChildren<TEXDraw> ().transform.GetComponent<RectTransform> ().anchoredPosition = (MathFunctions.PointAtDirection (Vector2.zero, arc.rotation+270f, pieRadius) - MathFunctions.PointAtDirection (Vector2.zero, nextAngle+270f, pieRadius)).normalized * (pieRadius/1.5f);
-				arc.gameObject.GetComponentInChildren<TEXDraw> ().text = Mathf.RoundToInt(Mathf.Abs (arc.rotation - nextAngle))+""+MathFunctions.deg;
+				arc.gameObject.GetComponentInChildren<TEXDraw> ().text = angle +""+MathFunctions.deg;
 				arc.fillPercent = (Mathf.Abs (arc.rotation - nextAngle) * 100f / 360f) +0.5f;
 				arc.ReDraw ();
 			}

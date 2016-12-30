@@ -233,7 +233,7 @@ namespace Cerebro
 			{
 				GenerateLinePoint (new LinePoint ((i * axisOffset.y).ToString(), GraphPosToUIPos (new Vector2 (0, i * axisOffset.y)), 0f, false, 0).SetPointTextOffset(new Vector2(-10,0)),axisParent);
 			}
-
+				
 			//Neg Y
 			int pointInPNegYAxis =   Mathf.Abs((Mathf.RoundToInt(gridCoordinateRange.y/2f - graphCenterOffset.y)));
 			graphMinValue.y = -pointInPNegYAxis * axisOffset.y;
@@ -243,6 +243,8 @@ namespace Cerebro
 			}
 			axisParent.gameObject.SetActive (showAxis);
 		}
+
+
 
 		//Generate line point 
 		public void GenerateLinePoint(LinePoint linePoint,GameObject parent)
@@ -1091,7 +1093,7 @@ namespace Cerebro
 			vectorLine.lineType = lineType;
 			vectorLine.SetWidth (lineShapeType == LineShapeType.Dotted ?width *4f : width);
 			currentGraphDiagram = new GraphDiagram (vectorLine,lineShapeType);
-
+		
 			if (graphPoints.Count < 2) {
 				return;
 			}
