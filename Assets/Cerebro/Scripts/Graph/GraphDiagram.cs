@@ -183,7 +183,7 @@ namespace Cerebro
 				} else {
 					nextAngle = arcs [nextIndex].rotation;
 				}
-				int angle = nextIndex==0? 360 - totalAngle  :  Mathf.RoundToInt(Mathf.Abs (arc.rotation - nextAngle));
+				int angle = nextIndex==0? 360 - totalAngle  :  Mathf.Abs (Mathf.RoundToInt(arc.rotation) - Mathf.RoundToInt(nextAngle));
 				totalAngle += angle;
 				arc.gameObject.GetComponentInChildren<TEXDraw> ().transform.GetComponent<RectTransform> ().anchoredPosition = (MathFunctions.PointAtDirection (Vector2.zero, arc.rotation+270f, pieRadius) - MathFunctions.PointAtDirection (Vector2.zero, nextAngle+270f, pieRadius)).normalized * (pieRadius/1.5f);
 				arc.gameObject.GetComponentInChildren<TEXDraw> ().text = angle +""+MathFunctions.deg;
