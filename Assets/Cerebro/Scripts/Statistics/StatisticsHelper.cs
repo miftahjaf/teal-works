@@ -1196,7 +1196,7 @@ namespace Cerebro
 			int pieValueCount = pieValues.Count;
 			float offsetPos = pieRadius / 5.5f;
 			float startPos = (count/2f *(offsetPos +18f));
-			Vector2 labelPosition = new Vector2 (pieRadius+offsetPos+10f, startPos - ((pieRadius - startPos)/2f));
+			Vector2 labelPosition = new Vector2 (pieRadius+offsetPos+10f, pieRadius/2f);
 			currentColors = CerebroHelper.GetRandomColorValues (pieValueCount);
 
 			List<Vector2> linePoints = new List<Vector2> ();
