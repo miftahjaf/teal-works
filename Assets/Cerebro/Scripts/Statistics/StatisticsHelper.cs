@@ -49,6 +49,7 @@ namespace Cerebro
 		private float pieStartAngle;
 
 		private bool isInteractable;
+		private bool shouldShowAngleInPie;
 
 		private string graphTitle;
 
@@ -100,6 +101,7 @@ namespace Cerebro
 			canClick = true;
 			lineGraphPoints = new List<GraphPointScript> ();
 			currentGraphDiagramPoints = new List<Vector2> ();
+			shouldShowAngleInPie = false;
 
 		}
 
@@ -591,8 +593,6 @@ namespace Cerebro
 			
 			Vector3 oldPos = graphPointObj.transform.position;
 			Vector3 v = new Vector3(position.x, position.y, transform.position.z)- transform.position;
-			Debug.Log (v.normalized * (pieRadius/2f  * Camera.main.aspect/0.75f) );
-			Debug.Log (transform.position);
 			Vector3 newPos = transform.position + v.normalized * ((pieRadius - 10f) * Screen.width /768f);
 			graphPointObj.transform.position = newPos;
 
@@ -658,11 +658,10 @@ namespace Cerebro
 		public bool IsPieDragCorrect()
 		{
 			int total = pieValues.Count;
-			Debug.Log (total);
+
 			for(int i=0;i< total;i++)
 			{
 				List<UIPolygon> tempPolygons = pieArcList.FindAll(x=>x.color == CerebroHelper.HexToRGB(currentColors[i]));
-				Debug.Log (tempPolygons.Count);
 				if (tempPolygons.Count > 1 || tempPolygons.Count<=0) {
 					return false;
 				} 
@@ -695,13 +694,11 @@ namespace Cerebro
 			{
 				for(int i=0;i<total;i++)
 				{
-					Debug.Log (angles[i] + " value " + (360f * pieValues [i] / totalValue));
 					if (arc.color == CerebroHelper.HexToRGB (currentColors [i]) && angles.Contains(Mathf.RoundToInt(360f * pieValues [i] / totalValue))) {
 						correctPieFillValues.Add (true);
 					}
 			   }
 			}
-			Debug.Log (correctPieFillValues.Count(x=>x == true));
 			return correctPieFillValues.Count(x=>x == true) == total;
 		}
 
@@ -1198,7 +1195,8 @@ namespace Cerebro
 			int totalValue = pieValues.Sum(x => System.Convert.ToInt32(x));
 			int pieValueCount = pieValues.Count;
 			float offsetPos = pieRadius / 5.5f;
-			Vector2 labelPosition = new Vector2 (pieRadius+offsetPos+10f, pieRadius/2f);
+			float startPos = (count/2f *(offsetPos +18f));
+			Vector2 labelPosition = new Vector2 (pieRadius+offsetPos+10f, startPos - ((pieRadius - startPos)/2f));
 			currentColors = CerebroHelper.GetRandomColorValues (pieValueCount);
 
 			List<Vector2> linePoints = new List<Vector2> ();
@@ -1272,8 +1270,7 @@ namespace Cerebro
 
 			pieArcList = tempPolygons.ToList ();
 
-			if (linePoints.Count > 0) 
-			{
+			if (statisticType == StatisticsType.PieToFill || statisticType == StatisticsType.PieToDrag) {
 				//Instantiate arc prefab
 				GameObject arc = GameObject.Instantiate (arcPrefab);
 				arc.transform.SetParent (this.transform, false);
@@ -1284,28 +1281,26 @@ namespace Cerebro
 				UIpolygon.name = "PieArcFill";
 
 				GameObject lineObject = GameObject.Instantiate (vectorObjectPrefab);
-				lineObject.transform.SetParent (this.transform,false);
+				lineObject.transform.SetParent (this.transform, false);
 				lineObject.name = "PieLineFill";
 				lineObject.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
 				VectorLine vectorLine = lineObject.GetComponent<VectorObject2D> ().vectorLine;
 				vectorLine.lineType = LineType.Discrete;
-				currentPieGraphDiagram = new GraphDiagram (vectorLine,LineShapeType.Normal);
+				currentPieGraphDiagram = new GraphDiagram (vectorLine, LineShapeType.Normal);
 
-				if (statisticType == StatisticsType.PieToDrag) 
-				{
+				if (statisticType == StatisticsType.PieToDrag) {
 					foreach (Vector2 point in linePoints) {
-							GraphPointScript piePoint = GenerateLinePoint (new LinePoint ("", point, 0, false, 0));
-							piePoint.SetPointColor (Color.blue);
-							piePoint.SetDotSize (point.Equals (Vector2.zero)?0:4f);
-							piePoint.SetSize (20f);
-							if (statisticType == StatisticsType.PieToDrag)
-						    {
-								piePoint.onDragEvent += MovePiePoint;
-								piePoint.onDragEndEvent += MoveEndPiePoint;
-							}	
-							currentGraphDiagramPoints.Add (point);
-							piePoint.SetDigramObject (currentPieGraphDiagram);
-							currentPieGraphDiagram.AddGraphPoint (piePoint);
+						GraphPointScript piePoint = GenerateLinePoint (new LinePoint ("", point, 0, false, 0));
+						piePoint.SetPointColor (Color.blue);
+						piePoint.SetDotSize (point.Equals (Vector2.zero) ? 0 : 4f);
+						piePoint.SetSize (20f);
+						if (statisticType == StatisticsType.PieToDrag) {
+							piePoint.onDragEvent += MovePiePoint;
+							piePoint.onDragEndEvent += MoveEndPiePoint;
+						}	
+						currentGraphDiagramPoints.Add (point);
+						piePoint.SetDigramObject (currentPieGraphDiagram);
+						currentPieGraphDiagram.AddGraphPoint (piePoint);
 							
 					}
 					currentPieGraphDiagram.SetArcs (tempPieArcList);
@@ -1313,14 +1308,16 @@ namespace Cerebro
 					currentPieGraphDiagram.UpdatePieArcFill (pieRadius);
 					currentPieGraphDiagram.Draw ();
 
-				}
-				else if (statisticType == StatisticsType.PieToFill)
-				{
+				} else if (statisticType == StatisticsType.PieToFill) {
 					vectorLine.points2 = linePoints;
 					vectorLine.Draw ();
 					currentPieGraphDiagram.SetArcs (tempPieArcList);
 					currentPieGraphDiagram.UpdatePieArc (pieRadius);
-			
+
+					if (shouldShowAngleInPie)
+					{
+						currentPieGraphDiagram.UpdatePieArcFill (pieRadius);
+					}
 				}
 
 					
@@ -1328,6 +1325,14 @@ namespace Cerebro
 				raycastDetector.AddComponent<RayCastDetector> ();
 				raycastDetector.transform.SetParent (this.transform, false);
 				raycastDetector.name = "Raycaster";
+			}
+			else if(statisticType == StatisticsType.Pie)
+			{
+				if (shouldShowAngleInPie) {
+					currentPieGraphDiagram = new GraphDiagram (null, LineShapeType.Normal);
+					currentPieGraphDiagram.SetArcs (tempPieArcList);
+					currentPieGraphDiagram.UpdatePieArcFill (pieRadius);
+				}
 			}
 		}
 
@@ -1365,6 +1370,11 @@ namespace Cerebro
 		public bool IsInteractable()
 		{
 			return isInteractable;
+		}
+
+		public void SetShouldShowAngleInPie(bool _shouldShowAngleInPie)
+		{
+			shouldShowAngleInPie = _shouldShowAngleInPie;
 		}
 			
 	}
