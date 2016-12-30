@@ -676,6 +676,7 @@ namespace Cerebro {
 					for (int i = 0; i < numberOfData; i++){
 						coeff[i] *= unitData;
 					}
+					coeff.Shuffle ();
 
 					TableContentsColumn1.Add ("<size=25>Holiday</size>");
 					TableContentsColumn1.AddRange (pieStringData);
@@ -717,7 +718,8 @@ namespace Cerebro {
 				for (int i = 0; i < numberOfData; i++){
 					coeff[i] *= unitData;
 				}
-
+				coeff.Shuffle ();
+				 
 				statisticsHelper.SetStatisticsType (StatisticsType.Pie);
 				statisticsHelper.ShiftPosition (new Vector2 (-330, 200));
 				statisticsHelper.SetPieParameters (
@@ -778,6 +780,7 @@ namespace Cerebro {
 				for (int i = 0; i < numberOfData; i++){
 					coeff[i] *= unitData;
 				}
+				coeff.Shuffle ();
 
 				statisticsHelper.SetStatisticsType (StatisticsType.Pie);
 				statisticsHelper.ShiftPosition (new Vector2 (-330, 200));

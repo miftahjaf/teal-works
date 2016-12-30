@@ -326,7 +326,7 @@ namespace Cerebro {
 					int minValue, maxValue;
 					int numberOfBars = 5;
 					minValue = Random.Range (6, 11);
-					maxValue = 20;
+					maxValue = Random.Range (15, 21);
 
 					List<string> Subjects = new List<string>() {"Maths", "Physics", "Biology", "Chemistry", "English", "Economy", "Philosophy", "Computer"};
 					Subjects.Shuffle ();
@@ -898,10 +898,10 @@ namespace Cerebro {
 
 					List<string> TableContentsColumn1 = new List<string>();
 					List<string> TableContentsColumn2 = new List<string>();
-					List<string> Branch = new List<string>() {"Oats", "Barley", "Wheat", "Rye", "Electrical"};
+					List<string> Branch = new List<string>() {"Oats", "Barley", "Wheat", "Rye", "Beans"};
 					Branch.Shuffle ();
 
-					int numberOfData = 5;
+					int numberOfData = 4;
 					coeff = MathFunctions.GetPieDataSet (45, 300, numberOfData, 15);
 
 					TableContentsColumn1.Add ("<size=25>Cereal</size>");
