@@ -18,6 +18,11 @@ namespace Cerebro {
 			}  
 		}
 
+		public static T ToEnum<T>(this string value)
+		{
+			return (T) System.Enum.Parse(typeof(T), value, true);
+		}
+
 		public static void Shuffle<T>(this List<T> list)  
 		{  
 			int n = list.Count;  

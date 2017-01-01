@@ -30,7 +30,7 @@ namespace Cerebro
 		
 
 		//		private string SERVER_URL = "http://192.168.1.28:3000/";
-		private string SERVER_URL = "https://teal-server.herokuapp.com/"; //"http://apis.aischool.net/cerebro/";
+		private string SERVER_URL = "http://apis.aischool.net/cerebro/";//"http://10.0.4.237:3000/cerebro/";//"https://teal-server.herokuapp.com/"; //;
 		//private string SERVER_URL = "https://teal-server-staging.herokuapp.com/";
 		private string SERVER_NEW_URL = "http://apis.aischool.net/";
 		//private string SERVER_NEW_URL ="http://10.0.4.237:3000/";
@@ -65,7 +65,15 @@ namespace Cerebro
 
 		public void CheckVersionNumber (Action<bool> callback)
 		{
-			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey, "");
+			Debug.Log ("here "+studentID);
+			if (studentID == null || studentID == "") {
+				Debug.Log ("callback true");
+				LaunchList.instance.IsVersionUptoDate = true;
+				LaunchList.instance.CheckingForVersion = false;
+				callback (true);
+				return;
+			}
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["student_id"] = studentID;
 			string CurrVersion = VersionHelper.GetVersionNumber();
@@ -197,7 +205,7 @@ namespace Cerebro
 			CerebroHelper.DebugLog (timeStarted + " Timings " + endTime);
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["component_data"] ["assessment_id"] = alteredAssessmentID.Substring (0, alteredAssessmentID.IndexOf ('Z'));
-			N ["myData"] ["component_data"] ["student_id"] = studentID;
+			N ["myData"] ["component_data"] ["fk_user_id"] = studentID;
 			N ["myData"] ["component_data"] ["correct"] = correct.ToString ();
 			N ["myData"] ["component_data"] ["difficulty"] = difficulty;
 			N ["myData"] ["component_data"] ["start_time"] = timeStarted;
@@ -212,7 +220,7 @@ namespace Cerebro
 			N ["myData"] ["component_data"] ["level_up"] = isLevelUp.ToString ();
 			N ["myData"] ["component_data"] ["answer"] = UserAnswer;
 			N ["myData"] ["component_data"] ["coins"] = CoinsEarned.ToString ();;
-			N ["myData"] ["component_name"] = "analytics";
+			N ["myData"] ["component_name"] = "math_practice";
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
 			CreatePostRequestByteArray (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
@@ -411,7 +419,7 @@ namespace Cerebro
 			CerebroHelper.DebugLog ("GetGamesForStudent");
 
 			WWWForm form = new WWWForm ();
-			form.AddField ("student_id", studentID);
+			form.AddField ("fk_user_id", studentID);
 			CreatePostRequestSimpleJSON (SERVER_URL + "games/got/get_game", form, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
 					LaunchList.instance.mStartableGames.Clear();
@@ -442,7 +450,7 @@ namespace Cerebro
 			CerebroHelper.DebugLog ("GetGOTGameData");
 
 			WWWForm form = new WWWForm ();
-			form.AddField ("student_id", studentID);
+			form.AddField ("fk_user_id", studentID);
 			form.AddField ("game_id", gameID);
 			CreatePostRequestSimpleJSON (SERVER_URL + "games/got/get_game_group", form, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
@@ -468,7 +476,7 @@ namespace Cerebro
 			CerebroHelper.DebugLog ("GetGOTGameStatus");
 
 			WWWForm form = new WWWForm ();
-			form.AddField ("student_id", studentID);
+			form.AddField ("fk_user_id", studentID);
 			form.AddField ("game_id", gameID);
 			CreatePostRequestSimpleJSON (SERVER_URL + "games/got/get_game_status", form, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
@@ -590,7 +598,7 @@ namespace Cerebro
 			WWWForm form = new WWWForm ();
 			form.AddField ("date", date);
 			form.AddField ("grade", grade);
-			CreatePostRequestSimpleJSON (SERVER_URL + "quiz/get_quiz_leader_board", form, (jsonResponse) => {
+			CreatePostRequestSimpleJSON (SERVER_URL + "quiz/leader_board/get", form, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
 					if (jsonResponse ["leader_board"] != null && jsonResponse ["leader_board"].Count > 0) {
 						LaunchList.instance.mLeaderboard = new List<LeaderBoard> ();
@@ -666,37 +674,44 @@ namespace Cerebro
 			WWWForm form = new WWWForm ();
 			form.AddField ("date", date);
 			form.AddField ("grade", grade);
-			CreatePostRequestSimpleJSON (SERVER_URL + "quiz/get_quiz", form, (jsonResponse) => {
+			CreatePostRequestSimpleJSON (SERVER_URL + "quiz/get", form, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
 					LaunchList.instance.mQuizQuestions.Clear ();
 					for (int i = 0; i < jsonResponse.Count; i++) {
 						QuizData q = new QuizData ();
 						q.QuizDate = jsonResponse [i] ["quiz_date"].Value;
 						q.QuestionID = jsonResponse [i] ["question_id"].Value;
-						q.AnswerOptions = jsonResponse [i] ["answer_options"].Value;
+						int cnt = jsonResponse [i] ["answer_options"].Count;
+						for(int j = 0; j < cnt; j++)
+						{
+							q.AnswerOptions += "@" + jsonResponse [i] ["answer_options"] [j] ["ans"].Value;
+						}
+						q.AnswerOptions = q.AnswerOptions.Substring(1);
+//						q.AnswerOptions = jsonResponse [i] ["answer_options"].Value;
 						q.CorrectAnswer = jsonResponse [i] ["correct_answer"].Value;
 						q.Difficulty = jsonResponse [i] ["difficulty"].Value;
-						q.QuestionIndex = jsonResponse [i] ["question_index"].Value;
-						q.QuestionMedia = jsonResponse [i] ["question_media"].Value;
+//						q.QuestionIndex = jsonResponse [i] ["question_index"].Value;
+						q.QuestionMedia = jsonResponse [i] ["question_media_url"].Value;
 						q.QuestionMediaType = jsonResponse [i] ["question_media_type"].Value;
-						q.QuestionText = jsonResponse [i] ["question_text"].Value;
+						q.QuestionText = jsonResponse [i] ["ques_text"].Value;
 						q.QuestionSubText = jsonResponse [i] ["question_sub_text"].Value;
-						q.QuestionType = jsonResponse [i] ["question_type"].Value;
-						q.AnswerType = jsonResponse [i] ["answer_type"].Value;
-						q.AnswerURL = jsonResponse [i] ["answer_url"].Value;
+						q.QuestionType = "MCQ";//jsonResponse [i] ["question_type"].Value;
+//						q.AnswerType = jsonResponse [i] ["answer_type"].Value;
+//						q.AnswerURL = jsonResponse [i] ["answer_url"].Value;
+						q.AnswerURL = "";
 
 						LaunchList.instance.mQuizQuestions.Add (q);
 					}
 
 					// sort based on question index
-					int test;
-					LaunchList.instance.mQuizQuestions.Sort (delegate(QuizData x, QuizData y) {
-						if (int.TryParse (x.QuestionIndex, out test) || int.TryParse (y.QuestionIndex, out test)) {
-							return int.Parse (x.QuestionIndex) - int.Parse (y.QuestionIndex);
-						} else {
-							return 0;
-						}
-					});
+//					int test;
+//					LaunchList.instance.mQuizQuestions.Sort (delegate(QuizData x, QuizData y) {
+//						if (int.TryParse (x.QuestionIndex, out test) || int.TryParse (y.QuestionIndex, out test)) {
+//							return int.Parse (x.QuestionIndex) - int.Parse (y.QuestionIndex);
+//						} else {
+//							return 0;
+//						}
+//					});
 
 					callback (LaunchList.instance.mQuizQuestions);
 				} else {
@@ -721,7 +736,7 @@ namespace Cerebro
 			WWWForm form = new WWWForm ();
 			form.AddField ("date", date);
 			form.AddField ("grade", grade);
-			CreatePostRequestSimpleJSON (SERVER_URL + "describe_image/get_describe_image", form, (jsonResponse) => {
+			CreatePostRequestSimpleJSON (SERVER_URL + "writers_corner/get_writers_corner", form, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
 					DescribeImage d = new DescribeImage ();
 					if(jsonResponse ["image_id"] == null) {
@@ -846,7 +861,7 @@ namespace Cerebro
 			try {
 
 				WWWForm form = new WWWForm ();
-				form.AddField ("student_id", PlayerPrefs.GetString (PlayerPrefKeys.IDKey,"0"));
+				form.AddField ("fk_user_id", PlayerPrefs.GetString (PlayerPrefKeys.IDKey,"0"));
 				Debug.Log("Load old kc mastery");
 				CreatePostRequestSimpleJSON (SERVER_URL + "practice_item/kc/mastery_all",form, (jsonResponse) => {
 					if (jsonResponse != null && jsonResponse.ToString () != "") {
@@ -961,21 +976,18 @@ namespace Cerebro
 			form.AddField ("grade", currGrade);
 			CreatePostRequestSimpleJSON (SERVER_URL + "feature/get_feature", form, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
-					for (int i = 0; i < jsonResponse.Count; i++) {
-						Feature f = new Feature ();
-						f.FeatureDate = date;
-						f.Grade = grade.ToString ();
-						f.Type = jsonResponse [i] ["type"].Value;
-						f.MediaUrl = jsonResponse [i] ["media_url"].Value;
-						f.MediaText = jsonResponse [i] ["media_text"].Value;
-						f.ImageUrl = jsonResponse [i] ["image_url"].Value;
-
-						callback (f);
-						break;
-					}
 					if (jsonResponse.Count == 0) {
 						callback (null);
 					}
+					Feature f = new Feature ();
+					f.FeatureDate = date;
+					f.Grade = grade.ToString ();
+					f.Type = jsonResponse ["media_type"].Value;
+					f.MediaUrl = jsonResponse ["media_url"].Value;
+					f.MediaText = jsonResponse ["media_text"].Value;
+					f.ImageUrl = jsonResponse ["thumb_url"].Value;
+
+					callback (f);
 				} else {
 					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
 					callback (null);
@@ -1100,14 +1112,14 @@ namespace Cerebro
 			WWWForm form = new WWWForm ();
 			form.AddField ("grade", grade);
 			form.AddField ("section", section);
-			form.AddField ("image_id", imageID);
-			CreatePostRequestSimpleJSON (SERVER_URL + "describe_image/get_english_image_response", form, (jsonResponse) => {
+			form.AddField ("wc_id", imageID);
+			CreatePostRequestSimpleJSON (SERVER_URL + "writers_corner/response/get", form, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
 					LaunchList.instance.mDescribeImageUserResponses.Clear ();
 					for (int i = 0; i < jsonResponse.Count; i++) {
 						DescribeImageUserResponse d = new DescribeImageUserResponse ();
-						d.ImageID = jsonResponse [i] ["image_id"].Value;
-						d.StudentID = jsonResponse [i] ["student_id"].Value;
+						d.ImageID = jsonResponse [i] ["wc_id"].Value;
+						d.StudentID = jsonResponse [i] ["fk_user_id"].Value;
 						d.UserResponse = jsonResponse [i] ["user_response"].Value;
 						d.StudentName = jsonResponse [i] ["student_name"].Value;
 						if (jsonResponse [i] ["profile_image"].Value != "" && jsonResponse [i] ["profile_image"].Value != "null") {
@@ -1200,27 +1212,22 @@ namespace Cerebro
 
 		public void GetContentItems ()
 		{
-			CreatePostRequestNoFormSimpleJSON (SERVER_URL + "content_item/get_content_items", (jsonResponse) => {
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			string studentId = PlayerPrefs.GetString(PlayerPrefKeys.IDKey, "1");
+			N ["myData"] ["student_id"] = studentId;
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArraySimpleJSON (SERVER_URL + "content_item/get_content_items", formData, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
 					LaunchList.instance.mContentItems = new List<ContentItem> ();
 					for (int i = 0; i < jsonResponse.Count; i++) {
 						ContentItem c = new ContentItem ();
-						c.SubtopicID = jsonResponse [i] ["sub_topic_id"].Value;
 						c.ContentID = jsonResponse [i] ["content_id"].Value;
 						c.ContentName = jsonResponse [i] ["content_name"].Value;
 						c.ContentDate = jsonResponse [i] ["content_date"].Value;
 						c.ContentDescription = jsonResponse [i] ["content_description"].Value;
 						c.ContentLink = jsonResponse [i] ["content_link"].Value;
 						c.ContentType = jsonResponse [i] ["content_type"].Value;
-						c.ContentDifficulty = jsonResponse [i] ["content_difficulty"].AsInt;
-						c.ContentRating = jsonResponse [i] ["content_rating"].AsInt;
-						c.ContentViews = jsonResponse [i] ["content_views"].AsInt;
-						c.ContentTags = new List<string> ();
-						for (int j = 0; j < jsonResponse ["content_tags"].Count; j++) {
-							if (jsonResponse [i] ["content_tags"] [j].Value != null)
-								c.ContentTags.Add (jsonResponse [i] ["content_tags"] [j].Value);
-						}
-						c.Userdata = jsonResponse [i] ["user_date"].Value;
 						LaunchList.instance.mContentItems.Add (c);
 					}
 					CerebroHelper.DebugLog ("added " + LaunchList.instance.mContentItems.Count + " rows");
@@ -1247,9 +1254,140 @@ namespace Cerebro
 			});
 		}
 
+		public void GetHomeworkFeed(string studentId, int pageSize, int pageCount, Action<JSONNode> callback)
+		{
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+//			studentId = "6";
+			N ["myData"] ["request_data"] ["user_id"] = studentId;
+			N ["myData"] ["request_data"] ["page_size"] = pageSize.ToString();
+			N ["myData"] ["request_data"] ["page_count"] = pageCount.ToString();
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArraySimpleJSON (SERVER_NEW_URL + "homework/teacher/feed/get", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString () != "") {
+					if(jsonResponse["response"]["is_success"] != null && jsonResponse["response"]["is_success"].Value == "true")
+					{
+						callback(jsonResponse["response"]);
+					}
+					else
+					{
+						callback(null);
+					}
+				}  else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					callback(null);
+				}
+			} );
+		}
+
+		public void GetResponseFeed(string homeworkId, Action<JSONNode> callback)
+		{
+			Debug.Log ("calling response feed");
+//			homeworkId = "4987";
+			CreateGetRequestSimpleJSON (SERVER_NEW_URL + "homework/teacher/responsefeed/get?hwc_id="+homeworkId, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString () != "") {
+					if(jsonResponse["response"]["is_success"] != null && jsonResponse["response"]["is_success"].Value == "true")
+					{
+						callback(jsonResponse["response"]);
+					}
+					else
+					{
+						callback(null);
+					}
+				}  else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					callback(null);
+				}
+			} );
+		}
+
 		//
 		// PUT Requests
 		//
+
+		public void SendHomeworkResponseWC(string homeworkContextId, string createdAt, string response, Action<bool> callback)
+		{
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			N ["myData"] ["request_data"] ["hwc_id"] = homeworkContextId;
+			N ["myData"] ["request_data"] ["created_at"] = createdAt;
+			N ["myData"] ["request_data"] ["type"] = "wc";
+			N ["myData"] ["request_data"] ["data"] ["response"] = response;
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArraySimpleJSON (SERVER_NEW_URL + "homework/teacher/create/response", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString () != "") {
+					CerebroHelper.DebugLog ("Added new row");
+					if(jsonResponse["response"]["is_success"].Value == "true")
+					{
+						callback(true);
+					}
+					else
+					{
+						callback(false);
+					}
+				}  else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					callback(false);
+				}
+			} );
+		}
+
+		public void SendHomeworkComment(string homeworkContextId, string createdAt, string teacherId, string comment, Action<bool> callback)
+		{
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			N ["myData"] ["request_data"] ["hwc_id"] = homeworkContextId;
+			N ["myData"] ["request_data"] ["created_at"] = createdAt;
+			N ["myData"] ["request_data"] ["from"] = studentID;
+			N ["myData"] ["request_data"] ["to"] = teacherId;
+			N ["myData"] ["request_data"] ["data"] ["comment"] = comment;
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArraySimpleJSON (SERVER_NEW_URL + "homework/teacher/create/comment", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString () != "") {
+					CerebroHelper.DebugLog ("Added new row");
+					if(jsonResponse["response"]["is_success"].Value == "true")
+					{						
+						callback(true);
+					}
+					else
+					{						
+						callback(false);
+					}
+				}  else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					callback(false);
+				}
+			} );
+		}
+
+		public void SendHomeworkResponseAnnouncement(string homeworkContextId, string createdAt, Action<bool> callback)
+		{
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			N ["myData"] ["request_data"] ["hwc_id"] = homeworkContextId;
+			N ["myData"] ["request_data"] ["created_at"] = createdAt;
+			N ["myData"] ["request_data"] ["type"] = "announcement";
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArraySimpleJSON (SERVER_NEW_URL + "homework/teacher/create/response", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString () != "") {
+					CerebroHelper.DebugLog ("Added new row");
+					if(jsonResponse["response"]["is_success"].Value == "true")
+					{
+						Debug.Log("true");
+						callback(true);
+					}
+					else
+					{
+						Debug.Log("false");
+						callback(false);
+					}
+				}  else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					callback(false);
+				}
+			} );
+		}
 
 		public void SubmitCompletedMission(Mission mission)
 		{
@@ -1327,7 +1465,7 @@ namespace Cerebro
 			string timestamp = assessmentID.Substring (assessmentID.IndexOf ("Z") + 1, assessmentID.IndexOf ("t") - assessmentID.IndexOf ("Z") - 1);
 
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
-			N ["myData"] ["component_data"] ["student_id"] = studentID;
+			N ["myData"] ["component_data"] ["fk_user_id"] = studentID;
 			N ["myData"] ["component_data"] ["practice_item_id"] = practiceItemId;
 			N ["myData"] ["component_data"] ["created_date"] = timestamp;
 			N ["myData"] ["component_data"] ["seed"] = seed;
@@ -1396,11 +1534,11 @@ namespace Cerebro
 		{
 			string grade = PlayerPrefs.GetString (PlayerPrefKeys.GradeKey);
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
-			N ["myData"] ["component_data"] ["image_id"] = ImageID;
-			N ["myData"] ["component_data"] ["student_id"] = studentID;
+			N ["myData"] ["component_data"] ["wc_id"] = ImageID;
+			N ["myData"] ["component_data"] ["fk_user_id"] = studentID;
 			N ["myData"] ["component_data"] ["user_response"] = StringHelper.RemoveUnicodeCharacters (userResponse);
 			N ["myData"] ["component_data"] ["grade"] = grade;
-			N ["myData"] ["component_name"] = "describe_image_user_response";
+			N ["myData"] ["component_name"] = "writers_corner_response";
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
 			CreatePostRequestByteArray (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
@@ -1423,7 +1561,7 @@ namespace Cerebro
 			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["component_data"] ["verbalize_id"] = verb.VerbalizeID;
-			N ["myData"] ["component_data"] ["student_id"] = studentID;
+			N ["myData"] ["component_data"] ["fk_user_id"] = studentID;
 			N ["myData"] ["component_data"] ["response_url"] = verb.UserResponseURL;
 			N ["myData"] ["component_data"] ["start_time"] = verb.VerbStartTime;
 			N ["myData"] ["component_data"] ["end_time"] = verb.VerbEndTime;

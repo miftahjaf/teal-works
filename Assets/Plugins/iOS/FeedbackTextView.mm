@@ -70,6 +70,18 @@ UITextView* feedbacktextView;
     UnitySendMessage("Feedback", "GetTextFieldString", stringAsChar);
 }
 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([textView isFirstResponder])
+    {
+        if ([[[textView textInputMode] primaryLanguage] isEqualToString:@"emoji"] || ![[textView textInputMode] primaryLanguage])
+        {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 @end
 
 static CerebroFeedbackTextViewController *vc = NULL;

@@ -68,6 +68,8 @@ namespace Cerebro
 
 		[NonSerialized]
 		public MissionData missionData = new MissionData();
+		[NonSerialized]
+		public HomeworkData homeworkData = new HomeworkData();
 
 		public bool mUpdateTimer = false;
 		public System.TimeSpan mTimer;
@@ -925,6 +927,16 @@ namespace Cerebro
 		{
 			CheckingForVersion = true;
 			HTTPRequestHelper.instance.CheckVersionNumber (VersionVerified);
+		}
+
+		public string ConvertDateToStandardString(DateTime date)
+		{
+			return date.ToString("yyyy-MM-ddTHH:mm:ss");
+		}
+
+		public DateTime ConvertStringToStandardDate(string dateString)
+		{
+			return DateTime.ParseExact (dateString, "yyyy-MM-ddTHH:mm:ss", null);
 		}
 
 		public void ChangeMpfsCounterVisibility()
@@ -4236,6 +4248,89 @@ namespace Cerebro
 			}
 		}
 
+		private string lastIdHwResponseSent = "";
+
+		public void CheckForHomeworkResponseToSend ()
+		{
+			string fileName = Application.persistentDataPath + "/HomeworkResponseLocalJSON.txt";
+			if (File.Exists (fileName)) {
+				string data = File.ReadAllText (fileName);
+				JSONNode N = JSONClass.Parse (data);
+				int cnt = 0;
+				if(N ["Data"] ["Response"] != null) {
+					cnt = N ["Data"] ["Response"].Count;
+					for (int i = 0; i < cnt; i++) {
+						lastIdHwResponseSent = N ["Data"] ["Response"] [i] ["id"].Value;
+						JSONNode res = N ["Data"] ["Response"] [i];
+						HTTPRequestHelper.instance.SendHomeworkResponseWC (res ["contextId"].Value, res ["createdAt"].Value, res ["responseData"].Value, HomeworkResponseSent);
+						return;
+					}
+				}
+				if(N ["Data"] ["Comment"] != null) {
+					cnt = N ["Data"] ["Comment"].Count;
+					for (int i = 0; i < cnt; i++) {
+						lastIdHwResponseSent = N ["Data"] ["Comment"] [i] ["id"].Value;
+						JSONNode cmt = N ["Data"] ["Comment"] [i];
+						HTTPRequestHelper.instance.SendHomeworkComment (cmt ["contextId"].Value, cmt ["createdAt"].Value, cmt ["teacherId"].Value, cmt ["commentData"].Value, HomeworkResponseSent);
+						return;
+					}
+				}
+				if(N ["Data"] ["Announcement"] != null) {
+					cnt = N ["Data"] ["Announcement"].Count;
+					for (int i = 0; i < cnt; i++) {
+						lastIdHwResponseSent = N ["Data"] ["Announcement"] [i] ["id"].Value;
+						JSONNode ann = N ["Data"] ["Announcement"] [i];
+						HTTPRequestHelper.instance.SendHomeworkResponseAnnouncement (ann ["contextId"].Value, ann ["createdAt"].Value, HomeworkResponseSent);
+						return;
+					}
+				}
+			}
+		}
+
+		public void HomeworkResponseSent(bool isSuccess)
+		{
+			string fileName = Application.persistentDataPath + "/HomeworkResponseLocalJSON.txt";
+			JSONNode N = JSONClass.Parse ("{\"Data\"}");
+			JSONNode N1 = JSONClass.Parse ("{\"Data\"}");
+			if (File.Exists (fileName)) {				
+				string data = File.ReadAllText (fileName);
+				N = JSONClass.Parse (data);
+				File.WriteAllText (fileName, string.Empty);
+				int myCnt = 0;
+				if(N ["Data"] ["Response"] != null) {
+					for (int i = 0; i < N ["Data"] ["Response"].Count; i++) {
+						if (N ["Data"] ["Response"] [i] ["id"].Value != lastIdHwResponseSent) {
+							N1 ["Data"] ["Response"] [myCnt] = N ["Data"] ["Response"] [i];
+							myCnt++;
+						}
+					}
+					myCnt++;
+				}
+				myCnt = 0;
+				if(N ["Data"] ["Comment"] != null) {
+					for (int i = 0; i < N ["Data"] ["Comment"].Count; i++) {
+						if (N ["Data"] ["Comment"] [i] ["id"].Value != lastIdHwResponseSent) {
+							N1 ["Data"] ["Comment"] [myCnt] = N ["Data"] ["Comment"] [i];
+							myCnt++;
+						}
+					}
+					myCnt++;
+				}
+				myCnt = 0;
+				if(N ["Data"] ["Announcement"] != null) {
+					for (int i = 0; i < N ["Data"] ["Announcement"].Count; i++) {
+						if (N ["Data"] ["Announcement"] [i] ["id"].Value != lastIdHwResponseSent) {
+							N1 ["Data"] ["Announcement"] [myCnt] = N ["Data"] ["Announcement"] [i];
+							myCnt++;
+						}
+					}
+					myCnt++;
+				}
+				N1 ["VersionNumber"] = N ["VersionNumber"].Value;
+				File.WriteAllText (fileName, N1.ToString());
+			}
+		}
+
 		public void OnFlaggedSentResponse(string assessmentID)
 		{
 			mUpdatingServerFlagged = false;
@@ -4429,18 +4524,12 @@ namespace Cerebro
 	public class ContentItem
 	{
 		   // Hash key.
-		public string SubtopicID { get; set; }
 		public string ContentID { get; set; }
 		public string ContentName { get; set; }
 		public string ContentDate { get; set; }
 		public string ContentDescription { get; set; }
 		public string ContentLink { get; set; }
 		public string ContentType { get; set; }
-		public int ContentDifficulty { get; set; }
-		public int ContentRating { get; set; }
-		public int ContentViews { get; set; }
-		public List<string> ContentTags { get; set; }
-		public string Userdata { get; set; }
 	}
 
 	public class Student

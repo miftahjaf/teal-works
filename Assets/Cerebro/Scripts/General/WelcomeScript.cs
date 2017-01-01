@@ -51,6 +51,8 @@ namespace Cerebro
 		public bool autoTestMissionCorrect = false;
 		public bool autoTestMissionMix = false;
 
+		public System.Action onDashboardClicked;
+
 		private static WelcomeScript m_Instance;
 		List<string> practiceOptions;
 
@@ -224,7 +226,7 @@ namespace Cerebro
 			LaunchList.instance.setWifiIcon ();
 
 			mFeatureDate = System.DateTime.Now;
-			string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
+			string forDate = mFeatureDate.ToString ("MMdd");
 			FetchFeatureData (forDate);
 
 			if (LaunchList.instance.mUseJSON) {
@@ -255,7 +257,7 @@ namespace Cerebro
 
 		public void RetryFeatureData ()
 		{
-			string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
+			string forDate = mFeatureDate.ToString ("MMdd");
 			FetchFeatureData (forDate);
 		}
 
@@ -267,6 +269,7 @@ namespace Cerebro
 			Text revisitData = BottomBarObject.transform.Find ("Revisit").Find ("Info").GetComponent<Text> ();
 			Text qotdData = BottomBarObject.transform.Find ("QOTD").Find ("Info").GetComponent<Text> ();
 			Text verbData = BottomBarObject.transform.Find ("Verbalize").Find ("Info").GetComponent<Text> ();
+			Text homeworkData = BottomBarObject.transform.Find ("Homework").Find ("Info").GetComponent<Text> ();
 
 			if (CerebroHelper.isTestUser ()) {
 				BottomBarObject.transform.Find ("Verbalize").gameObject.SetActive (true);
@@ -333,6 +336,8 @@ namespace Cerebro
 			} else {
 				practiceData.text = GetPracticeCount (today) ["attempts"].ToString () + " questions solved";
 			}
+
+			homeworkData.text = "Pending";
 		}
 
 		public Dictionary<string,int> GetPracticeCount (string date)
@@ -653,6 +658,8 @@ namespace Cerebro
 				LaunchList.instance.LoadGame ();
 			} else if (screenArr [0] == "Verbalize") {
 				childrenView = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.VerbalizeLandingPage, BaseScreen.transform);
+			} else if (screenArr [0] == "Homework") {
+				childrenView = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.HomeworkContainer, BaseScreen.transform);
 			} 
 
 			StartCoroutine (HideScreen (false));
@@ -775,6 +782,11 @@ namespace Cerebro
 			OpenScreen ("Verbalize");
 		}
 
+		public void OpenHomework ()
+		{
+			OpenScreen ("Homework");
+		}
+
 		public void LeftButtonBottomBarPressed()
 		{
 			if (BottomScrollStart)
@@ -833,6 +845,9 @@ namespace Cerebro
 
 		public void DashboardPressed ()
 		{
+			if (onDashboardClicked != null) {
+				onDashboardClicked.Invoke ();
+			}
 			WelcomeScript.instance.ShowScreen ();
 		}
 
@@ -903,7 +918,7 @@ namespace Cerebro
 		{
 			if (!mFetchingFeature && (mFeatureDate.ToString ("yyyyMMdd") != OldestDate.ToString ("yyyyMMdd") || CerebroHelper.isTestUser ())) {
 				mFeatureDate = mFeatureDate.AddDays (-1);
-				string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
+				string forDate = mFeatureDate.ToString ("MMdd");
 				//CerebroHelper.DebugLog ("KJFDJKDFJKFDKJFDJFKD FETCHING NEXT FEATURE " + forDate);
 				FetchFeatureData (forDate);
 			}
@@ -913,7 +928,7 @@ namespace Cerebro
 		{
 			if (!mFetchingFeature && (mFeatureDate.ToString ("yyyyMMdd") != TodayDate.ToString ("yyyyMMdd") || CerebroHelper.isTestUser ())) {
 				mFeatureDate = mFeatureDate.AddDays (1);
-				string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
+				string forDate = mFeatureDate.ToString ("MMdd");
 				//CerebroHelper.DebugLog ("KJFDJKDFJKFDKJFDJFKD FETCHING PREVIOUS FEATURE " + forDate);
 				FetchFeatureData (forDate);
 			}
@@ -921,7 +936,7 @@ namespace Cerebro
 
 		public void RefreshFeature() {
 			mFeatureDate = System.DateTime.Now;
-			string forDate = mFeatureDate.ToString ("yyyy-MM-dd");
+			string forDate = mFeatureDate.ToString ("MMdd");
 			FetchFeatureData (forDate);
 		}
 			

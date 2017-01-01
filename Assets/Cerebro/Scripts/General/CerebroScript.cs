@@ -44,6 +44,11 @@ namespace Cerebro {
 		public const string RatingPopup = "RatingPopup";
 		public const string GenericPopup = "GenericPopup";
 		public const string Daily = "Daily";
+		public const string HomeworkContainer = "Homework/HomeworkContainer";
+		public const string WritersCornerForHomework = "Homework/WritersCornerForHomework";
+		public const string AssignmentResponse = "Homework/AssignmentResponse";
+		public const string AnnouncementView = "Homework/AnnouncementView";
+		public const string AssessmentObject = "Homework/AssessmentObject";
 
 		public const string WordTower = "WordTower/WordTower";
 		public const string WordTowerMovableComponent = "WordTower/Movable";
@@ -222,7 +227,6 @@ namespace Cerebro {
 			if (!PlayerPrefs.HasKey (PlayerPrefKeys.GradeKey)) {
 				PlayerPrefs.SetString (PlayerPrefKeys.GradeKey, "6");
 			}
-
 			if (!PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
 				correctPassword ();
 			}
@@ -345,8 +349,8 @@ namespace Cerebro {
 			GameObject gTemp = GameObject.Find ("VersionDialog");
 			if (gTemp) {
 				Destroy (gTemp);
+				DialogScreen.transform.SetAsFirstSibling ();
 			}
-			DialogScreen.transform.SetAsFirstSibling ();
 		}
 
 		public void showVersionDialog() {
@@ -501,6 +505,7 @@ namespace Cerebro {
 			yield return new WaitForSeconds (15);
 			LaunchList.instance.CheckForVerbalizeToUpload ();
 			LaunchList.instance.CheckForFlaggedQuestionToSend ();
+			LaunchList.instance.CheckForHomeworkResponseToSend ();
 		}
 
 		public void SendUsageAnalytics() {

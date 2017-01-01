@@ -15,7 +15,7 @@ UITextView* textView;
 -(void) AddTextView:(NSUInteger)charLimit withText:(const char*)text
 {
     NSString* initText = [NSString stringWithUTF8String:text];
-    
+    characterLimit = charLimit;
     if(textView == NULL) {
         textView = [[UITextView alloc] initWithFrame:self.view.bounds];
     } else {
@@ -67,12 +67,24 @@ UITextView* textView;
 - (void)textViewDidChange:(UITextView *)textView
 {
     NSUInteger textLength = textView.text.length;
-    if(textLength > 500) {
-        textView.text = [textView.text substringToIndex:500];
+    if(textLength > characterLimit) {
+        textView.text = [textView.text substringToIndex:characterLimit];
     }
     const char *stringAsChar = [textView.text cStringUsingEncoding:[NSString defaultCStringEncoding]];
     
     UnitySendMessage("WritersCorner", "GetTextFieldString", stringAsChar);
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([textView isFirstResponder])
+    {
+        if ([[[textView textInputMode] primaryLanguage] isEqualToString:@"emoji"] || ![[textView textInputMode] primaryLanguage])
+        {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 @end

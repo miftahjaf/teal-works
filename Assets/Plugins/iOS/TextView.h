@@ -6,6 +6,9 @@ extern "C" {
 #import <UIKit/UIKit.h>
     
 @interface CerebroTextViewController: UIViewController <UITextViewDelegate>
+{
+    NSUInteger characterLimit;
+}
 -(void) AddTextView:(NSUInteger)charLimit withText:(const char*)text;
 @end
     

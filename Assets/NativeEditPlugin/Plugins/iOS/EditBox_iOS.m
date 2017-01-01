@@ -552,6 +552,30 @@ bool approxEqualFloat(float x, float y)
     [self onTextEditEnd:textField.text];
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if ([textField isFirstResponder])
+    {
+        if ([[[textField textInputMode] primaryLanguage] isEqualToString:@"emoji"] || ![[textField textInputMode] primaryLanguage])
+        {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([textView isFirstResponder])
+    {
+        if ([[[textView textInputMode] primaryLanguage] isEqualToString:@"emoji"] || ![[textView textInputMode] primaryLanguage])
+        {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 -(void) keyboardWillShow:(NSNotification *)notification
 {
        if (![editView isFirstResponder]) return;
