@@ -24,6 +24,8 @@ namespace Cerebro
 		private System.DateTime commentCreationTime;
 		private bool isImageFullScreen;
 		private GameObject parentForWC;
+		private bool fromComment = false;
+		public Text tempText;
 
 		public HomeworkDataCell currDataCell;
 
@@ -112,9 +114,9 @@ namespace Cerebro
 			System.IO.File.WriteAllText (fileName, N.ToString());
 		}
 
-		public void ReloadData(bool fromUpdate = false)
+		public void ReloadData()
 		{
-			responseSelector.GetComponent<CanvasGroup> ().alpha = 0f;
+//			responseSelector.GetComponent<CanvasGroup> ().alpha = 0f;
 			List<ResponseData> responseData = new List<ResponseData> ();
 			int cnt = currDataCell.responseFeed.Count;
 			List<ResponseFeed> rFeed = currDataCell.responseFeed;
@@ -125,6 +127,8 @@ namespace Cerebro
 					if (res != null) {
 						rd.id = res.id;
 						rd.title = LaunchList.instance.mCurrentStudent.StudentName;
+						tempText.text = res.userResponse;
+						rd.cellSize = Mathf.Max (80f, 40f + tempText.preferredHeight);
 						rd.responseText = res.userResponse;
 						rd.createdAt = res.createdAt;
 						rd.responseType = ResponseData.ResponseType.Submission;
@@ -143,6 +147,8 @@ namespace Cerebro
 							rd.title = currDataCell.teacherData [cmt.fromId].firstName + " " + currDataCell.teacherData [cmt.fromId].lastName;
 							rd.from = ResponseData.CommentFrom.Teacher;
 						}
+						tempText.text = cmt.comment;
+						rd.cellSize = Mathf.Max (80f, 40f + tempText.preferredHeight);
 						rd.responseText = cmt.comment;
 						rd.createdAt = cmt.createdAt;
 						rd.responseType = ResponseData.ResponseType.Comment;
@@ -150,11 +156,16 @@ namespace Cerebro
 					}
 				}
 			}
+			tempText.text = "";
 			responseSelector.currResponses = responseData;
 			responseSelector.ReloadData ();
 			AssessmentListGm.GetComponent<HomeworkAssessments> ().InitializeAssessments (currDataCell);
-			StopCoroutine ("WaitForTextAdjust");
-			StartCoroutine ("WaitForTextAdjust", fromUpdate);
+//			StopCoroutine ("WaitForTextAdjust");
+//			StartCoroutine ("WaitForTextAdjust", fromUpdate);
+			if (fromComment) {
+				responseSelector.GetComponent<ScrollRect> ().verticalNormalizedPosition = 0f;
+			}
+			fromComment = false;
 		}
 
 		IEnumerator WaitForTextAdjust(bool fromUpdate = false)
@@ -321,6 +332,7 @@ namespace Cerebro
 		public void OnSaveComment(bool IsSuccess)
 		{
 			if (IsSuccess) {
+				fromComment = true;
 				RefreshResponseFeed ();
 			} else {
 				string id = SaveCommentLocal ();
@@ -328,7 +340,7 @@ namespace Cerebro
 				HomeworkComment cmt = new HomeworkComment (id, CommentTextfield.text, commentCreationTime, LaunchList.instance.mCurrentStudent.StudentID, HomeworkComment.CommentFrom.Me);
 				currDataCell.comments.Add (cmt);
 				currDataCell.responseFeed.Add(new ResponseFeed(id, ResponseFeed.ResponseType.Comment));
-				ReloadData (true);
+				ReloadData ();
 			}
 			CommentTextfield.text = "";
 			CommentTextfield.GetComponent<NativeEditBox> ().SetTextNative ("");

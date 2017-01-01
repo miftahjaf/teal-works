@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<UAConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ProductionLogLevel>Error</ProductionLogLevel>
+  <DevelopmentAppKey>mKmIv1G4RgOMUpIzySqYmQ</DevelopmentAppKey>
+  <DevelopmentAppSecret>1anl5uvVTLWKvX8gxf7BJA</DevelopmentAppSecret>
+  <DevelopmentLogLevel>Debug</DevelopmentLogLevel>
+  <NotificationPresentationOptionAlert>false</NotificationPresentationOptionAlert>
+  <NotificationPresentationOptionBadge>false</NotificationPresentationOptionBadge>
+  <NotificationPresentationOptionSound>false</NotificationPresentationOptionSound>
+  <InProduction>false</InProduction>
+</UAConfig>

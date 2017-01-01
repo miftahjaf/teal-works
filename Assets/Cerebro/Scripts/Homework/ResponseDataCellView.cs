@@ -36,16 +36,19 @@ namespace Cerebro {
 					submissionText.gameObject.SetActive (true);
 				}
 			}
-			var sizeY = responseText.preferredHeight;
-			if (sizeY > 0)
-			{
-//				// if the size has been set by the content size fitter, then we add in some padding so the
-//				// the text isn't up against the border of the cell
-//				sizeY += textBuffer.top + textBuffer.bottom;
-				dataCell.cellSize = Mathf.Max (80f, 40f + sizeY);
-				responseText.GetComponent<RectTransform> ().sizeDelta = new Vector2 (responseText.GetComponent<RectTransform> ().sizeDelta.x, responseText.preferredHeight);
-			}
+//			var sizeY = responseText.preferredHeight;
+//			Debug.Log ("sizeY "+sizeY);
+//			if (sizeY > 0)
+//			{
+////				// if the size has been set by the content size fitter, then we add in some padding so the
+////				// the text isn't up against the border of the cell
+////				sizeY += textBuffer.top + textBuffer.bottom;
+//				dataCell.cellSize = Mathf.Max (80f, 40f + sizeY);
+//				Debug.Log ("set size "+dataCell.cellSize);
+//				responseText.GetComponent<RectTransform> ().sizeDelta = new Vector2 (responseText.GetComponent<RectTransform> ().sizeDelta.x, responseText.preferredHeight);
+//			}
 
+			responseText.GetComponent<RectTransform> ().sizeDelta = new Vector2 (responseText.GetComponent<RectTransform> ().sizeDelta.x, dataCell.cellSize);
 			int date = int.Parse(currDataCell.createdAt.ToString ("dd"));
 			createdTimeText.text = AddOrdinal(date) + " " + currDataCell.createdAt.ToString("MMM");
 			if (currDataCell.profilePicSprite == null) {

@@ -52,7 +52,7 @@ namespace Cerebro
 				return;
 			}
 			nextPageToken = null;
-			Cerebro.LaunchList.instance.SendYoutubeAnalytics ("you_tube_search_log", System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), searchField.text, "", "", "");
+			Cerebro.LaunchList.instance.SendYoutubeAnalytics ("youtube_search_log", System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), searchField.text, "", "", "");
 
 			youtubeVideoSelector.youtubeVideosData = new List<VideoData> ();
 			youtubeVideoSelector.Reload ();

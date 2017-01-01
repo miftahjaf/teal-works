@@ -202,7 +202,6 @@ namespace EnhancedUI.EnhancedScroller
         /// </summary>
         public ScrollerTweeningChangedDelegate scrollerTweeningChanged;
 
-
         /// <summary>
         /// The Delegate is what the scroller will call when it needs to know information about
         /// the underlying data or views. This allows a true MVC process.
@@ -968,7 +967,7 @@ namespace EnhancedUI.EnhancedScroller
         /// It also sets up the loop triggers and positions and initializes the cell views.
         /// </summary>
         /// <param name="keepPosition">If true, then the scroller will try to go back to the position it was at before the resize</param>
-		private void _Resize(bool keepPosition)
+        private void _Resize(bool keepPosition)
         {
             // cache the original position
             var originalScrollPosition = _scrollPosition;
@@ -1111,7 +1110,7 @@ namespace EnhancedUI.EnhancedScroller
         /// <summary>
         /// This sets up the visible cells, adding and recycling as necessary
         /// </summary>
-		private void _ResetVisibleCellViews()
+        private void _ResetVisibleCellViews()
         {
             int startIndex;
             int endIndex;
@@ -1232,7 +1231,6 @@ namespace EnhancedUI.EnhancedScroller
             // request a cell view from the delegate
             var cellView = _delegate.GetCellView(this, dataIndex, cellIndex);
 
-			
             // set the cell's properties
             cellView.cellIndex = cellIndex;
             cellView.dataIndex = dataIndex;
@@ -1272,7 +1270,7 @@ namespace EnhancedUI.EnhancedScroller
         /// This function adjusts the two padders that control the first cell view's
         /// offset and the overall size of each cell.
         /// </summary>
-		private void _SetPadders()
+        private void _SetPadders()
         {
             if (NumberOfCells == 0) return;
 
@@ -1305,7 +1303,7 @@ namespace EnhancedUI.EnhancedScroller
         /// <summary>
         /// This function is called if the scroller is scrolled, updating the active list of cells
         /// </summary>
-		private void _RefreshActive()
+        private void _RefreshActive()
         {
             _refreshActive = false;
 
@@ -1478,7 +1476,7 @@ namespace EnhancedUI.EnhancedScroller
             if (_reloadData)
             {
                 // if the reload flag is true, then reload the data
-				ReloadData();
+                ReloadData();
             }
 
             // if the scroll rect size has changed and looping is on,
@@ -1542,7 +1540,7 @@ namespace EnhancedUI.EnhancedScroller
         /// Handler for when the scroller changes value
         /// </summary>
         /// <param name="val">The scroll rect's value</param>
-		public void _ScrollRect_OnValueChanged(Vector2 val)
+        private void _ScrollRect_OnValueChanged(Vector2 val)
         {
             // set the internal scroll position
             if (scrollDirection == ScrollDirectionEnum.Vertical)
@@ -2051,9 +2049,7 @@ namespace EnhancedUI.EnhancedScroller
             val = val - 1;
             return a * Mathf.Pow(2, -10 * val) * Mathf.Sin((val * d - s) * (2 * Mathf.PI) / p) * 0.5f + end + start;
         }
-			
+
         #endregion
-
-
     }
 }

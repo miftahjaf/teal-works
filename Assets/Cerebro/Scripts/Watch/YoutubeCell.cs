@@ -23,7 +23,7 @@ namespace Cerebro
 			CerebroHelper.DebugLog ("CLOSE WEBVIEW");
 			VideoHelper.instance.VideoEnded -= CloseWebView;
 			VideoEventArgs eventArgs = e as VideoEventArgs;
-			Cerebro.LaunchList.instance.SendYoutubeAnalytics ("you_tube_student_log", System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), youtubeVideoData.title, youtubeVideoData.videoId, eventArgs.timeStarted, eventArgs.timeEnded);
+			Cerebro.LaunchList.instance.SendYoutubeAnalytics ("youtube_student_log", System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), youtubeVideoData.title, youtubeVideoData.videoId, eventArgs.timeStarted, eventArgs.timeEnded);
 		}
 			
 

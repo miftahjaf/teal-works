@@ -240,10 +240,10 @@ namespace Cerebro
 
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["component_name"]= componentName;
-			N ["myData"] ["component_data"] ["student_id"] = studentID;
+			N ["myData"] ["component_data"] ["fk_user_id"] = studentID;
 			N ["myData"] ["component_data"] ["created_at"] = createdAt.ToString ();
 
-			if (componentName == "you_tube_student_log") 
+			if (componentName == "youtube_student_log") 
 			{
 				N ["myData"] ["component_data"] ["video_title"] = searchOrVideoText;
 				N ["myData"] ["component_data"] ["video_id"] = videoId;
@@ -1304,6 +1304,56 @@ namespace Cerebro
 		//
 		// PUT Requests
 		//
+
+		public void SendUrbanDeviceToken(string deviceToken)
+		{
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey, "1");
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			N ["myData"] ["student_id"] = studentID;
+			N ["myData"] ["device_token"] = deviceToken;
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArraySimpleJSON (SERVER_URL + "student/device_token/set", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString () != "") {
+					CerebroHelper.DebugLog ("Added new row");
+					if(jsonResponse["is_success"].Value == "true")
+					{
+						Debug.Log ("token sent successfully");
+					}
+					else
+					{
+						Debug.Log("token not sent");
+					}
+				}  else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+				}
+			} );
+		}
+
+		public void RemoveDeviceToken()
+		{
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey, "1");
+			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
+			N ["myData"] ["student_id"] = studentID;
+			CerebroHelper.DebugLog (N ["myData"].ToString ());
+			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
+			CreatePostRequestByteArraySimpleJSON (SERVER_URL + "student/device_token/unset", formData, (jsonResponse) => {
+				if (jsonResponse != null && jsonResponse.ToString () != "") {
+					CerebroHelper.DebugLog ("Added new row");
+					if(jsonResponse["is_success"].Value == "true")
+					{
+						CerebroHelper.DebugLog("Removed device token from server");
+					}
+					else
+					{
+						CerebroHelper.DebugLog("Removed device token from server failed");
+					}
+				}  else {
+					CerebroHelper.DebugLog ("EXCEPTION GetItemAsync");
+					CerebroHelper.DebugLog("Removed device token from server failed");
+				}
+			} );
+		}
 
 		public void SendHomeworkResponseWC(string homeworkContextId, string createdAt, string response, Action<bool> callback)
 		{

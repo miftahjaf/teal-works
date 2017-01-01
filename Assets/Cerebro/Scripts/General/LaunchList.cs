@@ -184,6 +184,9 @@ namespace Cerebro
 			if (WelcomeScript.instance) {
 				WelcomeScript.instance.DestroyPooledPrefabs ();
 			}
+			if (HTTPRequestHelper.instance != null) {
+				HTTPRequestHelper.instance.RemoveDeviceToken ();
+			}
 			mSubjects.Clear ();
 			mTopics.Clear ();
 			mSubtopics.Clear ();
@@ -1239,6 +1242,12 @@ namespace Cerebro
 				} else if (i == (int)Cerebro.TableTypes.tStudent) {
 					mTableLoaded [i] = false;
 					GetStudentData (studentID, grade);
+					if (PlayerPrefs.HasKey (PlayerPrefKeys.DeviceToken)) {
+						Debug.Log ("added token");
+						HTTPRequestHelper.instance.SendUrbanDeviceToken (PlayerPrefs.GetString (PlayerPrefKeys.DeviceToken));
+					} else {
+						Debug.Log ("added token not set");
+					}
 				}
 			}
 		}

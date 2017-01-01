@@ -78,6 +78,7 @@ namespace Cerebro {
 		public const string IsConvertedToJSON = "IsConvertedToJSON";
 		public const string CerebroLastVersion = "CerebroLastVersion";
 		public const string LastLocalTime = "LastLocalTime";
+		public const string DeviceToken = "DeviceToken";
 	}
 
 	public static class PrefabManager
