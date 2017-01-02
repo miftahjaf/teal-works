@@ -174,6 +174,7 @@ namespace Cerebro
 			VideoInfo video = YoutubeHelper.RequestVideo (videoID);
 			string url = video.DownloadUrl;
 			_webView.EvaluatingJavaScript ("loadVideo('" + url + "')");
+			_webView.EvaluatingJavaScript ("setVideoName('" + video.Title + "')");
 		}
 
 		UniWebView CreateWebView ()
