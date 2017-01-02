@@ -4745,6 +4745,7 @@ namespace Cerebro
 		public string MediaURL { get; set; }
 		public string PromptText { get; set; }
 		public string SubPromptText { get; set; }
+		public int CharLimit { get; set; }
 		public bool UserSubmitted { get; set; }
 		public string UserResponse { get; set; }
 	}

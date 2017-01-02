@@ -72,6 +72,7 @@ namespace Cerebro
 			GetComponent<RectTransform> ().anchoredPosition = new Vector3 (0f, 0f);
 			GetComponent<RectTransform> ().sizeDelta = new Vector2 (0f, 0f);
 
+			charLimit = LaunchList.instance.mDescribeImage.CharLimit;
 			inputFieldCharLimit.text = charLimit.ToString ();
 
 			userAnswerText = subjectivePanel.transform.Find ("InputField").gameObject.GetChildByName<Text> ("Text");

@@ -747,6 +747,14 @@ namespace Cerebro
 						d.MediaURL = jsonResponse ["media_url"].Value;
 						d.PromptText = jsonResponse ["prompt_text"].Value;
 						d.SubPromptText = jsonResponse ["sub_prompt_text"].Value;
+						if(jsonResponse ["word_limit"] != null)
+						{
+							d.CharLimit = jsonResponse ["word_limit"].AsInt;
+						}
+						else 
+						{
+							d.CharLimit = 500;
+						}
 					}
 					LaunchList.instance.mDescribeImage = d;
 					LaunchList.instance.GotEnglishImage ();
