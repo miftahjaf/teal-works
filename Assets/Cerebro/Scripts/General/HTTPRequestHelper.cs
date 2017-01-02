@@ -1256,8 +1256,11 @@ namespace Cerebro
 
 		public void GetHomeworkFeed(string studentId, int pageSize, int pageCount, Action<JSONNode> callback)
 		{
+			if (!LaunchList.instance.mhasInternet) {
+				callback(null);
+				return;
+			}
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
-//			studentId = "6";
 			N ["myData"] ["request_data"] ["user_id"] = studentId;
 			N ["myData"] ["request_data"] ["page_size"] = pageSize.ToString();
 			N ["myData"] ["request_data"] ["page_count"] = pageCount.ToString();
@@ -1282,8 +1285,6 @@ namespace Cerebro
 
 		public void GetResponseFeed(string homeworkId, Action<JSONNode> callback)
 		{
-			Debug.Log ("calling response feed");
-//			homeworkId = "4987";
 			CreateGetRequestSimpleJSON (SERVER_NEW_URL + "homework/teacher/responsefeed/get?hwc_id="+homeworkId, (jsonResponse) => {
 				if (jsonResponse != null && jsonResponse.ToString () != "") {
 					if(jsonResponse["response"]["is_success"] != null && jsonResponse["response"]["is_success"].Value == "true")
@@ -1307,7 +1308,7 @@ namespace Cerebro
 
 		public void SendUrbanDeviceToken(string deviceToken)
 		{
-			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey, "1");
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey, "");
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["student_id"] = studentID;
 			N ["myData"] ["device_token"] = deviceToken;
@@ -1332,7 +1333,7 @@ namespace Cerebro
 
 		public void RemoveDeviceToken()
 		{
-			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey, "1");
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey, "");
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["student_id"] = studentID;
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
@@ -1359,7 +1360,7 @@ namespace Cerebro
 		{
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["request_data"] ["hwc_id"] = homeworkContextId;
-			N ["myData"] ["request_data"] ["created_at"] = createdAt;
+			N ["myData"] ["request_data"] ["created_at"] = LaunchList.instance.ConvertDateToStandardString (DateTime.Now);//createdAt;
 			N ["myData"] ["request_data"] ["type"] = "wc";
 			N ["myData"] ["request_data"] ["data"] ["response"] = response;
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
@@ -1384,10 +1385,11 @@ namespace Cerebro
 
 		public void SendHomeworkComment(string homeworkContextId, string createdAt, string teacherId, string comment, Action<bool> callback)
 		{
-			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
+			Debug.Log ("sending cmt");
+			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey, "");
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["request_data"] ["hwc_id"] = homeworkContextId;
-			N ["myData"] ["request_data"] ["created_at"] = createdAt;
+			N ["myData"] ["request_data"] ["created_at"] = LaunchList.instance.ConvertDateToStandardString (DateTime.Now);//createdAt;
 			N ["myData"] ["request_data"] ["from"] = studentID;
 			N ["myData"] ["request_data"] ["to"] = teacherId;
 			N ["myData"] ["request_data"] ["data"] ["comment"] = comment;
@@ -1415,7 +1417,7 @@ namespace Cerebro
 		{
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["request_data"] ["hwc_id"] = homeworkContextId;
-			N ["myData"] ["request_data"] ["created_at"] = createdAt;
+			N ["myData"] ["request_data"] ["created_at"] = LaunchList.instance.ConvertDateToStandardString (DateTime.Now);//createdAt;
 			N ["myData"] ["request_data"] ["type"] = "announcement";
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
@@ -2003,7 +2005,7 @@ namespace Cerebro
 				} else {
 					CerebroHelper.DebugLog ("Error in request " + request.exception);
 				}
-				CerebroHelper.DebugLog ("current response -------------" + json);
+				CerebroHelper.DebugLog ("current response ------"+url+"-------" + json);
 				if (IsJson (json)) {
 					JSONNode jsonObject = JSONSimple.Parse (json);
 					callback (jsonObject);

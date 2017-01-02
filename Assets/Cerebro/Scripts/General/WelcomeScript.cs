@@ -337,7 +337,7 @@ namespace Cerebro
 				practiceData.text = GetPracticeCount (today) ["attempts"].ToString () + " questions solved";
 			}
 
-			homeworkData.text = "Pending";
+			homeworkData.text = "Do your workout";
 		}
 
 		public Dictionary<string,int> GetPracticeCount (string date)

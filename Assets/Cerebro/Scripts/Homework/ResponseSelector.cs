@@ -66,6 +66,7 @@ namespace Cerebro
 		public TeacherData teacherData;
 		public bool isLateSubmission;
 		public CommentFrom from;
+		public bool isFromLocal;
 		public Sprite profilePicSprite;
 		public float cellSize;
 
@@ -92,11 +93,12 @@ namespace Cerebro
 			teacherData = new TeacherData ();
 			isLateSubmission = false;
 			from = CommentFrom.Me;
+			isFromLocal = false;
 			profilePicSprite = null;
 			cellSize = 0;
 		}
 
-		public ResponseData(string _id, string _title, string _responseText, string _profilePicUrl, System.DateTime _createdAt, ResponseType _responseType, CommentFrom _from)
+		public ResponseData(string _id, string _title, string _responseText, string _profilePicUrl, System.DateTime _createdAt, ResponseType _responseType, CommentFrom _from, bool _isFromLocal)
 		{
 			id = _id;
 			title = _title;
@@ -107,6 +109,7 @@ namespace Cerebro
 			teacherData = new TeacherData ();
 			isLateSubmission = false;
 			from = _from;
+			isFromLocal = _isFromLocal;
 			profilePicSprite = null;
 			cellSize = 0;
 		}

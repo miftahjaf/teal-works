@@ -146,6 +146,9 @@ namespace Cerebro
 			InputField subjectiveField = subjectivePanel.GetChildByName<InputField> ("InputField");
 			subjectiveField.text = "";
 
+			charLimit = currQuestion.wordLimit;
+			inputFieldCharLimit.text = charLimit.ToString ();
+
 			print (subjectivePanel.transform.parent.gameObject.GetComponent<RectTransform> ().anchoredPosition);
 			print (subjectivePanel.transform.parent.gameObject.GetComponent<RectTransform> ().sizeDelta);
 
@@ -222,7 +225,7 @@ namespace Cerebro
 		{
 			if (!IsSuccess) {
 				string id = SaveResponseLocal ();
-				WCResponse res = new WCResponse (id, userAnswerText.text, IsSuccess, creationTime);
+				WCResponse res = new WCResponse (id, userAnswerText.text, creationTime);
 				currDataCell.wcData.userResponses.Add (res);
 			}
 			LoaderView.SetActive (false);

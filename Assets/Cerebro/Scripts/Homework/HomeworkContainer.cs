@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using SimpleJSON;
@@ -27,13 +28,13 @@ namespace Cerebro
 			hwData = new HomeworkData ();
 			ProgressCircle.SetActive (true);
 			isMoreFeed = true;
-			NoFeedAvailable.SetActive (false);
 			LoadNextPage ();
 		}
 
 		public void RefreshFeed()
 		{
 			hwData = new HomeworkData ();
+			homeworkSelector.GetComponent<CanvasGroup> ().alpha = 0f;
 			ProgressCircle.SetActive (true);
 			isMoreFeed = true;
 			NoFeedAvailable.SetActive (false);
@@ -48,6 +49,7 @@ namespace Cerebro
 				homeworkSelector.isHomeworkFeedLoading = false;
 				return;
 			}
+			NoFeedAvailable.SetActive (false);
 			currPage++;
 			string studentId = PlayerPrefs.GetString (PlayerPrefKeys.IDKey, "1");
 			HTTPRequestHelper.instance.GetHomeworkFeed (studentId, countPerPage, currPage, OnGotResponseFeed);
@@ -75,6 +77,7 @@ namespace Cerebro
 			}
 			homeworkSelector.isHomeworkFeedLoading = false;
 			ProgressCircle.SetActive (false);
+			homeworkSelector.GetComponent<CanvasGroup> ().alpha = 1f;
 		}
 
 		void SaveHomeworkFeedToLocal()
@@ -133,7 +136,7 @@ namespace Cerebro
 						JSONNode res = N ["Data"] ["Response"] [i];
 						HomeworkDataCell dataCell = hwData.dataList.Find (x => x.contextId == res ["contextId"].Value);
 						if (dataCell != null) {
-							dataCell.wcData.userResponses.Add (new WCResponse (id, res ["responseData"].Value, false, LaunchList.instance.ConvertStringToStandardDate(res ["createdAt"].Value)));
+							dataCell.wcData.userResponses.Add (new WCResponse (id, res ["responseData"].Value, LaunchList.instance.ConvertStringToStandardDate(res ["createdAt"].Value)));
 						}
 					}
 				}
@@ -156,7 +159,6 @@ namespace Cerebro
 						HomeworkDataCell dataCell = hwData.dataList.Find (x => x.contextId == ann ["contextId"].Value);
 						if (dataCell != null) {
 							dataCell.announcementData.isRead = true;
-							dataCell.announcementData.uploadedToServer = false;
 						}
 					}
 				}
@@ -184,6 +186,7 @@ namespace Cerebro
 					}
 				}
 			}
+			homeworkSelector.GetComponent<ScrollRect> ().verticalNormalizedPosition = 1f;
 			homeworkSelector.ReloadData ();	
 		}
 

@@ -18,13 +18,13 @@ namespace Cerebro
 		private GameObject ProgressCircle;
 		public GameObject FullScreenImage;
 		public GameObject AssessmentListGm;
+		public bool ScrollListToEnd = false;
 
 		private WritersCornerData currData;
 		private ResponseSelector responseSelector;
 		private System.DateTime commentCreationTime;
 		private bool isImageFullScreen;
 		private GameObject parentForWC;
-		private bool fromComment = false;
 		public Text tempText;
 
 		public HomeworkDataCell currDataCell;
@@ -134,6 +134,7 @@ namespace Cerebro
 						rd.responseType = ResponseData.ResponseType.Submission;
 						rd.isLateSubmission = currDataCell.isLateSubmission;
 						rd.from = ResponseData.CommentFrom.Me;
+						rd.isFromLocal = rFeed [i].isFromLocal;
 						responseData.Add (rd);
 					}
 				} else {
@@ -152,6 +153,7 @@ namespace Cerebro
 						rd.responseText = cmt.comment;
 						rd.createdAt = cmt.createdAt;
 						rd.responseType = ResponseData.ResponseType.Comment;
+						rd.isFromLocal = rFeed [i].isFromLocal;
 						responseData.Add (rd);
 					}
 				}
@@ -162,10 +164,11 @@ namespace Cerebro
 			AssessmentListGm.GetComponent<HomeworkAssessments> ().InitializeAssessments (currDataCell);
 //			StopCoroutine ("WaitForTextAdjust");
 //			StartCoroutine ("WaitForTextAdjust", fromUpdate);
-			if (fromComment) {
+			if (ScrollListToEnd) {
 				responseSelector.GetComponent<ScrollRect> ().verticalNormalizedPosition = 0f;
 			}
-			fromComment = false;
+			responseSelector.GetComponent<ScrollRect> ().verticalNormalizedPosition = 0f;
+			ScrollListToEnd = false;
 		}
 
 		IEnumerator WaitForTextAdjust(bool fromUpdate = false)
@@ -332,14 +335,15 @@ namespace Cerebro
 		public void OnSaveComment(bool IsSuccess)
 		{
 			if (IsSuccess) {
-				fromComment = true;
+				ScrollListToEnd = true;
 				RefreshResponseFeed ();
 			} else {
 				string id = SaveCommentLocal ();
 				ProgressCircle.SetActive (false);
 				HomeworkComment cmt = new HomeworkComment (id, CommentTextfield.text, commentCreationTime, LaunchList.instance.mCurrentStudent.StudentID, HomeworkComment.CommentFrom.Me);
 				currDataCell.comments.Add (cmt);
-				currDataCell.responseFeed.Add(new ResponseFeed(id, ResponseFeed.ResponseType.Comment));
+				currDataCell.responseFeed.Add(new ResponseFeed(id, true, ResponseFeed.ResponseType.Comment));
+				ScrollListToEnd = true;
 				ReloadData ();
 			}
 			CommentTextfield.text = "";

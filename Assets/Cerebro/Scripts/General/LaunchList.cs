@@ -2946,6 +2946,7 @@ namespace Cerebro
 		{
 			//CheckLocalMissionCompleteJSON ();
 			UploadCompletedMission();
+			CheckForHomeworkResponseToSend ();
 			ScanTables ();
 		}
 
@@ -4261,6 +4262,7 @@ namespace Cerebro
 
 		public void CheckForHomeworkResponseToSend ()
 		{
+			Debug.Log ("checking for hw offline");
 			string fileName = Application.persistentDataPath + "/HomeworkResponseLocalJSON.txt";
 			if (File.Exists (fileName)) {
 				string data = File.ReadAllText (fileName);
@@ -4280,6 +4282,7 @@ namespace Cerebro
 					for (int i = 0; i < cnt; i++) {
 						lastIdHwResponseSent = N ["Data"] ["Comment"] [i] ["id"].Value;
 						JSONNode cmt = N ["Data"] ["Comment"] [i];
+						Debug.Log ("found cmt "+cmt ["commentData"].Value);
 						HTTPRequestHelper.instance.SendHomeworkComment (cmt ["contextId"].Value, cmt ["createdAt"].Value, cmt ["teacherId"].Value, cmt ["commentData"].Value, HomeworkResponseSent);
 						return;
 					}
@@ -4298,45 +4301,48 @@ namespace Cerebro
 
 		public void HomeworkResponseSent(bool isSuccess)
 		{
-			string fileName = Application.persistentDataPath + "/HomeworkResponseLocalJSON.txt";
-			JSONNode N = JSONClass.Parse ("{\"Data\"}");
-			JSONNode N1 = JSONClass.Parse ("{\"Data\"}");
-			if (File.Exists (fileName)) {				
-				string data = File.ReadAllText (fileName);
-				N = JSONClass.Parse (data);
-				File.WriteAllText (fileName, string.Empty);
-				int myCnt = 0;
-				if(N ["Data"] ["Response"] != null) {
-					for (int i = 0; i < N ["Data"] ["Response"].Count; i++) {
-						if (N ["Data"] ["Response"] [i] ["id"].Value != lastIdHwResponseSent) {
-							N1 ["Data"] ["Response"] [myCnt] = N ["Data"] ["Response"] [i];
-							myCnt++;
+			Debug.Log ("homework sent "+isSuccess);
+			if (isSuccess) {
+				string fileName = Application.persistentDataPath + "/HomeworkResponseLocalJSON.txt";
+				JSONNode N = JSONClass.Parse ("{\"Data\"}");
+				JSONNode N1 = JSONClass.Parse ("{\"Data\"}");
+				if (File.Exists (fileName)) {				
+					string data = File.ReadAllText (fileName);
+					N = JSONClass.Parse (data);
+					File.WriteAllText (fileName, string.Empty);
+					int myCnt = 0;
+					if (N ["Data"] ["Response"] != null) {
+						for (int i = 0; i < N ["Data"] ["Response"].Count; i++) {
+							if (N ["Data"] ["Response"] [i] ["id"].Value != lastIdHwResponseSent) {
+								N1 ["Data"] ["Response"] [myCnt] = N ["Data"] ["Response"] [i];
+								myCnt++;
+							}
 						}
+						myCnt++;
 					}
-					myCnt++;
-				}
-				myCnt = 0;
-				if(N ["Data"] ["Comment"] != null) {
-					for (int i = 0; i < N ["Data"] ["Comment"].Count; i++) {
-						if (N ["Data"] ["Comment"] [i] ["id"].Value != lastIdHwResponseSent) {
-							N1 ["Data"] ["Comment"] [myCnt] = N ["Data"] ["Comment"] [i];
-							myCnt++;
+					myCnt = 0;
+					if (N ["Data"] ["Comment"] != null) {
+						for (int i = 0; i < N ["Data"] ["Comment"].Count; i++) {
+							if (N ["Data"] ["Comment"] [i] ["id"].Value != lastIdHwResponseSent) {
+								N1 ["Data"] ["Comment"] [myCnt] = N ["Data"] ["Comment"] [i];
+								myCnt++;
+							}
 						}
+						myCnt++;
 					}
-					myCnt++;
-				}
-				myCnt = 0;
-				if(N ["Data"] ["Announcement"] != null) {
-					for (int i = 0; i < N ["Data"] ["Announcement"].Count; i++) {
-						if (N ["Data"] ["Announcement"] [i] ["id"].Value != lastIdHwResponseSent) {
-							N1 ["Data"] ["Announcement"] [myCnt] = N ["Data"] ["Announcement"] [i];
-							myCnt++;
+					myCnt = 0;
+					if (N ["Data"] ["Announcement"] != null) {
+						for (int i = 0; i < N ["Data"] ["Announcement"].Count; i++) {
+							if (N ["Data"] ["Announcement"] [i] ["id"].Value != lastIdHwResponseSent) {
+								N1 ["Data"] ["Announcement"] [myCnt] = N ["Data"] ["Announcement"] [i];
+								myCnt++;
+							}
 						}
+						myCnt++;
 					}
-					myCnt++;
+					N1 ["VersionNumber"] = N ["VersionNumber"].Value;
+					File.WriteAllText (fileName, N1.ToString ());
 				}
-				N1 ["VersionNumber"] = N ["VersionNumber"].Value;
-				File.WriteAllText (fileName, N1.ToString());
 			}
 		}
 

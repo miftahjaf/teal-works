@@ -13,6 +13,7 @@ namespace Cerebro {
 		public Text lateSubmissionText;
 		public Text responseText;
 		public Text createdTimeText;
+		public Text notSubmittedText;
 		public Sprite defaultSprite;
 
 		private ResponseData mCurrDataCell;
@@ -49,8 +50,15 @@ namespace Cerebro {
 //			}
 
 			responseText.GetComponent<RectTransform> ().sizeDelta = new Vector2 (responseText.GetComponent<RectTransform> ().sizeDelta.x, dataCell.cellSize);
-			int date = int.Parse(currDataCell.createdAt.ToString ("dd"));
-			createdTimeText.text = AddOrdinal(date) + " " + currDataCell.createdAt.ToString("MMM");
+			if (dataCell.isFromLocal) {
+				createdTimeText.gameObject.SetActive (false);
+				notSubmittedText.gameObject.SetActive (true);
+			} else {
+				createdTimeText.gameObject.SetActive (true);
+				notSubmittedText.gameObject.SetActive (false);
+				int date = int.Parse (currDataCell.createdAt.ToString ("dd"));
+				createdTimeText.text = AddOrdinal (date) + " " + currDataCell.createdAt.ToString ("MMM");
+			}
 			if (currDataCell.profilePicSprite == null) {
 				profilePicSprite.sprite = defaultSprite;
 				if (currDataCell.from == ResponseData.CommentFrom.Me) {

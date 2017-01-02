@@ -264,6 +264,7 @@ namespace Cerebro {
 					res.FillData (jsonNode ["context_feed"] ["responses"] [feed.dataId]);
 					wcData.userResponses.Add (res);
 				}
+				feed.isFromLocal = false;
 				responseFeed.Add (feed);
 			}
 
@@ -292,11 +293,19 @@ namespace Cerebro {
 			N ["Data"] ["thumbnailUrl"] = thumbnailUrl;
 			N ["Data"] ["userSubmitted"] = userSubmitted.ToString();
 			if (questionType == QuestionType.wc) {
-				N ["Data"] ["wcData"] = wcData.ConvertFeedToJson ();
+				if (wcData != null) {
+					N ["Data"] ["wcData"] = wcData.ConvertFeedToJson ();
+				} else {
+					N ["Data"] ["wcData"] = "";
+				}
 				N ["Data"] ["announcementData"] = "";
 			} else if (questionType == QuestionType.announcement) {
 				N ["Data"] ["wcData"] = "";
-				N ["Data"] ["announcementData"] = announcementData.ConvertFeedToJson ();
+				if (announcementData != null) {
+					N ["Data"] ["announcementData"] = announcementData.ConvertFeedToJson ();
+				} else {
+					N ["Data"] ["announcementData"] = "";
+				}
 			}
 
 			return N ["Data"];
@@ -315,7 +324,9 @@ namespace Cerebro {
 				N ["Data"] ["comments"] [comments[i].id] ["fromId"] = comments[i].fromId;
 				N ["Data"] ["comments"] [comments[i].id] ["fromType"] = comments[i].fromType.ToString();
 			}
-			N ["Data"] ["userResponses"] = wcData.ConvertResponseToJson ();
+			if (wcData.userResponses.Count > 0) {
+				N ["Data"] ["userResponses"] = wcData.ConvertResponseToJson ();
+			}
 			cnt = 0;
 			foreach(string key in teacherData.Keys)
 			{
@@ -418,6 +429,7 @@ namespace Cerebro {
 				ResponseFeed feed = new ResponseFeed ();
 				feed.dataId = jsonNode ["responseFeed"] [i] ["dataId"].Value;
 				feed.responseType = jsonNode ["responseFeed"] [i] ["responseType"].Value.ToEnum<ResponseFeed.ResponseType>();
+				feed.isFromLocal = true;
 				responseFeed.Add (feed);
 			}
 		}
@@ -450,6 +462,7 @@ namespace Cerebro {
 	public class ResponseFeed
 	{
 		public string dataId;
+		public bool isFromLocal;
 		public ResponseType responseType;
 
 		public enum ResponseType
@@ -461,12 +474,14 @@ namespace Cerebro {
 		public ResponseFeed()
 		{
 			dataId = "";
+			isFromLocal = false;
 			responseType = ResponseType.Submission;
 		}
 
-		public ResponseFeed(string _dataId, ResponseType _responseType)
+		public ResponseFeed(string _dataId, bool _isFromLocal, ResponseType _responseType)
 		{
 			dataId = _dataId;
+			isFromLocal = _isFromLocal;
 			responseType = _responseType;
 		}
 	}
@@ -607,7 +622,6 @@ namespace Cerebro {
 			{
 				N ["Data"] [userResponses[i].id] ["id"] = userResponses[i].id;
 				N ["Data"] [userResponses[i].id] ["userResponse"] = userResponses[i].userResponse;
-				N ["Data"] [userResponses[i].id] ["uploadedToServer"] = userResponses[i].uploadedToServer.ToString();
 				N ["Data"] [userResponses[i].id] ["createdAt"] = LaunchList.instance.ConvertDateToStandardString (userResponses [i].createdAt);
 			}
 			return N ["Data"];
@@ -631,7 +645,6 @@ namespace Cerebro {
 				WCResponse res = new WCResponse ();
 				res.id = jsonNode [i] ["id"].Value;
 				res.userResponse = jsonNode [i] ["userResponse"].Value;
-				res.uploadedToServer = jsonNode [i] ["uploadedToServer"].AsBool;
 				res.createdAt = LaunchList.instance.ConvertStringToStandardDate(jsonNode [i] ["createdAt"].Value);
 				userResponses.Add (res);
 			}
@@ -642,22 +655,19 @@ namespace Cerebro {
 	{
 		public string id;
 		public string userResponse;
-		public bool uploadedToServer;
 		public System.DateTime createdAt;
 
 		public WCResponse()
 		{
 			id = "";
 			userResponse = "";
-			uploadedToServer = false;
 			createdAt = System.DateTime.Now;
 		}
 
-		public WCResponse(string _id, string _userResponse, bool _uploadedToServer, System.DateTime _createdAt)
+		public WCResponse(string _id, string _userResponse, System.DateTime _createdAt)
 		{
 			id = _id;
 			userResponse = _userResponse;
-			uploadedToServer = _uploadedToServer;
 			createdAt = _createdAt;
 		}
 
@@ -665,7 +675,6 @@ namespace Cerebro {
 		{
 			id = jsonNode ["item_id"].Value;
 			userResponse = jsonNode ["data"] ["response"].Value;
-			uploadedToServer = true;
 			string date = jsonNode ["created_at"].Value;
 			if (date.Length > 18) {
 				date = date.Substring (0, 19);
@@ -683,7 +692,6 @@ namespace Cerebro {
 		public string announcementText;
 		public string thumbnailUrl;
 		public bool isRead;
-		public bool uploadedToServer;
 
 		public AnnouncementData()
 		{
@@ -691,16 +699,14 @@ namespace Cerebro {
 			announcementText = "";
 			thumbnailUrl = "";
 			isRead = false;
-			uploadedToServer = false;
 		}
 
-		public AnnouncementData(string _id, string _announcementText, string _thumbnailUrl, bool _isRead, bool _uploadedToServer)
+		public AnnouncementData(string _id, string _announcementText, string _thumbnailUrl, bool _isRead)
 		{
 			id = _id;
 			announcementText = _announcementText;
 			thumbnailUrl = _thumbnailUrl;
 			isRead = _isRead;
-			uploadedToServer = _uploadedToServer;
 		}
 
 		public void FillAnnouncementData(JSONNode jsonNode)
@@ -724,7 +730,6 @@ namespace Cerebro {
 			JSONNode N = JSONSimple.Parse ("{\"Data\"}");
 			N ["Data"] ["id"] = id;
 			N ["Data"] ["isRead"] = isRead.ToString();
-			N ["Data"] ["uploadedToServer"] = uploadedToServer.ToString();
 			return N ["Data"];
 		}
 
@@ -738,7 +743,6 @@ namespace Cerebro {
 		public void FeelResponseDataFromLocal(JSONNode jsonNode)
 		{
 			isRead = jsonNode ["isRead"].AsBool;
-			uploadedToServer = jsonNode ["uploadedToServer"].AsBool;
 		}
 	}
 

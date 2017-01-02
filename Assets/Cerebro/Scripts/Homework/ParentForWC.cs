@@ -8,6 +8,7 @@ namespace Cerebro
 		
 		public void BackFromWC()
 		{
+			transform.parent.GetComponent<AssignmentResponseView> ().ScrollListToEnd = true;
 			transform.parent.GetComponent<AssignmentResponseView> ().RefreshResponseFeed ();
 		}
 

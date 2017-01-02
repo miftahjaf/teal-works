@@ -16,6 +16,7 @@ namespace Cerebro
 
 		public void OnBackPressed()
 		{
+			transform.parent.GetComponent<ParentForAssignment> ().BackFromAssignment ();
 			Destroy (this.gameObject);
 		}
 
