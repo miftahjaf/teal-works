@@ -6,7 +6,7 @@ using MaterialUI;
 using System.Linq;
 
 namespace Cerebro {
-	public class Statistics6 : BaseAssessment {
+	public class Statistics7 : BaseAssessment {
 
 		private string Answer;
 		private List<string> options;
@@ -18,14 +18,14 @@ namespace Cerebro {
 		public Text StatTableColumn2;
 		public Text StatTableColumn3;
 		public GameObject MCQ;
-		public StatisticsHelper statisticsHelper;
+		public StatisticsHelper statisticsHelper; 
 		public GameObject CheckButton;
 		public GameObject numPadBg;
 		public int gridValOffset, axisValueOffset;
 
 		void Start () {
 
-			base.Initialise ("M", "STA06", "S01", "A01");
+			base.Initialise ("M", "STA07", "S01", "A01");
 
 			StartCoroutine(StartAnimation ());
 
@@ -256,7 +256,7 @@ namespace Cerebro {
 			#region level1
 			if (level == 1) 
 			{
-				selector = GetRandomSelector (1, 7);
+				selector = GetRandomSelector (1, 8);
 
 				if (selector == 1)
 				{
@@ -270,8 +270,8 @@ namespace Cerebro {
 					gridValOffset = axisValueOffset / 2;
 					int minValue, maxValue;
 					int numberOfBars = 5;
-					minValue = Random.Range (4, 8);
-					maxValue = Random.Range (10, 16);
+					minValue = Random.Range (2, 6);
+					maxValue = Random.Range (12, 16);
 
 					List<string> weekDays = new List<string>() {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
@@ -326,7 +326,7 @@ namespace Cerebro {
 					int minValue, maxValue;
 					int numberOfBars = 5;
 					minValue = Random.Range (6, 11);
-					maxValue = Random.Range (15, 21);
+					maxValue = 20;
 
 					List<string> Subjects = new List<string>() {"Maths", "Physics", "Biology", "Chemistry", "English", "Economy", "Philosophy", "Computer"};
 					Subjects.Shuffle ();
@@ -479,7 +479,7 @@ namespace Cerebro {
 					statisticsHelper.SetInteractable (true);
 					statisticsHelper.DrawGraph ();
 				}
-				else if (selector >= 5)
+				else if (selector == 4 || selector == 5)
 				{
 					subQuestionTEX.gameObject.SetActive (true);
 
@@ -550,12 +550,20 @@ namespace Cerebro {
 					);
 					statisticsHelper.DrawGraph ();
 				}
+				else if (selector == 6)
+				{
+					
+				}
+				else if (selector == 7)
+				{
+
+				}
 			}
 			#endregion
 			#region level2
 			else if (level == 2)
 			{
-				selector = GetRandomSelector (1, 5);
+				selector = GetRandomSelector (1, 6);
 
 				if (selector == 1)
 				{
@@ -737,12 +745,46 @@ namespace Cerebro {
 					statisticsHelper.SetInteractable (true);
 					statisticsHelper.DrawGraph ();
 				}
+				else if (selector == 5)
+				{
+					SetStatisticsMode ();
+					SetTable ();
+
+					List<string> TableContentsColumn1 = new List<string>();
+					List<string> TableContentsColumn2 = new List<string>();
+					List<string> TransportMode = new List<string>() {"School Bus", "Local Bus", "Bicycle", "Car", "Walking"};
+					TransportMode.Shuffle ();
+
+					int numberOfData = 5;
+					coeff = MathFunctions.GetPieDataSet (200, 1000, numberOfData, 50);
+
+					TableContentsColumn1.Add ("<size=25>Mode</size>");
+					TableContentsColumn1.AddRange (TransportMode);
+					TableContentsColumn2.Add ("<size=25>Number</size>");
+					foreach (int i in coeff){
+						TableContentsColumn2.Add (i.ToString ());
+					}
+					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
+					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
+
+					statisticsHelper.SetStatisticsType (StatisticsType.PieToDrag);
+					statisticsHelper.ShiftPosition (new Vector2 (-330, 110f));
+					statisticsHelper.SetPieParameters (
+						TransportMode,
+						coeff
+					);
+					statisticsHelper.SetInteractable(true);
+					statisticsHelper.SetPieRadius (100f); 
+					statisticsHelper.DrawGraph ();
+
+					QuestionText.text = string.Format ("The given table shows the various modes of transport used by the students to go to school and back home. Complete the pie chart to represent this data.");
+				}
 			}
 			#endregion
 			#region level3
 			else if (level == 3)
 			{
-				selector = GetRandomSelector (1, 5);
+				selector = GetRandomSelector (1, 6);
 
 				if (selector == 1)
 				{
@@ -924,6 +966,29 @@ namespace Cerebro {
 					statisticsHelper.DrawGraph ();
 
 					QuestionText.text = string.Format ("A packet of breakfast cereal weighing {0} gm contains four ingredients as given in the table. Complete the given pie chart for the data.", coeff.Sum ());
+				}
+				else if (selector == 5)  // show angles in pie
+				{
+					List<string> TableContentsColumn1 = new List<string>();
+					List<string> TableContentsColumn2 = new List<string>();
+					List<string> Expenses = new List<string>() {"Food", "House Rent", "Electricity Bill", "Water Bill ", "Savings", "School Fee"};
+					Expenses.Shuffle ();
+
+					int numberOfData = 6;
+					coeff = MathFunctions.GetPieDataSet (2000, 15000, numberOfData, 1000);
+
+					statisticsHelper.SetStatisticsType (StatisticsType.Pie);
+					statisticsHelper.ShiftPosition (new Vector2 (-360f, 180f));
+					statisticsHelper.SetPieParameters (
+						Expenses,
+						coeff
+					);
+					statisticsHelper.SetPieRadius (100f); 
+					statisticsHelper.DrawGraph ();
+
+					randSelector = Random.Range (0, Expenses.Count);
+					QuestionText.text = string.Format ("Mr. Allen's monthly income is Rs. {0} and his monthly expenses are represented by the given pie chart. How much (in Rs.) does he spend on '{1}'?", coeff.Sum (), Expenses[randSelector]);
+					Answer = string.Format ("{0}", coeff[randSelector]);
 				}
 			}
 			#endregion

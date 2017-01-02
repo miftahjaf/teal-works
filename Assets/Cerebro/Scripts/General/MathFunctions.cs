@@ -755,8 +755,8 @@ namespace Cerebro {
 					}
 				} while (pieDataSet.Sum () != total);
 			}
-			Debug.Log ("total = " + total + ", totalValidMin = " + factors[validTotalIndexInitial] + ", totalValidMax" + factors[validTotalIndexFinal - 1]);  // dont remove - helps in adjusting the parameters
-			Debug.Log ("Minimum Possible angle = " + (minValue * 360) / total);
+//			Debug.Log ("total = " + total + ", totalValidMin = " + factors[validTotalIndexInitial] + ", totalValidMax" + factors[validTotalIndexFinal - 1]);  // uncomment these two Debugs - helps in adjusting the parameters
+//			Debug.Log ("Minimum Possible angle = " + (minValue * 360) / total);
 			pieDataSet.Shuffle ();
 			return pieDataSet;
 		}
