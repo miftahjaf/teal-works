@@ -19,7 +19,7 @@ namespace Cerebro
 		public InputField searchField;
 		public Text errorText;
 		public YoutubeVideoSelector youtubeVideoSelector;
-
+		public GameObject progressBar;
 
 
 		private bool filterByDate = false;
@@ -51,6 +51,8 @@ namespace Cerebro
 			if (string.IsNullOrEmpty (searchField.text)) {
 				return;
 			}
+			errorText.text = "";
+			progressBar.SetActive (true);
 			nextPageToken = null;
 			Cerebro.LaunchList.instance.SendYoutubeAnalytics ("youtube_search_log", System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), searchField.text, "", "", "");
 
@@ -97,15 +99,27 @@ namespace Cerebro
 			Debug.Log (url);
 			WWW call = new WWW (url);
 			yield return call;
-			if (call.text == "" || call.text == null) {
+			progressBar.SetActive (false);
+			if (call.error!=null) {
 				errorText.text = "Something went wrong.";
+				youtubeVideoSelector.Reload ();
 				yield break;
+
 			}
+
 			Debug.Log (call.text);
 			JSONNode youtubeReturn = JSONNode.Parse (call.text);
 			nextPageToken = youtubeReturn["nextPageToken"].Value;
+
+			if (youtubeReturn["pageInfo"]["totalResults"].AsInt <= 0 ) {
+				errorText.text = "No video found.";
+			} else {
+				errorText.text = "";
+			}
+
 			youtubeReturn = youtubeReturn ["items"];
-			Debug.Log (nextPageToken);
+
+
 			for (int i = 0; i < youtubeReturn.Count; i++) {
 				VideoData youtubeVideoData = new VideoData ();
 				youtubeVideoData.videoId = youtubeReturn [i] ["id"] ["videoId"].Value;
