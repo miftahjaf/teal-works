@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Runtime.InteropServices;
 using NotificationServices = UnityEngine.iOS.NotificationServices;
 using NotificationType = UnityEngine.iOS.NotificationType;
+using UrbanAirship;
 
 namespace Cerebro
 {
@@ -12,11 +14,13 @@ namespace Cerebro
 
 		void Start () 
 		{
+			UAirship.Shared.UserNotificationsEnabled = true;
+			UAirship.Shared.OnPushReceived += OnPushReceived;
+			UAirship.Shared.OnChannelUpdated += OnChannelUpdated;
 			NotificationServices.RegisterForNotifications(
 				NotificationType.Alert | 
 				NotificationType.Badge | 
-				NotificationType.Sound);
-			PlayerPrefs.SetString (PlayerPrefKeys.DeviceToken, "0E897304089267975E76B9FEB6BFC81FF2F08AA774988B77BF0E59BA0E1FC07E");
+				NotificationType.Sound);			
 		}
 
 		void Update () {
@@ -28,11 +32,17 @@ namespace Cerebro
 					string hexToken = System.BitConverter.ToString(token).Replace("-", "");
 					Debug.Log ("got token "+hexToken);
 					Debug.Log ("token " + token.ToString());
-					PlayerPrefs.SetString (PlayerPrefKeys.DeviceToken, hexToken);
+//					PlayerPrefs.SetString (PlayerPrefKeys.DeviceToken, hexToken);
 					isTokenSent = true;
 				}
 			}
 			#endif
+		}
+
+		void OnDestroy ()
+		{
+			UAirship.Shared.OnPushReceived -= OnPushReceived;
+			UAirship.Shared.OnChannelUpdated -= OnChannelUpdated;
 		}
 
 		public void OnDeviceTokenSent(bool isSuccess)
@@ -43,5 +53,21 @@ namespace Cerebro
 				Debug.Log ("token not sent");
 			}
 		}
+
+		void OnChannelUpdated(string channelId) {
+			Debug.Log ("Channel updated: " + channelId);
+			PlayerPrefs.SetString (PlayerPrefKeys.DeviceToken, channelId);
+			HTTPRequestHelper.instance.SendUrbanDeviceToken (PlayerPrefs.GetString (PlayerPrefKeys.DeviceToken));
+		}
+
+		void OnPushReceived(PushMessage message) {
+			Debug.Log ("Received push! " + message.Alert);
+//			#if UNITY_IOS && !UNITY_EDITOR
+//			_ShowNativeAlert ("", message.Alert);
+//			#endif
+		}
+
+		[DllImport ("__Internal")]
+		private static extern void _ShowNativeAlert (string title, string message);
 	}
 }

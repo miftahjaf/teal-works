@@ -120,18 +120,30 @@ namespace Cerebro {
 					}
 				}
 			} else {
-				WWW remoteImage = new WWW (reqDataCell.profilePicUrl);
-				yield return remoteImage;
-				if (remoteImage.error == null) {
-					tex = remoteImage.texture;
+				string imgurl = reqDataCell.profilePicUrl;
+				if (CerebroHelper.remoteQuizTextures.ContainsKey (imgurl)) {
+					tex = CerebroHelper.remoteQuizTextures [imgurl];
+					yield return new WaitForSeconds (0.1f);
+				} else {
+					WWW remoteImage = new WWW (imgurl);
+					yield return remoteImage;
+					if (remoteImage.error == null) {
+						tex = remoteImage.texture;
+						if (!CerebroHelper.remoteQuizTextures.ContainsKey (imgurl)) {
+							CerebroHelper.remoteQuizTextures.Add (imgurl, tex);
+						}
+					} else {
+						print (remoteImage.error + ",for," + imgurl + " " + imgurl.Length);
+					}
+				}
+
+				if (tex != null) {
 					var newsprite = Sprite.Create (tex, new Rect (0f, 0f, tex.width, tex.height), new Vector2 (0.5f, 0.5f));
 					reqDataCell.profilePicSprite = newsprite;
 					if (currDataCell == reqDataCell) {
 						profilePicSprite.color = new Color (1, 1, 1, 1);
 						profilePicSprite.sprite = newsprite;
 					}
-				} else {
-					print (remoteImage.error + ",for," + reqDataCell.profilePicUrl + " " + reqDataCell.profilePicUrl.Length);
 				}
 			}
 		}
