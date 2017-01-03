@@ -395,11 +395,12 @@ namespace Cerebro {
 				} else if (selector == 5) {
 
 					subQuestionTEX.gameObject.SetActive (true);
-					num1 = 100 * Random.Range (10, 50);
-					num2 = Random.Range (4, 15);
-					num3 = Random.Range (2, 10);
-					while ((num1 * 100) % (num2 * num3) != 0)
+					do {
 						num1 = 100 * Random.Range (10, 50);
+						num2 = Random.Range (4, 15);
+						num3 = Random.Range (2, 10);
+					} while ((num1 * 100) % (num2 * num3) != 0);
+		
 					QuestionText.text = "Find Principal (in Rs.), if : ";
 					subQuestionTEX.text = "Simple Interest = Rs. " + num1 + ", Rate of Interest = " + num2 + "%, Time = " + num3 + " years";
 					int ans = (num1 * 100) / (num2 * num3);
