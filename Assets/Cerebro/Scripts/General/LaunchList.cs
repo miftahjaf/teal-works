@@ -48,6 +48,7 @@ namespace Cerebro
 		public List<QuizData> mQuizQuestions = new List<QuizData> ();
 		public List<QuizAnalytics> mQuizAnalytics = new List<QuizAnalytics> ();
 		public Missions mMission = new Missions ();   //Old Mission
+		public Dictionary<string,string> mPracticeItemNames = new Dictionary<string, string>();
 		public Dictionary<string, PracticeItems> mPracticeItems = new Dictionary<string, PracticeItems> ();
 		public DescribeImage mDescribeImage;
 		public Verbalize mVerbalize;
@@ -201,6 +202,7 @@ namespace Cerebro
 			mQuizAnalytics.Clear ();
 			mMission = new Missions ();
 			mPracticeItems.Clear ();
+			mPracticeItemNames.Clear ();
 			mKCCoins.Clear ();
 			mKCMastery.Clear ();
 			mDescribeImageUserResponses.Clear ();
@@ -1211,7 +1213,7 @@ namespace Cerebro
 			if (PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
 				GetProperties ();
 
-				GetPracticeItems ();
+				GetPracticeItemNames ();
 				GetExplanation ();
 				GetKCMastery ();
 				for (int i = 0; i < (int)Cerebro.TableTypes.kMaxTables - 3; i++) { 
@@ -3318,8 +3320,26 @@ namespace Cerebro
 
 		public void LoadPracticeItems ()
 		{
-			
-			string fileName = Application.persistentDataPath + "/PracticeItemCoins.txt";
+			string fileName = Application.persistentDataPath + "/PracticeItemNames.txt";
+			if (File.Exists (fileName)) 
+			{
+				string json = File.ReadAllText (fileName);
+
+				JSONNode jsonNode = JSONNode.Parse (json);
+				int length = jsonNode.Count;
+
+				for (int i = 0; i < length; i++) 
+				{
+					string practiceItemId = jsonNode [i] ["practice_id"].Value;
+					string practiceItemName = jsonNode [i] ["practice_item_name"].Value;
+
+					if (!mPracticeItemNames.ContainsKey (practiceItemId)) 
+					{
+						mPracticeItemNames.Add (practiceItemId, practiceItemName);
+					}
+				}
+			}
+		   fileName = Application.persistentDataPath + "/PracticeItemCoins.txt";
 			if (File.Exists (fileName)) 
 			{
 				mKCCoins.Clear ();
@@ -3399,6 +3419,7 @@ namespace Cerebro
 
 						JSONNode KCdata = jsonNode [i] ["topics"];
 						int KClength = KCdata.Count;
+						int cnt = 1;
 						for (int j = 0; j < KClength; j++)
 						{
 							KnowledgeComponent KC = new KnowledgeComponent ();
@@ -3407,7 +3428,7 @@ namespace Cerebro
 							KC.KCName = KCdata[j] ["name"].Value;
 							KC.TotalCoins = KCdata[j] ["coins"].AsInt;
 							KC.CurrentCoins = 0;
-							KC.Index = j + 1;
+
 							if (mKCCoins.ContainsKey (KC.ID)) 
 							{
 								if (mKCCoins [KC.ID] > KC.TotalCoins)
@@ -3417,20 +3438,31 @@ namespace Cerebro
 							}
 							pItem.TotalCoins += KC.TotalCoins;
 							pItem.CurrentCoins += KC.CurrentCoins;
-							KC.Mappings = new List<string>();
+							KC.Mappings = new List<KCQuestion>();
 						
 							JSONNode MappingData = KCdata[j]["question_types"];
 							int Mappinglength = MappingData.Count;
 							for(int k=0; k<Mappinglength; k++)
 							{
-								string mapping = MappingData [k] .Value;
-								if (!KC.Mappings.Contains (mapping)) 
+								
+								KCQuestion kcQuestion = new KCQuestion ();
+								kcQuestion.practiceCodeId = MappingData [k] ["practice_item_id"].Value;
+								if(mPracticeItemNames.ContainsKey(kcQuestion.practiceCodeId ))
 								{
-									KC.Mappings.Add (mapping);
+									kcQuestion.difficulty = MappingData [k] ["difficulty"].AsInt;
+									kcQuestion.subLevel = MappingData [k] ["sub_level"].AsInt;
+									kcQuestion.practiceName = mPracticeItemNames [kcQuestion.practiceCodeId];
+									if (!KC.Mappings.Contains (kcQuestion)) 
+									{
+										KC.Mappings.Add (kcQuestion);
+									}
 								}
+
 							}
-							if (!pItem.KnowledgeComponents.ContainsKey (KC.ID)) 
+							if (!pItem.KnowledgeComponents.ContainsKey (KC.ID) && KC.Mappings.Count>0) 
 							{
+								KC.Index = cnt;
+								cnt++;
 								pItem.KnowledgeComponents.Add (KC.ID, KC);
 							}
 						}
@@ -3586,11 +3618,23 @@ namespace Cerebro
 
 			File.WriteAllText (fileName, jsonNode.ToString ());
 		}
+
+		public void GotPraticeItemNames()
+		{
+			GetPracticeItems ();
+		}
 			
 		public void GotPracticeItems ()
 		{		
 			mTableLoaded [(int)Cerebro.TableTypes.tPracticeItems] = true;	
 			LoadPracticeItems ();
+		}
+
+		public void GetPracticeItemNames()
+		{
+			if (mHitServer) {
+				HTTPRequestHelper.instance.GetPracticeItemsName ();
+			}  
 		}
 
 		public void GetPracticeItems ()
@@ -4674,10 +4718,18 @@ namespace Cerebro
 		public int Index { get; set;}
 		public string ID { get; set; }
 		public string KCName { get; set; }
-		public List<string> Mappings { get; set; }
+		public List<KCQuestion> Mappings { get; set; }
 		public int TotalCoins { get; set; }
 		public int CurrentCoins { get; set; }
 		public int Mastery{ get; set;}
+	}
+
+	public class KCQuestion
+	{
+		public string practiceCodeId;
+		public int difficulty;
+		public int subLevel;
+		public string practiceName;
 	}
 		
 	public class QuizData

@@ -226,9 +226,17 @@ namespace Cerebro
 			
 			GameObject assessmentgameobject = PrefabManager.InstantiateGameObject (Cerebro.ResourcePrefabs.Assessments, gameObject.transform.parent.transform);
 			assessmentgameobject.transform.SetAsLastSibling ();
-			if (mission == null) {
-				assessmentgameobject.GetComponent<AssessmentScript> ().Initialize (type, title, gameObject, testModeActive, practiceId, KCId);
-			} else {
+
+			if (!string.IsNullOrEmpty (KCId))
+			{
+				assessmentgameobject.GetComponent<AssessmentScript> ().Initialize (gameObject, practiceId, KCId, testModeActive);
+			} 
+			else if (mission == null) 
+			{
+				assessmentgameobject.GetComponent<AssessmentScript> ().Initialize (type, title, gameObject, testModeActive, practiceId, KCId, practiceId);
+			}
+			else
+			{
 				assessmentgameobject.GetComponent<AssessmentScript> ().Initialize (gameObject, mission);
 			}
 

@@ -109,7 +109,6 @@ namespace Cerebro
 			var imgurl = "https://img.youtube.com/vi/" + videoID + "/default.jpg";
 
 			videoData.isWatched = watchedVideos.Contains (data.id);
-			Debug.Log ("s watched "+videoData.isWatched);
 			videoData.thumbnailSprite = null;
 			videoData.title = data.name;
 			videoData.videoId = videoUrl;

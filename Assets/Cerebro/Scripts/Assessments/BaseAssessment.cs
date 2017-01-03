@@ -73,18 +73,16 @@ namespace Cerebro {
 		private bool didLevelUp = false;
 		private Explanation currentExplanation;
 
-		public string practiceID = "";
-		public string KCID = "";
-		private List<string> KCMappings;
-
-		private int currentMappingIndex ;
-		private string currenKCMapping;
-
 		private bool isQuestionStarted;
 		public string currentQuestionMapping;
 
 		public bool isMissionQuestion;
 		public Dictionary<string, string> missionQuestionData;
+		public Dictionary<string, string> kcQuestionData;
+
+		public string practiceCodeID = "";
+		public string KCID = "";
+
 
 
 		protected void Initialise(string subjectID, string topicID, string subTopicID, string assessmentID) {
@@ -97,7 +95,7 @@ namespace Cerebro {
 			string PracticeItemID = subjectID + topicID + subTopicID + assessmentID;
 			QuestionsAttemptedKey = PracticeItemID + "QuestionsAttempted";
 			CurrentLevelKey = PracticeItemID + "LevelKey";
-			CurrentLevelSeed = practiceID + KCID + "Seed";
+			CurrentLevelSeed = practiceCodeID + KCID + "Seed";
 			if (parentAssessmentScript != null) {
 				parentAssessmentScript.mPracticeID = subjectID + topicID + subTopicID + assessmentID;
 			}
@@ -117,25 +115,7 @@ namespace Cerebro {
 			}
 		}
 
-		private void LoadKnowledgeComponentMappings()
-		{
-			currentMappingIndex = -1;
-			KCMappings = new List<string> ();
-
-			if (!string.IsNullOrEmpty(practiceID) && !string.IsNullOrEmpty(KCID)) 
-			{
-				if (LaunchList.instance.mPracticeItems.ContainsKey (practiceID))
-				{
-					PracticeItems practiceItem = LaunchList.instance.mPracticeItems [practiceID];
-					if (practiceItem.KnowledgeComponents.ContainsKey (KCID)) 
-					{
-						KnowledgeComponent KC =practiceItem.KnowledgeComponents[KCID];
-						KCMappings = KC.Mappings;
-
-					}
-				}
-			}
-		}
+	
 
 		public void StartSequence(int max)
 		{
@@ -171,83 +151,23 @@ namespace Cerebro {
 			sequence = -1;
 		}
 
-		private string GetKCMapping()
-		{ 
-			if (this.KCMappings.Count > 0 )
-			{
-				int index = 0;
-				if (testMode)
-				{
-					
-					if (parentAssessmentScript != null)
-					{
-						if (!parentAssessmentScript.shouldRegenQuestion)
-						{
-							if (currentMappingIndex >= this.KCMappings.Count - 1) 
-							{
-								currentMappingIndex = 0;
-							}
-							else 
-							{
-								currentMappingIndex++;
-							}
-						}
-						else
-						{
-							parentAssessmentScript.shouldRegenQuestion = false;
-						}
-					}
-					index = currentMappingIndex;
 
-				}
-				else 
-				{
-					index = Random.Range (0, KCMappings.Count);
-				}
-				return KCMappings [index];
-			} 
 
-			return "";
-		}
 
-		public string GetCurrentKCID()
-		{
-			
-			if(!string.IsNullOrEmpty(KCID))
-			{
-			   return KCID;
-			}
-			else if(!string.IsNullOrEmpty(currenKCMapping)  && !string.IsNullOrEmpty(practiceID) && LaunchList.instance.mPracticeItems.ContainsKey(practiceID))
-			{
-				PracticeItems practiceItem = LaunchList.instance.mPracticeItems [practiceID];
-
-				foreach (var KC in practiceItem.KnowledgeComponents)
-				{
-					if (KC.Value.Mappings.Exists (x => x == currenKCMapping)) 
-					{
-						return KC.Value.ID;
-					}
-				}
-			}
-			return "";
-		}
 
 
 
 	
 
-		public string GetPracticeItemID() {
-			return practiceID; // mSubjectID + mTopicID + mSubTopicID + mAssessmentID;
+		public string GetPracticeCodeID() {
+			return practiceCodeID; // mSubjectID + mTopicID + mSubTopicID + mAssessmentID;
 		}
 
 
 		protected void QuestionStarted() {
 
 			isQuestionStarted = true;
-			if (KCMappings == null)
-			{
-				LoadKnowledgeComponentMappings ();
-			}
+
 
 			if (userAnswerText) {
 				userAnswerText.text = "";
@@ -305,14 +225,9 @@ namespace Cerebro {
 				}*/
 				if ((WelcomeScript.instance.autoTestMissionMix || WelcomeScript.instance.autoTestMissionCorrect) && CerebroHelper.isTestUser ())
 					StartCoroutine (autoCorrectMission ());
-			} else if (KCMappings.Count > 0) {
-				string randomMapping = GetKCMapping ();
-				Debug.Log (randomMapping);
-				string[] spiltRandomMapping = randomMapping.Split (new char[]{ 't' }, System.StringSplitOptions.RemoveEmptyEntries);
-				Queslevel = int.Parse (spiltRandomMapping [0]);
-				forceSelector = int.Parse (spiltRandomMapping [1]);
-
-
+			} else if (kcQuestionData != null) {
+				Queslevel = int.Parse (kcQuestionData ["difficulty"]);
+				forceSelector = int.Parse (kcQuestionData ["sublevel"]);
 			}
 			else if (parentAssessmentScript != null && parentAssessmentScript.shouldRegenQuestion && !string.IsNullOrEmpty(currentQuestionMapping))
 			{
@@ -384,7 +299,8 @@ namespace Cerebro {
 				if (forceSelector >= lowerLimit && forceSelector < upperLimit) {
 					randomSelector = forceSelector;
 					if (parentAssessmentScript != null && testMode) {
-						parentAssessmentScript.testingText.text = Queslevel.ToString () + "t" + forceSelector.ToString ();
+						string practiceIdDisplayName = practiceCodeID.Length>6? practiceCodeID.Substring (1, 5):practiceCodeID;
+							parentAssessmentScript.testingText.text = Queslevel.ToString () + "t" + forceSelector.ToString ()+"\n"+"("+practiceIdDisplayName+")";
 					}
 				}
 			}
@@ -428,7 +344,6 @@ namespace Cerebro {
 
 			}
 			Random.seed = randomSeed;
-			Debug.Log ("Random Selector " +randomSelector +"QuestionLevel "+Queslevel);
 
 			if (randomSelector == -1) {
 				randomSelector = Random.Range (lowerLimit, upperLimit);
@@ -462,8 +377,9 @@ namespace Cerebro {
 				}
 				currentQuestionDifficulty = difficulty;
 			}
-			currenKCMapping = difficulty + "t" + type;
+
 			if (parentAssessmentScript != null) {
+				parentAssessmentScript.currenKCMapping = difficulty + "t" + type;
 				parentAssessmentScript.QuestionEnded (isCorrect, difficulty, _increment, currentQuestionAssessmentKey, randomSeed, type, UserAnswer);
 			}
 
@@ -482,6 +398,10 @@ namespace Cerebro {
 				revisitScript.ShowFlagButton ();
 			} else if (isMissionQuestion) {
 				parentAssessmentScript.UpdateNextQuestion ();
+			} 
+			else if(!string.IsNullOrEmpty(KCID))
+			{
+				parentAssessmentScript.UpdateKCNextQuestion ();
 			}
 			else {
 				GenerateQuestion ();
@@ -489,10 +409,12 @@ namespace Cerebro {
 			}
 		}
 
-		public void ShowNextMissionAssessmentQuestion()
+		public void ShowNextQuestionWithAnimation()
 		{
 			GenerateQuestion ();
-			StartCoroutine(StartAnimation());
+			if (!testMode) {
+				StartCoroutine (StartAnimation ());
+			}	
 		}
 
 		protected void LevelUp() {
@@ -655,7 +577,11 @@ namespace Cerebro {
 		}
 
 		public void TestNextQuestion() {
-			GenerateQuestion ();
+			if (!string.IsNullOrEmpty (KCID)) {
+				parentAssessmentScript.UpdateKCNextQuestion ();
+			} else {
+				GenerateQuestion ();
+			}
 		}
 
 		public virtual void SolutionButtonPressed() {

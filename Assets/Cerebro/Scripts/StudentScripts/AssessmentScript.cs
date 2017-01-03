@@ -52,6 +52,7 @@ namespace Cerebro
 		private Mission mission;
 		private string currentAssessmentType;
 		private Dictionary<string, string> missionQuestionData;
+		private Dictionary<string, string> kcQuestionData;
 
 		private string currentQuestionMapping ="1t1";
 
@@ -59,6 +60,21 @@ namespace Cerebro
 
 		public Slider masterySlider;
 		public Text backButtonText;
+
+		private List<KCQuestion> KCMappings;
+
+		private int currentMappingIndex ;
+		public string currenKCMapping;
+
+		public string practiceItemID = "";
+		public string KCID = "";
+		protected string CurrentLevelSeed;
+
+		private bool testMode = false;
+
+		public KCQuestion kcQuestion;
+
+
 
 		// Use this for initialization
 		void Start ()
@@ -89,7 +105,7 @@ namespace Cerebro
 			currentAssessmentType = "";
 		}
 
-		public void Initialize (string assessmentType, string _title, GameObject _chooseAssessment, bool testMode = false,string practiceId="", string KCID ="")
+		public void Initialize (string assessmentType, string _title, GameObject _chooseAssessment, bool testMode = false,string _practiceItemID="", string _KCID ="", string _practiceCodeId ="")
 		{
 			GetComponent<RectTransform> ().sizeDelta = new Vector2 (0f, 0f);
 			chooseAssessment = _chooseAssessment;
@@ -97,7 +113,8 @@ namespace Cerebro
 			mPracticeName = _title;
 			mPracticeName = mPracticeName.Trim ();
 			string backButtonTitle = "Practice";
-			if (!KCID.Equals (""))
+			practiceItemID = _practiceItemID;
+			if (!_KCID.Equals (""))
 			{
 				if (LaunchList.instance.mKCMastery.ContainsKey (KCID)) {
 					UpdateMasterySlider (LaunchList.instance.mKCMastery [KCID]);
@@ -105,9 +122,9 @@ namespace Cerebro
 					UpdateMasterySlider (0);
 				}
 				title.text = "";
-				if(LaunchList.instance.mPracticeItems.ContainsKey(practiceId) && LaunchList.instance.mPracticeItems [practiceId].KnowledgeComponents.ContainsKey(KCID))
+				if(LaunchList.instance.mPracticeItems.ContainsKey(practiceItemID) && LaunchList.instance.mPracticeItems [practiceItemID].KnowledgeComponents.ContainsKey(KCID))
 				{
-					backButtonTitle = LaunchList.instance.mPracticeItems [practiceId].KnowledgeComponents [KCID].KCName;
+					backButtonTitle = LaunchList.instance.mPracticeItems [practiceItemID].KnowledgeComponents [KCID].KCName;
 				}
 			}
 			else 
@@ -115,6 +132,7 @@ namespace Cerebro
 				title.text = StringHelper.RemoveNumbers (_title);
 				masterySlider.gameObject.SetActive (false);
 			}
+				
 
 			if (testMode && backButtonTitle.Length > 10) {
 				backButtonTitle = backButtonTitle.Substring (0, 10) +"...";
@@ -133,10 +151,10 @@ namespace Cerebro
 			baseAssessment.assessmentName = _title.Replace (" ", "");
 			baseAssessment.isMissionQuestion = (mission!=null);
 			baseAssessment.missionQuestionData = missionQuestionData;
-			baseAssessment.practiceID = practiceId;
+			baseAssessment.practiceCodeID = _practiceCodeId;
 			baseAssessment.KCID = KCID;
 			baseAssessment.testMode = testMode;
-
+			baseAssessment.kcQuestionData = kcQuestionData;
 
 			
 			if (testMode) {
@@ -160,6 +178,21 @@ namespace Cerebro
 
 		}
 
+		public void Initialize( GameObject _chooseAssessment,string _practiceItemID, string _KCID, bool _testMode)
+		{
+			practiceItemID = _practiceItemID;
+			KCID = _KCID;
+			testMode = _testMode;
+			chooseAssessment = _chooseAssessment;
+			Debug.Log ("Init practice Id "+practiceItemID + " KC ID " + KCID);
+			if (KCMappings == null)
+			{
+				LoadKnowledgeComponentMappings ();
+			}
+
+			UpdateKCNextQuestion ();
+		}
+
 		public void UpdateNextQuestion()
 		{
 			if (mission == null) {
@@ -179,15 +212,38 @@ namespace Cerebro
 			if (baseAssessment != null && currentAssessmentType.Equals (assessmentType)) {
 				baseAssessment.isMissionQuestion = (mission!=null);
 				baseAssessment.missionQuestionData = missionQuestionData;
-				baseAssessment.practiceID = missionNextQuestion.practiceItemID;
-				baseAssessment.ShowNextMissionAssessmentQuestion ();
+				baseAssessment.practiceCodeID = missionNextQuestion.practiceItemID;
+				baseAssessment.ShowNextQuestionWithAnimation ();
 			} else {
 				if (baseAssessment != null) {
-					Debug.Log ("Current Assessment Type :"+currentAssessmentType);
 					baseAssessment.isDestroyed = true;
 					Destroy (baseAssessment.gameObject);
 				}
-				Initialize (assessmentType, missionNextQuestion.practiceName, chooseAssessment,false,missionNextQuestion.practiceItemID);
+				Initialize (assessmentType, missionNextQuestion.practiceName, chooseAssessment,false, missionNextQuestion.practiceItemID, "", missionNextQuestion.practiceItemID);
+			}
+
+			currentAssessmentType = assessmentType;
+		}
+
+		public void UpdateKCNextQuestion()
+		{
+
+			KCQuestion kcQuestion = GetKCMapping();
+			string prefabName =  kcQuestion.practiceName.Replace (" ", "");
+			string assessmentType = "Assessments/" +prefabName;
+			kcQuestionData = new Dictionary<string, string> ();
+			kcQuestionData.Add ("difficulty", kcQuestion.difficulty.ToString());
+			kcQuestionData.Add ("sublevel", kcQuestion.subLevel.ToString());
+			if (baseAssessment != null && currentAssessmentType.Equals (assessmentType)) {
+				baseAssessment.kcQuestionData = kcQuestionData;
+				baseAssessment.practiceCodeID = kcQuestion.practiceCodeId;
+				baseAssessment.ShowNextQuestionWithAnimation ();
+			} else {
+				if (baseAssessment != null) {
+					baseAssessment.isDestroyed = true;
+					Destroy (baseAssessment.gameObject);
+				}
+				Initialize (assessmentType, kcQuestion.practiceName, chooseAssessment, testMode,practiceItemID, KCID, kcQuestion.practiceCodeId);
 			}
 
 			currentAssessmentType = assessmentType;
@@ -219,17 +275,17 @@ namespace Cerebro
 			string day = System.DateTime.Now.ToUniversalTime().ToString ("yyyyMMdd");
 
 			//string practiceID = mPracticeID;
-			string practiceItemID = baseAssessment.GetPracticeItemID ();
+			string practiceCodeID = baseAssessment.GetPracticeCodeID ();
 
 			if (LaunchList.instance.mUseJSON) {
-				PracticeData.UpdateLocalFileJSON (practiceItemID, isCorrect);
+				PracticeData.UpdateLocalFileJSON (practiceCodeID, isCorrect);
 			} else {
-				PracticeData.UpdateLocalFile (practiceItemID, isCorrect);
+				PracticeData.UpdateLocalFile (practiceCodeID, isCorrect);
 			}
 			//List<string> missionQuestionIds = CheckMissions (isCorrect, difficulty, sublevel, practiceID);  //Old Mission
 
 			int increment = 0;
-			string KCID = baseAssessment.GetCurrentKCID ();
+			string KCID = GetCurrentKCID ();
 
 			if (isCorrect) {
 				if (rightSound != null) {
@@ -238,11 +294,6 @@ namespace Cerebro
 				var bonus = increaseStreak ();
 				increment = _increment + bonus;
 
-				/*if (LaunchList.instance.mPracticeItems.ContainsKey (mPracticeID)) {
-					if (LaunchList.instance.mPracticeItems[mPracticeID].RegenerationStarted != "") {
-						increment = 0;
-					}
-				}*/
 
 				if (CerebroProperties.instance.ShowCoins) {
 					increment = UpdatePracticeItems (practiceItemID, KCID , increment);
@@ -275,65 +326,13 @@ namespace Cerebro
 //				incrementBy = Mathf.FloorToInt(increment / 5);
 //				LaunchList.instance.SetCoins (groupID, studentID, increment);
 			}
-			//Old Mission
-			//if (missionQuestionIds.Count != 0) { 
-			//	string missionString = LaunchList.instance.mMission.MissionID; 
-			//	foreach (var str in missionQuestionIds) {  
-			//		missionString = missionString + "@" + str;
-			//	}
-			//	Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, missionString, UserAnswer, increment);  
-			//} else {
-
-				
-			//}
 
 			Cerebro.LaunchList.instance.WriteAnalyticsToFileJSON (assessKey, difficulty, isCorrect, day, timeStarted, Mathf.FloorToInt (timetaken), "0", randomSeed, " ", UserAnswer, increment);  
 			UpdateKCMastery (practiceItemID, KCID, isCorrect);
 
-			isMissionCompleted = LaunchList.instance.missionData.CheckAndUpdateMissionData (practiceItemID, difficulty, sublevel, isCorrect, randomSeed, UserAnswer);
+			isMissionCompleted = LaunchList.instance.missionData.CheckAndUpdateMissionData (practiceCodeID, difficulty, sublevel, isCorrect, randomSeed, UserAnswer);
 		}
-
-		//Old Mission
-		/*List<string> CheckMissions (bool isCorrect, int level, int sublevel, string practiceID)
-		{
-			List<string> missionQuestionIDs = new List<string> ();
-
-			if (practiceID != "" && LaunchList.instance.mMission.Questions != null) {
-				foreach (var item in LaunchList.instance.mMission.Questions) {
-					bool foundInMission = false;
-					if (practiceID == item.Value.PracticeItemID) {
-						if (item.Value.QuestionLevel == "-1") {
-							foundInMission = true;
-						} else {
-							if (!item.Value.QuestionLevel.Contains ("@")) {
-								if (item.Value.QuestionLevel == level.ToString ()) {
-									if (item.Value.SubLevel == "-1") {
-										foundInMission = true;
-									} else if (item.Value.SubLevel == sublevel.ToString ()) {
-										foundInMission = true;
-									}
-								}
-							} else {
-								string[] levelVals = item.Value.QuestionLevel.Split ("@" [0]);
-								string[] sublevelVals = item.Value.SubLevel.Split ("@" [0]);
-								for (var i = 0; i < levelVals.Length; i++) {
-									if (levelVals [i] == level.ToString () && sublevelVals [i] == sublevel.ToString ()) {
-										foundInMission = true;
-									}
-								}
-							}
-						}
-
-						if (foundInMission) {
-							missionQuestionIDs.Add (item.Value.QuestionID);
-							LaunchList.instance.UpdateLocalMissionFileJSON (item.Value, item.Value.QuestionID, isCorrect);
-						}
-					}
-				}
-			}
-			return missionQuestionIDs;
-		}*/
-
+			
 		int increaseStreak ()
 		{
 			currentStreak++;
@@ -731,6 +730,94 @@ namespace Cerebro
 				return CerebroHelper.HexToRGB ("24C8A6");
 
 			return CerebroHelper.HexToRGB ("FDD000");
+		}
+
+		private void LoadKnowledgeComponentMappings()
+		{
+			currentMappingIndex = -1;
+			KCMappings = new List<KCQuestion> ();
+
+			if (!string.IsNullOrEmpty(practiceItemID) && !string.IsNullOrEmpty(KCID)) 
+			{
+				if (LaunchList.instance.mPracticeItems.ContainsKey (practiceItemID))
+				{
+					PracticeItems practiceItem = LaunchList.instance.mPracticeItems [practiceItemID];
+					if (practiceItem.KnowledgeComponents.ContainsKey (KCID)) 
+					{
+						KnowledgeComponent KC =practiceItem.KnowledgeComponents[KCID];
+						KCMappings = KC.Mappings;
+
+					}
+				}
+			}
+		}
+
+		private KCQuestion GetKCMapping()
+		{ 
+
+			if (this.KCMappings.Count > 0 )
+			{
+				int index = 0;
+				if (testMode)
+				{
+					
+					if (!shouldRegenQuestion)
+					{
+						if (currentMappingIndex >= this.KCMappings.Count - 1) 
+						{
+							currentMappingIndex = 0;
+						}
+						else 
+						{
+							currentMappingIndex++;
+						}	
+						Debug.Log ("Current Map Index "+currentMappingIndex + " should regen "+shouldRegenQuestion);
+					}
+					else
+					{
+						shouldRegenQuestion = false;
+					}
+
+					index = currentMappingIndex;
+
+				}
+				else 
+				{
+					index = Random.Range (0, KCMappings.Count);
+				}
+				return KCMappings [index];
+			} 
+
+			return null;
+		}
+
+		public string GetCurrentKCID()
+		{
+			
+			string practiceID = baseAssessment.GetPracticeCodeID ();
+			if(!string.IsNullOrEmpty(KCID))
+			{
+				return KCID;
+			}
+			else if(!string.IsNullOrEmpty(currenKCMapping)  && !string.IsNullOrEmpty(practiceID) && LaunchList.instance.mPracticeItems.ContainsKey(practiceItemID))
+			{
+				PracticeItems practiceItem = LaunchList.instance.mPracticeItems [practiceItemID];
+				string[] spiltRandomMapping = currenKCMapping.Split (new char[]{ 't' }, System.StringSplitOptions.RemoveEmptyEntries);
+
+				int difficulty = int.Parse (spiltRandomMapping [0]);
+				int subLevel = int.Parse (spiltRandomMapping [1]);
+
+				Debug.Log ("difficulty " + difficulty + " sub level " + subLevel);
+
+				foreach (var KC in practiceItem.KnowledgeComponents)
+				{
+						if (KC.Value.Mappings.Exists (x=>x.practiceCodeId == practiceID && x.difficulty == difficulty && x.subLevel == subLevel)) 
+					{
+						return KC.Value.ID;
+					}
+				}
+			}
+			return "";
 		}
 	}
 
