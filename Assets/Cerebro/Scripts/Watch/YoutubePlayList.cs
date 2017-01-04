@@ -54,13 +54,33 @@ namespace Cerebro
 			errorText.text = "";
 			progressBar.SetActive (true);
 			nextPageToken = null;
-			Cerebro.LaunchList.instance.SendYoutubeAnalytics ("youtube_search_log", System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), searchField.text, "", "", "");
+			Cerebro.LaunchList.instance.SendYoutubeAnalytics ("youtube_search_log", System.DateTime.Now.ToUniversalTime ().ToString ("yyyy-MM-ddTHH:mm:ss"), searchField.text, "", "", "",SendYoutubeCallBack);
 
 			youtubeVideoSelector.youtubeVideosData = new List<VideoData> ();
 			youtubeVideoSelector.Reload ();
 
-			YoutubeV3Call (searchField.text);
 
+
+		}
+
+		public void SendYoutubeCallBack(JSONNode jsonResponse)
+		{
+			if (jsonResponse == null) {
+				return;
+			}
+			if (!jsonResponse ["return_data"] ["is_success"].AsBool) {
+				progressBar.SetActive (false);
+				errorText.text = "Something went wrong.";
+				return;
+			}
+
+			if (!jsonResponse ["return_data"] ["serach_valid"].AsBool) {
+				progressBar.SetActive (false);
+				errorText.text = "No video found.";
+				return;
+			}
+
+			YoutubeV3Call (searchField.text);
 		}
 
 		public void CallNextPage(int dataIndex)
@@ -97,6 +117,7 @@ namespace Cerebro
 				url += "&pageToken=" + nextPageToken;
 			}
 			Debug.Log (url);
+
 			WWW call = new WWW (url);
 			yield return call;
 			progressBar.SetActive (false);

@@ -234,7 +234,7 @@ namespace Cerebro
 			});
 		}
 
-		public void SendYoutubeAnalytics(string componentName,string createdAt, string searchOrVideoText, string videoId, string startTime, string endTime)
+		public void SendYoutubeAnalytics(string componentName,string createdAt, string searchOrVideoText, string videoId, string startTime, string endTime, Action<JSONNode> callback = null)
 		{
 			var studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 
@@ -255,11 +255,19 @@ namespace Cerebro
 
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
-			CreatePostRequestByteArray (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
-				if (jsonResponse != null && jsonResponse.type != JSONObject.Type.NULL) {
+			CreatePostRequestByteArraySimpleJSON (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
+				if (jsonResponse != null &&   jsonResponse.ToString()!= "") {
 					CerebroHelper.DebugLog ("Added youtube analytics");
+					if(callback!=null)
+					{
+						callback(jsonResponse);
+					}
 
 				} else {
+					if(callback!=null)
+					{
+						callback(null);
+					}
 					CerebroHelper.DebugLog ("Error in request");
 				}
 			});
@@ -855,7 +863,7 @@ namespace Cerebro
 
 		public void GetKCMastery()
 		{
-			string fileName = Application.persistentDataPath + "/KCsMasteryUpdated.txt";
+			string fileName = Application.persistentDataPath + "/KCsMasteryLatest.txt";
 			if (File.Exists (fileName)) 
 			{
 				string json = File.ReadAllText (fileName);

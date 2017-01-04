@@ -2861,7 +2861,7 @@ namespace Cerebro
 
 		}
 
-		public void SendYoutubeAnalytics(string componentName,string createdAt, string searchOrVideoText, string videoId, string startTime, string endTime)
+		public void SendYoutubeAnalytics(string componentName,string createdAt, string searchOrVideoText, string videoId, string startTime, string endTime,System.Action<JSONNode> callback = null)
 		{
 			if (!PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
 				CerebroHelper.DebugLog ("SendAnalytics - no ID set");
@@ -2869,7 +2869,7 @@ namespace Cerebro
 			}
 
 			if (mHitServer) {
-				HTTPRequestHelper.instance.SendYoutubeAnalytics (componentName, createdAt, searchOrVideoText, videoId, startTime, endTime);
+				HTTPRequestHelper.instance.SendYoutubeAnalytics (componentName, createdAt, searchOrVideoText, videoId, startTime, endTime,callback);
 			}
 		}
 
@@ -3236,7 +3236,7 @@ namespace Cerebro
 
 		public void LoadKCMastery()
 		{
-			string fileName = Application.persistentDataPath + "/KCsMasteryUpdated.txt";
+			string fileName = Application.persistentDataPath + "/KCsMasteryLatest.txt";
 			proficiencyConstants = new ProficiencyConstants ();
 
 			if (File.Exists (fileName)) 
@@ -3274,7 +3274,7 @@ namespace Cerebro
 		public void UpdateKCProficiencyConstants(JSONNode proficiency)
 		{
 			Debug.Log ("Update KC proficiency constants");
-			string fileName = Application.persistentDataPath + "/KCsMasteryUpdated.txt";
+			string fileName = Application.persistentDataPath + "/KCsMasteryLatest.txt";
 			JSONNode jsonNode;
 			if (File.Exists (fileName)) {
 				string json = File.ReadAllText (fileName);
@@ -3299,7 +3299,7 @@ namespace Cerebro
 
 		public void UpdateKCMastery()
 		{
-			string fileName = Application.persistentDataPath + "/KCsMasteryUpdated.txt";
+			string fileName = Application.persistentDataPath + "/KCsMasteryLatest.txt";
 			JSONNode jsonNode;
 			if (File.Exists (fileName))
 			{
