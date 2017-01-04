@@ -35,14 +35,18 @@ namespace Cerebro
 			statisticsHelper.SetGraphTitle ("ashdkjadhskjahsdjkasdh");
 			statisticsHelper.DrawGraph ();*/
 
-			statisticsHelper.SetStatisticsType (StatisticsType.PieToDrag);
+			/*statisticsHelper.SetStatisticsType (StatisticsType.PieToDrag);
 			statisticsHelper.SetPieParameters (
 				new List<string> (){ "Ramiz", "Negi", "Ankit", "Sagar" },
 				new List<int> (){ 10, 20, 30, 40 }
 			);
 			statisticsHelper.SetPieRadius (150f); //250 default radius
 			//statisticsHelper.ShiftPosition (new Vector2 (-270, 200));
-			statisticsHelper.DrawGraph ();
+			statisticsHelper.DrawGraph ();*/
+
+			statisticsHelper.SetFrequencyDataSets(new List<int>(){18,18,18,18,18,18,18,21,21,21,21,25,25,25,25,27,28,49});
+			statisticsHelper.SetFrequencyInterval (10);
+			statisticsHelper.DrawFrequencyTable();
 
 		}
 }

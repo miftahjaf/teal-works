@@ -17,6 +17,7 @@ namespace Cerebro
 		PieToFill,
 		PieToDrag,
 		Line,
+		Frequency,
 		None
 	}
 
@@ -27,6 +28,7 @@ namespace Cerebro
 		public GameObject linePointPrefab;   // point prefab to render point 
 		public GameObject arcPrefab;
 		public GameObject textObjectPrefab;
+		public GameObject textDrawObjectPrefab;
 
 		public Sprite arrowSprite;
 		private GameObject pointLineDisplay;   //Display line when change plotted point position
@@ -74,6 +76,11 @@ namespace Cerebro
 		private GraphDiagram currentLineGraphDiagram;
 		private GraphDiagram currentPieGraphDiagram;
 
+		private List<int> frequencyDataSets;
+		private int frequencyInterval;
+		public System.Action<GameObject> onFrequencyTextBoxClicked;
+		public List<GameObject> frequencyObjs;
+
 		//Reset old set values
 		public void Reset()
 		{
@@ -102,6 +109,9 @@ namespace Cerebro
 			lineGraphPoints = new List<GraphPointScript> ();
 			currentGraphDiagramPoints = new List<Vector2> ();
 			shouldShowAngleInPie = false;
+			frequencyDataSets = new List<int> ();
+			frequencyInterval = 1;
+			frequencyObjs = new List<GameObject> ();
 
 		}
 
@@ -650,9 +660,26 @@ namespace Cerebro
 					correct = IsPieDragCorrect ();
 				break;
 
+			case StatisticsType.Frequency:
+				correct = IsFrequencyTableAnswerCorrect ();
+				break;
+
 			}
 
 			return correct;
+		}
+
+		public bool IsFrequencyTableAnswerCorrect()
+		{
+			foreach (GameObject obj in frequencyObjs) {
+				TEXDraw userAnswer =  obj.gameObject.GetChildByName<TEXDraw> ("UserAnswer");
+				TEXDraw correctAnswer =  obj.gameObject.GetChildByName<TEXDraw> ("CorrectAnswer");
+				if (!userAnswer.Equals (correctAnswer)) {
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		public bool IsPieDragCorrect()
@@ -787,8 +814,14 @@ namespace Cerebro
 				currentLineGraphDiagram.vectorLine.Draw ();
 				break;
 
+			case StatisticsType.Frequency:
+				ShowFrequencyTableCorrectAnswers ();
+				break;
+
 			}
 		}
+
+
 
 		public void ResetAnswer ()
 		{
@@ -813,6 +846,21 @@ namespace Cerebro
 			case StatisticsType.PieToDrag:
 				ResetPieDragGraph ();
 				break;
+
+			case StatisticsType.Frequency:
+				ResetFrequencyTable ();
+				break;
+			}
+		}
+
+		public void ResetFrequencyTable()
+		{
+			foreach (GameObject obj in frequencyObjs) {
+				TEXDraw userAnswer =  obj.gameObject.GetChildByName<TEXDraw> ("UserAnswer");
+				userAnswer.text = "";
+			}
+			if (frequencyObjs.Count > 0) {
+				frequencyObjs[0].GetComponent<Toggle> ().isOn = true;
 			}
 		}
 
@@ -907,6 +955,26 @@ namespace Cerebro
 					}
 				}
 				break;
+
+			case StatisticsType.Frequency:
+				ShowWrongAnswerInFrequencyTable (isRevisited);
+				break;
+			}
+		}
+
+		public void ShowWrongAnswerInFrequencyTable(bool isRevisited)
+		{
+			foreach (GameObject obj in frequencyObjs) {
+				TEXDraw userAnswer =  obj.gameObject.GetChildByName<TEXDraw> ("UserAnswer");
+				TEXDraw correctAnswer =  obj.gameObject.GetChildByName<TEXDraw> ("CorrectAnswer");
+
+				if (!correctAnswer.text.Equals (userAnswer.text)) {
+					userAnswer.color = MaterialColor.red800;
+				} else {
+					userAnswer.color = MaterialColor.green800;
+				}
+
+				obj.GetComponent<Toggle> ().enabled = isRevisited;
 			}
 		}
 
@@ -949,6 +1017,21 @@ namespace Cerebro
 				ShowCorrectAnswerPieToDragAnswers ();
 				break;
 
+			case StatisticsType.Frequency:
+				ShowFrequencyTableCorrectAnswers ();
+				break;
+
+			}
+		}
+
+
+		public void ShowFrequencyTableCorrectAnswers()
+		{
+			foreach (GameObject obj in frequencyObjs) {
+				TEXDraw userAnswer =  obj.gameObject.GetChildByName<TEXDraw> ("UserAnswer");
+				userAnswer.text = "";
+				TEXDraw correctAnswer =  obj.gameObject.GetChildByName<TEXDraw> ("CorrectAnswer");
+				correctAnswer.color = MaterialColor.green800;
 			}
 		}
 
@@ -1096,11 +1179,25 @@ namespace Cerebro
 						}
 					}
 				break;
+
+			case StatisticsType.Frequency:
+				isAnswered = IsFrequencyTableAnswered ();
+				break;
 			}
 
 			return isAnswered;
 		}
 
+		public bool IsFrequencyTableAnswered()
+		{
+			foreach (GameObject obj in frequencyObjs) {
+				TEXDraw userAnswer =  obj.gameObject.GetChildByName<TEXDraw> ("UserAnswer");
+				if (!string.IsNullOrEmpty (userAnswer.text)) {
+					return true;
+				}
+			}
+			return false;
+		}
 
 		public bool IsGraphAnswered()
 		{
@@ -1376,6 +1473,163 @@ namespace Cerebro
 		{
 			shouldShowAngleInPie = _shouldShowAngleInPie;
 		}
+
+		public void SetFrequencyDataSets(List<int> _frequancyDataSets)
+		{
+			frequencyDataSets = _frequancyDataSets;
+		}
+
+		public void SetFrequencyInterval(int _frequancyInterval)
+		{
+			frequencyInterval = _frequancyInterval;
+		}
+
+		public void DrawFrequencyTable()
+		{
+			
+			int totalColumn = 3;
+
+			GameObject freqTable = new GameObject ();
+			freqTable.AddComponent<RectTransform> ();
+			freqTable.transform.SetParent (this.transform,false);
+			freqTable.name = "freqTable";
+			ToggleGroup toggleGroup = freqTable.AddComponent<ToggleGroup> ();
+			toggleGroup.allowSwitchOff = true;
+
+			int minNumber = frequencyInterval>1 ? 0 :  frequencyDataSets.Min ()-1;
+			int maxNumber = frequencyDataSets.Max ().RoundOff ();
+
+			List<int> frequancies = new List<int> ();
+			List<string> ranges = new List<string> ();
+			List<string> frequancySymbols = new List<string> ();
+
+			int startValue = minNumber + 1;
+			string range = "";
+			bool shouldAdd = false;
+			while (maxNumber > 0) {
+				int cnt = 0;
+				maxNumber -= frequencyInterval;
+
+				int nextValue = startValue + frequencyInterval - 1;
+
+				string frequancySymbol = "";
+				string symbol = "";
+
+				for(int i=0;i<frequencyDataSets.Count;i++)
+				{
+					if (frequencyDataSets [i] >= startValue && frequencyDataSets [i] <= nextValue ) {
+						cnt++;
+						if (cnt % 5 == 0) {
+							frequancySymbol += "\\not[-0.1,-0.1]{" + symbol + "}";
+							symbol = "";
+						} else {
+							symbol +="\\mid ";
+						}
+					}
+				}
+
+			
+			  frequancySymbol += symbol;
+				if (frequencyInterval > 1) 
+				{
+					range = startValue + "-" + nextValue;
+					shouldAdd = true;
+				}
+				else
+				{
+					range = startValue.ToString();
+					shouldAdd = (cnt > 0);
+				}
+			
+				if (shouldAdd) {
+					frequancies.Add (cnt);
+					frequancySymbols.Add (frequancySymbol);
+					ranges.Add (range);
+				}
+
+				startValue += frequencyInterval;
+			}
+
+
+			Vector2 startPos = new Vector2(-totalColumn/2f * 157f +80f, ranges.Count/2f * 40f +100f);
+			for (int i = 0; i < totalColumn; i++)
+			{
+				startPos.y = ranges.Count/2f *40f +100f ;
+				for (int j = -1; j < ranges.Count; j++)
+				{
+					string value = "";
+					string name = "";
+					if (j == -1) {
+						if (i == 0) {
+							value = "Marks";
+							name = "Marks";
+						} else if (i == 1) {
+							value = "Tally Marks";
+							name = "Tally Marks";
+						} else if (i == 2) {
+							value = "Frequency";
+							name = "Frequency";
+						}
+					} else {
+						if (i == 0) {
+							value = ranges [j];
+							name = "range";
+						} else if (i == 1) {
+							value = frequancySymbols [j];
+							name = "stick";
+						} else if (i == 2) {
+							value = frequancies [j].ToString ();
+							name = "number";
+						}
+
+					}
+
+					GenerateFrequncyTableText (startPos, freqTable, value, name, toggleGroup,j>-1);
+					startPos += new Vector2 (0f,-33f);
+				}
+				startPos += new Vector2 (157f,0f);
+			}
+
+			if (frequencyObjs.Count > 0) {
+				frequencyObjs[0].GetComponent<Toggle> ().isOn = true;
+			}
+		}
+
+		public void GenerateFrequncyTableText(Vector2 pos, GameObject parent, string value,string name, ToggleGroup toggleGroup,bool isToggle)
+		{
+			GameObject gTextBox = GameObject.Instantiate (textDrawObjectPrefab);
+			gTextBox.transform.SetParent (parent.transform,false);
+			TEXDraw textObj = gTextBox.gameObject.GetChildByName<TEXDraw> ("CorrectAnswer");
+
+			textObj.text = value;
+			gTextBox.name = name;
+			gTextBox.GetComponent<Toggle> ().enabled = isToggle;
+			if (isToggle) {
+				frequencyObjs.Add (gTextBox);
+				gTextBox.GetComponent<Toggle> ().onValueChanged.AddListener (
+					delegate { 
+						if (gTextBox.GetComponent<Toggle> ().isOn) {
+							OnFrequencyButtonClicked (gTextBox);
+						}
+					});
+				gTextBox.GetComponent<Toggle> ().group = toggleGroup;
+				Color color = Color.black;
+				color.a = 0;
+				textObj.color = color;
+			}
+			gTextBox.transform.GetComponent<RectTransform> ().anchoredPosition = pos;
+		
+		}
+
+		public void OnFrequencyButtonClicked(GameObject gObj)
+		{
+			
+			if (onFrequencyTextBoxClicked != null) {
+				onFrequencyTextBoxClicked.Invoke (gObj);
+			}
+		}
+
+
 			
 	}
 }

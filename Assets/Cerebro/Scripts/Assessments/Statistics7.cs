@@ -41,8 +41,11 @@ namespace Cerebro {
 		}
 
 		public override void SubmitClick(){
-			if (ignoreTouches || (userAnswerText.text == "" && !statisticsHelper.IsInteractable()) || (statisticsHelper.IsInteractable() && !statisticsHelper.IsAnswered())) {
+			if (ignoreTouches || (userAnswerLaText.text == "" && !statisticsHelper.IsInteractable()) || (statisticsHelper.IsInteractable() && !statisticsHelper.IsAnswered())) {
 				return;
+			}
+			if (statisticsHelper.IsInteractable ()) {
+				userAnswerLaText = GeneralButton.gameObject.GetChildByName<TEXDraw> ("Text");
 			}
 			int increment = 0;
 			ignoreTouches = true;
@@ -55,7 +58,7 @@ namespace Cerebro {
 			if (!statisticsHelper.IsInteractable()) {
 
 				if (MCQ.activeSelf) {
-					if (Answer == userAnswerText.text) {
+					if (Answer == userAnswerLaText.text) {
 						correct = true;
 					} else {
 						correct = false;
@@ -71,15 +74,15 @@ namespace Cerebro {
 						directCheck = true;
 					}
 
-					if (float.TryParse (userAnswerText.text, out userAnswer)) {
-						userAnswer = float.Parse (userAnswerText.text);
+					if (float.TryParse (userAnswerLaText.text, out userAnswer)) {
+						userAnswer = float.Parse (userAnswerLaText.text);
 					} else {
 						directCheck = true;
 					}
 
 
 					if (directCheck) {
-						if (userAnswerText.text == Answer){
+						if (userAnswerLaText.text == Answer){
 							correct = true;
 						} else {
 							correct = false;
@@ -134,8 +137,8 @@ namespace Cerebro {
 				return;
 			}
 			for (int i = 1; i <= 4; i++) {
-				if (MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().text == ans) {
-					MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().color = MaterialColor.green800;
+				if (MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().text == ans) {
+					MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.green800;
 				}
 			}
 		}
@@ -154,15 +157,15 @@ namespace Cerebro {
 				return;
 			}
 			AnimateMCQOption (value);
-			userAnswerText = MCQ.transform.Find ("Option" + value.ToString ()).Find ("Text").GetComponent<Text> ();
+			userAnswerLaText = MCQ.transform.Find ("Option" + value.ToString ()).Find ("Text").GetComponent<TEXDraw> ();
 			answerButton = MCQ.transform.Find ("Option" + value.ToString ()).GetComponent<Button> ();
 			SubmitClick ();
 		}
 
 		protected override IEnumerator ShowWrongAnimation()
 		{
-			userAnswerText.color = MaterialColor.red800;
-			Go.to(userAnswerText.gameObject.transform, 0.5f, new GoTweenConfig().shake(new Vector3(0, 0, 20), GoShakeType.Eulers));
+			userAnswerLaText.color = MaterialColor.red800;
+			Go.to(userAnswerLaText.gameObject.transform, 0.5f, new GoTweenConfig().shake(new Vector3(0, 0, 20), GoShakeType.Eulers));
 			statisticsHelper.HandleIncorrectAnwer (isRevisitedQuestion);
 			yield return new WaitForSeconds(0.5f);
 
@@ -170,11 +173,11 @@ namespace Cerebro {
 			{
 				if (numPad.activeSelf)
 				{               // is not MCQ type question
-					userAnswerText.text = "";
+					userAnswerLaText.text = "";
 				}
-				if (userAnswerText != null)
+				if (userAnswerLaText != null)
 				{
-					userAnswerText.color = MaterialColor.textDark;
+					userAnswerLaText.color = MaterialColor.textDark;
 				}
 				ignoreTouches = false;
 				statisticsHelper.ResetAnswer ();
@@ -182,15 +185,15 @@ namespace Cerebro {
 			else
 			{
 				this.CheckButton.gameObject.SetActive(false);
-				if (numPad.activeSelf)
+				if (numPad.activeSelf && !statisticsHelper.IsInteractable())
 				{               // is not MCQ type question
-					userAnswerText.text = Answer.ToString();
-					userAnswerText.color = MaterialColor.green800;
+					userAnswerLaText.text = Answer.ToString();
+					userAnswerLaText.color = MaterialColor.green800;
 				}
 				else
 				{
 					CerebroHelper.DebugLog("going in else");
-					userAnswerText.color = MaterialColor.textDark;
+					userAnswerLaText.color = MaterialColor.textDark;
 
 					statisticsHelper.ShowCorrectAnswer ();
 				}
@@ -200,17 +203,17 @@ namespace Cerebro {
 		}
 
 		protected override IEnumerator ShowCorrectAnimation() {
-			userAnswerText.color = MaterialColor.green800;
+			userAnswerLaText.color = MaterialColor.green800;
 			var config = new GoTweenConfig ()
 				.scale (new Vector3 (1.1f, 1.1f, 1f))
 				.setIterations( 2, GoLoopType.PingPong );
 			var flow = new GoTweenFlow( new GoTweenCollectionConfig().setIterations( 1 ) );
-			var tween = new GoTween( userAnswerText.gameObject.transform, 0.2f, config );
+			var tween = new GoTween( userAnswerLaText.gameObject.transform, 0.2f, config );
 			flow.insert( 0f, tween );
 			flow.play ();
 			statisticsHelper.HandleCorrectAnswer (); 
 			yield return new WaitForSeconds (1f);
-			userAnswerText.color = MaterialColor.textDark;
+			userAnswerLaText.color = MaterialColor.textDark;
 
 			showNextQuestion ();
 
@@ -228,7 +231,7 @@ namespace Cerebro {
 			options.Shuffle ();
 			int cnt = options.Count;
 			for (int i = 1; i <= cnt; i++) {
-				MCQ.transform.Find ("Option"+i).Find ("Text").GetComponent<Text> ().text = options [i - 1];
+				MCQ.transform.Find ("Option"+i).Find ("Text").GetComponent<TEXDraw> ().text = options [i - 1];
 			}
 		}
 
@@ -250,7 +253,7 @@ namespace Cerebro {
 			coeff = new List<int> ();
 			statisticsHelper.Reset ();
 			for (int i = 1; i < 5; i++) {
-				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<Text> ().color = MaterialColor.textDark;
+				MCQ.transform.Find ("Option" + i.ToString ()).Find ("Text").GetComponent<TEXDraw> ().color = MaterialColor.textDark;
 			}
 
 			#region level1
@@ -504,7 +507,7 @@ namespace Cerebro {
 
 					QuestionText.text = "The given graph shows the number of boarding schools in each of the given cities.";
 
-					if (selector == 5)
+					if (selector == 4)
 					{
 						SetMCQMode (4);
 
@@ -524,16 +527,16 @@ namespace Cerebro {
 						Answer = options[0];
 						RandomizeMCQOptionsAndFill (options);
 					}
-					else if (selector == 6)
+					else if (selector == 5)
 					{
 						int randSelector1 = Random.Range (0, 4);
 						subQuestionTEX.text = string.Format ("How many boarding schools are there in {0}?", Cities[randSelector1]);
 						Answer = string.Format ("{0}", coeff[randSelector1]);
 					}
 
-					statisticsHelper.SetGridParameters (new Vector2 (13, 14), 15f);
+					statisticsHelper.SetGridParameters (new Vector2 (18, 14), 15f);
 					statisticsHelper.SetStatisticsType (StatisticsType.VerticalBar);
-					statisticsHelper.ShiftPosition (new Vector2 (-270, 215));
+					statisticsHelper.ShiftPosition (new Vector2 (-250, 215));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 						{
 							new StatisticsAxis ().SetStatisticsValues
@@ -544,7 +547,7 @@ namespace Cerebro {
 									new StatisticsValue (Cities[2], coeff[2]),
 									new StatisticsValue (Cities[3], coeff[3]),
 								}
-							).SetAxisName ("Cities").SetPointOffset (3),
+							).SetAxisName ("Cities").SetPointOffset (4),
 							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of Boarding Schools").SetPointOffset (2)
 						}
 					);
@@ -553,10 +556,17 @@ namespace Cerebro {
 				else if (selector == 6)
 				{
 					
+
 				}
 				else if (selector == 7)
 				{
-
+					statisticsHelper.SetStatisticsType(StatisticsType.Frequency);
+					statisticsHelper.SetFrequencyDataSets(MathFunctions.GetIntRandomDataSet(1,51,50));
+					statisticsHelper.SetFrequencyInterval (10);
+					GeneralButton.gameObject.SetActive(false);
+					statisticsHelper.SetInteractable(true);
+					statisticsHelper.onFrequencyTextBoxClicked = OnFrequancyTextClicked;
+					statisticsHelper.DrawFrequencyTable();
 				}
 			}
 			#endregion
@@ -668,7 +678,7 @@ namespace Cerebro {
 					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
 
-					statisticsHelper.SetGridParameters (new Vector2 (12, 18), 22f);
+					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
 					statisticsHelper.SetStatisticsType (StatisticsType.Line);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -682,7 +692,7 @@ namespace Cerebro {
 									new StatisticsValue (Sports[3], coeff[3]),
 									new StatisticsValue (Sports[4], coeff[4])
 								}
-							).SetAxisName ("Sports").SetPointOffset (2),
+							).SetAxisName ("Sports").SetPointOffset (3),
 							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of Students").SetPointOffset (2)
 						}
 					);
@@ -724,7 +734,7 @@ namespace Cerebro {
 					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
 
-					statisticsHelper.SetGridParameters (new Vector2 (12, 18), 22f);
+					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
 					statisticsHelper.SetStatisticsType (StatisticsType.Line);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -738,7 +748,7 @@ namespace Cerebro {
 									new StatisticsValue (Subjects[3], coeff[3]),
 									new StatisticsValue (Subjects[4], coeff[4])
 								}
-							).SetAxisName ("Subjects").SetPointOffset (2),
+							).SetAxisName ("Subjects").SetPointOffset (3),
 							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number of Students").SetPointOffset (2)
 						}
 					);
@@ -912,7 +922,7 @@ namespace Cerebro {
 					StatTableColumn1.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn1.ToArray ());
 					StatTableColumn2.text = string.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}", TableContentsColumn2.ToArray ());
 
-					statisticsHelper.SetGridParameters (new Vector2 (12, 18), 22f);
+					statisticsHelper.SetGridParameters (new Vector2 (18, 18), 22f);
 					statisticsHelper.SetStatisticsType (StatisticsType.Line);
 					statisticsHelper.ShiftPosition (new Vector2 (-200, 0));
 					statisticsHelper.SetGraphParameters (new StatisticsAxis[]
@@ -926,7 +936,7 @@ namespace Cerebro {
 									new StatisticsValue (Make[3], coeff[3]),
 									new StatisticsValue (Make[4], coeff[4])
 								}
-							).SetAxisName ("Make").SetPointOffset (2),
+							).SetAxisName ("Make").SetPointOffset (3),
 							new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Number").SetPointOffset (2)
 						}
 					);
@@ -978,7 +988,7 @@ namespace Cerebro {
 					coeff = MathFunctions.GetPieDataSet (2000, 15000, numberOfData, 1000);
 
 					statisticsHelper.SetStatisticsType (StatisticsType.Pie);
-					statisticsHelper.ShiftPosition (new Vector2 (-360f, 180f));
+					statisticsHelper.ShiftPosition (new Vector2 (-360f, 230f));
 					statisticsHelper.SetPieParameters (
 						Expenses,
 						coeff
@@ -1020,22 +1030,22 @@ namespace Cerebro {
 
 				QuestionText.text = "The line graph shows the number of children playing various games on a given day.";
 
-				statisticsHelper.SetGridParameters (new Vector2 (14, 14), 15f);
+				statisticsHelper.SetGridParameters (new Vector2 (20, 14), 16f);
 				statisticsHelper.SetStatisticsType (StatisticsType.Line);
-				statisticsHelper.ShiftPosition (new Vector2 (-270, 235));
+				statisticsHelper.ShiftPosition (new Vector2 (-240f, 240));
 				statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 					{
 						new StatisticsAxis ().SetStatisticsValues
 						(
 							new List<StatisticsValue>(){
-								new StatisticsValue (Sports[0].Substring (0, 3), coeff[0]),
-								new StatisticsValue (Sports[1].Substring (0, 3), coeff[1]),
-								new StatisticsValue (Sports[2].Substring (0, 3), coeff[2]),
-								new StatisticsValue (Sports[3].Substring (0, 3), coeff[3]),
-								new StatisticsValue (Sports[4].Substring (0, 3), coeff[4]),
-								new StatisticsValue (Sports[5].Substring (0, 3), coeff[5])
+								new StatisticsValue (Sports[0], coeff[0]),
+								new StatisticsValue (Sports[1], coeff[1]),
+								new StatisticsValue (Sports[2], coeff[2]),
+								new StatisticsValue (Sports[3], coeff[3]),
+								new StatisticsValue (Sports[4], coeff[4]),
+								new StatisticsValue (Sports[5], coeff[5])
 							}
-						).SetAxisName ("Test Month").SetPointOffset (2),
+						).SetAxisName ("Test Month").SetPointOffset (3),
 						new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Marks").SetPointOffset (2)
 					}
 				);
@@ -1130,9 +1140,9 @@ namespace Cerebro {
 
 				QuestionText.text = "In the given line graph, the temperature of a particular day in North India is given.";
 
-				statisticsHelper.SetGridParameters (new Vector2 (16, 14), 15f);
+				statisticsHelper.SetGridParameters (new Vector2 (22, 14), 14f);
 				statisticsHelper.SetStatisticsType (StatisticsType.Line);
-				statisticsHelper.ShiftPosition (new Vector2 (-270, 235));
+				statisticsHelper.ShiftPosition (new Vector2 (-250, 235));
 				statisticsHelper.SetGraphParameters (new StatisticsAxis[]
 					{
 						new StatisticsAxis ().SetStatisticsValues
@@ -1146,7 +1156,7 @@ namespace Cerebro {
 								new StatisticsValue (Time[5], coeff[5]),
 								new StatisticsValue (Time[6], coeff[6])
 							}
-						).SetAxisName ("Test Month").SetPointOffset (2),
+						).SetAxisName ("Test Month").SetPointOffset (3),
 						new StatisticsAxis ().SetOffsetValue (axisValueOffset).SetAxisName ("Marks").SetPointOffset (2)
 					}
 				);
@@ -1213,28 +1223,53 @@ namespace Cerebro {
 			}
 			#endregion
 			CerebroHelper.DebugLog (Answer);
-			userAnswerText = GeneralButton.gameObject.GetChildByName<Text>("Text");
-			userAnswerText.text = "";
+			if (GeneralButton.gameObject.activeSelf) {
+				userAnswerLaText = GeneralButton.gameObject.GetChildByName<TEXDraw> ("Text");
+				userAnswerLaText.text = "";
+			}
+		}
+
+		public void OnFrequancyTextClicked(GameObject textObj)
+		{
+			userAnswerLaText = textObj.gameObject.GetChildByName<TEXDraw> ("UserAnswer");
 		}
 
 		public override void numPadButtonPressed(int value) {
 			if (ignoreTouches) {
 				return;
 			}
-			if (value <= 9) {
-				userAnswerText.text += value.ToString ();
+			if (value <= 9 && !userAnswerLaText.transform.parent.name.Contains("stick")) {
+				userAnswerLaText.text += value.ToString ();
 			} else if (value == 10) {    //Back
-				if (userAnswerText.text.Length > 0) {
-					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
+				if (checkLastTextFor (new string[1] { "}" })) {
+					int lastIndex = userAnswerLaText.text.LastIndexOf ("\\not[-0.1,-0.1]{");
+					Debug.Log ("Last Index " + lastIndex);
+					if (lastIndex >= 0) {
+						userAnswerLaText.text = userAnswerLaText.text.Substring (0, lastIndex) + userAnswerLaText.text.Substring (lastIndex + 16, userAnswerLaText.text.Length - 2 - (lastIndex + 15));
+					}
+				} else if (checkLastTextFor (new string[1] { "\\mid " })) {
+					userAnswerLaText.text = userAnswerLaText.text.Substring (0, userAnswerLaText.text.Length - 5);
+				} else if (userAnswerLaText.text.Length > 0) {
+					userAnswerLaText.text = userAnswerLaText.text.Substring (0, userAnswerLaText.text.Length - 1);
 				}
 			} else if (value == 11) {   // All Clear
-				userAnswerText.text = "";
-			} else if (value == 12)
-			{
-				if (checkLastTextFor (new string[1]{ "/" })) {
-					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
+				userAnswerLaText.text = "";
+			} else if (value == 12  && userAnswerLaText.transform.parent.name.Contains("stick")) {
+				int lastIndex = userAnswerLaText.text.LastIndexOf ("}");
+
+				if (lastIndex >= 0) {
+					userAnswerLaText.text = userAnswerLaText.text.Substring (0, lastIndex + 1) + "\\not[-0.1,-0.1]{" + userAnswerLaText.text.Substring (lastIndex + 1, userAnswerLaText.text.Length - lastIndex - 1) + "}";
+				} else {
+					userAnswerLaText.text = "\\not[-0.1,-0.1]{" + userAnswerLaText.text.Substring (0, userAnswerLaText.text.Length) + "}";
 				}
-				userAnswerText.text += "/";
+			} else if (value == 13  && userAnswerLaText.transform.parent.name.Contains("range")) {
+				if(checkLastTextFor (new string[1] { "-" }))
+				{
+					userAnswerLaText.text = userAnswerLaText.text.Substring (0,userAnswerLaText.text.Length-1);
+				}
+				userAnswerLaText.text += "-";
+			} else if (value == 14 && userAnswerLaText.transform.parent.name.Contains("stick")) {
+				userAnswerLaText.text += "\\mid ";
 			}
 		}
 
