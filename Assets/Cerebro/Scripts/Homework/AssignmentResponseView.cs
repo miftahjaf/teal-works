@@ -336,6 +336,8 @@ namespace Cerebro
 
 		public void sendButtonClicked ()
 		{
+			if (CommentTextfield.text.Length <= 0)
+				return;
 			commentCreationTime = System.DateTime.Now.Subtract(new System.TimeSpan(5, 30, 0));
 			ProgressCircle.SetActive (true);
 			Vector2 pos = CommentTextfield.transform.parent.gameObject.GetComponent<RectTransform> ().anchoredPosition;
