@@ -292,7 +292,7 @@ namespace Cerebro
 			PlayerPrefs.SetString (PlayerPrefKeys.CerebroLastVersion, VersionHelper.GetVersionNumber());
 
 //			UpdateServerTime ();
-			LoadPracticeItems ();
+//			LoadPracticeItems ();
 			CheckIfFileJSON ();
 
 			wifiOff.SetActive (false);

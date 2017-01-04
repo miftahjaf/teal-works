@@ -1999,7 +1999,7 @@ namespace Cerebro
 				} else {
 					CerebroHelper.DebugLog ("Error in request " + request.exception);
 				}
-				CerebroHelper.DebugLog ("current response -------------" + json);
+				CerebroHelper.DebugLog ("current response ----"+url+"---------" + json);
 				if (IsJson (json)) {
 					JSONNode jsonObject = JSONSimple.Parse (json);
 					callback (jsonObject);
