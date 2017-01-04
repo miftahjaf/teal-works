@@ -13,7 +13,7 @@ namespace Cerebro {
 		MissionItemData mItemData;
 		// Use this for initialization
 		void Start () {
-			CerebroAnalytics.instance.ScreenOpen (CerebroScreens.Watch);
+			//CerebroAnalytics.instance.ScreenOpen (CerebroScreens.Watch);
 
 			GetComponent<RectTransform> ().sizeDelta = new Vector2 (1024f, 768f);
 			playlist = LaunchList.instance.LoadStudentPlayList (gameObject);

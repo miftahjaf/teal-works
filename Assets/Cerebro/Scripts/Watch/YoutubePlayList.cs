@@ -66,6 +66,8 @@ namespace Cerebro
 		public void SendYoutubeCallBack(JSONNode jsonResponse)
 		{
 			if (jsonResponse == null) {
+				progressBar.SetActive (false);
+				errorText.text = "Something went wrong.";
 				return;
 			}
 			if (!jsonResponse ["return_data"] ["is_success"].AsBool) {
