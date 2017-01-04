@@ -10,6 +10,14 @@
 
 static CerebroAlertViewController *vc = NULL;
 
+@interface CerebroAlertViewController()
+
+@end
+
+@implementation CerebroAlertViewController
+
+@end
+
 void _ShowNativeAlert(const char* title, const char* message)
 {
     if(vc == NULL) {

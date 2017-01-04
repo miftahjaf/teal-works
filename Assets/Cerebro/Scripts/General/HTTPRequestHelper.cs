@@ -204,23 +204,33 @@ namespace Cerebro
 			Debug.Log (alteredAssessmentID+" "+itemID);
 			CerebroHelper.DebugLog (timeStarted + " Timings " + endTime);
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
-			N ["myData"] ["component_data"] ["assessment_id"] = alteredAssessmentID.Substring (0, alteredAssessmentID.IndexOf ('Z'));
-			N ["myData"] ["component_data"] ["fk_user_id"] = studentID;
-			N ["myData"] ["component_data"] ["correct"] = correct.ToString ();
-			N ["myData"] ["component_data"] ["difficulty"] = difficulty;
-			N ["myData"] ["component_data"] ["start_time"] = timeStarted;
-			N ["myData"] ["component_data"] ["time_taken"] = timeTaken;
-			N ["myData"] ["component_data"] ["play_time"] = playTime;
-			N ["myData"] ["component_data"] ["random_seed"] = seed;
-			N ["myData"] ["component_data"] ["mission_data"] = missionField;
-			N ["myData"] ["component_data"] ["item_id"] = itemID;
-			N ["myData"] ["component_data"] ["end_time"] = endTime;
-			N ["myData"] ["component_data"] ["sub_level"] = subLevel;
-			N ["myData"] ["component_data"] ["item_type"] = itemType;
-			N ["myData"] ["component_data"] ["level_up"] = isLevelUp.ToString ();
-			N ["myData"] ["component_data"] ["answer"] = UserAnswer;
-			N ["myData"] ["component_data"] ["coins"] = CoinsEarned.ToString ();;
-			N ["myData"] ["component_name"] = "math_practice";
+			if (itemType == "VIDEO" || itemType == "SOLUTION") {
+				N ["myData"] ["component_data"] ["fk_user_id"] = studentID;
+				N ["myData"] ["component_data"] ["start_time"] = timeStarted;
+				N ["myData"] ["component_data"] ["time_taken"] = timeTaken;
+				N ["myData"] ["component_data"] ["play_time"] = playTime;
+				N ["myData"] ["component_data"] ["content_id"] = itemID;
+				N ["myData"] ["component_data"] ["type"] = itemType;
+				N ["myData"] ["component_name"] = "content_analytics";
+			}  else {
+				N ["myData"] ["component_data"] ["assessment_id"] = alteredAssessmentID.Substring (0, alteredAssessmentID.IndexOf ('Z'));
+				N ["myData"] ["component_data"] ["fk_user_id"] = studentID;
+				N ["myData"] ["component_data"] ["correct"] = correct.ToString ();
+				N ["myData"] ["component_data"] ["difficulty"] = difficulty;
+				N ["myData"] ["component_data"] ["start_time"] = timeStarted;
+				N ["myData"] ["component_data"] ["time_taken"] = timeTaken;
+				N ["myData"] ["component_data"] ["play_time"] = playTime;
+				N ["myData"] ["component_data"] ["random_seed"] = seed;
+				N ["myData"] ["component_data"] ["mission_data"] = missionField;
+				N ["myData"] ["component_data"] ["p_item_id"] = itemID;
+				N ["myData"] ["component_data"] ["end_time"] = endTime;
+				N ["myData"] ["component_data"] ["sub_level"] = subLevel;
+				N ["myData"] ["component_data"] ["item_type"] = itemType;
+				N ["myData"] ["component_data"] ["level_up"] = isLevelUp.ToString ();
+				N ["myData"] ["component_data"] ["answer"] = UserAnswer;
+				N ["myData"] ["component_data"] ["coins"] = CoinsEarned.ToString ();
+				N ["myData"] ["component_name"] = "math_practice";
+			}
 			CerebroHelper.DebugLog (N ["myData"].ToString ());
 			byte[] formData = System.Text.Encoding.ASCII.GetBytes (N ["myData"].ToString ().ToCharArray ());
 			CreatePostRequestByteArray (SERVER_URL + "put_data/ins_data", formData, (jsonResponse) => {
@@ -1929,7 +1939,7 @@ namespace Cerebro
 				Telemetry row = list [i];
 
 				N ["myData"] ["component_data"] [i] ["timestamp"] = row.Timestamp;
-				N ["myData"] ["component_data"] [i] ["student_id"] = studentID;
+				N ["myData"] ["component_data"] [i] ["fk_user_id"] = studentID;
 				N ["myData"] ["component_data"] [i] ["description"] = row.Description;
 				N ["myData"] ["component_data"] [i] ["time_spent"] = row.TimeSpent;
 				N ["myData"] ["component_data"] [i] ["type"] = row.Type;

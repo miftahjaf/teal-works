@@ -9,6 +9,10 @@ namespace Cerebro
 		
 		public void InitializeAssessments(HomeworkDataCell dataCell)
 		{
+			AssessmentObject[] objs = transform.GetComponentsInChildren<AssessmentObject> (true);
+			for (int i = 0; objs != null && i < objs.Length; i++) {
+				Destroy (objs[i].gameObject);
+			}
 			if (dataCell.currGradedScore.Count > 0) {
 				NotGradedGm.SetActive (false);
 				for (int i = 0; i < dataCell.currGradedScore.Count; i++) {

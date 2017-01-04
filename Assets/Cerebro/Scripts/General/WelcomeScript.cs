@@ -279,6 +279,7 @@ namespace Cerebro
 				BottomBarObject.transform.Find ("TestScreens").gameObject.SetActive (true);
 				BottomBarObject.transform.Find ("TestScreens").Find ("Info").GetComponent<Text> ().text = "Screenshots " + takingScreenshots.ToString ();
 			} else {
+				BottomBarObject.transform.Find ("Homework").gameObject.SetActive (false);
 //				BottomBarObject.transform.Find ("Verbalize").gameObject.SetActive (false);
 				BottomBarObject.transform.Find ("WordTower").gameObject.SetActive (false);
 				//BottomBarObject.transform.Find ("GOT").gameObject.SetActive (false);
