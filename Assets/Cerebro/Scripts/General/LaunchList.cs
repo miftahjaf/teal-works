@@ -3386,7 +3386,7 @@ namespace Cerebro
 				}
 				sr.Close ();
 			}
-			fileName = Application.persistentDataPath + "/PracticeItemsWithKC.txt";
+			fileName = Application.persistentDataPath + "/PracticeItemsWithKCJSON.txt";
 			//List<string> resetRegenerationList = new List<string> ();
 
 			if (File.Exists (fileName)) {

@@ -921,7 +921,7 @@ namespace Cerebro
 
 		public void GetPracticeItems ()
 		{
-			string fileName = Application.persistentDataPath + "/PracticeItemsWithKC.txt";
+			string fileName = Application.persistentDataPath + "/PracticeItemsWithKCJSON.txt";
 			try {
 
 				WWWForm form = new WWWForm ();
@@ -930,9 +930,7 @@ namespace Cerebro
 				CreatePostRequestSimpleJSON (SERVER_URL + "practice_item/student/with_kc/question_object",form, (jsonResponse) => {
 					if (jsonResponse != null && jsonResponse.ToString () != "") {
 						LaunchList.instance.mQuizAnalytics.Clear ();
-						StreamWriter sr = File.CreateText (fileName);	
-						sr.WriteLine (jsonResponse.ToString());
-						sr.Close ();
+						File.WriteAllText(fileName, jsonResponse.ToString());
 
 						CerebroHelper.DebugLog ("LOAD COMPLETE");
 						LaunchList.instance.GotPracticeItems ();
