@@ -41,7 +41,7 @@ namespace Cerebro {
 		}
 
 		public override void SubmitClick(){
-			if (ignoreTouches || (userAnswerLaText.text == "" && !statisticsHelper.IsInteractable()) || (statisticsHelper.IsInteractable() && !statisticsHelper.IsAnswered())) {
+			if (ignoreTouches || (userAnswerLaText!=null && userAnswerLaText.text == "" && !statisticsHelper.IsInteractable()) || (statisticsHelper.IsInteractable() && !statisticsHelper.IsAnswered())) {
 				return;
 			}
 			if (statisticsHelper.IsInteractable ()) {
