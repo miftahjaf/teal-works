@@ -555,18 +555,36 @@ namespace Cerebro {
 				}
 				else if (selector == 6)
 				{
-					
+					int numberOfData = Random.Range (20, 40);
+					List<int> dataSet = MathFunctions.GetFrequencyTableDataSet (20, 50, numberOfData, Random.Range (5, 8));
 
+					QuestionText.text = string.Format ("Complete the given frequency table for the given array data.\n\n{0}", MathFunctions.getArrayAsSet (dataSet.ToArray (), false, false, false));
+
+					statisticsHelper.SetStatisticsType(StatisticsType.Frequency);
+					statisticsHelper.SetFrequencyDataSets(dataSet);
+					GeneralButton.gameObject.SetActive(false);
+					statisticsHelper.SetInteractable(true);
+					statisticsHelper.onFrequencyTextBoxClicked = OnFrequencyTextClicked;
+					statisticsHelper.DrawFrequencyTable();
+					statisticsHelper.ShiftPosition (new Vector2 (-225, 80));
 				}
 				else if (selector == 7)
 				{
+					int numberOfStudents = Random.Range (20, 40);
+					int maxMarks = 25 * Random.Range (1, 5);
+					int interval = 5 * maxMarks / 25;
+					List<int> dataSet = MathFunctions.GetIntRandomDataSet (1, maxMarks + 1, numberOfStudents);
+
+					QuestionText.text = string.Format ("Given are the marks of {0} students in a maths olympiad. Complete the given frequency table. Take interval = {1}.\n\n{2}", numberOfStudents, interval, MathFunctions.getArrayAsSet (dataSet.ToArray (), false, false, false));
+
 					statisticsHelper.SetStatisticsType(StatisticsType.Frequency);
-					statisticsHelper.SetFrequencyDataSets(MathFunctions.GetIntRandomDataSet(1,51,50));
-					statisticsHelper.SetFrequencyInterval (10);
+					statisticsHelper.SetFrequencyDataSets(dataSet);
+					statisticsHelper.SetFrequencyInterval (interval);
 					GeneralButton.gameObject.SetActive(false);
 					statisticsHelper.SetInteractable(true);
-					statisticsHelper.onFrequencyTextBoxClicked = OnFrequancyTextClicked;
+					statisticsHelper.onFrequencyTextBoxClicked = OnFrequencyTextClicked;
 					statisticsHelper.DrawFrequencyTable();
+					statisticsHelper.ShiftPosition (new Vector2 (-225, 80));
 				}
 			}
 			#endregion
@@ -1229,7 +1247,7 @@ namespace Cerebro {
 			}
 		}
 
-		public void OnFrequancyTextClicked(GameObject textObj)
+		public void OnFrequencyTextClicked(GameObject textObj)
 		{
 			userAnswerLaText = textObj.gameObject.GetChildByName<TEXDraw> ("UserAnswer");
 		}

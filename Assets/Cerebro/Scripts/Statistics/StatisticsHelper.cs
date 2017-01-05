@@ -674,7 +674,7 @@ namespace Cerebro
 			foreach (GameObject obj in frequencyObjs) {
 				TEXDraw userAnswer =  obj.gameObject.GetChildByName<TEXDraw> ("UserAnswer");
 				TEXDraw correctAnswer =  obj.gameObject.GetChildByName<TEXDraw> ("CorrectAnswer");
-				if (!userAnswer.Equals (correctAnswer)) {
+				if (!userAnswer.text.Equals (correctAnswer.text)) {
 					return false;
 				}
 			}
@@ -1474,14 +1474,14 @@ namespace Cerebro
 			shouldShowAngleInPie = _shouldShowAngleInPie;
 		}
 
-		public void SetFrequencyDataSets(List<int> _frequancyDataSets)
+		public void SetFrequencyDataSets(List<int> _frequencyDataSets)
 		{
-			frequencyDataSets = _frequancyDataSets;
+			frequencyDataSets = _frequencyDataSets;
 		}
 
-		public void SetFrequencyInterval(int _frequancyInterval)
+		public void SetFrequencyInterval(int _frequencyInterval)
 		{
-			frequencyInterval = _frequancyInterval;
+			frequencyInterval = _frequencyInterval;
 		}
 
 		public void DrawFrequencyTable()
@@ -1499,9 +1499,9 @@ namespace Cerebro
 			int minNumber = frequencyInterval>1 ? 0 :  frequencyDataSets.Min ()-1;
 			int maxNumber = frequencyDataSets.Max ().RoundOff ();
 
-			List<int> frequancies = new List<int> ();
+			List<int> frequencies = new List<int> ();
 			List<string> ranges = new List<string> ();
-			List<string> frequancySymbols = new List<string> ();
+			List<string> frequencySymbols = new List<string> ();
 
 			int startValue = minNumber + 1;
 			string range = "";
@@ -1512,7 +1512,7 @@ namespace Cerebro
 
 				int nextValue = startValue + frequencyInterval - 1;
 
-				string frequancySymbol = "";
+				string frequencySymbol = "";
 				string symbol = "";
 
 				for(int i=0;i<frequencyDataSets.Count;i++)
@@ -1520,7 +1520,7 @@ namespace Cerebro
 					if (frequencyDataSets [i] >= startValue && frequencyDataSets [i] <= nextValue ) {
 						cnt++;
 						if (cnt % 5 == 0) {
-							frequancySymbol += "\\not[-0.1,-0.1]{" + symbol + "}";
+							frequencySymbol += "\\not[-0.1,-0.1]{" + symbol + "}";
 							symbol = "";
 						} else {
 							symbol +="\\mid ";
@@ -1529,7 +1529,7 @@ namespace Cerebro
 				}
 
 			
-			  frequancySymbol += symbol;
+			  frequencySymbol += symbol;
 				if (frequencyInterval > 1) 
 				{
 					range = startValue + "-" + nextValue;
@@ -1542,8 +1542,8 @@ namespace Cerebro
 				}
 			
 				if (shouldAdd) {
-					frequancies.Add (cnt);
-					frequancySymbols.Add (frequancySymbol);
+					frequencies.Add (cnt);
+					frequencySymbols.Add (frequencySymbol);
 					ranges.Add (range);
 				}
 
@@ -1554,7 +1554,24 @@ namespace Cerebro
 			Vector2 startPos = new Vector2(-totalColumn/2f * 157f +80f, ranges.Count/2f * 40f +100f);
 			for (int i = 0; i < totalColumn; i++)
 			{
-				startPos.y = ranges.Count/2f *40f +100f ;
+				Vector2 offset = new Vector2(157f,33f);
+				Vector2 pos = startPos;
+				if (i == 0) 
+				{
+					offset = new Vector2 (120f, 33f);
+					pos = startPos;
+				} else if (i == 1)
+				{
+					offset = new Vector2 (150f, 33f);
+					pos = startPos + new Vector2 (147f, 0f);
+				}
+				else if (i == 2)
+				{
+					offset = new Vector2 (120f, 33f);
+					pos = startPos + new Vector2 (265f, 0f);
+				}
+
+
 				for (int j = -1; j < ranges.Count; j++)
 				{
 					string value = "";
@@ -1575,19 +1592,21 @@ namespace Cerebro
 							value = ranges [j];
 							name = "range";
 						} else if (i == 1) {
-							value = frequancySymbols [j];
+							value = frequencySymbols [j];
 							name = "stick";
 						} else if (i == 2) {
-							value = frequancies [j].ToString ();
+							value = frequencies [j].ToString ();
 							name = "number";
 						}
 
 					}
 
-					GenerateFrequncyTableText (startPos, freqTable, value, name, toggleGroup,j>-1);
-					startPos += new Vector2 (0f,-33f);
+
+					GenerateFrequncyTableText (pos, freqTable, value, name, toggleGroup,j>-1, offset);
+					pos.y -= offset.y;
 				}
-				startPos += new Vector2 (157f,0f);
+
+
 			}
 
 			if (frequencyObjs.Count > 0) {
@@ -1595,12 +1614,12 @@ namespace Cerebro
 			}
 		}
 
-		public void GenerateFrequncyTableText(Vector2 pos, GameObject parent, string value,string name, ToggleGroup toggleGroup,bool isToggle)
+		public void GenerateFrequncyTableText(Vector2 pos, GameObject parent, string value,string name, ToggleGroup toggleGroup,bool isToggle,Vector2 sizeDelta)
 		{
 			GameObject gTextBox = GameObject.Instantiate (textDrawObjectPrefab);
 			gTextBox.transform.SetParent (parent.transform,false);
 			TEXDraw textObj = gTextBox.gameObject.GetChildByName<TEXDraw> ("CorrectAnswer");
-
+			gTextBox.GetComponent<RectTransform> ().sizeDelta = sizeDelta;
 			textObj.text = value;
 			gTextBox.name = name;
 			gTextBox.GetComponent<Toggle> ().enabled = isToggle;

@@ -374,7 +374,7 @@ namespace Cerebro {
 						}
 						answer = answerList.ToArray ();
 					}
-					Answer = getArrayAsSet (answer, false, true);
+					Answer = MathFunctions.getArrayAsSet (answer, false, true);
 				}
 				else if (selector == 3 || selector == 4) 
 				{
@@ -433,7 +433,7 @@ namespace Cerebro {
 							subQuestionText.text = "\\lbrace" + MathFunctions.AlgebraicDisplayForm (num1, "\\xalgebra^2", true) + MathFunctions.AlgebraicDisplayForm (num2, "\\xalgebra") + " + " + num3 + " | \\xalgebra \\in " + numberType + ", \\xalgebra \\leq " + upperLimit + "\\rbrace";
 						}
 					}
-					Answer = getArrayAsSet (answer, false, true);
+					Answer = MathFunctions.getArrayAsSet (answer, false, true);
 				}
 				else if (selector == 5 || selector == 6) 
 				{			
@@ -487,7 +487,7 @@ namespace Cerebro {
 
 						answer = new int[] {num1, num2};
 						var question = getRosterForm (new int[]{ num1, num2 }, subNumbers.ToArray ());
-						subQuestionText.text = getArrayAsSet (question, true);
+						subQuestionText.text = MathFunctions.getArrayAsSet (question, true);
 						subQuestionText2.text = "\\lbrace{? | \\xalgebra \\in " + numberType + ", " + lowerLimit + " \\leq \\xalgebra \\leq " + upperLimit + "}\\rbrace";
 					} 
 					else if (selector == 6) 
@@ -504,7 +504,7 @@ namespace Cerebro {
 
 						answer = new int[] {lowerLimit, upperLimit};
 						var question = getRosterForm (new int[]{ num1, num2 }, subNumbers.ToArray ());
-						subQuestionText.text = getArrayAsSet (question, true);
+						subQuestionText.text = MathFunctions.getArrayAsSet (question, true);
 						subQuestionText2.text = "\\lbrace" + MathFunctions.AlgebraicDisplayForm (num1, "\\xalgebra", true) + " + " + num2 + "| \\xalgebra \\in " + numberType + ", ? \\leq \\xalgebra \\leq ?\\rbrace";
 					}
 				} 
@@ -545,7 +545,7 @@ namespace Cerebro {
 					int cardinalNumber = Random.Range (5, 11);
 
 					QuestionLatext.text = string.Format ("Find \\nalgebra({0}).", randAlpha);
-					subQuestionText.text = string.Format ("{0} = {1}", randAlpha, getArrayAsSet (MathFunctions.GetUniqueIntRandomDataSet (5, 20, cardinalNumber).ToArray (), true));
+					subQuestionText.text = string.Format ("{0} = {1}", randAlpha, MathFunctions.getArrayAsSet (MathFunctions.GetUniqueIntRandomDataSet (5, 20, cardinalNumber).ToArray (), true));
 
 					Answer = string.Format ("{0}", cardinalNumber);
 				}
@@ -647,8 +647,8 @@ namespace Cerebro {
 						}
 
 						QuestionLatext.text = string.Format ("Are set {0} and set {1} equal?", randAlpha1, randAlpha2);
-						subQuestionText.text = string.Format ("{0} = {1}", randAlpha1, getArrayAsSet (set1.ToArray (), true));
-						subQuestionText2.text = string.Format ("{0} = {1}", randAlpha2, getArrayAsSet (set2.ToArray (), true));
+						subQuestionText.text = string.Format ("{0} = {1}", randAlpha1, MathFunctions.getArrayAsSet (set1.ToArray (), true));
+						subQuestionText2.text = string.Format ("{0} = {1}", randAlpha2, MathFunctions.getArrayAsSet (set2.ToArray (), true));
 					}
 
 					MCQ.transform.Find ("Option1").Find ("Text").GetComponent<Text> ().text = "Yes";
@@ -675,7 +675,7 @@ namespace Cerebro {
 					setB [i] = randNums2 [i];
 				}
 
-				subQuestionText.text = string.Format ("A = {0}, B = {1}", getArrayAsSet (setA, true), getArrayAsSet (setB, true));
+				subQuestionText.text = string.Format ("A = {0}, B = {1}", MathFunctions.getArrayAsSet (setA, true), MathFunctions.getArrayAsSet (setB, true));
 
 				if (selector == 1) 
 				{
@@ -697,7 +697,7 @@ namespace Cerebro {
 					QuestionLatext.text = "Find B - A.";
 					answer = getDifference (setB, setA);
 				}
-				Answer = getArrayAsSet (answer, false, true);
+				Answer = MathFunctions.getArrayAsSet (answer, false, true);
 			}
 			#endregion
 			#region level4
@@ -803,7 +803,7 @@ namespace Cerebro {
 				List<int> set1 = MathFunctions.GetUniqueIntRandomDataSet (1, 10, Random.Range (4, 9)); 
 				List<int> set2 = MathFunctions.GetPrimes (maxPrime, includeMax);
 
-				subQuestionText.text = string.Format ("{0} = {1}", randAlpha1, getArrayAsSet (set1.ToArray (), true));
+				subQuestionText.text = string.Format ("{0} = {1}", randAlpha1, MathFunctions.getArrayAsSet (set1.ToArray (), true));
 				subQuestionText2.text = string.Format ("{0} = \\lbrace{{\\xalgebra | \\xalgebra is a prime number, \\xalgebra {1} {2}}}\\rbrace", randAlpha2, includeMax? "\\leq" : "<", maxPrime);
 					
 				if (selector == 1) //AuB
@@ -847,7 +847,7 @@ namespace Cerebro {
 					answer = getIntersection (set1.ToArray (), set2.ToArray ());
 				}
 				if (selector <= 4) {
-					Answer = getArrayAsSet (answer, false, true);
+					Answer = MathFunctions.getArrayAsSet (answer, false, true);
 				} else {
 					Answer = answer.Length.ToString ();
 				}
@@ -926,31 +926,6 @@ namespace Cerebro {
 
 		int[] getUnion(int[] setA, int[] setB) {
 			return setA.Union (setB).ToArray ();
-		}
-
-		string getArrayAsSet(int[] arr, bool fontLatex = false, bool isAnswer = false) {
-			string str = "";
-			if (fontLatex) {
-				str += "\\lbrace{";
-			} else {
-				str += "{";
-			}
-			for (var i = 0; i < arr.Length-1; i++){
-				if (isAnswer) {
-					str = str + arr [i].ToString () + ",";
-				} else {
-					str = str + arr [i].ToString () + ", ";
-				}
-			}
-			if (arr.Length != 0) {
-				str = str + arr [arr.Length - 1].ToString ();
-			}
-			if (fontLatex) {
-				str += "}\\rbrace";
-			} else {
-				str += "}";
-			}
-			return str;
 		}
 
 		string GetInequality (int rangeMin, int cardinalNumber, int Case)

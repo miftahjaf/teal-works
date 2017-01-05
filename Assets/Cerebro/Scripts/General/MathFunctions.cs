@@ -460,6 +460,34 @@ namespace Cerebro {
 			return answer;
 		}
 
+		public static List<int> GetFrequencyTableDataSet (int startVal, int endVal, int dataSetLength, int numberOfUniqueEntries)
+		{
+			List<int> dataSet = new List<int> ();
+			if (dataSetLength < numberOfUniqueEntries) {
+				Debug.Log ("Check parameters.");
+				return dataSet;
+			}
+
+			List<int> uniqueDataSet = GetUniqueIntRandomDataSet (startVal, endVal, numberOfUniqueEntries);
+			List<int> numberOfOccurrences = new List<int> ();
+
+			for (int i = 0; i < numberOfUniqueEntries; i++) {
+				numberOfOccurrences.Add (1);
+			}
+
+			do {
+				for (int i = 0; i < numberOfUniqueEntries; i++) {
+					numberOfOccurrences[i] = Random.Range (1, 2 * dataSetLength / numberOfUniqueEntries);
+				}
+			} while (numberOfOccurrences.Sum () != dataSetLength);
+
+			for (int i = 0; i < numberOfUniqueEntries; i++) {
+				for (int j = 0; j < numberOfOccurrences[i]; j++) {
+					dataSet.Add (uniqueDataSet[i]);
+				}
+			}
+			return dataSet;
+		}
 
 		public static List<int> GetUniqueIntRandomDataSet (int startVal, int endVal, int dataSetLength) 
 		{
@@ -875,6 +903,34 @@ namespace Cerebro {
 				}
 			}
 			return primes;
+		}
+
+		public static string getArrayAsSet(int[] arr, bool fontLatex = false, bool isAnswer = false, bool showBraces = true) {
+			string str = "";
+			if (fontLatex) {
+				str += "\\lbrace{";
+			} else {
+				str += "{";
+			}
+			for (var i = 0; i < arr.Length-1; i++){
+				if (isAnswer) {
+					str = str + arr [i].ToString () + ",";
+				} else {
+					str = str + arr [i].ToString () + ", ";
+				}
+			}
+			if (arr.Length != 0) {
+				str = str + arr [arr.Length - 1].ToString ();
+			}
+			if (fontLatex) {
+				str += "}\\rbrace";
+			} else {
+				str += "}";
+			}
+			if (!showBraces) {
+				return str.Substring (1, str.Length - 2);
+			}
+			return str;
 		}
 	}
 }
