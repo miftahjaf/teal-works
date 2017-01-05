@@ -472,6 +472,7 @@ namespace Cerebro {
 			}
 			else
 			{
+				LaunchList.instance.CheckVersionNumber ();
 				CerebroAnalytics.instance.SessionStarted ();
 				isAppActive = true;
 				if (WelcomeScript.instance != null) {

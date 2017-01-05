@@ -85,6 +85,11 @@ public class PushwooshBuildManager : MonoBehaviour
 			PlistElementArray bgModes = rootDict.CreateArray("UIAppFonts");
 			bgModes.AddString("GothamSSm-Book.otf");
 
+			rootDict.SetString("NSMicrophoneUsageDescription", "$(PRODUCT_NAME) microphone use");
+			rootDict.SetString("NSCameraUsageDescription", "$(PRODUCT_NAME) camera use");
+			rootDict.SetString("NSAppleMusicUsageDescription", "$(PRODUCT_NAME) media use");
+			rootDict.SetString("NSPhotoLibraryUsageDescription", "$(PRODUCT_NAME) photo use");
+
 			// Write to file
 			File.WriteAllText(plistPath, plist.WriteToString());
 			//===================================================================

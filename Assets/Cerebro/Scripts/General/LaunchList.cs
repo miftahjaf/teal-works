@@ -292,7 +292,7 @@ namespace Cerebro
 			PlayerPrefs.SetString (PlayerPrefKeys.CerebroLastVersion, VersionHelper.GetVersionNumber());
 
 //			UpdateServerTime ();
-//			LoadPracticeItems ();
+			LoadPracticeItems ();
 			CheckIfFileJSON ();
 
 			wifiOff.SetActive (false);
@@ -3392,6 +3392,7 @@ namespace Cerebro
 			if (File.Exists (fileName)) {
 				var sr = File.OpenText (fileName);
 				string json = sr.ReadToEnd ();
+				Debug.Log (json);
 				JSONNode jsonNode = JSONNode.Parse (json);
 				if (jsonNode != null) 
 				{
