@@ -376,6 +376,28 @@ namespace Cerebro {
 			return true;
 		}
 
+		public static bool checkArrayValues (List<int> A, List<int> B) 
+		{
+			if (A.Count != B.Count) {
+				CerebroHelper.DebugLog ("Length not equal");
+				return false;
+			}
+			for (var i = 0; i < A.Count; i++) {
+				var found = false;
+				for (var j = 0; j < B.Count; j++) {
+					if (A [i] == B [j]) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					CerebroHelper.DebugLog (A[i] + " not found");
+					return false;
+				}
+			}
+			return true;
+		}
+
 		public static Vector2 PointAtDirection(Vector2 origin,float angle,float radius)
 		{
 			return new Vector2(origin.x+radius * Mathf.Cos(Mathf.Deg2Rad * angle), origin.y+radius*Mathf.Sin(Mathf.Deg2Rad*angle));
@@ -436,6 +458,27 @@ namespace Cerebro {
 			}
 
 			return answer;
+		}
+
+
+		public static List<int> GetUniqueIntRandomDataSet (int startVal, int endVal, int dataSetLength) 
+		{
+			if (endVal - startVal < dataSetLength) {
+				endVal = dataSetLength + startVal;
+				Debug.Log ("Adjust Parameters >>> endVal increased by " + (dataSetLength - endVal + startVal));
+			}
+
+			List<int> dataSet = new List<int> ();
+			int randNumber;
+
+			for (int i = 0; i < dataSetLength; i++) {
+				do {
+					randNumber = Random.Range (startVal, endVal);
+				} while (dataSet.Contains (randNumber));
+				dataSet.Add (randNumber);
+			}
+
+			return dataSet;
 		}
 
 		public static List<int> GetIntRandomDataSet (int startVal, int endVal, int dataSetLength) 
@@ -759,6 +802,79 @@ namespace Cerebro {
 //			Debug.Log ("Minimum Possible angle = " + (minValue * 360) / total);
 			pieDataSet.Shuffle ();
 			return pieDataSet;
+		}
+
+		public static bool checkSets (string userSet, string correctSet)
+		{
+			int userLength = userSet.Length;
+			if (userSet [0] != '{' || userSet [userLength - 1] != '}') {
+				return false;
+			}
+				
+			string[] userAnswerSplits = userSet.Substring (1, userLength - 2).Split (new string[] { "," }, System.StringSplitOptions.None);
+			string[] correctAnswerSplits = correctSet.Substring (1, userLength - 2).Split (new string[] { "," }, System.StringSplitOptions.None);
+
+
+			List<int> correctAnswers = new List<int> ();
+			List<int> userAnswers = new List<int> ();
+
+			for (var i = 0; i < correctAnswerSplits.Length; i++) 
+			{
+				int correctAnswer = 0;
+				if (int.TryParse (correctAnswerSplits [i], out correctAnswer)) {
+					correctAnswer = int.Parse (correctAnswerSplits [i]);
+					correctAnswers.Add (correctAnswer);
+				} else {
+					return false;
+				}
+			}
+
+			for (var i = 0; i < userAnswerSplits.Length; i++) {
+				int userAnswer = 0;
+				if (int.TryParse (userAnswerSplits [i], out userAnswer)) {
+					userAnswer = int.Parse (userAnswerSplits [i]);
+					userAnswers.Add (userAnswer);
+				} else {
+					return false;
+				}
+			}
+
+			return checkArrayValues (userAnswers, correctAnswers);
+		}
+
+		public static bool isPrime (int number)
+		{
+			for (int i = 2; i <= number / 2; i++) {
+				if (number % i == 0) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public static List<int> GetPrimes (int maxNumber, bool includeMaxNumber = false)  
+		{
+			List<int> primes = new List<int> ();
+			for (int i = 2; i < maxNumber; i++) {
+				if (isPrime (i)) {
+					primes.Add (i);
+				}
+			}
+			if (includeMaxNumber && isPrime (maxNumber)) {
+				primes.Add (maxNumber);
+			}
+			return primes;
+		}
+
+		public static List<int> GetPrimes (int minNumber, int maxNumber)  
+		{
+			List<int> primes = new List<int> ();
+			for (int i = minNumber; i <= maxNumber; i++) {
+				if (isPrime (i)) {
+					primes.Add (i);
+				}
+			}
+			return primes;
 		}
 	}
 }
