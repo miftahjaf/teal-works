@@ -1551,7 +1551,7 @@ namespace Cerebro
 			}
 
 
-			Vector2 startPos = new Vector2(-totalColumn/2f * 157f +80f, ranges.Count/2f * 40f +100f);
+			Vector2 startPos = new Vector2(-totalColumn/2f * 157f +80f, ranges.Count/2f * 40f +80f);
 			for (int i = 0; i < totalColumn; i++)
 			{
 				Vector2 offset = new Vector2(157f,33f);
@@ -1563,12 +1563,12 @@ namespace Cerebro
 				} else if (i == 1)
 				{
 					offset = new Vector2 (150f, 33f);
-					pos = startPos + new Vector2 (147f, 0f);
+					pos = startPos + new Vector2 (131f, 0f);
 				}
 				else if (i == 2)
 				{
 					offset = new Vector2 (120f, 33f);
-					pos = startPos + new Vector2 (265f, 0f);
+					pos = startPos + new Vector2 (263f, 0f);
 				}
 
 
@@ -1603,7 +1603,7 @@ namespace Cerebro
 
 
 					GenerateFrequncyTableText (pos, freqTable, value, name, toggleGroup,j>-1, offset);
-					pos.y -= offset.y;
+					pos.y -= (offset.y-2f);
 				}
 
 

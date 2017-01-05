@@ -566,7 +566,7 @@ namespace Cerebro {
 					statisticsHelper.SetInteractable(true);
 					statisticsHelper.onFrequencyTextBoxClicked = OnFrequencyTextClicked;
 					statisticsHelper.DrawFrequencyTable();
-					statisticsHelper.ShiftPosition (new Vector2 (-225, 80));
+					statisticsHelper.ShiftPosition (new Vector2 (-240, 80));
 				}
 				else if (selector == 7)
 				{
@@ -584,7 +584,7 @@ namespace Cerebro {
 					statisticsHelper.SetInteractable(true);
 					statisticsHelper.onFrequencyTextBoxClicked = OnFrequencyTextClicked;
 					statisticsHelper.DrawFrequencyTable();
-					statisticsHelper.ShiftPosition (new Vector2 (-225, 80));
+					statisticsHelper.ShiftPosition (new Vector2 (-240, 80));
 				}
 			}
 			#endregion
