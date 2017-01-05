@@ -90,9 +90,9 @@ namespace Cerebro {
 			return false;
 		}
 
-		public static int RoundOff(this int i)
+		public static int RoundOff(this int i, int snap)
 		{
-			return Mathf.RoundToInt(i / 10.0f) * 10;
+			return Mathf.CeilToInt(i /(float)snap) * snap;
 		}
 	}
 }

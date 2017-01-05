@@ -1497,7 +1497,7 @@ namespace Cerebro
 			toggleGroup.allowSwitchOff = true;
 
 			int minNumber = frequencyInterval>1 ? 0 :  frequencyDataSets.Min ()-1;
-			int maxNumber = frequencyDataSets.Max ().RoundOff ();
+			int maxNumber = frequencyDataSets.Max ().RoundOff (frequencyInterval);
 
 			List<int> frequencies = new List<int> ();
 			List<string> ranges = new List<string> ();
