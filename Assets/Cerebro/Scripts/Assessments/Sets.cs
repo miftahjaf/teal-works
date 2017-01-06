@@ -15,7 +15,7 @@ namespace Cerebro {
 
 		private int[] answer;
 		private string Answer;
-		private bool HasMultipleButtons;
+		private bool HasMultipleButtons, HasAnswerSet;
 
 		public GameObject EquationButtons;
 		public GameObject RangeButtons;
@@ -46,7 +46,7 @@ namespace Cerebro {
 			//var correct = false;
 			ignoreTouches = true;
 			//Checking if the response was correct and computing question level
-			var correct = true;
+			var correct = false;
 
 			questionsAttempted++;
 			updateQuestionsAttempted ();
@@ -58,8 +58,7 @@ namespace Cerebro {
 					correct = false;
 					AnimateMCQOptionCorrect (Answer);
 				}
-			}
-			else if (HasMultipleButtons){
+			} else if (HasMultipleButtons) {
 				int ans1 = 0;
 				int ans2 = 0;
 				GameObject Buttons;
@@ -70,8 +69,8 @@ namespace Cerebro {
 				}
 				var button1 = Buttons.transform.Find ("Button1").GetComponent<Button> ();
 				var button2 = Buttons.transform.Find ("Button2").GetComponent<Button> ();
-				var ans1Text = button1.gameObject.GetChildByName<Text>("Text").text;
-				var ans2Text = button2.gameObject.GetChildByName<Text>("Text").text;
+				var ans1Text = button1.gameObject.GetChildByName<Text> ("Text").text;
+				var ans2Text = button2.gameObject.GetChildByName<Text> ("Text").text;
 				if (int.TryParse (ans1Text, out ans1)) {
 					ans1 = int.Parse (ans1Text);
 				} else {
@@ -88,9 +87,17 @@ namespace Cerebro {
 					correct = false;
 				}
 
-			}
-			else {
+			} else if (HasAnswerSet) {
 				correct = MathFunctions.checkSets (userAnswerText.text, Answer);
+			} else {
+				int userAns = 0;
+				if (int.TryParse (userAnswerText.text, out userAns)) {
+					userAns = int.Parse (userAnswerText.text);
+				}
+
+				if (userAns == int.Parse (Answer)) {
+					correct = true;
+				}
 			}
 			if (correct == true) {
 				if (Queslevel == 1) {
@@ -285,6 +292,7 @@ namespace Cerebro {
 			answerButton = GeneralButton;
 
 			HasMultipleButtons = false;
+			HasAnswerSet = false;
 			subQuestionText.gameObject.SetActive (true);
 			subQuestionText2.gameObject.SetActive (false);
 			RangeButtons.SetActive (false);
@@ -334,6 +342,7 @@ namespace Cerebro {
 				} 
 				else if (selector == 2) 
 				{
+					HasAnswerSet = true;
 					int randNum = Random.Range (5, 20);
 					int randNum1 = Random.Range (randNum + 1, 2 * randNum);
 					string[] questionList = new string[] {
@@ -378,6 +387,7 @@ namespace Cerebro {
 				}
 				else if (selector == 3 || selector == 4) 
 				{
+					HasAnswerSet = true;
 					QuestionLatext.text = "Express in Roster form.";
 
 					var num1 = Random.Range (1, 10);    //a
@@ -660,6 +670,7 @@ namespace Cerebro {
 			else if (level == 3)
 			{
 				selector = GetRandomSelector (1, 5);
+				HasAnswerSet = true;
 
 				var num1 = Random.Range (3, 7);
 				var num2 = Random.Range (3, 7);
@@ -847,6 +858,7 @@ namespace Cerebro {
 					answer = getIntersection (set1.ToArray (), set2.ToArray ());
 				}
 				if (selector <= 4) {
+					HasAnswerSet = true;
 					Answer = MathFunctions.getArrayAsSet (answer, false, true);
 				} else {
 					Answer = answer.Length.ToString ();

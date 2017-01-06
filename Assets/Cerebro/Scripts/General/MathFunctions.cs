@@ -838,7 +838,9 @@ namespace Cerebro {
 			if (userSet [0] != '{' || userSet [userLength - 1] != '}') {
 				return false;
 			}
-				
+			if (userSet.Equals ("{}") && correctSet.Equals ("{}")) {
+				return true;
+			}
 			string[] userAnswerSplits = userSet.Substring (1, userLength - 2).Split (new string[] { "," }, System.StringSplitOptions.None);
 			string[] correctAnswerSplits = correctSet.Substring (1, userLength - 2).Split (new string[] { "," }, System.StringSplitOptions.None);
 
