@@ -6,7 +6,7 @@ namespace Cerebro
 {
 	public class CerebroHelper : MonoBehaviour
 	{
-		private static List<string> testIds = new List<string>(){"9000002","9000003","9000004"};
+		private static List<string> testIds = new List<string>(){"9000002","9000003","9000004", "301"};
 		public static Dictionary<string,Texture2D> remoteWatchTextures = new Dictionary<string,Texture2D>();
 		public static Dictionary<string,Texture2D> remoteQuizTextures = new Dictionary<string,Texture2D>();
 
@@ -26,13 +26,14 @@ namespace Cerebro
 
 		public static bool isTestUser ()
 		{
-			if (PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
-				var id = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
-				if (testIds.Contains (id)) {
-					return true;
-				}
-			}
-			return false;
+			return HTTPRequestHelper.instance.IsStagingEnable ();
+//			if (PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
+//				var id = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
+//				if (testIds.Contains (id)) {
+//					return true;
+//				}
+//			}
+//			return false;
 		}
 
 		public static void DebugLog(object log)
