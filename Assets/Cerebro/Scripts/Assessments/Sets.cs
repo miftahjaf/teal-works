@@ -15,7 +15,7 @@ namespace Cerebro {
 
 		private int[] answer;
 		private string Answer;
-		private bool HasMultipleButtons, HasAnswerSet;
+		private bool HasAnswerSet;
 
 		public GameObject EquationButtons;
 		public GameObject RangeButtons;
@@ -46,7 +46,7 @@ namespace Cerebro {
 			//var correct = false;
 			ignoreTouches = true;
 			//Checking if the response was correct and computing question level
-			var correct = false;
+			var correct = true;
 
 			questionsAttempted++;
 			updateQuestionsAttempted ();
@@ -58,7 +58,7 @@ namespace Cerebro {
 					correct = false;
 					AnimateMCQOptionCorrect (Answer);
 				}
-			} else if (HasMultipleButtons) {
+			} else if (EquationButtons.activeSelf || RangeButtons.activeSelf) {
 				int ans1 = 0;
 				int ans2 = 0;
 				GameObject Buttons;
@@ -97,6 +97,8 @@ namespace Cerebro {
 
 				if (userAns == int.Parse (Answer)) {
 					correct = true;
+				} else {
+					correct = false;
 				}
 			}
 			if (correct == true) {
@@ -161,7 +163,7 @@ namespace Cerebro {
 		}
 
 		protected override IEnumerator ShowWrongAnimation() {
-			if (!HasMultipleButtons) {
+			if (!(EquationButtons.activeSelf || RangeButtons.activeSelf)) {
 				userAnswerText.color = MaterialColor.red800;
 				Go.to (userAnswerText.gameObject.transform, 0.5f, new GoTweenConfig ().shake (new Vector3 (0, 0, 20), GoShakeType.Eulers));
 			} else {
@@ -179,7 +181,7 @@ namespace Cerebro {
 				button2.gameObject.GetChildByName<Text> ("Text").color = MaterialColor.red800;
 			}
 			yield return new WaitForSeconds (0.5f);
-			if (HasMultipleButtons) {
+			if (EquationButtons.activeSelf || RangeButtons.activeSelf) {
 				GameObject Buttons;
 				if (EquationButtons.activeSelf) {
 					Buttons = EquationButtons;
@@ -223,7 +225,7 @@ namespace Cerebro {
 		}
 
 		protected override IEnumerator ShowCorrectAnimation() {
-			if (HasMultipleButtons) {
+			if (EquationButtons.activeSelf || RangeButtons.activeSelf) {
 				GameObject Buttons;
 				if (EquationButtons.activeSelf) {
 					Buttons = EquationButtons;
@@ -266,7 +268,7 @@ namespace Cerebro {
 			}
 
 			yield return new WaitForSeconds (1f);
-			if (!HasMultipleButtons) {
+			if (!(EquationButtons.activeSelf || RangeButtons.activeSelf)) {
 				userAnswerText.color = MaterialColor.textDark;
 			}
 
@@ -291,7 +293,6 @@ namespace Cerebro {
 
 			answerButton = GeneralButton;
 
-			HasMultipleButtons = false;
 			HasAnswerSet = false;
 			subQuestionText.gameObject.SetActive (true);
 			subQuestionText2.gameObject.SetActive (false);
@@ -447,7 +448,6 @@ namespace Cerebro {
 				}
 				else if (selector == 5 || selector == 6) 
 				{			
-					HasMultipleButtons = true;
 					QuestionLatext.text = "Express in set builder form.";
 					subQuestionText2.gameObject.SetActive (true);
 
@@ -546,7 +546,7 @@ namespace Cerebro {
 					subQuestionText.text = questionList[randSelector].Substring (1);
 					Answer = questionList[randSelector][0] == 'I'? "Infinite set": "Finite set";
 
-					MCQ.transform.Find ("Option1").Find ("Text").GetComponent<Text> ().text = "Infinte set";
+					MCQ.transform.Find ("Option1").Find ("Text").GetComponent<Text> ().text = "Infinite set";
 					MCQ.transform.Find ("Option2").Find ("Text").GetComponent<Text> ().text = "Finite set";
 				} 
 				else if (selector == 2) 
