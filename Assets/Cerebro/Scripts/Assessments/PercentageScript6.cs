@@ -641,7 +641,7 @@ namespace Cerebro {
 		}
 
 		public override void numPadButtonPressed(int value) {
-			if (ignoreTouches || checkLastTextFor (new string[1]{ "%" })) {
+			if (ignoreTouches) {
 				return;
 			}
 			if (value <= 9) {
@@ -675,6 +675,12 @@ namespace Cerebro {
 					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
 				}
 				userAnswerText.text += ":";
+			}
+			else if (value == 16) {   // ,
+				if (checkLastTextFor (new string[1]{ "," })) {
+					userAnswerText.text = userAnswerText.text.Substring (0, userAnswerText.text.Length - 1);
+				}
+				userAnswerText.text += ",";
 			}
 		}
 	}
