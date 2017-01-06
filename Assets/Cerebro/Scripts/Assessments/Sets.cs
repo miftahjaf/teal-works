@@ -691,22 +691,22 @@ namespace Cerebro {
 				if (selector == 1) 
 				{
 					QuestionLatext.text = "Find A \\cup B.";
-					answer = getUnion (setB, setA);
+					answer = MathFunctions.getUnion (setB, setA);
 				} 
 				else if (selector == 2) 
 				{
 					QuestionLatext.text = "Find A \\cap B.";
-					answer = getIntersection (setB, setA);
+					answer = MathFunctions.getIntersection (setB, setA);
 				}
 				else if (selector == 3) 
 				{
 					QuestionLatext.text = "Find A - B.";
-					answer = getDifference (setA, setB);
+					answer = MathFunctions.getDifference (setA, setB);
 				}
 				else if (selector == 4) 
 				{
 					QuestionLatext.text = "Find B - A.";
-					answer = getDifference (setB, setA);
+					answer = MathFunctions.getDifference (setB, setA);
 				}
 				Answer = MathFunctions.getArrayAsSet (answer, false, true);
 			}
@@ -727,34 +727,34 @@ namespace Cerebro {
 				if (selector == 1) 
 				{
 					QuestionLatext.text = string.Format ("Find \\nalgebra({0} \\cup {1}), if :", randAlpha1, randAlpha2);
-					subQuestionText.text = string.Format ("\\nalgebra({0}) = {1}, \\nalgebra({2}) = {3}, \\nalgebra({0} \\cap {2}) = {4}", randAlpha1, set1.Length, randAlpha2, set2.Length, getIntersection (set1, set2).Length);
-					Answer = getUnion (set1, set2).Length.ToString ();
+					subQuestionText.text = string.Format ("\\nalgebra({0}) = {1}, \\nalgebra({2}) = {3}, \\nalgebra({0} \\cap {2}) = {4}", randAlpha1, set1.Length, randAlpha2, set2.Length, MathFunctions.getIntersection (set1, set2).Length);
+					Answer = MathFunctions.getUnion (set1, set2).Length.ToString ();
 				} 
 				else if (selector == 2) 
 				{
 					QuestionLatext.text = string.Format ("Find \\nalgebra({0} \\cap {1}), if :", randAlpha1, randAlpha2);
-					subQuestionText.text = string.Format ("\\nalgebra({0}) = {1}, \\nalgebra({2}) = {3}, \\nalgebra({0} \\cup {2}) = {4}", randAlpha1, set1.Length, randAlpha2, set2.Length, getUnion (set1, set2).Length);
-					Answer = getIntersection (set1, set2).Length.ToString ();
+					subQuestionText.text = string.Format ("\\nalgebra({0}) = {1}, \\nalgebra({2}) = {3}, \\nalgebra({0} \\cup {2}) = {4}", randAlpha1, set1.Length, randAlpha2, set2.Length, MathFunctions.getUnion (set1, set2).Length);
+					Answer = MathFunctions.getIntersection (set1, set2).Length.ToString ();
 				}
 				else if (selector == 3) 
 				{
 					QuestionLatext.text = string.Format ("Find \\nalgebra({0} - {1}), if :", randAlpha1, randAlpha2);
 					if (Random.Range (0, 2) == 0) {
-						subQuestionText.text = string.Format ("\\nalgebra({0}) = {2}, \\nalgebra({0} \\cap {1}) = {3}", randAlpha1, randAlpha2, set1.Length, getIntersection (set1, set2).Length);
+						subQuestionText.text = string.Format ("\\nalgebra({0}) = {2}, \\nalgebra({0} \\cap {1}) = {3}", randAlpha1, randAlpha2, set1.Length, MathFunctions.getIntersection (set1, set2).Length);
 					} else {
-						subQuestionText.text = string.Format ("\\nalgebra({1}) = {2}, \\nalgebra({0} \\cup {1}) = {3}", randAlpha1, randAlpha2, set2.Length, getUnion (set1, set2).Length);
+						subQuestionText.text = string.Format ("\\nalgebra({1}) = {2}, \\nalgebra({0} \\cup {1}) = {3}", randAlpha1, randAlpha2, set2.Length, MathFunctions.getUnion (set1, set2).Length);
 					}
-					Answer = getDifference (set1, set2).Length.ToString ();
+					Answer = MathFunctions.getDifference (set1, set2).Length.ToString ();
 				}
 				else if (selector == 4) 
 				{
 					QuestionLatext.text = string.Format ("Find \\nalgebra({1} - {0}), if :", randAlpha1, randAlpha2);
 					if (Random.Range (0, 2) == 0) {
-						subQuestionText.text = string.Format ("\\nalgebra({1}) = {2}, \\nalgebra({0} \\cap {1}) = {3}", randAlpha1, randAlpha2, set2.Length, getIntersection (set1, set2).Length);
+						subQuestionText.text = string.Format ("\\nalgebra({1}) = {2}, \\nalgebra({0} \\cap {1}) = {3}", randAlpha1, randAlpha2, set2.Length, MathFunctions.getIntersection (set1, set2).Length);
 					} else {
-						subQuestionText.text = string.Format ("\\nalgebra({0}) = {2}, \\nalgebra({0} \\cup {1}) = {3}", randAlpha1, randAlpha2, set1.Length, getUnion (set1, set2).Length);
+						subQuestionText.text = string.Format ("\\nalgebra({0}) = {2}, \\nalgebra({0} \\cup {1}) = {3}", randAlpha1, randAlpha2, set1.Length, MathFunctions.getUnion (set1, set2).Length);
 					}
-					Answer = getDifference (set2, set1).Length.ToString ();
+					Answer = MathFunctions.getDifference (set2, set1).Length.ToString ();
 				}
 				else if (selector == 5) 
 				{
@@ -769,7 +769,7 @@ namespace Cerebro {
 						subQuestionText.text = string.Format ("\\nalgebra({0} \\cap {1}) = {2}", randAlpha1, randAlpha2, randNum);
 						Answer = randNum == 0? "Disjoint": "Overlapping";
 					} 
-					else if (randSelector == 1) 
+					else if (randSelector == 2) 
 					{
 						subQuestionText2.gameObject.SetActive (true);
 
@@ -780,7 +780,7 @@ namespace Cerebro {
 						subQuestionText2.text = string.Format ("{0} = \\lbrace{{\\xalgebra | \\xalgebra is an even number, \\xalgebra {1} {2}}}\\rbrace", randAlpha2, Random.Range (0, 2) == 0? "\\leq" : "<", maxEven);
 						Answer = "Disjoint";
 					} 
-					else if (randSelector == 2)
+					else if (randSelector == 3)
 					{
 						subQuestionText2.gameObject.SetActive (true);
 
@@ -820,42 +820,42 @@ namespace Cerebro {
 				if (selector == 1) //AuB
 				{
 					QuestionLatext.text = string.Format ("Find {0} \\cup {1}.", randAlpha1, randAlpha2);
-					answer = getUnion (set1.ToArray (), set2.ToArray ());
+					answer = MathFunctions.getUnion (set1.ToArray (), set2.ToArray ());
 				} 
 				else if (selector == 2) //AinterB
 				{
 					QuestionLatext.text = string.Format ("Find {0} \\cap {1}.", randAlpha1, randAlpha2);
-					answer = getIntersection (set1.ToArray (), set2.ToArray ());
+					answer = MathFunctions.getIntersection (set1.ToArray (), set2.ToArray ());
 				}
 				else if (selector == 3) //A-B
 				{
 					QuestionLatext.text = string.Format ("Find {0} - {1}.", randAlpha1, randAlpha2);
-					answer = getDifference (set1.ToArray (), set2.ToArray ());
+					answer = MathFunctions.getDifference (set1.ToArray (), set2.ToArray ());
 				}
 				else if (selector == 4) //B-A
 				{
 					QuestionLatext.text = string.Format ("Find {1} - {0}.", randAlpha1, randAlpha2);
-					answer = getDifference (set2.ToArray (), set1.ToArray ());
+					answer = MathFunctions.getDifference (set2.ToArray (), set1.ToArray ());
 				}
 				else if (selector == 5) //nA-B
 				{
 					QuestionLatext.text = string.Format ("Find \\nalgebra({0}).", randAlpha1);
-					answer = getDifference (set1.ToArray (), set2.ToArray ());
+					answer = MathFunctions.getDifference (set1.ToArray (), set2.ToArray ());
 				}
 				else if (selector == 6) //nB-A
 				{
 					QuestionLatext.text = string.Format ("Find \\nalgebra({0}).", randAlpha2);
-					answer = getDifference (set2.ToArray (), set1.ToArray ());
+					answer = MathFunctions.getDifference (set2.ToArray (), set1.ToArray ());
 				}
 				else if (selector == 7) //nAuB
 				{
 					QuestionLatext.text = string.Format ("Find \\nalgebra({0} \\cup {1}).", randAlpha1, randAlpha2);
-					answer = getUnion (set1.ToArray (), set2.ToArray ());
+					answer = MathFunctions.getUnion (set1.ToArray (), set2.ToArray ());
 				}
 				else if (selector == 8) //nAinterB
 				{
 					QuestionLatext.text = string.Format ("Find \\nalgebra({0} \\cap {1}).", randAlpha1, randAlpha2);
-					answer = getIntersection (set1.ToArray (), set2.ToArray ());
+					answer = MathFunctions.getIntersection (set1.ToArray (), set2.ToArray ());
 				}
 				if (selector <= 4) {
 					HasAnswerSet = true;
@@ -913,31 +913,6 @@ namespace Cerebro {
 				tmpNums[r] = tmp;
 			}
 			return tmpNums;
-		}
-
-		int[] getDifference(int[] setA, int[] setB) {
-			List<int> answer = new List<int> ();
-			for (var i = 0; i < setA.Length; i++) {
-				var found = false;
-				for (var j = 0; j < setB.Length; j++) {
-					if (setA [i] == setB [j]) {
-						found = true;
-						break;
-					}
-				}
-				if (!found) {
-					answer.Add (setA [i]);
-				}
-			}
-			return answer.ToArray ();
-		}
-
-		int[] getIntersection(int[] setA, int[] setB) {
-			return setA.Intersect (setB).ToArray ();
-		}
-
-		int[] getUnion(int[] setA, int[] setB) {
-			return setA.Union (setB).ToArray ();
 		}
 
 		string GetInequality (int rangeMin, int cardinalNumber, int Case)

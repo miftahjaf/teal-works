@@ -934,5 +934,30 @@ namespace Cerebro {
 			}
 			return str;
 		}
+	
+		public static int[] getDifference (int[] setA, int[] setB) {
+			List<int> answer = new List<int> ();
+			for (var i = 0; i < setA.Length; i++) {
+				var found = false;
+				for (var j = 0; j < setB.Length; j++) {
+					if (setA [i] == setB [j]) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					answer.Add (setA [i]);
+				}
+			}
+			return answer.ToArray ();
+		}
+
+		public static int[] getIntersection (int[] setA, int[] setB) {
+			return setA.Intersect (setB).ToArray ();
+		}
+
+		public static int[] getUnion (int[] setA, int[] setB) {
+			return setA.Union (setB).ToArray ();
+		}
 	}
 }
