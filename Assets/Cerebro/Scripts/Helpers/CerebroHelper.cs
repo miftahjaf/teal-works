@@ -26,7 +26,11 @@ namespace Cerebro
 
 		public static bool isTestUser ()
 		{
-			return HTTPRequestHelper.instance.IsStagingEnable ();
+			if (HTTPRequestHelper.instance != null) {
+				return HTTPRequestHelper.instance.IsStagingEnable ();
+			} else {
+				return false;
+			}
 //			if (PlayerPrefs.HasKey (PlayerPrefKeys.IDKey)) {
 //				var id = PlayerPrefs.GetString (PlayerPrefKeys.IDKey);
 //				if (testIds.Contains (id)) {
