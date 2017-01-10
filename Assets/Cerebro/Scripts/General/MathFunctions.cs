@@ -376,22 +376,21 @@ namespace Cerebro {
 			return true;
 		}
 
-		public static bool checkArrayValues (List<int> A, List<int> B) 
+		public static bool checkArrayValues (List<int> toCompare, List<int> compareWith) 
 		{
-			if (A.Count != B.Count) {
-				CerebroHelper.DebugLog ("Length not equal");
+			if (toCompare.Count != compareWith.Count) {
 				return false;
 			}
-			for (var i = 0; i < A.Count; i++) {
+			int length = toCompare.Count;
+			for (var i = 0; i < length; i++) {
 				var found = false;
-				for (var j = 0; j < B.Count; j++) {
-					if (A [i] == B [j]) {
+				for (var j = 0; j < length; j++) {
+					if (toCompare [j] == compareWith [i]) {
 						found = true;
 						break;
 					}
 				}
 				if (!found) {
-					CerebroHelper.DebugLog (A[i] + " not found");
 					return false;
 				}
 			}
@@ -832,19 +831,28 @@ namespace Cerebro {
 			return pieDataSet;
 		}
 
-		public static bool checkSets (string userSet, string correctSet)
+		public static bool checkSets (string userSet, string correctSet, bool userFontLatex = false)
 		{
 			int userLength = userSet.Length;
+			string tempCorrectSet = string.Copy (correctSet);
+			if (userSet.Equals (tempCorrectSet)) {  //for empty sets
+				return true;
+			}
+			if (userFontLatex) {
+				if (!userSet.Substring (0, "\\lbrace".Length).Equals ("\\lbrace") || !userSet.Substring (userLength - "\\rbrace".Length).Equals ("\\rbrace")) {
+					return false;
+				}
+				userSet = userSet.Substring ("\\lbrace".Length, userLength - 2 * "\\lbrace".Length);
+				tempCorrectSet = tempCorrectSet.Substring ("\\lbrace".Length, tempCorrectSet.Length - 2 * "\\lbrace".Length);
+			}
+			userLength = userSet.Length;
 			if (userSet [0] != '{' || userSet [userLength - 1] != '}') {
 				return false;
 			}
-			if (userSet.Equals ("{}") && correctSet.Equals ("{}")) {
-				return true;
-			}
+
 			string[] userAnswerSplits = userSet.Substring (1, userLength - 2).Split (new string[] { "," }, System.StringSplitOptions.None);
-			string[] correctAnswerSplits = correctSet.Substring (1, userLength - 2).Split (new string[] { "," }, System.StringSplitOptions.None);
-
-
+			string[] correctAnswerSplits = tempCorrectSet.Substring (1, tempCorrectSet.Length - 2).Split (new string[] { "," }, System.StringSplitOptions.None);
+	
 			List<int> correctAnswers = new List<int> ();
 			List<int> userAnswers = new List<int> ();
 
@@ -872,6 +880,46 @@ namespace Cerebro {
 			return checkArrayValues (userAnswers, correctAnswers);
 		}
 
+		public static bool checkPowerSets (string userSet, string correctSet) //both in Latex font
+		{
+			int userLength = userSet.Length;
+			string tempCorrectSet = string.Copy (correctSet);
+			if (userSet.Equals (tempCorrectSet)) {  //for empty sets
+				return true;
+			}
+			if (!userSet.Contains ("\\lbrace{\\lbrace") || !userSet.Contains ("\\rbrace}\\rbrace")) {
+				return false;
+			}
+			if (!userSet.Substring (0, "\\lbrace{\\lbrace".Length).Equals ("\\lbrace{\\lbrace") || !userSet.Substring (userLength - "\\rbrace}\\rbrace".Length).Equals ("\\rbrace}\\rbrace")) {
+				return false;
+			}
+			userSet = userSet.Substring ("\\lbrace{\\lbrace".Length, userLength - 2 * "\\lbrace{\\lbrace".Length);
+			tempCorrectSet = tempCorrectSet.Substring ("\\lbrace{\\lbrace".Length, tempCorrectSet.Length - 2 * "\\lbrace{\\lbrace".Length);
+			userLength = userSet.Length;
+
+			string[] userAnswerSplits = userSet.Split (new string[] { "\\rbrace,\\lbrace" }, System.StringSplitOptions.None);
+			string[] correctAnswerSplits = tempCorrectSet.Split (new string[] { "\\rbrace,\\lbrace" }, System.StringSplitOptions.None);
+
+			if (userAnswerSplits.Length != correctAnswerSplits.Length) {
+				return false;
+			}
+				
+			int length = correctAnswerSplits.Length;
+			for (int i = 0; i < length; i++) {
+				bool correct = false;
+				for (int j = 0; j < length; j++) {
+					if (checkSets (userAnswerSplits[j], correctAnswerSplits[i])) {
+						correct = true;
+						break;
+					}
+				}
+				if (!correct) {
+					return false;
+				}
+			}
+			return true;
+		}
+
 		public static bool isPrime (int number)
 		{
 			for (int i = 2; i <= number / 2; i++) {
@@ -896,18 +944,39 @@ namespace Cerebro {
 			return primes;
 		}
 
-		public static List<int> GetPrimes (int minNumber, int maxNumber)  
+		public static List<int> GetPrimes (int minNumber, int maxNumber, bool includeMaxNumber = false)  
 		{
 			List<int> primes = new List<int> ();
-			for (int i = minNumber; i <= maxNumber; i++) {
+			for (int i = minNumber; i < maxNumber; i++) {
 				if (isPrime (i)) {
 					primes.Add (i);
 				}
 			}
+			if (includeMaxNumber && isPrime (maxNumber)) {
+				primes.Add (maxNumber);
+			}
 			return primes;
 		}
 
-		public static string getArrayAsSet(int[] arr, bool fontLatex = false, bool isAnswer = false, bool showBraces = true) {
+		public static List<int> GetSubset (List<int> SuperSet, int numberOfElements)
+		{
+			List<int> dataSet = new List<int> ();
+			if (SuperSet.Count < numberOfElements){
+				Debug.Log ("Check Parameters");
+				return dataSet;
+			}
+
+			List<int> tempSuperSet = new List<int> ();
+			tempSuperSet.AddRange (SuperSet);
+			tempSuperSet.Shuffle ();
+
+			for (int i = 0; i < numberOfElements; i++) {
+				dataSet.Add (tempSuperSet[i]);
+			}
+			return dataSet;
+		}
+
+		public static string getArrayAsSet (int[] arr, bool fontLatex = false, bool isAnswer = false, bool showBraces = true) {
 			string str = "";
 			if (fontLatex) {
 				str += "\\lbrace{";
@@ -958,6 +1027,24 @@ namespace Cerebro {
 
 		public static int[] getUnion (int[] setA, int[] setB) {
 			return setA.Union (setB).ToArray ();
+		}
+
+		public static List<List<int>> GetPowerSet (List<int> Set)  
+		{
+			List<List<int>> dataSet = new List<List<int>> ();
+			int setCount = Set.Count;
+			int powerSetCount = 1 << setCount;
+
+			for (int i = 0; i < powerSetCount; i++) {
+				List<int> tempDataSet = new List<int> ();
+				for (int j = 0; j < setCount; j++) {
+					if ((i & (1 << j)) > 0) {
+						tempDataSet.Add (Set[j]);
+					}
+				}
+				dataSet.Add (tempDataSet);
+			}
+			return dataSet;
 		}
 	}
 }
