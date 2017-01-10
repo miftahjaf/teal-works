@@ -1368,6 +1368,10 @@ namespace Cerebro
 		public void SendUrbanDeviceToken(string deviceToken)
 		{
 			string studentID = PlayerPrefs.GetString (PlayerPrefKeys.IDKey, "");
+			if (studentID == "") {
+				Debug.Log("token not sent");
+				return;
+			}
 			JSONNode N = JSONSimple.Parse ("{\"myData\"}");
 			N ["myData"] ["student_id"] = studentID;
 			N ["myData"] ["device_token"] = deviceToken;
